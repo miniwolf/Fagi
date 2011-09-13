@@ -38,7 +38,7 @@ public class LoginScreen extends javax.swing.JFrame {
 
 	    jPassword.setText("Password...");
 
-	    jPasswordRepeat.setText("Repeat Password...");
+	    jPasswordRepeat.setText("Password...");
 	    jPasswordRepeat.setVisible(false);
 	    
 	    jCreateUser.setText("Create Username");
@@ -72,6 +72,7 @@ public class LoginScreen extends javax.swing.JFrame {
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 							  .addGroup(layout.createSequentialGroup()
 								    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+									      .addComponent(jPasswordRepeat, javax.swing.GroupLayout.Alignment.LEADING)
 									      .addComponent(jPassword, javax.swing.GroupLayout.Alignment.LEADING)
 									      .addComponent(jUsername, 
 											    javax.swing.GroupLayout.Alignment.LEADING, 
@@ -95,7 +96,12 @@ public class LoginScreen extends javax.swing.JFrame {
 							     javax.swing.GroupLayout.PREFERRED_SIZE, 
 							     javax.swing.GroupLayout.DEFAULT_SIZE, 
 							     javax.swing.GroupLayout.PREFERRED_SIZE)
-					       .addGap(51, 51, 51)
+					       .addGap(5, 5, 5)
+					       .addComponent(jPasswordRepeat, 
+							     javax.swing.GroupLayout.PREFERRED_SIZE, 
+							     javax.swing.GroupLayout.DEFAULT_SIZE, 
+							     javax.swing.GroupLayout.PREFERRED_SIZE)
+					       .addGap(18, 18, 18)
 					       .addComponent(jCreateUser)
 					       .addContainerGap(26, Short.MAX_VALUE) 
 					       )
@@ -104,18 +110,20 @@ public class LoginScreen extends javax.swing.JFrame {
 	    pack();
 	}
     
-    private void jPasswordActionPerformed(java.awt.event.ActionEvent evt) {                                            
-	// TODO add your handling code here:
+    private void jPasswordActionPerformed(java.awt.event.ActionEvent evt) {
+
+	new Login().doLogin(jUsername.getText(),jPassword.getPassword());
     }                                           
 
-    private void jCreateUserMouseClicked(java.awt.event.MouseEvent evt) {                                     
-	System.out.println("CreateUser been pressed");
+    private void jCreateUserMouseClicked(java.awt.event.MouseEvent evt) {
+
 	jPasswordRepeat.setVisible(true);
+	pack();
     }                                    
 
-    private void jLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {                                         
-	System.out.println("LoginBtn been pressed");
-	//  User.Login();
+    private void jLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {
+
+	new Login().doLogin(jUsername.getText(),jPassword.getPassword());
     }                                        
 
     /**
