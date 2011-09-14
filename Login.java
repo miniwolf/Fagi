@@ -1,4 +1,6 @@
-public class Login {
+class Login {
+    private static int port = 4242;
+    //private static InetAddress = 
 
     public Login() {
 	
