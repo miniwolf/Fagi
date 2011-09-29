@@ -1,5 +1,6 @@
 /*
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+ * LoginScreen.java
  *
  * Login screen for the IM-client part
  */
@@ -122,8 +123,9 @@ public class LoginScreen extends javax.swing.JFrame {
     }                                    
 
     private void jLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {
-
-	new Login().doLogin(jUsername.getText(),jPassword.getPassword());
+	if ( new Login().doLogin(jUsername.getText(),jPassword.getPassword()) ) {
+	    new MainScreen(jUsername.getText());
+	}
     }                                        
 
     /**

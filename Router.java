@@ -32,7 +32,7 @@ public class Router extends Thread {
     }
     
     /** Adds a new client to the list */
-    private void addClient(Socket s) {
+    public void addClient(Socket s) {
         clients.add(new Client(s));
     }
 

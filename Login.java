@@ -1,23 +1,36 @@
-class Login {
-    private static int port = 4242;
-    //private static InetAddress = 
+/*
+ * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+ * Login.java
+ *
+ * Handles logins.
+ */
 
-    public Login() {
-	
+/**
+ * @author miniwolf
+ */
+
+/*
+ * TODO: Send request to Communication
+ */
+
+public class Login {
+    private Communication communication;
+    
+    public Login() { 
+	communication = new Communication();
     }
 
     /**
-     * @param username string from the textField
-     * @param password char[] from passwordField
+     * @param username string from the textField.getText method
+     * @param password char[] from passwordField.getPassword method
      */
 
     public boolean doLogin(String username, char[] password) {
-	StringBuilder login = new StringBuilder("M");
-	login.append(username);
+	StringBuilder login = new StringBuilder("L,");
+	login.append(username + ","); 
 	login.append(password);
 	String requestLogin = login.toString();
-	// Send request using requestLogin
-	return true;
+	return communication.login(login.toString());
     }
 
 }
