@@ -1,0 +1,99 @@
+/*
+ * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+ * InputHandler.java
+ *
+ * Handling every incoming object from the server
+ */
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
+/**
+ * TODO: Write description
+ */
+class InputHandler extends Thread {
+    private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<Object>();
+    private final ObjectInputStream in;
+
+    public InputHandler(ObjectInputStream in) {
+        this.in = in;
+    }
+
+    @Override
+    public void run() {
+        Object object = null;
+        while ( true ) {
+            while ( object == null ) {
+                try {
+                    object = in.readObject();
+                    inputs.add(object);
+                } catch (IOException ioe) {
+                    System.err.println("ioe: " + ioe.toString());
+                    return;
+                } catch (ClassNotFoundException cnfe) {
+                    System.err.println(cnfe.getMessage()); // Shared files are not the same on both side of the server
+                    // TODO: This will be a bitch when having to update the server
+                }
+            }
+            object = null;
+        }
+    }
+
+    public Object getLast() {
+        if ( inputs.isEmpty() ) return null;
+        return inputs.pollLast();
+    }
+
+    /**
+     * Checking our queue for a list from the server,
+     * if the list contains something not a string,
+     * we will throw an IllegalArgumentException.
+     *
+     * @return List<String> containing all the friends.
+     * @throws IllegalArgumentException meaning the server
+     *         has given some illegal list
+     */
+    public List<String> containsList() throws IllegalArgumentException {
+        List<String> list = new ArrayList<String>();
+        for ( Object object : inputs ) {
+            if ( !(object instanceof List) ) continue;
+            try {
+                list = checkList(object);
+                inputs.remove(object);
+                return list;
+            } catch (IllegalArgumentException iae) {
+                inputs.remove(object);
+                throw iae;
+            }
+        }
+        return list;
+    }
+
+    List<String> checkList(Object object) throws IllegalArgumentException {
+        List<String> list = new ArrayList<String>();
+        List<?> tmp = (List<?>) object;
+        for ( Object o : tmp ) {
+            if ( !(o instanceof String) )
+                throw new IllegalArgumentException("Server returned invalid list " + o.toString());
+            list.add((String) o);
+        }
+        return list;
+    }
+
+    public Message containsMessage() {
+        Message message;
+        for ( Object object : inputs ) {
+            if ( !(object instanceof Message) ) continue;
+
+            message = (Message) object;
+            if ( !message.isSystemMessage() ) {
+                inputs.remove(object);
+                return message;
+            }
+        }
+        return null;
+    }
+}
