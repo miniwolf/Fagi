@@ -12,11 +12,7 @@ import java.util.regex.Pattern;
  * TODO: Add descriptions
  */
 class LoginManager {
-    private final Communication communication;
-
-    public LoginManager(Communication communication) {
-        this.communication = communication;
-    }
+    private static Communication communication = null;
 
     /**
      * @param login       contains the login object.
@@ -24,7 +20,7 @@ class LoginManager {
      * @param jCreateUser respond to the user is posted here.
      * @param loginScreen is used for disposing and creating a new Mainscreen.
      */
-    public void handleLogin(Login login, String username, JLabel jCreateUser, LoginScreen loginScreen) {
+    public static void handleLogin(Login login, String username, JLabel jCreateUser, LoginScreen loginScreen) {
         if (isEmpty(login.getUsername()) || isEmpty(login.getPassword())) {
             jCreateUser.setText("Fields cannot be empty"); return;
         }
@@ -44,12 +40,28 @@ class LoginManager {
     }
 
     /**
+     * Logging out user by sending server request using the {Logout} object.
+     * @param logout     contains the logout object.
+     * @param mainScreen is used for disposing when successfully logged out.
+     */
+    public static void handleLogout(Logout logout, MainScreen mainScreen) {
+        communication.sendObject(logout);
+        Object object = null;
+        while ( !(object instanceof AllIsWellException) )
+            object = communication.handleObjects();
+        communication.close();
+        mainScreen.dispose();
+        String[] strings = {};
+        LoginScreen.main(strings);
+    }
+
+    /**
      * @param username   username from the LoginScreen.
      * @param password   password from the LoginScreen.
      * @param passRepeat for checking repeated password is equal.
      * @param jMessage   JLabel for writing status messages to the user.
      */
-    public void handleCreateUser(String username, String password, String passRepeat, JLabel jMessage) {
+    public static void handleCreateUser(String username, String password, String passRepeat, JLabel jMessage) {
         if ( isEmpty(username) || isEmpty(password) || isEmpty(passRepeat) ) {
             jMessage.setText("Fields can't be empty"); return;
         }
@@ -74,7 +86,7 @@ class LoginManager {
     /**
      * @param friendRequest contains the FriendRequest object to be send using the communication class.
      */
-    public void handleFriendRequest(FriendRequest friendRequest) {
+    public static void handleFriendRequest(FriendRequest friendRequest) {
         if ( isEmpty(friendRequest.getFriendUsername()) ) {
             JOptionPane.showMessageDialog(null, "Friend request cannot be empty", "Error in friend request.", JOptionPane.ERROR_MESSAGE);
             return;
@@ -92,17 +104,21 @@ class LoginManager {
      * @param string which is escaped in all the illegal characters.
      * @return String the escaped string.
      */
-    private String deleteIllegalCharacters(String string) {
+    private static String deleteIllegalCharacters(String string) {
         if ( string.contains("\"") ) string = string.replace("\"", "'");
         if ( string.contains(",") ) string = string.replace(",", ";");
         return string;
     }
 
-    private boolean isEmpty(String string) {
+    public static void setCommunication(Communication communication) {
+        LoginManager.communication = communication;
+    }
+
+    private static boolean isEmpty(String string) {
         return string.equals("");
     }
 
-    private boolean isValid(String string) {
+    private static boolean isValid(String string) {
         return Pattern.matches("\\w*", string);
     }
 }

@@ -25,7 +25,7 @@ class LoginScreen extends JFrame {
     /**
      * Creates new form LoginScreen
      */
-    private LoginScreen() {
+    public LoginScreen() {
         initComponents();
         initCommunication();
     }
@@ -135,6 +135,7 @@ class LoginScreen extends JFrame {
     private void initCommunication() {
         try {
             communication = new Communication();
+            LoginManager.setCommunication(communication);
             jMessageLabel.setText("Connected to server");
             connected = true;
         } catch (IOException ioe) {
@@ -162,7 +163,7 @@ class LoginScreen extends JFrame {
         }
 
         if ( creatingUser ) {
-            new LoginManager(communication).handleCreateUser(jUsername.getText(), new String(jPassword.getPassword()), new String(jPasswordRepeat.getPassword()), jMessageLabel);
+            LoginManager.handleCreateUser(jUsername.getText(), new String(jPassword.getPassword()), new String(jPasswordRepeat.getPassword()), jMessageLabel);
             jPasswordRepeat.setVisible(false);
             jLoginBtn.setText("Login");
             creatingUser = false;
@@ -170,7 +171,7 @@ class LoginScreen extends JFrame {
         } else {
             String username = jUsername.getText();
             Login login = new Login(username, new String(jPassword.getPassword()));
-            new LoginManager(communication).handleLogin(login, username, jMessageLabel, this);
+            LoginManager.handleLogin(login, username, jMessageLabel, this);
         }
     }
 

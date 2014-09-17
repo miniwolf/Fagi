@@ -57,6 +57,9 @@ class Worker extends Thread {
             } else if ( input instanceof Login) {
                 Login arg = (Login) input;
                 return handleLogin(arg);
+            } else if ( input instanceof Logout) {
+                Logout arg = (Logout) input;
+                return handleLogout(arg);
             } else if ( input instanceof GetFriends ) {
                 return handleGetFriends();
             } else if ( input instanceof CreateUser ) {
@@ -99,6 +102,14 @@ class Worker extends Thread {
         } catch (Exception e) {
             return e;
         }
+        return new AllIsWellException();
+    }
+
+    private Object handleLogout(Logout arg) {
+        System.out.println("Logout");
+        myUserName = arg.getUsername();
+        Data.userLogout(myUserName);
+        running = false;
         return new AllIsWellException();
     }
 

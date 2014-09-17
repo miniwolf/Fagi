@@ -29,9 +29,9 @@ class Communication {
             inputHandler = new InputHandler(new ObjectInputStream(socket.getInputStream()));
             inputHandler.start();
         } catch (UnknownHostException Uhe) {
-            System.err.println("Uhe " + Uhe);
+            System.err.println("c Uhe: " + Uhe);
         } catch (IOException ioe) {
-            throw new IOException(ioe.toString());
+            throw new IOException("c ioe: " + ioe.toString());
         }
     }
 
@@ -44,7 +44,7 @@ class Communication {
             out.writeObject(obj);
             out.flush();
         } catch (IOException e) {
-            System.err.println(e.toString());
+            System.err.println("c ioe: " + e.toString());
             System.exit(1);
         }
     }
@@ -67,20 +67,25 @@ class Communication {
         try {
             list = inputHandler.containsList();
         } catch (IllegalArgumentException e) {
-            System.err.println(e.toString());
+            System.err.println("c iae: " + e.toString());
         }
         return list;
     }
 
     // TODO: Need to close correctly?
     public void close() {
+        inputHandler.close();
+
         try {
+            Thread.sleep(10);
             socket.close();
+            System.out.println("Closed socket.");
         } catch (IOException ioe) {
-            System.err.println("cioe: " + ioe.toString());
+            System.err.println("c ioe: " + ioe.toString());
+        } catch (InterruptedException ie) {
+            System.err.println("c ie: " + ie.toString());
         }
         inputHandler.interrupt();
-        while (inputHandler.isInterrupted()) {
-        }
+        while (!inputHandler.isInterrupted()) { }
     }
 }

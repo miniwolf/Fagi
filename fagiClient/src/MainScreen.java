@@ -251,12 +251,10 @@ class MainScreen extends JFrame implements KeyListener {
     }
 
     private void jLogOutClickPerformed() {
-        /*messageListener.interrupt();
-		  communication.close();
-		  dispose();
-		  String[] strings = {};
-		  new LoginScreen().main(strings);*/
-        System.exit(1);
+        Logout logout = new Logout(username);
+        LoginManager.handleLogout(logout, this);
+        messageListener.interrupt();
+        communication.close();
     }
 
     private void jMenuFriendRequestClickPerformed() {
@@ -264,7 +262,7 @@ class MainScreen extends JFrame implements KeyListener {
         if ( null == friend ) return;
 
         FriendRequest friendRequest = new FriendRequest(username, friend);
-        new LoginManager(communication).handleFriendRequest(friendRequest);
+        LoginManager.handleFriendRequest(friendRequest);
     }
 
     public JScrollPane getConversationWindow() {
