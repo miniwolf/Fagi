@@ -13,13 +13,13 @@ import java.util.*;
  * TODO: Add description, maybe think about .fagi file ending
  */
 class Data {
-    private static final Map<String, Worker> onlineUsers = new HashMap<String, Worker>();
-    private static final Map<String, User> registeredUsers = new HashMap<String, User>();
+    private static final Map<String, Worker> onlineUsers = new HashMap<>();
+    private static final Map<String, User> registeredUsers = new HashMap<>();
     private static final String separator = "\",\"";
     private static final String indexFilePath = "users/userIndex.fagi";
 
-    public static boolean createUser(String userName, String pass) throws IOException {
-        if ( registeredUsers.containsKey(userName) ) return false;
+    public static void createUser(String userName, String pass) throws IOException {
+        if ( registeredUsers.containsKey(userName) ) return;
 
         registeredUsers.put(userName, new User(userName, pass));
 
@@ -30,8 +30,6 @@ class Data {
 
         if ( !(new File("users/" + userName)).createNewFile() )
             System.out.println(userName + ". File already exists, supposed bug. Report please!");
-
-        return true;
     }
 
     public static void userLogin(String userName, String pass, Worker w) throws Exception {
@@ -91,7 +89,7 @@ class Data {
 
     private static List<String> readIndexFile(File indexFile) throws Exception {
         BufferedReader indexReader = new BufferedReader(new FileReader(indexFile));
-        List<String> tmpUsernameList = new ArrayList<String>();
+        List<String> tmpUsernameList = new ArrayList<>();
         while ( indexReader.ready() ) {
             String line = indexReader.readLine();
             int sep = line.indexOf(separator);
@@ -149,21 +147,21 @@ class Data {
         String requestLine = reader.readLine();
         requestLine = requestLine.substring(1, requestLine.length() - 1);
 
-        List<String> friends = new ArrayList<String>();
+        List<String> friends = new ArrayList<>();
         try {
-            friends = new ArrayList<String>(Arrays.asList(friendLine.split(separator)));
+            friends = new ArrayList<>(Arrays.asList(friendLine.split(separator)));
         } catch (Exception e) {
             System.out.println("Error while loading friends for " + userName + " maybe he just doesn't have any friends" + e);
         }
 
-        List<String> requests = new ArrayList<String>();
+        List<String> requests = new ArrayList<>();
         try {
-            requests = new ArrayList<String>(Arrays.asList(requestLine.split(separator)));
+            requests = new ArrayList<>(Arrays.asList(requestLine.split(separator)));
         } catch (Exception e) {
             System.out.println("Error while loading friend requests for " + userName + " maybe he just doesn't have any friends " + e);
         }
 
-        List<List<String>> result = new ArrayList<List<String>>();
+        List<List<String>> result = new ArrayList<>();
         result.add(friends);
         result.add(requests);
 

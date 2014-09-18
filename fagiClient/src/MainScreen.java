@@ -18,7 +18,7 @@ class MainScreen extends JFrame implements KeyListener {
     private final Communication communication;
     private final ArrayList<Conversation> conversations;
     private final MessageListener messageListener;
-    private Thread messageThread;
+    private final Thread messageThread;
     private JActionList<Object> jContactList;
     private JScrollPane jScrollPane2;
     private JTextArea jMessage;
@@ -33,14 +33,14 @@ class MainScreen extends JFrame implements KeyListener {
     public MainScreen(String username, Communication communication) {
         this.username = username;
         this.communication = communication;
-        conversations = new ArrayList<Conversation>();
+        conversations = new ArrayList<>();
         createGUI();
         initComponents();
         messageListener = new MessageListener(communication, jContactList, this);
         messageListener.update(conversations);
         messageThread = new Thread(messageListener);
         messageThread.start();
-        jContactList.setCellRenderer(new MyListCellRenderer<Object>(messageListener, this));
+        jContactList.setCellRenderer(new MyListCellRenderer<>(messageListener, this));
         setVisible(true);
     }
 
@@ -56,8 +56,8 @@ class MainScreen extends JFrame implements KeyListener {
         JTextArea jConversation = new Chat("nobody, that's sad.");
         jMessage = new JTextArea();
         JTabbedPane jTabbedPane1 = new JTabbedPane();
-        jContactList = new JActionList<Object>();
-        JActionList<Object> jList2 = new JActionList<Object>();
+        jContactList = new JActionList<>();
+        JActionList<Object> jList2 = new JActionList<>();
         chatname = new JLabel();
         JButton jSendBtn = new JButton();
         JMenuBar jMenuBar1 = new JMenuBar();
@@ -77,12 +77,7 @@ class MainScreen extends JFrame implements KeyListener {
         jMessage.addKeyListener(this);
 
         jScrollPane4.setViewportView(jMessage);
-        jScrollPane4.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-            @Override
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                jMessage.select(getHeight() + 1000, 0);
-            }
-        });
+        jScrollPane4.getVerticalScrollBar().addAdjustmentListener(e -> jMessage.select(getHeight() + 1000, 0));
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -95,12 +90,11 @@ class MainScreen extends JFrame implements KeyListener {
         content.add(jScrollPane4, gridBagConstraints);
 
         jScrollPane2.setViewportView(jConversation);
-        jScrollPane2.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                Chat chat = (Chat) jScrollPane2.getViewport().getView();
-                for ( Conversation conversation : conversations ) if ( conversation.getConversation() == chat )
-                    conversation.getConversation().select(getHeight() + 1000, 0);
-            }
+        jScrollPane2.getVerticalScrollBar().addAdjustmentListener(e -> {
+            Chat chat = (Chat) jScrollPane2.getViewport().getView();
+            conversations.stream().filter(conversation -> conversation.getConversation() == chat).
+                    forEach(conversation -> conversation.getConversation().select(getHeight() + 1000, 0));
+
         });
 
         gridBagConstraints = new GridBagConstraints();
@@ -116,11 +110,9 @@ class MainScreen extends JFrame implements KeyListener {
         gridBagConstraints.insets = new Insets(6, 6, 0, 0);
         content.add(jScrollPane2, gridBagConstraints);
 
-        jContactList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jContactList.setSelectionBackground(new Color(255, 153, 51));
-                jContactListClickPerformed();
-            }
+        jContactList.addActionListener(evt -> {
+            jContactList.setSelectionBackground(new Color(255, 153, 51));
+            jContactListClickPerformed();
         });
 
         jScrollPane1.setViewportView(jContactList);
@@ -150,12 +142,7 @@ class MainScreen extends JFrame implements KeyListener {
         content.add(chatname, gridBagConstraints);
 
         jSendBtn.setText("Send...");
-        jSendBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleMessage();
-            }
-        });
+        jSendBtn.addActionListener(e -> handleMessage());
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -168,20 +155,11 @@ class MainScreen extends JFrame implements KeyListener {
         jMenu1.setText("File");
 
         jMenuFriendRequest.setText("FriendRequest");
-        jMenuFriendRequest.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jMenuFriendRequestClickPerformed();
-            }
-        });
+        jMenuFriendRequest.addActionListener(evt -> jMenuFriendRequestClickPerformed());
         jMenu1.add(jMenuFriendRequest);
 
         jLogout.setText("Logout");
-        jLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jLogOutClickPerformed();
-            }
-        });
+        jLogout.addActionListener(e -> jLogOutClickPerformed());
         jMenu1.add(jLogout);
         jMenuBar1.add(jMenu1);
         setJMenuBar(jMenuBar1);
@@ -266,7 +244,7 @@ class MainScreen extends JFrame implements KeyListener {
         String friend = JOptionPane.showInputDialog("Type username you want to add.");
         if ( null == friend ) return;
 
-        FriendRequest friendRequest = new FriendRequest(username, friend);
+        FriendRequest friendRequest = new FriendRequest(friend);
         LoginManager.handleFriendRequest(friendRequest);
     }
 

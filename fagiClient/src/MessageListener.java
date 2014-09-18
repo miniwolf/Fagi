@@ -18,7 +18,7 @@ class MessageListener implements Runnable {
     public ArrayList<Conversation> conversations;
     private final JActionList<Object> jContactList;
     private final MainScreen mainScreen;
-    public final ArrayList<Object> unread = new ArrayList<Object>();
+    public final ArrayList<Object> unread = new ArrayList<>();
     private boolean running = true;
 
     public MessageListener(Communication communication, JActionList<Object> jContactList, MainScreen mainScreen) {

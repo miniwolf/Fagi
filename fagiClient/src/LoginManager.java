@@ -2,7 +2,7 @@
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
  * Login.java
  *
- * Handles login requests and respons to and from server.
+ * Handles login requests and responds to and from server.
  */
 
 import javax.swing.*;
@@ -95,7 +95,7 @@ class LoginManager {
         communication.sendObject(friendRequest);
         Object object = communication.handleObjects();
         if ( object instanceof AllIsWellException )
-            JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeded", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeeded", JOptionPane.PLAIN_MESSAGE);
         else if ( object instanceof Exception )
             JOptionPane.showMessageDialog(null, "Friend doesn't exists, try again.", "Error in friend request.", JOptionPane.ERROR_MESSAGE);
     }

@@ -26,7 +26,4 @@ class Chat extends JTextArea {
         super.setText("You are now chatting with: " + chatBuddy + "\n");
     }
 
-    public String getChatBuddy() {
-        return chatBuddy;
-    }
 }

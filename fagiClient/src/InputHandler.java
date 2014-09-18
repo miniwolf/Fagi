@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * TODO: Write description
  */
 class InputHandler implements Runnable {
-    private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<Object>();
+    private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<>();
     private final ObjectInputStream in;
     private boolean running = true;
 
@@ -62,7 +62,7 @@ class InputHandler implements Runnable {
      *         has given some illegal list
      */
     public List<String> containsList() throws IllegalArgumentException {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for ( Object object : inputs ) {
             if ( !(object instanceof List) ) continue;
             try {
@@ -78,7 +78,7 @@ class InputHandler implements Runnable {
     }
 
     List<String> checkList(Object object) throws IllegalArgumentException {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         List<?> tmp = (List<?>) object;
         for ( Object o : tmp ) {
             if ( !(o instanceof String) )

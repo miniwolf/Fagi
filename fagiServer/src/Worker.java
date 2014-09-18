@@ -5,7 +5,6 @@
  * Worker thread for each client.
  */
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -13,9 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 class Worker extends Thread {
-    private final Queue<Message> incMessages = new ConcurrentLinkedQueue<Message>();
+    private final Queue<Message> incMessages = new ConcurrentLinkedQueue<>();
     private ObjectInputStream oIn;
     private ObjectOutputStream oOut;
     private boolean running = true;
@@ -113,7 +113,7 @@ class Worker extends Thread {
         return new AllIsWellException();
     }
 
-    private Object handleCreateUser(CreateUser arg) throws IOException {
+    private Object handleCreateUser(CreateUser arg) {
         System.out.println("CreateUser");
         try {
             Data.createUser(arg.getUsername(), arg.getPassword());
@@ -143,10 +143,7 @@ class Worker extends Thread {
         if ( me == null )
             throw new NoSuchUserException();
 
-        List<String> list = new ArrayList<String>();
-        for ( String friendName : me.getFriends() ) if ( Data.isUserOnline(friendName) )
-            list.add(friendName);
-        return list;
+        return me.getFriends().stream().filter(Data::isUserOnline).collect(Collectors.toList());
     }
 
     synchronized void addMessage(Message m) {

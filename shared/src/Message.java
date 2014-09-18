@@ -17,7 +17,7 @@ class Message implements Serializable {
      */
     private final String sender;
     /**
-     * The message reciever
+     * The message receiver
      */
     private final String receiver;
     /**
@@ -30,13 +30,6 @@ class Message implements Serializable {
         this.sender = sender;
         this.receiver = receiver;
         systemMessage = false;
-    }
-
-    public Message(String text, boolean systemMessage) {
-        this.text = text;
-        this.systemMessage = systemMessage;
-        this.sender = "";
-        this.receiver = "";
     }
 
     public String getMessage() {

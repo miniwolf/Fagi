@@ -7,7 +7,7 @@
 
 import java.io.Serializable;
 
-public class Logout implements Serializable {
+class Logout implements Serializable {
     private final String username;
 
     public Logout(String username) {

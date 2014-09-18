@@ -21,8 +21,8 @@ public class User {
     public User(String name, String pass) {
         this.pass = pass;
         this.userName = name;
-        friends = new ArrayList<String>();
-        incFriendReq = new ArrayList<String>();
+        friends = new ArrayList<>();
+        incFriendReq = new ArrayList<>();
     }
 
     public String getPass() {

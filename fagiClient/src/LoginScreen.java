@@ -7,8 +7,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
@@ -24,7 +22,7 @@ class LoginScreen extends JFrame {
     /**
      * Creates new form LoginScreen
      */
-    public LoginScreen() {
+    private LoginScreen() {
         initComponents();
         initCommunication();
     }
@@ -62,11 +60,7 @@ class LoginScreen extends JFrame {
         container.add(jUsername, gridBagConstraints);
 
         jPassword.setText("Password...");
-        jPassword.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                handleUserRequest();
-            }
-        });
+        jPassword.addActionListener(evt -> handleUserRequest());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -78,11 +72,7 @@ class LoginScreen extends JFrame {
 
         jPasswordRepeat.setText("Password...");
         jPasswordRepeat.setVisible(false);
-        jPasswordRepeat.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                handleUserRequest();
-            }
-        });
+        jPasswordRepeat.addActionListener(evt -> handleUserRequest());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -93,11 +83,7 @@ class LoginScreen extends JFrame {
         container.add(jPasswordRepeat, gridBagConstraints);
 
         jLoginBtn.setText("Login");
-        jLoginBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                handleUserRequest();
-            }
-        });
+        jLoginBtn.addActionListener(evt -> handleUserRequest());
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -118,11 +104,7 @@ class LoginScreen extends JFrame {
         container.add(jMessageLabel, gridBagConstraints);
 
         jMenuCreateUser.setText("Create User");
-        jMenuCreateUser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jMenuCreateUserActionPerformed();
-            }
-        });
+        jMenuCreateUser.addActionListener(evt -> jMenuCreateUserActionPerformed());
         jMenu1.setText("User");
         jMenu1.add(jMenuCreateUser);
         jMenuBar1.add(jMenu1);
@@ -193,10 +175,6 @@ class LoginScreen extends JFrame {
         }
 
         /* Create and display the form */
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginScreen().setVisible(true);
-            }
-        });
+        EventQueue.invokeLater(() -> new LoginScreen().setVisible(true));
     }
 }

@@ -8,18 +8,10 @@
 import java.io.Serializable;
 
 class FriendRequest implements Serializable {
-    private final String username;
     private final String friendUsername;
 
-    public FriendRequest(String username, String friendUsername) {
-        this.username = username;
+    public FriendRequest(String friendUsername) {
         this.friendUsername = friendUsername;
-    }
-
-    // TODO: Refactor away
-    @Deprecated
-    public String getUsername() {
-        return username;
     }
 
     public String getFriendUsername() {
