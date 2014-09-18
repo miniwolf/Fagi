@@ -19,7 +19,6 @@ class LoginScreen extends JFrame {
     private JLabel jMessageLabel;
     private JTextField jUsername;
     private JPasswordField jPassword, jPasswordRepeat;
-    private Communication communication;
     private boolean connected = false, creatingUser = false;
 
     /**
@@ -134,8 +133,7 @@ class LoginScreen extends JFrame {
 
     private void initCommunication() {
         try {
-            communication = new Communication();
-            LoginManager.setCommunication(communication);
+            LoginManager.setCommunication(new Communication());
             jMessageLabel.setText("Connected to server");
             connected = true;
         } catch (IOException ioe) {

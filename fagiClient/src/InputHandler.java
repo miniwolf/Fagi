@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 /**
  * TODO: Write description
  */
-class InputHandler extends Thread {
+class InputHandler implements Runnable {
     private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<Object>();
     private final ObjectInputStream in;
     private boolean running = true;
@@ -27,15 +27,15 @@ class InputHandler extends Thread {
     public void run() {
         Object object = null;
         while ( running ) {
-            while ( object == null ) {
-                if ( !running ) return;
-
+            while ( object == null && running ) {
                 try {
                     object = in.readObject();
                     inputs.add(object);
                 } catch (IOException ioe) {
-                    System.err.println("i ioe: " + ioe.toString());
-                    ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
+                    if ( running ) {
+                        System.err.println("i ioe: " + ioe.toString());
+                        ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
+                    }
                     return;
                 } catch (ClassNotFoundException cnfe) {
                     // Shared files are not the same on both side of the server

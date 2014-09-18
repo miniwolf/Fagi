@@ -18,6 +18,7 @@ class MainScreen extends JFrame implements KeyListener {
     private final Communication communication;
     private final ArrayList<Conversation> conversations;
     private final MessageListener messageListener;
+    private Thread messageThread;
     private JActionList<Object> jContactList;
     private JScrollPane jScrollPane2;
     private JTextArea jMessage;
@@ -37,7 +38,8 @@ class MainScreen extends JFrame implements KeyListener {
         initComponents();
         messageListener = new MessageListener(communication, jContactList, this);
         messageListener.update(conversations);
-        messageListener.start();
+        messageThread = new Thread(messageListener);
+        messageThread.start();
         jContactList.setCellRenderer(new MyListCellRenderer<Object>(messageListener, this));
         setVisible(true);
     }
@@ -251,10 +253,13 @@ class MainScreen extends JFrame implements KeyListener {
     }
 
     private void jLogOutClickPerformed() {
+        messageListener.close();
+        messageThread.interrupt();
+        /* Have to wait, else the listener will try asking
+           request using the closed socket causing a SocketException. */
+        while ( !messageThread.isInterrupted() ) {}
         Logout logout = new Logout(username);
         LoginManager.handleLogout(logout, this);
-        messageListener.interrupt();
-        communication.close();
     }
 
     private void jMenuFriendRequestClickPerformed() {

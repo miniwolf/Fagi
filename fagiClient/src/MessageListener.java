@@ -13,12 +13,13 @@ import java.util.List;
 /**
  * TODO: Add descriptions, add friend requests
  */
-class MessageListener extends Thread {
+class MessageListener implements Runnable {
     private final Communication communication;
     public ArrayList<Conversation> conversations;
     private final JActionList<Object> jContactList;
     private final MainScreen mainScreen;
     public final ArrayList<Object> unread = new ArrayList<Object>();
+    private boolean running = true;
 
     public MessageListener(Communication communication, JActionList<Object> jContactList, MainScreen mainScreen) {
         this.communication = communication;
@@ -40,13 +41,13 @@ class MessageListener extends Thread {
      * and updating our friend list.
      */
     public void run() {
-        while ( true ) {
+        while ( running ) {
             Message message = null;
-            while ( message == null ) {
+            while ( message == null && running ) {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
-                    System.err.println("t: " + e.toString());
+                    Thread.currentThread().interrupt();
                     return;
                 }
                 List<String> friends = communication.getFriends();
@@ -94,6 +95,10 @@ class MessageListener extends Thread {
                 jContactList.setListData(friends.toArray());
                 return;
             }
+    }
+
+    public void close() {
+        running = false;
     }
 }
 
