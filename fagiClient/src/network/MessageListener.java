@@ -5,6 +5,7 @@ package network;/*
  * For receiving messages and printing these to the conversation
  */
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -77,7 +78,7 @@ public class MessageListener implements Runnable {
      */
     private void update(ListView<String> list, List<String> input) {
         if ( input.isEmpty() ) { // TODO: Cheaper to not set if already empty?
-            list.getItems().setAll("");
+            Platform.runLater(() -> list.getItems().setAll(""));
             return;
         }
 
@@ -90,7 +91,8 @@ public class MessageListener implements Runnable {
 
         for ( int i = 0; i < modelSize; i++ )
             if ( !input.get(i).equals(observableList.get(i)) ) {
-                observableList.setAll(input); return;
+                Platform.runLater(() -> observableList.setAll(input));
+                return;
             }
     }
 
@@ -99,7 +101,7 @@ public class MessageListener implements Runnable {
         for ( Conversation conversation : conversations ) {
             if ( !conversation.getChatBuddy().equals(chatBuddy) ) continue;
 
-            conversation.getConversation().appendText(conversation.getChatBuddy() + ": " + message.getMessage() + "\n");
+            Platform.runLater(() -> conversation.getConversation().appendText(conversation.getChatBuddy() + ": " + message.getMessage() + "\n"));
             if ( mainScreen.getConversationWindow().getContent().equals(conversation.getConversation()) )
                 return;
 
