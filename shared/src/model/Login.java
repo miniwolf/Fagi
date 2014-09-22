@@ -1,5 +1,5 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package model;/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Login.java
  *
  * Serializable object to send login requests to server.
@@ -7,7 +7,7 @@
 
 import java.io.Serializable;
 
-class Login implements Serializable {
+public class Login implements Serializable {
     private final String username;
     private final String password;
 

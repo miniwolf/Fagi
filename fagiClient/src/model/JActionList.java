@@ -1,5 +1,5 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package model;/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * JActionList.java
  *
  * Extension for JList to handle mouse and keyboard actions.
@@ -12,7 +12,7 @@ import java.awt.event.*;
  * Extending JList with an actionListener
  * to be able to detect mouseActions and Enter
  */
-class JActionList<E> extends javax.swing.JList<E> {
+public class JActionList<E> extends javax.swing.JList<E> {
     private ActionListener action;
 
     public JActionList() {

@@ -1,14 +1,18 @@
 /*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Worker.java
  *
  * Worker thread for each client.
  */
 
+import exceptions.AllIsWellException;
+import exceptions.NoSuchUserException;
+import exceptions.UserOnlineException;
+import model.*;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -50,35 +54,41 @@ class Worker extends Thread {
     }
 
     private Object handleInput(Object input) {
-        try {
-            if ( input instanceof Message ) {
-                Message arg = (Message) input;
-                return handleMessage(arg);
-            } else if ( input instanceof Login) {
-                Login arg = (Login) input;
-                return handleLogin(arg);
-            } else if ( input instanceof Logout) {
-                Logout arg = (Logout) input;
-                return handleLogout(arg);
-            } else if ( input instanceof GetFriends ) {
-                return handleGetFriends();
-            } else if ( input instanceof CreateUser ) {
-                CreateUser arg = (CreateUser) input;
-                return handleCreateUser(arg);
-            } else if ( input instanceof FriendRequest ) {
-                FriendRequest arg = (FriendRequest) input;
-                return handleFriendRequest(arg);
-            } else {
-                return handleUnknownObject(input);
-            }
-        } catch (Exception e) {
-            return e;
+        if ( input instanceof Message ) {
+            Message arg = (Message) input;
+            return handleMessage(arg);
+        } else if ( input instanceof Login) {
+            Login arg = (Login) input;
+            return handleLogin(arg);
+        } else if ( input instanceof Logout) {
+            Logout arg = (Logout) input;
+            return handleLogout(arg);
+        } else if ( input instanceof GetFriends ) {
+            return handleGetFriends();
+        } else if ( input instanceof GetRequests) {
+            return handleGetRequests();
+        } else if ( input instanceof CreateUser ) {
+            CreateUser arg = (CreateUser) input;
+            return handleCreateUser(arg);
+        } else if ( input instanceof FriendRequest ) {
+            FriendRequest arg = (FriendRequest) input;
+            return handleFriendRequest(arg);
+        } else {
+            return handleUnknownObject(input);
         }
     }
 
     private Object handleGetFriends() {
         try {
             return getOnlineFriends();
+        } catch (Exception e) {
+            return e;
+        }
+    }
+
+    private Object handleGetRequests() {
+        try {
+            return getFriendRequests();
         } catch (Exception e) {
             return e;
         }
@@ -144,6 +154,14 @@ class Worker extends Thread {
             throw new NoSuchUserException();
 
         return me.getFriends().stream().filter(Data::isUserOnline).collect(Collectors.toList());
+    }
+
+    private List<String> getFriendRequests() throws NoSuchUserException {
+        User me = Data.getUser(myUserName);
+        if ( me == null )
+            throw new NoSuchUserException();
+
+        return me.getFriendReq();
     }
 
     synchronized void addMessage(Message m) {

@@ -5,6 +5,8 @@
  * User data object.
  */
 
+import exceptions.NoSuchUserException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,10 @@ public class User {
 
     public List<String> getFriends() {
         return friends;
+    }
+
+    public List<String> getFriendReq() {
+        return incFriendReq;
     }
 
     public void addFriend(User friend) {

@@ -1,5 +1,5 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package model;/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Message.java
  *
  * Serializable object to send messages to server.
@@ -7,7 +7,7 @@
 
 import java.io.Serializable;
 
-class Message implements Serializable {
+public class Message implements Serializable {
     /**
      * Containing the message text
      */

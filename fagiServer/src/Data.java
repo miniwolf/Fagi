@@ -1,12 +1,16 @@
 /*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Data.java
  *
  * Contains and update information on users.
  */
 
+import exceptions.NoSuchUserException;
+import exceptions.PasswordException;
+import exceptions.UserOnlineException;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 /**
@@ -28,7 +32,9 @@ class Data {
         out.flush();
         out.close();
 
-        if ( !(new File("users/" + userName)).createNewFile() )
+        File file = new File("users/" + userName);
+
+        if ( !file.createNewFile() )
             System.out.println(userName + ". File already exists, supposed bug. Report please!");
     }
 
@@ -118,6 +124,7 @@ class Data {
 
     private static void appendFriendToUserFile(String username, String friendName) throws Exception {
         appendToUserFile(username, friendName, 0);
+        removeFromUserFile(username, friendName, 1);
     }
 
     public static void appendFriendReqToUserFile(String username, String friendName) throws Exception {
@@ -132,47 +139,67 @@ class Data {
         writeUserFile(username, wholeFile);
     }
 
+    private static void removeFromUserFile(String username, String friendName, int index) throws Exception {
+        List<List<String>> wholeFile = parseUserFile(username);
+        List<String> stringList = wholeFile.get(index);
+        stringList.remove(friendName);
+        wholeFile.set(index, stringList);
+        writeUserFile(username, wholeFile);
+    }
+
     private static List<List<String>> parseUserFile(String userName) throws Exception {
         File userFile = new File("users/" + userName);
 
-        if (!userFile.exists()) {
+        if ( !userFile.exists() ) {
             System.out.println(userName + " doesn't exist");
             throw new Exception();
         }
 
         BufferedReader reader = new BufferedReader(new FileReader(userFile));
         String friendLine = reader.readLine();
-        friendLine = friendLine.substring(1, friendLine.length() - 1);
-
-        String requestLine = reader.readLine();
-        requestLine = requestLine.substring(1, requestLine.length() - 1);
-
         List<String> friends = new ArrayList<>();
-        try {
-            friends = new ArrayList<>(Arrays.asList(friendLine.split(separator)));
-        } catch (Exception e) {
-            System.out.println("Error while loading friends for " + userName + " maybe he just doesn't have any friends" + e);
+
+        if ( null != friendLine && !friendLine.isEmpty() ) {
+            friendLine = friendLine.substring(1, friendLine.length() - 1);
+            try {
+                friends = new ArrayList<>(Arrays.asList(friendLine.split(separator)));
+            } catch (Exception e) {
+                System.out.println("Error while loading friends for " + userName + " maybe he just doesn't have any friends" + e);
+            }
         }
 
+        String requestLine = reader.readLine();
         List<String> requests = new ArrayList<>();
-        try {
-            requests = new ArrayList<>(Arrays.asList(requestLine.split(separator)));
-        } catch (Exception e) {
-            System.out.println("Error while loading friend requests for " + userName + " maybe he just doesn't have any friends " + e);
+
+        if ( null != requestLine && !requestLine.isEmpty() ) {
+            requestLine = requestLine.substring(1, requestLine.length() - 1);
+            try {
+                requests = new ArrayList<>(Arrays.asList(requestLine.split(separator)));
+            } catch (Exception e) {
+                System.out.println("Error while loading friend requests for " + userName + " maybe he just doesn't have any friends " + e);
+            }
         }
 
         List<List<String>> result = new ArrayList<>();
         result.add(friends);
         result.add(requests);
 
+        reader.close();
         return result;
     }
 
     // TODO: This doesn't work
     private static void writeUserFile(String userName, List<List<String>> in) {
         File file = new File("users/" + userName);
-        if ( !file.delete() )
-            System.out.println("Deleting file that doesn't exist. Data.java");
+        System.out.println(file.exists());
+        Path path = FileSystems.getDefault().getPath("users/" + userName);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            System.err.println(e.toString());
+        }
+        /*if ( !file.delete() )
+            System.out.println("Deleting file that doesn't exist. users/" + userName);*/
 
         file = new File("users/" + userName);
 

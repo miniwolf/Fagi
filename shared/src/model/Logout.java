@@ -1,13 +1,13 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
- * Login.java
+package model;/*
+ * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel.
+ * Logout.java
  *
  * Serializable object to send login requests to server.
  */
 
 import java.io.Serializable;
 
-class Logout implements Serializable {
+public class Logout implements Serializable {
     private final String username;
 
     public Logout(String username) {

@@ -1,9 +1,11 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package network;/*
+ * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * InputHandler.java
  *
  * Handling every incoming object from the server
  */
+
+import model.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 /**
  * TODO: Write description
  */
-class InputHandler implements Runnable {
+public class InputHandler implements Runnable {
     private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<>();
     private final ObjectInputStream in;
     private boolean running = true;

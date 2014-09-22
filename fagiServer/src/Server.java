@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
+ * Server.java
+ *
+ * Listening socket for incoming transmissions from clients.
+ */
+
 import java.net.ServerSocket;
 import java.net.Socket;
 

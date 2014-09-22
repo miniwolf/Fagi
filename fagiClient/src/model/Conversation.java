@@ -1,5 +1,5 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package model;/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Conversation.java
  *
  * Tool class contains information on name and textarea for a chat.
@@ -8,16 +8,16 @@
 /**
  *  TODO: Write description
  */
-class Conversation extends java.awt.Component {
-    private final javax.swing.JTextArea chat;
+public class Conversation extends java.awt.Component {
     private final String chatBuddy;
+    private final Chat chat;
 
     public Conversation(String chatBuddy) {
         this.chatBuddy = chatBuddy;
         chat = new Chat(chatBuddy);
     }
 
-    public javax.swing.JTextArea getConversation() {
+    public Chat getConversation() {
         return chat;
     }
 

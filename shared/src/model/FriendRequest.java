@@ -1,5 +1,5 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package model;/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * FriendRequest.java
  *
  * Serializable object to send friend requests to server.
@@ -7,7 +7,7 @@
 
 import java.io.Serializable;
 
-class FriendRequest implements Serializable {
+public class FriendRequest implements Serializable {
     private final String friendUsername;
 
     public FriendRequest(String friendUsername) {

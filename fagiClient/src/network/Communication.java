@@ -1,9 +1,11 @@
-/*
- * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
+package network;/*
+ * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Communication.java
  *
  * Handling in and output
  */
+
+import model.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +17,7 @@ import java.util.List;
 /**
  * TODO: Add description
  */
-class Communication {
+public class Communication {
     private ObjectOutputStream out;
     private static final String host = "localhost";
     private static final int port = 4242;
@@ -40,7 +42,7 @@ class Communication {
         return inputHandler.containsMessage();
     }
 
-    void sendObject(Object obj) {
+    public void sendObject(Object obj) {
         try {
             out.writeObject(obj);
             out.flush();
@@ -59,13 +61,14 @@ class Communication {
     }
 
     /**
-     * Getting the friend list from the server.
+     * Getting the friend/friend request list from the server.
+     * Using object to pass the correct get requests to the server.
      *
-     * @return Object[] which contains all of our friends as strings.
+     * @return List<String> which contains all of our friends as strings.
      */
-    public List<String> getFriends() {
+    public List<String> getList(Object object) {
         List<String> list = null;
-        sendObject(new GetFriends());
+        sendObject(object);
         try {
             list = inputHandler.containsList();
         } catch (IllegalArgumentException e) {
