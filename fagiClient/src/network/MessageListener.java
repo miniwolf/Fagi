@@ -61,7 +61,6 @@ public class MessageListener implements Runnable {
                 }
                 List<String> friends = communication.getList(new GetFriends());
                 update(contactList, friends);
-                // TODO: Bug that will hide the request from the list until after re-log.
                 List<String> requests = communication.getList(new GetRequests());
                 update(requestList, requests);
 

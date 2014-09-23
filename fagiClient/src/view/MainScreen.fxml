@@ -40,7 +40,7 @@
                            <Insets bottom="20.0"/>
                        </padding>
                        <ListView fx:id="requestList" maxHeight="1.7976931348623157E308" prefHeight="326.0"
-                                 prefWidth="128.0"/>
+                                 prefWidth="128.0" onMousePressed="#requestListClicked"/>
                    </ScrollPane>
                </Tab>
            </TabPane>

@@ -96,9 +96,25 @@ public class MainScreen {
 
     @FXML
     void requestListClicked() {
-        /* TODO: Clicking on a friend request, should open a alert box, with add as friend or delete.
-         *
-         */
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RequestRespond.fxml"));
+            GridPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Friend Request Respond");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            RespondController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setUsername(requestList.getFocusModel().getFocusedItem());
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
