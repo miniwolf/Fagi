@@ -16,7 +16,9 @@ import network.Communication;
 import java.io.IOException;
 
 /**
- * @author miniwolf
+ * Controller class for the login screen, used by the JavaFX thread.
+ * InitComponents and initCommunication will be called from the FagiApp
+ * class.
  */
 public class LoginScreen {
     @FXML private Button loginBtn;

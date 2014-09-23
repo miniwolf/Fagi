@@ -5,12 +5,14 @@ package network;/*
  * For receiving messages and printing these to the conversation
  */
 
+import controller.MainScreen;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import controller.MainScreen;
-import model.*;
+import model.Conversation;
+import model.GetFriends;
+import model.GetRequests;
+import model.Message;
 
 import java.util.ArrayList;
 import java.util.List;

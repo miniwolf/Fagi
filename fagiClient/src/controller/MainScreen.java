@@ -58,15 +58,10 @@ public class MainScreen {
     }
 
     /**
-     * Callback from constructor.
+     * Callback from FagiApp class.
      * Used to initialize the form.
      */
     public void initComponents() {
-        TextArea conversation = new Chat("nobody, that's sad.");
-
-        message.setText("Enter your message...");
-        message.setWrapText(true);
-        message.wrapTextProperty().setValue(true);
         message.setOnKeyPressed(event -> {
             if (event.getSource() != message || event.getCode() != KeyCode.ENTER)
                 return;
@@ -74,7 +69,7 @@ public class MainScreen {
             else handleMessage();
         });
 
-        scrollPaneChat.setContent(conversation);
+        scrollPaneChat.setContent(new Chat("nobody, that's sad."));
 
         //contactList.setCellFactory(param -> new ListCellRenderer(messageListener, scrollPaneChat));
 

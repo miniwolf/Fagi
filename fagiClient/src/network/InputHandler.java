@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 /**
  * TODO: Write description
  */
-public class InputHandler implements Runnable {
+class InputHandler implements Runnable {
     private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<>();
     private final ObjectInputStream in;
     private boolean running = true;

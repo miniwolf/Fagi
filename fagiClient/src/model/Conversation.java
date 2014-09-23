@@ -8,7 +8,7 @@ package model;/*
 /**
  *  TODO: Write description
  */
-public class Conversation extends java.awt.Component {
+public class Conversation {
     private final String chatBuddy;
     private final Chat chat;
 
