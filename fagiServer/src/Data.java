@@ -5,6 +5,7 @@
  * Contains and update information on users.
  */
 
+import exceptions.AllIsWellException;
 import exceptions.NoSuchUserException;
 import exceptions.PasswordException;
 import exceptions.UserOnlineException;
@@ -129,6 +130,12 @@ class Data {
 
     public static void appendFriendReqToUserFile(String username, String friendName) throws Exception {
         appendToUserFile(username, friendName, 1);
+    }
+
+    public static Exception removeFriendFromUserFile(String username, String friendName) throws Exception {
+        removeFromUserFile(username, friendName, 0);
+        removeFromUserFile(username, friendName, 1);
+        return new AllIsWellException();
     }
 
     private static void appendToUserFile(String username, String friendName, int index) throws Exception {

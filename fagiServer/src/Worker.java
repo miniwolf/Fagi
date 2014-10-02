@@ -78,8 +78,19 @@ class Worker extends Thread {
         } else if ( input instanceof FriendRequest ) {
             FriendRequest arg = (FriendRequest) input;
             return handleFriendRequest(arg);
+        } else if ( input instanceof FriendDelete ) {
+            FriendDelete arg = (FriendDelete) input;
+            return handleFriendDelete(arg);
         } else {
             return handleUnknownObject(input);
+        }
+    }
+
+    private Object handleFriendDelete(FriendDelete arg) {
+        try {
+            return Data.removeFriendFromUserFile(myUserName, arg.getFriendUsername());
+        } catch (Exception e) {
+            return e;
         }
     }
 
