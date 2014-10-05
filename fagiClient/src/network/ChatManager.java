@@ -72,6 +72,10 @@ public class ChatManager {
         application.showLoginScreen();
     }
 
+    public static void closeAllCommunication() {
+        communication.close();
+    }
+
     /**
      * @param username   username from the LoginScreen.
      * @param password   password from the LoginScreen.

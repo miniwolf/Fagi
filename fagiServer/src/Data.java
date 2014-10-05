@@ -52,7 +52,7 @@ class Data {
         if ( onlineUsers.containsKey(userName) )
             onlineUsers.remove(userName);
         else
-            System.out.println("Couldn't logout");
+            System.out.println("Couldn't log " + userName + " out");
     }
 
     public static boolean isUserOnline(String userName) {

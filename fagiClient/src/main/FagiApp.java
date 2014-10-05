@@ -5,10 +5,12 @@ package main;/*
 import controller.LoginScreen;
 import controller.MainScreen;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import network.ChatManager;
 import network.Communication;
 
@@ -42,13 +44,6 @@ public class FagiApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        this.primaryStage.setOnCloseRequest(event -> {
-            try {
-                stop();
-            } catch (Exception e) {
-                System.err.println(e.toString());
-            }
-        });
 
         scene = new Scene(new AnchorPane());
 
@@ -72,7 +67,14 @@ public class FagiApp extends Application {
             loader.setController(controller);
 
             scene.setRoot(loader.load());
-
+            this.primaryStage.setOnCloseRequest(event -> {
+                try {
+                    ChatManager.closeAllCommunication();
+                    stop();
+                } catch (Exception e) {
+                    System.err.println(e.toString());
+                }
+            });
             primaryStage.setResizable(false);
             controller.setPrimaryStage(primaryStage);
             controller.initCommunication();
@@ -103,6 +105,11 @@ public class FagiApp extends Application {
             } catch (IOException e) {
                 System.err.println(e.toString());
             }
+
+            this.primaryStage.setOnCloseRequest(event -> {
+                event.consume();
+                primaryStage.setIconified(true);
+            });
 
             primaryStage.setResizable(true);
             controller.setPrimaryStage(primaryStage);
