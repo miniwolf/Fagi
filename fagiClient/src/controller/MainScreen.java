@@ -6,6 +6,7 @@ package controller;/*
  */
 
 import exceptions.UserOnlineException;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -208,19 +209,8 @@ public class MainScreen {
         return scrollPaneChat;
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
+    public void setPrimaryStage(final Stage primaryStage) {
         this.primaryStage = primaryStage;
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                messageListener.close();
-                messageThread.interrupt();
-        /* Have to wait, else the listener will try asking
-           request using the closed socket causing a SocketException. */
-                while ( !messageThread.isInterrupted() ) {}
-                Logout logout = new Logout(username);
-                ChatManager.handleLogout(logout);
-            }
-        });
     }
 
     /*private static void createGUI() {
