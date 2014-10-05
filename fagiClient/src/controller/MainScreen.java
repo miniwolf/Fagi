@@ -186,7 +186,8 @@ public class MainScreen {
     @FXML
     void menuFriendRequest() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FriendRequest.fxml"));
+            URL f = new File("D:/Github/Fagi/fagiClient/src/view/FriendRequest.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(f);
             GridPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Friend Request");
@@ -200,6 +201,8 @@ public class MainScreen {
             controller.setStage(dialogStage);
 
             dialogStage.showAndWait();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -5,11 +5,19 @@ package network;/*
  * Handles login requests and responds to and from server.
  */
 
+import controller.ErrorBoxController;
+import controller.RespondController;
 import exceptions.AllIsWellException;
 import exceptions.NoSuchUserException;
 import exceptions.PasswordException;
 import exceptions.UserOnlineException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import main.FagiApp;
 import model.CreateUser;
 import model.FriendRequest;
@@ -17,6 +25,10 @@ import model.Login;
 import model.Logout;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 /**
@@ -72,7 +84,7 @@ public class ChatManager {
         application.showLoginScreen();
     }
 
-    public static void closeAllCommunication() {
+    public static void closeCommunication() {
         communication.close();
     }
 
@@ -121,7 +133,32 @@ public class ChatManager {
             JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeeded", JOptionPane.PLAIN_MESSAGE);
         } else if ( object instanceof Exception ) {
             System.err.println("Friend doesn't exist.");
+            showErrorMessage("Error in friends request", "Friend doesn't exist, try again");
             JOptionPane.showMessageDialog(null, "Friend doesn't exist, try again.", "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // TODO : Make this shit work
+    public static void showErrorMessage(String title, String message) {
+        try {
+            URL f = new File("D:/Github/Fagi/fagiClient/src/view/RequestRespond.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(f);
+            GridPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(title);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            ErrorBoxController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setText(message);
+            dialogStage.showAndWait();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

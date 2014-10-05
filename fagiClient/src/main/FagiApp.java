@@ -4,11 +4,15 @@ package main;/*
 
 import controller.LoginScreen;
 import controller.MainScreen;
+import controller.RespondController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import network.ChatManager;
@@ -69,7 +73,7 @@ public class FagiApp extends Application {
             scene.setRoot(loader.load());
             this.primaryStage.setOnCloseRequest(event -> {
                 try {
-                    ChatManager.closeAllCommunication();
+                    ChatManager.closeCommunication();
                     stop();
                 } catch (Exception e) {
                     System.err.println(e.toString());

@@ -41,11 +41,12 @@ class Worker extends Thread {
                 oOut.writeObject(handleInput(input));
             } catch (EOFException eof) {
                 running = false;
+                System.out.println("Logging out user " + myUserName);
+                Data.userLogout(myUserName);
             } catch (Exception e) {
                 running = false;
                 System.out.println("Something went wrong in a worker while loop " + e);
                 e.printStackTrace();
-            } finally {
                 System.out.println("Logging out user " + myUserName);
                 Data.userLogout(myUserName);
             }
