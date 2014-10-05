@@ -22,6 +22,7 @@ public class RequestController {
     @FXML
     private void handleButton() {
         ChatManager.handleFriendRequest(new FriendRequest(username.getText()));
+
         stage.close();
     }
 

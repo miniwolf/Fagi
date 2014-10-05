@@ -11,13 +11,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
 import network.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -97,7 +101,8 @@ public class MainScreen {
     @FXML
     void requestListClicked() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RequestRespond.fxml"));
+            URL f = new File("D:/Github/Fagi/fagiClient/src/view/RequestRespond.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(f);
             GridPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Friend Request Respond");
@@ -107,11 +112,21 @@ public class MainScreen {
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
-            RespondController controller = loader.getController();
-            controller.setStage(dialogStage);
-            controller.setUsername(requestList.getFocusModel().getFocusedItem());
+            requestList.setOnMouseClicked(event -> {
+                if (event.getSource() != requestList || !event.getButton().equals(MouseButton.PRIMARY))
+                    return;
 
-            dialogStage.showAndWait();
+                String user = requestList.getFocusModel().getFocusedItem();
+                if (user == null) return;
+
+                RespondController controller = loader.getController();
+                controller.setStage(dialogStage);
+                controller.setUsername(user);
+
+                dialogStage.showAndWait();
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

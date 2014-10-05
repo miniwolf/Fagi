@@ -12,7 +12,10 @@ import javafx.stage.Stage;
 import network.ChatManager;
 import network.Communication;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * JavaFX application class for handling GUI
@@ -61,20 +64,25 @@ public class FagiApp extends Application {
      * when the user log out and the main screen shut down.
      */
     public void showLoginScreen() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginScreen.fxml"));
-        LoginScreen controller = new LoginScreen();
-        loader.setController(controller);
         try {
+            URL f = new File("D:/Github/Fagi/fagiClient/src/view/LoginScreen.fxml").toURI().toURL();
+
+            FXMLLoader loader = new FXMLLoader(f);
+            LoginScreen controller = new LoginScreen();
+            loader.setController(controller);
+
             scene.setRoot(loader.load());
+
+            primaryStage.setResizable(false);
+            controller.setPrimaryStage(primaryStage);
+            controller.initCommunication();
+            controller.initComponents();
+            primaryStage.sizeToScene();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             System.err.println(e.toString());
         }
-
-        primaryStage.setResizable(false);
-        controller.setPrimaryStage(primaryStage);
-        controller.initCommunication();
-        controller.initComponents();
-        primaryStage.sizeToScene();
     }
 
     /**
@@ -85,19 +93,26 @@ public class FagiApp extends Application {
      * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-        MainScreen controller = new MainScreen(username, communication);
-        loader.setController(controller);
         try {
-            scene.setRoot(loader.load());
+            URL f = new File("D:/Github/Fagi/fagiClient/src/view/MainScreen.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(f);
+            MainScreen controller = new MainScreen(username, communication);
+            loader.setController(controller);
+            try {
+                scene.setRoot(loader.load());
+            } catch (IOException e) {
+                System.err.println(e.toString());
+            }
+
+            primaryStage.setResizable(true);
+            controller.setPrimaryStage(primaryStage);
+            controller.initComponents();
+            controller.initCommunication();
+            primaryStage.sizeToScene();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             System.err.println(e.toString());
         }
-
-        primaryStage.setResizable(true);
-        controller.setPrimaryStage(primaryStage);
-        controller.initComponents();
-        controller.initCommunication();
-        primaryStage.sizeToScene();
     }
 }

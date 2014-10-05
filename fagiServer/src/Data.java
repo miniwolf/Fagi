@@ -79,7 +79,7 @@ class Data {
         try {
             File f = new File("users/");
             File indexFile = new File(indexFilePath);
-            if ( !f.exists() ) {
+            if ( !f.exists() || !indexFile.exists() ) {
                 if ( !f.mkdir() )
                     System.err.println("Couldn't create folder");
                 if ( !indexFile.createNewFile() )
