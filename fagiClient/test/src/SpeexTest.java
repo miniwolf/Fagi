@@ -10,11 +10,11 @@ import java.util.Vector;
 
 public class SpeexTest {
     public static void main(String[] args) throws Exception {
-        for ( AudioFormat audioFormat : new SpeexTest().getSupportedFormats(TargetDataLine.class) ) {
+        /*for ( AudioFormat audioFormat : new SpeexTest().getSupportedFormats(TargetDataLine.class) ) {
             System.out.println(audioFormat.toString());
-        }
+        }*/
 
-        int sample_rate = 48000;
+        int sample_rate = 44100;
         int sample_size = 16;
         int channels = 2;
         AudioFormat format = new AudioFormat(sample_rate, sample_size, channels, true, false);
@@ -38,28 +38,27 @@ public class SpeexTest {
             return;
         }
         SpeexEncoder encoder = new SpeexEncoder();
-        SpeexDecoder decoder = new SpeexDecoder();
         encoder.init(1, 10, sample_rate, channels);
+        SpeexDecoder decoder = new SpeexDecoder();
         decoder.init(1, sample_rate, channels, false);
-        int raw_block_size = encoder.getFrameSize() * channels
-                * (sample_size / 8);
+        int raw_block_size = channels * (sample_size / 8) * encoder.getFrameSize();
         byte[] buffer = new byte[raw_block_size * 2];
         line_in.start();
         line_out.start();
-        while (true) {
-            int read = line_in.read(buffer, 0, raw_block_size);
+        int read;
+        while ( true ) {
+            read = line_in.read(buffer, 0, raw_block_size);
             if (!encoder.processData(buffer, 0, raw_block_size)) {
                 System.err.println("Could not encode data!");
                 break;
             }
             int encoded = encoder.getProcessedData(buffer, 0);
-            //System.out.println(encoded + " bytes resulted as a result of encoding " + read + " raw bytes.");
             byte[] encoded_data = new byte[encoded];
             System.arraycopy(buffer, 0, encoded_data, 0, encoded);
             decoder.processData(encoded_data, 0, encoded);
             byte[] decoded_data = new byte[decoder.getProcessedDataByteSize()];
             int decoded = decoder.getProcessedData(decoded_data, 0);
-            //System.out.println(decoded + " bytes resulted as a result of decoding " + encoded + " encoded bytes.");
+            System.out.println(decoded + " bytes resulted as a result of decoding " + encoded + " encoded bytes.");
             line_out.write(decoded_data, 0, decoded);
         }
     }

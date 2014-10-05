@@ -88,4 +88,9 @@ public class Communication {
             System.err.println("cc ioe: " + ioe.toString());
         }
     }
+
+    public byte[] getVoice() {
+        byte[] data = inputHandler.containsVoice();
+        return data;
+    }
 }

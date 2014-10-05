@@ -6,6 +6,7 @@ package network;/*
  */
 
 import model.Message;
+import model.Voice;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -106,5 +107,16 @@ class InputHandler implements Runnable {
 
     public void close() {
         running = false;
+    }
+
+    public byte[] containsVoice() {
+        byte[] data;
+        for ( Object object : inputs ) {
+            if ( !(object instanceof Voice) ) continue;
+
+            data = ((Voice) object).getData();
+            return data;
+        }
+        return null;
     }
 }
