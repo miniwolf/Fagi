@@ -64,10 +64,9 @@ public class FagiApp extends Application {
      */
     public void showLoginScreen() {
         try {
-            URL f = new File("D:/Github/Fagi/fagiClient/src/view/LoginScreen.fxml").toURI().toURL();
 
-            FXMLLoader loader = new FXMLLoader(f);
             LoginScreen controller = new LoginScreen();
+            FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/view/LoginScreen.fxml"));
             loader.setController(controller);
 
             scene.setRoot(loader.load());
@@ -99,31 +98,31 @@ public class FagiApp extends Application {
      * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {
-        try {
-            URL f = new File("D:/Github/Fagi/fagiClient/src/view/MainScreen.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(f);
-            MainScreen controller = new MainScreen(username, communication);
-            loader.setController(controller);
-            try {
-                scene.setRoot(loader.load());
-            } catch (IOException e) {
-                System.err.println(e.toString());
-            }
+        /*try {
 
-            this.primaryStage.setOnCloseRequest(event -> {
-                event.consume();
-                primaryStage.setIconified(true);
-            });
-
-            primaryStage.setResizable(true);
-            controller.setPrimaryStage(primaryStage);
-            controller.initComponents();
-            controller.initCommunication();
-            primaryStage.sizeToScene();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             System.err.println(e.toString());
+        }*/
+        MainScreen controller = new MainScreen(username, communication);
+        FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/view/MainScreen.fxml"));
+        loader.setController(controller);
+        try {
+            scene.setRoot(loader.load());
+        } catch (IOException e) {
+            System.err.println(e.toString());
         }
+
+        this.primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            primaryStage.setIconified(true);
+        });
+
+        primaryStage.setResizable(true);
+        controller.setPrimaryStage(primaryStage);
+        controller.initComponents();
+        controller.initCommunication();
+        primaryStage.sizeToScene();
     }
 }
