@@ -1,2 +1,7 @@
 *.class
 *~
+
+.idea
+out
+users
+*.iml
