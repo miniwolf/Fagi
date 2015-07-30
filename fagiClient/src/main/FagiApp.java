@@ -4,15 +4,24 @@ package main;/*
 
 import controller.LoginScreen;
 import controller.MainScreen;
+import controller.RespondController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import network.ChatManager;
 import network.Communication;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * JavaFX application class for handling GUI
@@ -39,13 +48,6 @@ public class FagiApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        this.primaryStage.setOnCloseRequest(event -> {
-            try {
-                stop();
-            } catch (Exception e) {
-                System.err.println(e.toString());
-            }
-        });
 
         scene = new Scene(new AnchorPane());
 
@@ -61,20 +63,31 @@ public class FagiApp extends Application {
      * when the user log out and the main screen shut down.
      */
     public void showLoginScreen() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginScreen.fxml"));
-        LoginScreen controller = new LoginScreen();
-        loader.setController(controller);
         try {
+
+            LoginScreen controller = new LoginScreen();
+            FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/view/LoginScreen.fxml"));
+            loader.setController(controller);
+
             scene.setRoot(loader.load());
+            this.primaryStage.setOnCloseRequest(event -> {
+                try {
+                    ChatManager.closeCommunication();
+                    stop();
+                } catch (Exception e) {
+                    System.err.println(e.toString());
+                }
+            });
+            primaryStage.setResizable(false);
+            controller.setPrimaryStage(primaryStage);
+            controller.initCommunication();
+            controller.initComponents();
+            primaryStage.sizeToScene();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             System.err.println(e.toString());
         }
-
-        primaryStage.setResizable(false);
-        controller.setPrimaryStage(primaryStage);
-        controller.initCommunication();
-        controller.initComponents();
-        primaryStage.sizeToScene();
     }
 
     /**
@@ -85,14 +98,26 @@ public class FagiApp extends Application {
      * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+        /*try {
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println(e.toString());
+        }*/
         MainScreen controller = new MainScreen(username, communication);
+        FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/view/MainScreen.fxml"));
         loader.setController(controller);
         try {
             scene.setRoot(loader.load());
         } catch (IOException e) {
             System.err.println(e.toString());
         }
+
+        this.primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            primaryStage.setIconified(true);
+        });
 
         primaryStage.setResizable(true);
         controller.setPrimaryStage(primaryStage);

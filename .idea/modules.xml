@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/fagiClient/fagiClient.iml" filepath="$PROJECT_DIR$/fagiClient/fagiClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fagiServer/fagiServer.iml" filepath="$PROJECT_DIR$/fagiServer/fagiServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shared/shared.iml" filepath="$PROJECT_DIR$/shared/shared.iml" />
+    </modules>
+  </component>
+</project>
+

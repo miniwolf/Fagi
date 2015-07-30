@@ -10,6 +10,7 @@ import exceptions.NoSuchUserException;
 import exceptions.UserOnlineException;
 import model.*;
 
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -38,6 +39,10 @@ class Worker extends Thread {
                 sendIncMessages();
                 Object input = oIn.readObject();
                 oOut.writeObject(handleInput(input));
+            } catch (EOFException eof) {
+                running = false;
+                System.out.println("Logging out user " + myUserName);
+                Data.userLogout(myUserName);
             } catch (Exception e) {
                 running = false;
                 System.out.println("Something went wrong in a worker while loop " + e);

@@ -52,7 +52,7 @@ class Data {
         if ( onlineUsers.containsKey(userName) )
             onlineUsers.remove(userName);
         else
-            System.out.println("Couldn't logout");
+            System.out.println("Couldn't log " + userName + " out");
     }
 
     public static boolean isUserOnline(String userName) {
@@ -79,7 +79,7 @@ class Data {
         try {
             File f = new File("users/");
             File indexFile = new File(indexFilePath);
-            if ( !f.exists() ) {
+            if ( !f.exists() || !indexFile.exists() ) {
                 if ( !f.mkdir() )
                     System.err.println("Couldn't create folder");
                 if ( !indexFile.createNewFile() )
