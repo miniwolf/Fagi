@@ -5,6 +5,7 @@
  * Listening socket for incoming transmissions from clients.
  */
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,7 +22,7 @@ class Server {
         ServerSocket ss = null;
         try {
             ss = new ServerSocket(port);
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error while creating socket, are you sure you can use port " + port + " on you system?");
             running = false;
         }
@@ -29,7 +30,7 @@ class Server {
         while ( running ) {
             try {
                 workerCreation(ss);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.out.println("Error in server loop exception = " + e);
                 running = false;
             }
@@ -37,9 +38,9 @@ class Server {
         System.out.println("Stopping Server");
     }
 
-    private void workerCreation(ServerSocket ss) throws Exception {
+    private void workerCreation(ServerSocket ss) throws IOException {
         Socket s = ss.accept();
-        Worker w = new Worker(s);
-        w.start();
+        Thread workerThread = new Thread(new Worker(s));
+        workerThread.start();
     }
 }

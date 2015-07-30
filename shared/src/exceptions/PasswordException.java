@@ -5,5 +5,7 @@ package exceptions;/*
  * Object for handling password errors.
  */
 
-public class PasswordException extends Exception {
+import java.io.Serializable;
+
+public class PasswordException extends Exception implements Serializable {
 }

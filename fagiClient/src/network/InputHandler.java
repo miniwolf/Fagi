@@ -6,19 +6,21 @@ package network;/*
  */
 
 import model.Message;
-import model.Voice;
+import model.TextMessage;
+import model.VoiceMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * TODO: Write description
  */
 class InputHandler implements Runnable {
-    private final ConcurrentLinkedDeque<Object> inputs = new ConcurrentLinkedDeque<>();
+    private final LinkedBlockingDeque<Object> inputs = new LinkedBlockingDeque<>();
     private final ObjectInputStream in;
     private boolean running = true;
 
@@ -95,7 +97,6 @@ class InputHandler implements Runnable {
         Message message;
         for ( Object object : inputs ) {
             if ( !(object instanceof Message) ) continue;
-
             message = (Message) object;
             if ( !message.isSystemMessage() ) {
                 inputs.remove(object);
@@ -109,13 +110,14 @@ class InputHandler implements Runnable {
         running = false;
     }
 
-    public byte[] containsVoice() {
-        byte[] data;
+    public Message containsVoice() {
+        Message message;
         for ( Object object : inputs ) {
-            if ( !(object instanceof Voice) ) continue;
+            if ( !(object instanceof VoiceMessage) ) continue;
 
-            data = ((Voice) object).getData();
-            return data;
+            message = (VoiceMessage) object;
+            inputs.remove(object);
+            return message;
         }
         return null;
     }

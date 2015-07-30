@@ -9,11 +9,9 @@ import controller.MainScreen;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import model.Conversation;
-import model.GetFriends;
-import model.GetRequests;
-import model.Message;
+import model.*;
 
+import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +64,11 @@ public class MessageListener implements Runnable {
 
                 message = communication.receiveMessage();
             }
-            updateConversation(message);
+            if ( message instanceof TextMessage ) {
+                updateConversation((TextMessage) message);
+            } else if ( message instanceof VoiceMessage ) {
+                new VoiceReceiver().playAudio((VoiceMessage) message);
+            }
         }
     }
 
@@ -87,7 +89,8 @@ public class MessageListener implements Runnable {
 
         int modelSize = observableList.size();
         if ( input.size() != modelSize ) {
-            observableList.setAll(input); return;
+            Platform.runLater(() -> observableList.setAll(input));
+            return;
         }
 
         for ( int i = 0; i < modelSize; i++ )
@@ -97,12 +100,12 @@ public class MessageListener implements Runnable {
             }
     }
 
-    private void updateConversation(Message message) {
+    private void updateConversation(TextMessage message) {
         String chatBuddy = message.getSender();
         for ( Conversation conversation : conversations ) {
             if ( !conversation.getChatBuddy().equals(chatBuddy) ) continue;
 
-            Platform.runLater(() -> conversation.getConversation().appendText(conversation.getChatBuddy() + ": " + message.getMessage() + "\n"));
+            Platform.runLater(() -> conversation.getConversation().appendText(conversation.getChatBuddy() + ": " + message.getData() + "\n"));
             if ( mainScreen.getConversationWindow().getContent().equals(conversation.getConversation()) )
                 return;
 

@@ -9,7 +9,10 @@ import exceptions.AllIsWellException;
 import exceptions.NoSuchUserException;
 import exceptions.UserOnlineException;
 import model.*;
+import model.GetSound;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,14 +22,14 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-class Worker extends Thread {
+class Worker implements Runnable {
     private final Queue<Message> incMessages = new ConcurrentLinkedQueue<>();
     private ObjectInputStream oIn;
     private ObjectOutputStream oOut;
     private boolean running = true;
     private String myUserName;
 
-    public Worker(Socket s) throws Exception {
+    public Worker(Socket s) throws IOException {
         System.out.println("Starting a worker thread");
         oIn = new ObjectInputStream(s.getInputStream());
         oOut = new ObjectOutputStream(s.getOutputStream());
@@ -81,33 +84,23 @@ class Worker extends Thread {
         } else if ( input instanceof FriendDelete ) {
             FriendDelete arg = (FriendDelete) input;
             return handleFriendDelete(arg);
-        } else {
+        }/* else if ( input instanceof GetSound) {
+// TODO: Implement or at least think about it
+        }*/ else {
             return handleUnknownObject(input);
         }
     }
 
     private Object handleFriendDelete(FriendDelete arg) {
-        try {
-            return Data.removeFriendFromUserFile(myUserName, arg.getFriendUsername());
-        } catch (Exception e) {
-            return e;
-        }
+        return Data.removeFriendFromUserFile(myUserName, arg.getFriendUsername());
     }
 
     private Object handleGetFriends() {
-        try {
-            return getOnlineFriends();
-        } catch (Exception e) {
-            return e;
-        }
+        return getOnlineFriends();
     }
 
     private Object handleGetRequests() {
-        try {
-            return getFriendRequests();
-        } catch (Exception e) {
-            return e;
-        }
+        return getFriendRequests();
     }
 
     private Object handleMessage(Message arg) {
@@ -123,12 +116,7 @@ class Worker extends Thread {
     private Object handleLogin(Login arg) {
         System.out.println("Login");
         myUserName = arg.getUsername();
-        try {
-            Data.userLogin(arg.getUsername(), arg.getPassword(), this);
-        } catch (Exception e) {
-            return e;
-        }
-        return new AllIsWellException();
+        return Data.userLogin(arg.getUsername(), arg.getPassword(), this);
     }
 
     private Object handleLogout(Logout arg) {
@@ -142,11 +130,10 @@ class Worker extends Thread {
     private Object handleCreateUser(CreateUser arg) {
         System.out.println("CreateUser");
         try {
-            Data.createUser(arg.getUsername(), arg.getPassword());
+            return Data.createUser(arg.getUsername(), arg.getPassword());
         } catch (Exception e) {
             return e;
         }
-        return new AllIsWellException();
     }
 
     private Object handleFriendRequest(FriendRequest arg) {
@@ -164,18 +151,18 @@ class Worker extends Thread {
         return new Exception();
     }
 
-    private List<String> getOnlineFriends() throws Exception {
+    private Object getOnlineFriends() {
         User me = Data.getUser(myUserName);
         if ( me == null )
-            throw new NoSuchUserException();
+            return new NoSuchUserException();
 
         return me.getFriends().stream().filter(Data::isUserOnline).collect(Collectors.toList());
     }
 
-    private List<String> getFriendRequests() throws NoSuchUserException {
+    private Object getFriendRequests() {
         User me = Data.getUser(myUserName);
         if ( me == null )
-            throw new NoSuchUserException();
+            return new NoSuchUserException();
 
         return me.getFriendReq();
     }

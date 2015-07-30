@@ -1,88 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                 minWidth="-Infinity" prefHeight="375.0" prefWidth="600.0" BorderPane.alignment="TOP_LEFT">
+       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="600.0" BorderPane.alignment="TOP_LEFT">
            <columnConstraints>
-               <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0"/>
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity"/>
+               <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
            </columnConstraints>
            <rowConstraints>
-               <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
            </rowConstraints>
-           <TabPane layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
-                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="128.0"
-                    tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
-                    AnchorPane.topAnchor="10.0" GridPane.halignment="LEFT" GridPane.valignment="TOP"
-                    GridPane.vgrow="ALWAYS">
-               <GridPane.margin>
-                   <Insets left="10.0" top="20.0"/>
-               </GridPane.margin>
-               <Tab closable="false" text="Online">
-                   <ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" prefHeight="200.0"
-                               prefWidth="200.0">
-                       <padding>
-                           <Insets bottom="20.0"/>
-                       </padding>
-                       <ListView fx:id="contactList" maxHeight="1.7976931348623157E308"
-                                 onMousePressed="#contactListClicked" prefHeight="326.0" prefWidth="128.0"/>
-                   </ScrollPane>
-               </Tab>
-               <Tab closable="false" text="Requests">
-                   <ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" prefHeight="342.0"
-                               prefWidth="128.0">
-                       <padding>
-                           <Insets bottom="20.0"/>
-                       </padding>
-                       <ListView fx:id="requestList" maxHeight="1.7976931348623157E308" prefHeight="326.0"
-                                 prefWidth="128.0" onMousePressed="#requestListClicked"/>
-                   </ScrollPane>
-               </Tab>
-           </TabPane>
-           <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="348.0"
-                       prefWidth="447.0" GridPane.columnIndex="1">
-               <GridPane.margin>
-                   <Insets/>
-               </GridPane.margin>
-               <Button layoutX="394.0" layoutY="330.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                       minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0"
-                       prefWidth="55.0" text="Send..." AnchorPane.bottomAnchor="20.0"
-                       AnchorPane.rightAnchor="10.0"/>
-               <ScrollPane fx:id="scrollPaneChat" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0"
-                           layoutX="7.0" layoutY="20.0" maxHeight="1.7976931348623157E308"
-                           maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                           pannable="true" prefHeight="282.0" prefWidth="443.0" AnchorPane.bottomAnchor="73.0"
-                           AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
-                   <TextArea fx:id="chatMessage" editable="false" maxHeight="1.7976931348623157E308"
-                             maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                             prefHeight="273.0" prefWidth="441.0"/>
-               </ScrollPane>
-               <Label fx:id="chatname" layoutX="8.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                      minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.0" prefWidth="60.0" text="ChatName"
-                      AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0"/>
-               <TextArea fx:id="message" layoutX="10.0" layoutY="309.0" maxHeight="-Infinity"
-                         maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                         prefHeight="45.0" prefWidth="380.0" text="Enter your message...." wrapText="true"
-                         AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="75.0"/>
-           </AnchorPane>
+          <children>
+              <TabPane layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="128.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" GridPane.halignment="LEFT" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                  <GridPane.margin>
+                      <Insets left="10.0" top="20.0" />
+                  </GridPane.margin>
+                 <tabs>
+                     <Tab closable="false" text="Online">
+                        <content>
+                            <ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                                <padding>
+                                    <Insets bottom="20.0" />
+                                </padding>
+                               <content>
+                                   <ListView fx:id="contactList" maxHeight="1.7976931348623157E308" onMousePressed="#contactListClicked" prefHeight="326.0" prefWidth="128.0" />
+                               </content>
+                            </ScrollPane>
+                        </content>
+                     </Tab>
+                     <Tab closable="false" text="Requests">
+                        <content>
+                            <ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" prefHeight="342.0" prefWidth="128.0">
+                                <padding>
+                                    <Insets bottom="20.0" />
+                                </padding>
+                               <content>
+                                   <ListView fx:id="requestList" maxHeight="1.7976931348623157E308" onMousePressed="#requestListClicked" prefHeight="326.0" prefWidth="128.0" />
+                               </content>
+                            </ScrollPane>
+                        </content>
+                     </Tab>
+                 </tabs>
+              </TabPane>
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="348.0" prefWidth="447.0" GridPane.columnIndex="1">
+                  <GridPane.margin>
+                      <Insets />
+                  </GridPane.margin>
+                 <children>
+                     <Button layoutX="400.0" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" onMouseClicked="#sendButtonClicked" text="Send..." AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="10.0" />
+                     <ScrollPane fx:id="scrollPaneChat" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" layoutX="7.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="282.0" prefWidth="443.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+                        <content>
+                            <TextArea fx:id="chatMessage" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="273.0" prefWidth="441.0" />
+                        </content>
+                     </ScrollPane>
+                     <Label fx:id="chatname" layoutX="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.0" prefWidth="60.0" text="ChatName" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                     <TextArea fx:id="message" layoutX="10.0" layoutY="309.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="380.0" text="Enter your message...." wrapText="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="75.0" />
+                  <Button layoutX="400.0" layoutY="343.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#talkButtonClicked" prefHeight="25.0" prefWidth="55.0" text="Talk..." />
+                 </children>
+              </AnchorPane>
+          </children>
        </GridPane>
    </center>
    <top>
-       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT"
-                prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                BorderPane.alignment="TOP_LEFT">
-           <Menu mnemonicParsing="false" text="File">
-               <MenuItem mnemonicParsing="false" onAction="#menuFriendRequest" text="FriendRequest"/>
-               <MenuItem mnemonicParsing="false" onAction="#logoutRequest" text="Logout"/>
-           </Menu>
-           <Menu mnemonicParsing="false" text="Help">
-               <MenuItem mnemonicParsing="false" text="About"/>
-           </Menu>
+       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" BorderPane.alignment="TOP_LEFT">
+          <menus>
+              <Menu mnemonicParsing="false" text="File">
+                 <items>
+                     <MenuItem mnemonicParsing="false" onAction="#menuFriendRequest" text="FriendRequest" />
+                     <MenuItem mnemonicParsing="false" onAction="#logoutRequest" text="Logout" />
+                 </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Help">
+                 <items>
+                     <MenuItem mnemonicParsing="false" text="About" />
+                 </items>
+              </Menu>
+          </menus>
        </MenuBar>
    </top>
 </BorderPane>

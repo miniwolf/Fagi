@@ -4,10 +4,14 @@
 
 package model;
 
-public class Voice {
+public class VoiceMessage extends Message<byte[]> {
+    /**
+     * Contains voice data.
+     */
     private byte[] data;
 
-    public Voice(byte[] data) {
+    public VoiceMessage(byte[] data, String sender, String receiver) {
+        super(sender, receiver);
         this.data = data;
     }
 

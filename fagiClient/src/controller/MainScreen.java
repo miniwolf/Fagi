@@ -73,7 +73,10 @@ public class MainScreen {
             if (event.getSource() != message || event.getCode() != KeyCode.ENTER)
                 return;
             if (event.isControlDown()) message.appendText("\n");
-            else handleMessage();
+            else {
+                handleMessage();
+                event.consume();
+            }
         });
 
         scrollPaneChat.setContent(new Chat("nobody, that's sad."));
@@ -87,14 +90,15 @@ public class MainScreen {
         if ( message.getText().equals("") ) return;
 
         Chat chat = (Chat) scrollPaneChat.getContent();
-        for ( Conversation conversation : conversations )
-            if ( conversation.getConversation() == chat ) {
-                communication.sendObject(new Message(username, message.getText(), conversation.getChatBuddy()));
+        for ( Conversation conversation : conversations ) {
+            if (conversation.getConversation() == chat) {
+                communication.sendObject(new TextMessage(message.getText(), username, conversation.getChatBuddy()));
                 Object object = communication.handleObjects();
-                if ( object instanceof UserOnlineException)
+                if (object instanceof UserOnlineException)
                     conversation.getConversation().appendText("User went offline");
                 break;
             }
+        }
 
         chat.appendText(username + ": " + message.getText() + "\n");
         message.setText("");
@@ -102,10 +106,15 @@ public class MainScreen {
     }
 
     @FXML
+    void talkButtonClicked() {
+
+    }
+
+    @FXML
     void requestListClicked() {
         try {
-            URL f = new File("D:/Github/Fagi/fagiClient/src/view/RequestRespond.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(f);
+            //URL f = new File("D:/Github/Fagi/fagiClient/src/view/RequestRespond.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RequestRespond.fxml"));
             GridPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Friend Request Respond");
@@ -186,8 +195,8 @@ public class MainScreen {
     @FXML
     void menuFriendRequest() {
         try {
-            URL f = new File("D:/Github/Fagi/fagiClient/src/view/FriendRequest.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(f);
+            // URL f = new File("D:/Github/Fagi/fagiClient/src/view/FriendRequest.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FriendRequest.fxml"));
             GridPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Friend Request");
@@ -214,6 +223,10 @@ public class MainScreen {
 
     public void setPrimaryStage(final Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    public void sendButtonClicked(Event event) {
+        handleMessage();
     }
 
     /*private static void createGUI() {

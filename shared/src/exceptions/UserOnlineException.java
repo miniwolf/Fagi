@@ -5,7 +5,9 @@ package exceptions;/*
  * Object for handling user already logged in.
  */
 
-public class UserOnlineException extends Exception {
+import java.io.Serializable;
+
+public class UserOnlineException extends Exception implements Serializable {
     public UserOnlineException(String s) {
         super(s);
     }

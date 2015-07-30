@@ -7,11 +7,7 @@ package model;/*
 
 import java.io.Serializable;
 
-public class Message implements Serializable {
-    /**
-     * Containing the message text
-     */
-    private final String text;
+public abstract class Message<E> implements Serializable {
     /**
      * The message sender
      */
@@ -25,15 +21,10 @@ public class Message implements Serializable {
      */
     private final boolean systemMessage;
 
-    public Message(String sender, String text, String receiver) {
-        this.text = text;
+    public Message(String sender, String receiver) {
         this.sender = sender;
         this.receiver = receiver;
         systemMessage = false;
-    }
-
-    public String getMessage() {
-        return text;
     }
 
     public String getSender() {
@@ -47,4 +38,6 @@ public class Message implements Serializable {
     public boolean isSystemMessage() {
         return systemMessage;
     }
+
+    public abstract E getData();
 }

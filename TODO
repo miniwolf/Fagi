@@ -1,0 +1,15 @@
+Friend request -> receieve accept or reject.
+
+Unit test + Documentation
+
+SystemVoice
+
+InputHandler -> FriendRequest vs FriendList synchronization.
+
+Empty request list -> Popup !
+
+VoiceListener interfaces vs config class.
+
+User files update once per minute. Delete duplicates.
+
+DEBUG friendrequest printout on server.

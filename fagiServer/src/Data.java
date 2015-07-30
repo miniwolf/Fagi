@@ -5,13 +5,12 @@
  * Contains and update information on users.
  */
 
-import exceptions.AllIsWellException;
-import exceptions.NoSuchUserException;
-import exceptions.PasswordException;
-import exceptions.UserOnlineException;
+import exceptions.*;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -23,8 +22,8 @@ class Data {
     private static final String separator = "\",\"";
     private static final String indexFilePath = "users/userIndex.fagi";
 
-    public static void createUser(String userName, String pass) throws IOException {
-        if ( registeredUsers.containsKey(userName) ) return;
+    public static Object createUser(String userName, String pass) throws IOException {
+        if ( registeredUsers.containsKey(userName) ) return new UserExistsException();
 
         registeredUsers.put(userName, new User(userName, pass));
 
@@ -37,23 +36,26 @@ class Data {
 
         if ( !file.createNewFile() )
             System.out.println(userName + ". File already exists, supposed bug. Report please!");
+        return new AllIsWellException();
     }
 
-    public static void userLogin(String userName, String pass, Worker w) throws Exception {
+    public static Exception userLogin(String userName, String pass, Worker w) {
         if ( onlineUsers.containsKey(userName) )
-            throw new UserOnlineException();
+            return new UserOnlineException();
         if ( !registeredUsers.containsKey(userName) )
-            throw new NoSuchUserException();
+            return new NoSuchUserException();
         if ( !registeredUsers.get(userName).getPass().equals(pass) )
-            throw new PasswordException();
+            return new PasswordException();
         onlineUsers.put(userName, w);
+        return new AllIsWellException();
     }
 
     public static void userLogout(String userName) {
-        if ( onlineUsers.containsKey(userName) )
+        if ( onlineUsers.containsKey(userName) ) {
             onlineUsers.remove(userName);
-        else
+        } else {
             System.out.println("Couldn't log " + userName + " out");
+        }
     }
 
     public static boolean isUserOnline(String userName) {
@@ -111,59 +113,78 @@ class Data {
     }
 
     private static void readUsers(List<String> tmpUsernameList) {
-        for (String s : tmpUsernameList) {
+        for ( String s : tmpUsernameList ) {
             User user = registeredUsers.get(s);
             System.out.println("Now parsing: " + s);
-            try {
-                List<List<String>> tmp = parseUserFile(s);
-                user.addFriends(tmp.get(0));
-                user.addFriendReqs(tmp.get(1));
-            } catch (Exception ignored) {
-            }
+            List<List<String>> tmp = (List<List<String>>) parseUserFile(s);
+            user.addFriends(tmp.get(0));
+            user.addFriendReqs(tmp.get(1));
         }
     }
 
-    private static void appendFriendToUserFile(String username, String friendName) throws Exception {
-        appendToUserFile(username, friendName, 0);
-        removeFromUserFile(username, friendName, 1);
+    private static Object appendFriendToUserFile(String username, String friendName) throws Exception {
+        Exception o = appendToUserFile(username, friendName, 0);
+        if ( o != null ) {
+            return o;
+        }
+        return removeFromUserFile(username, friendName, 1);
     }
 
-    public static void appendFriendReqToUserFile(String username, String friendName) throws Exception {
-        appendToUserFile(username, friendName, 1);
+    public static Object appendFriendReqToUserFile(String username, String friendName) throws Exception {
+        return appendToUserFile(username, friendName, 1);
     }
 
-    public static Exception removeFriendFromUserFile(String username, String friendName) throws Exception {
-        removeFromUserFile(username, friendName, 0);
-        removeFromUserFile(username, friendName, 1);
-        return new AllIsWellException();
+    public static Exception removeFriendFromUserFile(String username, String friendName) {
+        Exception o = removeFromUserFile(username, friendName, 0);
+        if ( o != null ) {
+            return o;
+        }
+        return removeFromUserFile(username, friendName, 1);
     }
 
-    private static void appendToUserFile(String username, String friendName, int index) throws Exception {
-        List<List<String>> wholeFile = parseUserFile(username);
+    private static Exception appendToUserFile(String username, String friendName, int index) {
+        Object o = parseUserFile(username);
+        if ( o instanceof Exception ) {
+            return (Exception) o;
+        }
+        List<List<String>> wholeFile = (List<List<String>>) o;
         List<String> stringList = wholeFile.get(index);
         stringList.add(friendName);
         wholeFile.set(index, stringList);
         writeUserFile(username, wholeFile);
+        return new AllIsWellException();
     }
 
-    private static void removeFromUserFile(String username, String friendName, int index) throws Exception {
-        List<List<String>> wholeFile = parseUserFile(username);
+    private static Exception removeFromUserFile(String username, String friendName, int index) {
+        Object o = parseUserFile(username);
+        if ( o instanceof Exception ) {
+            return (Exception) o;
+        }
+        List<List<String>> wholeFile = (List<List<String>>) o;
+
         List<String> stringList = wholeFile.get(index);
         stringList.remove(friendName);
         wholeFile.set(index, stringList);
         writeUserFile(username, wholeFile);
+        return new AllIsWellException();
     }
 
-    private static List<List<String>> parseUserFile(String userName) throws Exception {
+    private static Object parseUserFile(String userName) {
         File userFile = new File("users/" + userName);
 
         if ( !userFile.exists() ) {
             System.out.println(userName + " doesn't exist");
-            throw new Exception();
+            return new NoSuchUserException();
         }
 
-        BufferedReader reader = new BufferedReader(new FileReader(userFile));
-        String friendLine = reader.readLine();
+        BufferedReader reader = null;
+        String friendLine = null;
+        try {
+            reader = new BufferedReader(new FileReader(userFile));
+            friendLine = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         List<String> friends = new ArrayList<>();
 
         if ( null != friendLine && !friendLine.isEmpty() ) {
@@ -175,7 +196,14 @@ class Data {
             }
         }
 
-        String requestLine = reader.readLine();
+        String requestLine = null;
+        try {
+            if (reader != null) {
+                requestLine = reader.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         List<String> requests = new ArrayList<>();
 
         if ( null != requestLine && !requestLine.isEmpty() ) {
@@ -191,7 +219,13 @@ class Data {
         result.add(friends);
         result.add(requests);
 
-        reader.close();
+        try {
+            if (reader != null) {
+                reader.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 

@@ -7,10 +7,7 @@ package network;/*
 
 import controller.ErrorBoxController;
 import controller.RespondController;
-import exceptions.AllIsWellException;
-import exceptions.NoSuchUserException;
-import exceptions.PasswordException;
-import exceptions.UserOnlineException;
+import exceptions.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -114,7 +111,7 @@ public class ChatManager {
         Object object = communication.handleObjects();
 
         if ( object instanceof AllIsWellException) jMessage.setText("User Created");
-        else if ( object instanceof NoSuchUserException) jMessage.setText("User already exists");
+        else if ( object instanceof UserExistsException ) jMessage.setText("User already exists");
     }
 
     /**

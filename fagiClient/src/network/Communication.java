@@ -6,6 +6,7 @@ package network;/*
  */
 
 import model.Message;
+import model.TextMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -41,7 +42,11 @@ public class Communication {
     }
 
     public Message receiveMessage() {
-        return inputHandler.containsMessage();
+        Message message = inputHandler.containsMessage();
+        if ( message == null ) {
+            return inputHandler.containsVoice();
+        }
+        return message;
     }
 
     public void sendObject(Object obj) {
@@ -87,10 +92,5 @@ public class Communication {
         } catch (IOException ioe) {
             System.err.println("cc ioe: " + ioe.toString());
         }
-    }
-
-    public byte[] getVoice() {
-        byte[] data = inputHandler.containsVoice();
-        return data;
     }
 }

@@ -5,5 +5,7 @@ package exceptions;/*
  * Object for handling user not found.
  */
 
-public class NoSuchUserException extends Exception {
+import java.io.Serializable;
+
+public class NoSuchUserException extends Exception implements Serializable {
 }
