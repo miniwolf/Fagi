@@ -16,7 +16,10 @@ import com.fagi.model.FriendRequest;
 import com.fagi.model.Login;
 import com.fagi.model.Logout;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -139,8 +142,7 @@ public class ChatManager {
     public static void handleFriendRequest(FriendRequest friendRequest) {
         if ( isEmpty(friendRequest.getFriendUsername()) ) {
             System.err.println("Friend request cannot be empty");
-            JOptionPane.showMessageDialog(null, "Friend request cannot be empty",
-                                          "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage("Error in friend request.", "Friend request cannot be empty");
             return;
         }
         communication.sendObject(friendRequest);
@@ -148,15 +150,13 @@ public class ChatManager {
         Exception exception;
         while ( (exception = communication.getNextException()) == null ) { }
         if ( exception instanceof AllIsWellException ) {
+            // TODO: Maybe use version of showErrorMessage on this too.
             JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeeded",
                                           JOptionPane.PLAIN_MESSAGE);
         } else if ( exception instanceof UserExistsException ) {
-            JOptionPane.showMessageDialog(null, "Request has already been made.",
-                                          "FriendRequest Failed", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage("FriendRequest Failed", "Request has already been made.");
         } else if ( exception instanceof NoSuchUserException ) {
-            //showErrorMessage("Error in friends request", "Friend doesn't exist, try again");
-            JOptionPane.showMessageDialog(null, "Friend doesn't exist, try again.",
-                                          "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage("Error in friend request.", "Friend doesn't exist, try again.");
         } else {
             System.out.println(exception.toString());
         }
@@ -169,13 +169,6 @@ public class ChatManager {
      * @param friendRequest FriendRequest object that we want to delete from the server.
      */
     public static void handleRequestDelete(FriendRequest friendRequest) {
-        if ( isEmpty(friendRequest.getFriendUsername()) ) {
-            System.err.println("Friend request cannot be empty");
-            JOptionPane.showMessageDialog(null, "Friend request cannot be empty",
-                                          "Error in friend request.", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         communication.sendObject(new DeleteFriendRequest(friendRequest.getFriendUsername()));
         Exception exception;
         while ( (exception = communication.getNextException()) == null ) {}
@@ -192,21 +185,22 @@ public class ChatManager {
     // TODO : Make this shit work
     public static void showErrorMessage(String title, String message) {
         try {
-            ErrorBoxController controller = new ErrorBoxController();
             //URL f =
             // new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/RequestRespond.fxml")
             // .toURI().toURL();
             FXMLLoader loader =
-                    new FXMLLoader(controller.getClass()
-                                             .getResource("/com/fagi/view/ErrorBox.fxml"));
+                    new FXMLLoader(ErrorBoxController.class
+                                              .getResource("/com/fagi/view/ErrorBox.fxml"));
             Pane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle(title);
             dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(application.getPrimaryStage());
 
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
+            ErrorBoxController controller = loader.getController();
             controller.setStage(dialogStage);
             controller.setText(message);
             dialogStage.showAndWait();

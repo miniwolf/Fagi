@@ -9,13 +9,14 @@ import javafx.stage.Stage;
  * Created by MFH on 05-10-2014.
  */
 public class ErrorBoxController {
-    @FXML private Button okBtn;
-    @FXML private Label messageArea;
+    @FXML
+    private Button okBtn;
+    @FXML
+    private Label messageArea;
 
     private Stage stage;
 
-    @FXML
-    private void handleButton() {
+    public void handleButton() {
         stage.close();
     }
 

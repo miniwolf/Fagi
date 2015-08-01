@@ -115,4 +115,8 @@ public class FagiApp extends Application {
         controller.initCommunication();
         primaryStage.sizeToScene();
     }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 }
