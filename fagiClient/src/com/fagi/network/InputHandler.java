@@ -45,6 +45,7 @@ class InputHandler implements Runnable {
                     // Shared files are not the same on both side of the server
                     System.err.println(cnfe.getMessage());
                     // TODO: This will be a bitch when having to update the server
+                    // Fix: could be to implement JSON
                 }
             }
             object = null;
@@ -127,6 +128,20 @@ class InputHandler implements Runnable {
             message = (VoiceMessage) object;
             inputs.remove(object);
             return message;
+        }
+        return null;
+    }
+
+    public Exception containsException() {
+        Exception exception;
+        for ( Object object : inputs ) {
+            if ( !(object instanceof Exception ) ) {
+                continue;
+            }
+
+            exception = (Exception) object;
+            inputs.remove(object);
+            return exception;
         }
         return null;
     }

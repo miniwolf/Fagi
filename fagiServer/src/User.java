@@ -5,10 +5,12 @@
  * User data object.
  */
 
+import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
+import com.fagi.exceptions.UserExistsException;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * TODO: Add description, password protection OTR:
@@ -23,8 +25,8 @@ public class User {
     public User(String name, String pass) {
         this.pass = pass;
         this.userName = name;
-        friends = new ArrayList<>();
-        incFriendReq = new ArrayList<>();
+        friends = new CopyOnWriteArrayList<>();
+        incFriendReq = new CopyOnWriteArrayList<>();
     }
 
     public String getPass() {
@@ -47,27 +49,41 @@ public class User {
         friends.add(friend.getUserName());
     }
 
-    public void requestFriend(String otherUser) throws Exception {
-        User other = Data.getUser(otherUser);
-        if ( other == null )
-            throw new NoSuchUserException();
-
-        boolean status = true;
-        for ( String s : incFriendReq ) if (s.equals(otherUser)) {
-            Data.makeFriends(this, other);
-            status = false;
+    public Exception requestFriend(String otherUser) {
+        if ( Data.findInUserFile(userName, otherUser, 0) ) {
+            return new UserExistsException();
         }
-        if ( status )
-            other.addFriendReq(userName);
+        User other = Data.getUser(otherUser);
+        if ( other == null ) {
+            return new NoSuchUserException();
+        }
+
+        if ( incFriendReq.contains(otherUser) ) {
+            Exception exception = other.removeFriendRequest(userName);
+            if ( exception instanceof AllIsWellException ) {
+                Data.makeFriends(this, other);
+                return removeFriendRequest(otherUser);
+            } else {
+                return exception;
+            }
+        }
+        return other.addFriendReq(userName);
     }
 
-    void addFriendReq(String userName) {
-        incFriendReq.add(userName);
-        try {
-            Data.appendFriendReqToUserFile(this.userName, userName);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public Exception removeFriendRequest(String otherUser) {
+        if ( !Data.findInUserFile(userName, otherUser, 1) ) {
+            return new UserExistsException();
         }
+        incFriendReq.remove(otherUser);
+        return new AllIsWellException();
+    }
+
+    private Exception addFriendReq(String userName) {
+        if ( incFriendReq.contains(userName) ) {
+            return new UserExistsException();
+        }
+        incFriendReq.add(userName);
+        return Data.appendFriendReqToUserFile(this.userName, userName);
     }
 
     public void addFriendReqs(List<String> friendReqs) {

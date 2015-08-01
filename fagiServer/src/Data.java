@@ -23,14 +23,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * TODO: Add description, maybe think about .fagi file ending
  * Contains and update information on users.
  */
 class Data {
-    private static final Map<String, Worker> onlineUsers = new HashMap<>();
-    private static final Map<String, User> registeredUsers = new HashMap<>();
+    private static final Map<String, Worker> onlineUsers = new ConcurrentHashMap<>();
+    private static final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
     private static final String separator = "\",\"";
     private static final String indexFilePath = "users/userIndex.fagi";
 
@@ -58,10 +59,11 @@ class Data {
         if ( onlineUsers.containsKey(userName) ) {
             return new UserOnlineException();
         }
-        if ( !registeredUsers.containsKey(userName) ) {
+        User user = registeredUsers.get(userName);
+        if ( user == null ) {
             return new NoSuchUserException();
         }
-        if ( !registeredUsers.get(userName).getPass().equals(pass) ) {
+        if ( !user.getPass().equals(pass) ) {
             return new PasswordException();
         }
         onlineUsers.put(userName, worker);
@@ -80,7 +82,7 @@ class Data {
         return onlineUsers.containsKey(userName);
     }
 
-    public static void makeFriends(User first, User second) throws Exception {
+    public static void makeFriends(User first, User second) {
         first.addFriend(second);
         second.addFriend(first);
 
@@ -142,8 +144,7 @@ class Data {
         }
     }
 
-    private static Object appendFriendToUserFile(String username, String friendName)
-            throws Exception {
+    private static Object appendFriendToUserFile(String username, String friendName) {
         Exception object = appendToUserFile(username, friendName, 0);
         if ( object != null ) {
             return object;
@@ -151,8 +152,7 @@ class Data {
         return removeFromUserFile(username, friendName, 1);
     }
 
-    public static Object appendFriendReqToUserFile(String username, String friendName)
-            throws Exception {
+    public static Exception appendFriendReqToUserFile(String username, String friendName) {
         return appendToUserFile(username, friendName, 1);
     }
 
@@ -183,6 +183,17 @@ class Data {
         wholeFile.set(index, stringList);
         writeUserFile(username, wholeFile);
         return new AllIsWellException();
+    }
+
+    public static boolean findInUserFile(String username, String friendName, int index) {
+        Object object = parseUserFile(username);
+        // Usually NoSuchUserException
+        if ( object instanceof Exception ) {
+            return false;
+        }
+        List<List<String>> wholeFile = (List<List<String>>) object;
+        List<String> stringList = wholeFile.get(index);
+        return stringList.contains(friendName);
     }
 
     /**

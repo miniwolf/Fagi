@@ -6,6 +6,14 @@ package com.fagi.controller;/*
  */
 
 import com.fagi.exceptions.UserOnlineException;
+import com.fagi.model.Chat;
+import com.fagi.model.Conversation;
+import com.fagi.model.Logout;
+import com.fagi.model.TextMessage;
+import com.fagi.network.ChatManager;
+import com.fagi.network.Communication;
+import com.fagi.network.MessageListener;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,16 +26,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import com.fagi.model.Chat;
-import com.fagi.model.Conversation;
-import com.fagi.model.Logout;
-import com.fagi.model.TextMessage;
-import com.fagi.network.ChatManager;
-import com.fagi.network.Communication;
-import com.fagi.network.MessageListener;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 /**
@@ -79,10 +79,12 @@ public class MainScreen {
      */
     public void initComponents() {
         message.setOnKeyPressed(event -> {
-            if ( event.getSource() != message || event.getCode() != KeyCode.ENTER )
+            if ( event.getSource() != message || event.getCode() != KeyCode.ENTER ) {
                 return;
-            if ( event.isControlDown() ) message.appendText("\n");
-            else {
+            }
+            if ( event.isControlDown() ) {
+                message.appendText("\n");
+            } else {
                 handleMessage();
                 event.consume();
             }
@@ -90,21 +92,27 @@ public class MainScreen {
 
         scrollPaneChat.setContent(new Chat("nobody, that's sad."));
 
-        //contactList.setCellFactory(param -> new ListCellRenderer(messageListener, scrollPaneChat));
+        //contactList.setCellFactory(param ->
+        // new ListCellRenderer(messageListener, scrollPaneChat));
 
         //    jContactList.setSelectionBackground(new Color(255, 153, 51));
     }
 
     private void handleMessage() {
-        if ( message.getText().equals("") ) return;
+        if ( message.getText().equals("") ) {
+            return;
+        }
 
         Chat chat = (Chat) scrollPaneChat.getContent();
         for ( Conversation conversation : conversations ) {
             if ( conversation.getConversation() == chat ) {
-                communication.sendObject(new TextMessage(message.getText(), username, conversation.getChatBuddy()));
-                Object object = communication.handleObjects();
-                if ( object instanceof UserOnlineException )
-                    conversation.getConversation().appendText("User went offline");
+                communication.sendObject(new TextMessage(message.getText(), username,
+                                                         conversation.getChatBuddy()));
+                Exception exception;
+                while ( (exception = communication.getNextException()) == null ) {}
+                if ( exception instanceof UserOnlineException ) {
+                    conversation.getConversation().appendText("System: User went offline.");
+                }
                 break;
             }
         }
@@ -123,7 +131,8 @@ public class MainScreen {
     void requestListClicked() {
         try {
             //URL f = new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/RequestRespond.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/RequestRespond.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/fagi/view/RequestRespond.fxml"));
             GridPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Friend Request Respond");
@@ -134,11 +143,15 @@ public class MainScreen {
             dialogStage.setScene(scene);
 
             requestList.setOnMouseClicked(event -> {
-                if ( event.getSource() != requestList || !event.getButton().equals(MouseButton.PRIMARY) )
+                if ( event.getSource() != requestList
+                     || !event.getButton().equals(MouseButton.PRIMARY) ) {
                     return;
+                }
 
                 String user = requestList.getFocusModel().getFocusedItem();
-                if ( user == null || user.length() == 0 ) return;
+                if ( user == null || user.length() == 0 ) {
+                    return;
+                }
 
                 RespondController controller = loader.getController();
                 controller.setStage(dialogStage);
@@ -146,8 +159,6 @@ public class MainScreen {
 
                 dialogStage.showAndWait();
             });
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -191,10 +202,8 @@ public class MainScreen {
         messageThread.interrupt();
         /* Have to wait, else the listener will try asking
            request using the closed socket causing a SocketException. */
-        while (!messageThread.isInterrupted()) {
-        }
-        Logout logout = new Logout(username);
-        ChatManager.handleLogout(logout);
+        while ( !messageThread.isInterrupted() ) { }
+        ChatManager.handleLogout(new Logout());
     }
 
     /**
@@ -236,18 +245,4 @@ public class MainScreen {
     public void sendButtonClicked() {
         handleMessage();
     }
-
-    /*private static void createGUI() {
-        // Set the Nimbus look and feel
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }*/
 }

@@ -59,6 +59,14 @@ public class Communication {
         }
     }
 
+    /**
+     * Do not use this method anymore.
+     * This might give you the wrong object or even none
+     * if it has not reached the input yet.
+     *
+     * @return Current object in the bottom of queue. (Newest Object)
+     * @deprecated use contains"Object" methods instead.
+     */
     public Object handleObjects() {
         Object object = null;
         while ( object == null ) {
@@ -97,5 +105,9 @@ public class Communication {
         } catch (IOException ioe) {
             System.err.println("cc ioe: " + ioe.toString());
         }
+    }
+
+    public Exception getNextException() {
+        return inputHandler.containsException();
     }
 }

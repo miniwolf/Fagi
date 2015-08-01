@@ -32,7 +32,6 @@ import javax.swing.JOptionPane;
  * Chatmanager is used to handle all communication about the chat.
  * Sending messages, handling friend requests and so on.
  * Handles login requests and responds to and from server.
- * TODO: Add descriptions
  */
 public class ChatManager {
     private static Communication communication = null;
@@ -58,14 +57,18 @@ public class ChatManager {
         }
 
         communication.sendObject(login);
-        Object object = communication.handleObjects();
-        if ( object instanceof AllIsWellException ) {
+        Exception exception;
+        while ( (exception = communication.getNextException()) == null ) {}
+        if ( exception instanceof AllIsWellException ) {
             application.showMainScreen(username, communication);
         } else {
-            labelCreateUser.setText(object instanceof NoSuchUserException ? "User doesn't exist"
-                    : object instanceof UserOnlineException ? "You're already online"
-                    : object instanceof PasswordException ? "Wrong password"
-                    : "Unknown Exception: " + object.toString());
+            labelCreateUser.setText(exception instanceof NoSuchUserException
+                                    ? "User doesn't exist"
+                                    : exception instanceof UserOnlineException
+                                      ? "You're already online"
+                                      : exception instanceof PasswordException
+                                        ? "Wrong password"
+                                        : "Unknown Exception: " + exception.toString());
         }
 
     }
@@ -78,9 +81,11 @@ public class ChatManager {
      */
     public static void handleLogout(Logout logout) {
         communication.sendObject(logout);
-        Object object = null;
-        while (!(object instanceof AllIsWellException)) {
-            object = communication.handleObjects();
+        Exception exception;
+        while ( (exception = communication.getNextException()) == null ) {}
+        if ( !(exception instanceof AllIsWellException) ) {
+            System.err.println("Could not log out properly. "
+                               + "Shut down and let server handle the exception");
         }
         communication.close();
         application.showLoginScreen();
@@ -116,12 +121,14 @@ public class ChatManager {
             password = deleteIllegalCharacters(password);
         }
         communication.sendObject(new CreateUser(username, password));
-        Object object = communication.handleObjects();
 
-        if ( object instanceof AllIsWellException ) {
+        Exception exception;
+        while ( (exception = communication.getNextException()) == null ) {}
+
+        if ( exception instanceof AllIsWellException ) {
             labelMessage.setText("User Created");
-        } else if ( object instanceof UserExistsException ) {
-            labelMessage.setText("User already exists");
+        } else if ( exception instanceof UserExistsException ) {
+            labelMessage.setText("Error: User already exists");
         }
     }
 
@@ -133,20 +140,25 @@ public class ChatManager {
         if ( isEmpty(friendRequest.getFriendUsername()) ) {
             System.err.println("Friend request cannot be empty");
             JOptionPane.showMessageDialog(null, "Friend request cannot be empty",
-                    "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+                                          "Error in friend request.", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         communication.sendObject(friendRequest);
-        Object object = communication.handleObjects();
-        // TODO : Make this code work
-        if ( object instanceof AllIsWellException ) {
+
+        Exception exception;
+        while ( (exception = communication.getNextException()) == null ) { }
+        if ( exception instanceof AllIsWellException ) {
             JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeeded",
-                    JOptionPane.PLAIN_MESSAGE);
-        } else if ( object instanceof Exception ) {
+                                          JOptionPane.PLAIN_MESSAGE);
+        } else if ( exception instanceof UserExistsException ) {
+            JOptionPane.showMessageDialog(null, "Request has already been made.",
+                                          "FriendRequest Failed", JOptionPane.ERROR_MESSAGE);
+        } else if ( exception instanceof NoSuchUserException ) {
             //showErrorMessage("Error in friends request", "Friend doesn't exist, try again");
             JOptionPane.showMessageDialog(null, "Friend doesn't exist, try again.",
-                    "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+                                          "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+        } else {
+            System.out.println(exception.toString());
         }
     }
 
@@ -160,16 +172,20 @@ public class ChatManager {
         if ( isEmpty(friendRequest.getFriendUsername()) ) {
             System.err.println("Friend request cannot be empty");
             JOptionPane.showMessageDialog(null, "Friend request cannot be empty",
-                    "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+                                          "Error in friend request.", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         communication.sendObject(new DeleteFriendRequest(friendRequest.getFriendUsername()));
-        Object object = communication.handleObjects();
-        if ( object instanceof Exception ) {
+        Exception exception;
+        while ( (exception = communication.getNextException()) == null ) {}
+        if ( exception instanceof AllIsWellException ) {
+            JOptionPane.showMessageDialog(null, "Successfully deleted.", "Success",
+                                          JOptionPane.PLAIN_MESSAGE);
+        } else {
             showErrorMessage("Delete Friend Request", "Somethign went wrong");
-            JOptionPane.showMessageDialog(null, "Something went wrong.", "Error in delete request.",
-                    JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Something went wrong.",
+            // "Error in delete request.", JOptionPane.ERROR_MESSAGE);
         }
     }
 

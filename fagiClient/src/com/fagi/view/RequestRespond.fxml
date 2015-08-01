@@ -50,7 +50,7 @@
                   </HBox.margin>
               </HBox>
               <Pane maxWidth="+Infinity" HBox.hgrow="ALWAYS" />
-              <Button fx:id="requestBtn" cancelButton="true" minWidth="80.0" mnemonicParsing="false" onMouseClicked="#handleOK" text="Ok" HBox.hgrow="NEVER">
+              <Button fx:id="requestBtn" cancelButton="true" minWidth="80.0" mnemonicParsing="false" onMouseClicked="#handleOk" text="Ok" HBox.hgrow="NEVER">
                   <HBox.margin>
                       <Insets />
                   </HBox.margin>

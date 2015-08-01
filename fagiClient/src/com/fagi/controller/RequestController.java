@@ -17,12 +17,10 @@ public class RequestController {
     private Stage stage;
 
     /**
-     * Called when the user press Send Request
+     * Called when the user press Send Request.
      */
-    @FXML
-    private void handleButton() {
+    public void handleButton() {
         ChatManager.handleFriendRequest(new FriendRequest(username.getText()));
-
         stage.close();
     }
 

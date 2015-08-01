@@ -42,8 +42,7 @@
         </HBox>
         <Pane maxWidth="+Infinity" HBox.hgrow="ALWAYS"/>
         <HBox alignment="CENTER">
-            <Button minWidth="80.0" mnemonicParsing="false" onMousePressed="#handleButton"
-                    text="Send Request" HBox.hgrow="NEVER">
+            <Button minWidth="80.0" mnemonicParsing="false" onMousePressed="#handleButton" text="Send Request" HBox.hgrow="NEVER">
                 <HBox.margin>
                     <Insets left="14.0"/>
                 </HBox.margin>

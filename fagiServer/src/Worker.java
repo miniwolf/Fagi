@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -65,7 +64,7 @@ class Worker implements Runnable {
     }
 
     private void sendIncMessages() throws Exception {
-        while (incMessages.size() > 0) {
+        while ( incMessages.size() > 0 ) {
             oOut.writeObject(incMessages.remove());
         }
     }
@@ -79,7 +78,7 @@ class Worker implements Runnable {
             return handleLogin(arg);
         } else if ( input instanceof Logout ) {
             Logout arg = (Logout) input;
-            return handleLogout(arg);
+            return handleLogout();
         } else if ( input instanceof GetFriends ) {
             return handleGetFriends();
         } else if ( input instanceof GetRequests ) {
@@ -105,7 +104,8 @@ class Worker implements Runnable {
     }
 
     private Object handleDeleteFriendRequest(DeleteFriendRequest arg) {
-        return Data.removeFriendRequestFromUserFile(myUserName, arg.getFriendUsername());
+        System.out.println("DeleteFriendRequest");
+        return Data.getUser(myUserName).removeFriendRequest(arg.getFriendUsername());
     }
 
     private Object handleFriendDelete(FriendDelete arg) {
@@ -136,9 +136,8 @@ class Worker implements Runnable {
         return Data.userLogin(arg.getUsername(), arg.getPassword(), this);
     }
 
-    private Object handleLogout(Logout arg) {
+    private Object handleLogout() {
         System.out.println("Logout");
-        myUserName = arg.getUsername();
         Data.userLogout(myUserName);
         running = false;
         return new AllIsWellException();
@@ -155,12 +154,7 @@ class Worker implements Runnable {
 
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
-        try {
-            Data.getUser(myUserName).requestFriend(arg.getFriendUsername());
-        } catch (Exception e) {
-            return e;
-        }
-        return new AllIsWellException();
+        return Data.getUser(myUserName).requestFriend(arg.getFriendUsername());
     }
 
     private Object handleUnknownObject(Object input) {
