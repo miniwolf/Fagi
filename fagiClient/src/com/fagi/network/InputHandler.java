@@ -1,20 +1,21 @@
-package com.fagi.network;/*
+package com.fagi.network;
+/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * InputHandler.java
- *
- * Handling every incoming object from the server
  */
 
+import com.fagi.model.FriendList;
+import com.fagi.model.FriendRequestList;
 import com.fagi.model.Message;
 import com.fagi.model.VoiceMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
+ * Handling every incoming object from the server.
  * TODO: Write description
  */
 class InputHandler implements Runnable {
@@ -51,7 +52,9 @@ class InputHandler implements Runnable {
     }
 
     public Object getLast() {
-        if ( inputs.isEmpty() ) return null;
+        if ( inputs.isEmpty() ) {
+            return null;
+        }
         return inputs.pollLast();
     }
 
@@ -60,41 +63,47 @@ class InputHandler implements Runnable {
      * if the list contains something not a string,
      * we will throw an IllegalArgumentException.
      *
-     * @return List<String> containing all the friends.
+     * @return FriendRequestList containing all the requests
      * @throws IllegalArgumentException meaning the server
      *         has given some illegal list
      */
-    public List<String> containsList() throws IllegalArgumentException {
-        List<String> list = new ArrayList<>();
+    public FriendRequestList containsRequests() throws IllegalArgumentException {
         for ( Object object : inputs ) {
-            if ( !(object instanceof List) ) continue;
-            try {
-                list = checkList(object);
-                inputs.remove(object);
-                return list;
-            } catch (IllegalArgumentException iae) {
-                inputs.remove(object);
-                throw iae;
+            if ( !(object instanceof FriendRequestList) ) {
+                continue;
             }
+            inputs.remove(object);
+            return (FriendRequestList) object;
         }
-        return list;
+        return new FriendRequestList(new ArrayList<>());
     }
 
-    List<String> checkList(Object object) throws IllegalArgumentException {
-        List<String> list = new ArrayList<>();
-        List<?> tmp = (List<?>) object;
-        for ( Object o : tmp ) {
-            if ( !(o instanceof String) )
-                throw new IllegalArgumentException("Server returned invalid list " + o.toString());
-            list.add((String) o);
+    /**
+     * Checking our queue for a list from the server,
+     * if the list contains something not a string,
+     * we will throw an IllegalArgumentException.
+     *
+     * @return FriendList containing all the friends
+     * @throws IllegalArgumentException meaning the server
+     *         has given some illegal list
+     */
+    public FriendList containsFriends() throws IllegalArgumentException {
+        for ( Object object : inputs ) {
+            if ( !(object instanceof FriendList) ) {
+                continue;
+            }
+            inputs.remove(object);
+            return (FriendList) object;
         }
-        return list;
+        return new FriendList(new ArrayList<>());
     }
 
     public Message containsMessage() {
         Message message;
         for ( Object object : inputs ) {
-            if ( !(object instanceof Message) ) continue;
+            if ( !(object instanceof Message) ) {
+                continue;
+            }
             message = (Message) object;
             if ( !message.isSystemMessage() ) {
                 inputs.remove(object);
@@ -111,7 +120,9 @@ class InputHandler implements Runnable {
     public Message containsVoice() {
         Message message;
         for ( Object object : inputs ) {
-            if ( !(object instanceof VoiceMessage) ) continue;
+            if ( !(object instanceof VoiceMessage) ) {
+                continue;
+            }
 
             message = (VoiceMessage) object;
             inputs.remove(object);

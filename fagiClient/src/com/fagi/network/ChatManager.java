@@ -5,7 +5,17 @@ package com.fagi.network;
  */
 
 import com.fagi.controller.ErrorBoxController;
-import com.fagi.exceptions.*;
+import com.fagi.exceptions.AllIsWellException;
+import com.fagi.exceptions.NoSuchUserException;
+import com.fagi.exceptions.PasswordException;
+import com.fagi.exceptions.UserExistsException;
+import com.fagi.exceptions.UserOnlineException;
+import com.fagi.model.CreateUser;
+import com.fagi.model.DeleteFriendRequest;
+import com.fagi.model.FriendRequest;
+import com.fagi.model.Login;
+import com.fagi.model.Logout;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -13,12 +23,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.FagiApp;
-import com.fagi.model.*;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  * Chatmanager is used to handle all communication about the chat.
@@ -39,8 +47,8 @@ public class ChatManager {
      * Wrong password will give PasswordException. This is done to distinguish
      * between wrong username and wrong password. (Better user experience...)
      *
-     * @param login       contains the login object.
-     * @param username    string from the textField.getText method.
+     * @param login           contains the login object.
+     * @param username        string from the textField.getText method.
      * @param labelCreateUser respond to the user is posted here.
      */
     public static void handleLogin(Login login, String username, Label labelCreateUser) {
@@ -83,12 +91,13 @@ public class ChatManager {
     }
 
     /**
-     * @param username   username from the LoginScreen.
-     * @param password   password from the LoginScreen.
-     * @param passRepeat for checking repeated password is equal.
-     * @param labelMessage   JLabel for writing status messages to the user.
+     * @param username     username from the LoginScreen.
+     * @param password     password from the LoginScreen.
+     * @param passRepeat   for checking repeated password is equal.
+     * @param labelMessage JLabel for writing status messages to the user.
      */
-    public static void handleCreateUser(String username, String password, String passRepeat, Label labelMessage) {
+    public static void handleCreateUser(String username, String password, String passRepeat,
+                                        Label labelMessage) {
         if ( isEmpty(username) || isEmpty(password) || isEmpty(passRepeat) ) {
             labelMessage.setText("Fields can't be empty");
             return;
@@ -117,12 +126,14 @@ public class ChatManager {
     }
 
     /**
-     * @param friendRequest contains the FriendRequest object to be send using the communication class.
+     * @param friendRequest contains the FriendRequest object to be send
+     *                      using the communication class.
      */
     public static void handleFriendRequest(FriendRequest friendRequest) {
         if ( isEmpty(friendRequest.getFriendUsername()) ) {
             System.err.println("Friend request cannot be empty");
-            JOptionPane.showMessageDialog(null, "Friend request cannot be empty", "Error in friend request.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Friend request cannot be empty",
+                    "Error in friend request.", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -134,8 +145,8 @@ public class ChatManager {
                     JOptionPane.PLAIN_MESSAGE);
         } else if ( object instanceof Exception ) {
             //showErrorMessage("Error in friends request", "Friend doesn't exist, try again");
-            JOptionPane.showMessageDialog(null, "Friend doesn't exist, try again.", "Error in friend request.",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Friend doesn't exist, try again.",
+                    "Error in friend request.", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -148,14 +159,15 @@ public class ChatManager {
     public static void handleRequestDelete(FriendRequest friendRequest) {
         if ( isEmpty(friendRequest.getFriendUsername()) ) {
             System.err.println("Friend request cannot be empty");
-            JOptionPane.showMessageDialog(null, "Friend request cannot be empty", "Error in friend request.",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Friend request cannot be empty",
+                    "Error in friend request.", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         communication.sendObject(new DeleteFriendRequest(friendRequest.getFriendUsername()));
         Object object = communication.handleObjects();
         if ( object instanceof Exception ) {
+            showErrorMessage("Delete Friend Request", "Somethign went wrong");
             JOptionPane.showMessageDialog(null, "Something went wrong.", "Error in delete request.",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -165,8 +177,12 @@ public class ChatManager {
     public static void showErrorMessage(String title, String message) {
         try {
             ErrorBoxController controller = new ErrorBoxController();
-            //URL f = new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/RequestRespond.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/com/fagi/view/ErrorBox.fxml"));
+            //URL f =
+            // new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/RequestRespond.fxml")
+            // .toURI().toURL();
+            FXMLLoader loader =
+                    new FXMLLoader(controller.getClass()
+                                             .getResource("/com/fagi/view/ErrorBox.fxml"));
             Pane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle(title);
@@ -176,10 +192,8 @@ public class ChatManager {
             dialogStage.setScene(scene);
 
             controller.setStage(dialogStage);
-            //com.fagi.controller.setText(message);
+            controller.setText(message);
             dialogStage.showAndWait();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -190,8 +204,8 @@ public class ChatManager {
      * @return String the escaped string.
      */
     private static String deleteIllegalCharacters(String string) {
-        if ( string.contains("\"") ) string = string.replace("\"", "'");
-        if ( string.contains(",") ) string = string.replace(",", ";");
+        string = string.replace("\"", "'");
+        string = string.replace(",", ";");
         return string;
     }
 

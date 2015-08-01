@@ -1,33 +1,38 @@
-package main;/*
+package main;
+/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 
 import com.fagi.controller.LoginScreen;
 import com.fagi.controller.MainScreen;
+import com.fagi.network.ChatManager;
+import com.fagi.network.Communication;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import com.fagi.network.ChatManager;
-import com.fagi.network.Communication;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
- * JavaFX application class for handling GUI
+ * JavaFX application class for handling GUI.
  */
 public class FagiApp extends Application {
     private Stage primaryStage;
     private Scene scene;
 
     /**
+     * Main method, launches the application.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        if ( args.length != 0 )
+        if ( args.length != 0 ) {
             System.out.println("Usage: java LoginScreen");
+        }
         launch(args);
     }
 
@@ -35,10 +40,9 @@ public class FagiApp extends Application {
      * Initial method called by the threat manager in JavFX.
      *
      * @param primaryStage Canvas for displaying scenes.
-     * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
         scene = new Scene(new AnchorPane());
@@ -86,7 +90,7 @@ public class FagiApp extends Application {
      * Opens the main window with all user interface for chatting.
      * Switching com.fagi.controller to MainScreen.
      *
-     * @param username Username logged in.
+     * @param username      Username logged in.
      * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {

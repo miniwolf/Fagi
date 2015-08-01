@@ -1,20 +1,32 @@
 /*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Data.java
- *
- * Contains and update information on users.
  */
 
-import com.fagi.exceptions.*;
+import com.fagi.exceptions.AllIsWellException;
+import com.fagi.exceptions.NoSuchUserException;
+import com.fagi.exceptions.PasswordException;
+import com.fagi.exceptions.UserExistsException;
+import com.fagi.exceptions.UserOnlineException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Add description, maybe think about .fagi file ending
+ * Contains and update information on users.
  */
 class Data {
     private static final Map<String, Worker> onlineUsers = new HashMap<>();
@@ -23,7 +35,9 @@ class Data {
     private static final String indexFilePath = "users/userIndex.fagi";
 
     public static Object createUser(String userName, String pass) throws IOException {
-        if ( registeredUsers.containsKey(userName) ) return new UserExistsException();
+        if ( registeredUsers.containsKey(userName) ) {
+            return new UserExistsException();
+        }
 
         registeredUsers.put(userName, new User(userName, pass));
 
@@ -34,19 +48,23 @@ class Data {
 
         File file = new File("users/" + userName);
 
-        if ( !file.createNewFile() )
+        if ( !file.createNewFile() ) {
             System.out.println(userName + ". File already exists, supposed bug. Report please!");
+        }
         return new AllIsWellException();
     }
 
-    public static Exception userLogin(String userName, String pass, Worker w) {
-        if ( onlineUsers.containsKey(userName) )
+    public static Exception userLogin(String userName, String pass, Worker worker) {
+        if ( onlineUsers.containsKey(userName) ) {
             return new UserOnlineException();
-        if ( !registeredUsers.containsKey(userName) )
+        }
+        if ( !registeredUsers.containsKey(userName) ) {
             return new NoSuchUserException();
-        if ( !registeredUsers.get(userName).getPass().equals(pass) )
+        }
+        if ( !registeredUsers.get(userName).getPass().equals(pass) ) {
             return new PasswordException();
-        onlineUsers.put(userName, w);
+        }
+        onlineUsers.put(userName, worker);
         return new AllIsWellException();
     }
 
@@ -62,12 +80,12 @@ class Data {
         return onlineUsers.containsKey(userName);
     }
 
-    public static void makeFriends(User a, User b) throws Exception {
-        a.addFriend(b);
-        b.addFriend(a);
+    public static void makeFriends(User first, User second) throws Exception {
+        first.addFriend(second);
+        second.addFriend(first);
 
-        appendFriendToUserFile(a.getUserName(), b.getUserName());
-        appendFriendToUserFile(b.getUserName(), a.getUserName());
+        appendFriendToUserFile(first.getUserName(), second.getUserName());
+        appendFriendToUserFile(second.getUserName(), first.getUserName());
     }
 
     public static User getUser(String name) {
@@ -80,13 +98,15 @@ class Data {
 
     public static void readInData() {
         try {
-            File f = new File("users/");
+            File file = new File("users/");
             File indexFile = new File(indexFilePath);
-            if ( !f.exists() || !indexFile.exists() ) {
-                if ( !f.mkdir() )
+            if ( !file.exists() || !indexFile.exists() ) {
+                if ( !file.mkdir() ) {
                     System.err.println("Couldn't create folder");
-                if ( !indexFile.createNewFile() )
+                }
+                if ( !indexFile.createNewFile() ) {
                     System.err.println("Can't create file");
+                }
             } else {
                 List<String> tmpUsernameList = readIndexFile(indexFile);
                 readUsers(tmpUsernameList);
@@ -122,32 +142,42 @@ class Data {
         }
     }
 
-    private static Object appendFriendToUserFile(String username, String friendName) throws Exception {
-        Exception o = appendToUserFile(username, friendName, 0);
-        if ( o != null ) {
-            return o;
+    private static Object appendFriendToUserFile(String username, String friendName)
+            throws Exception {
+        Exception object = appendToUserFile(username, friendName, 0);
+        if ( object != null ) {
+            return object;
         }
         return removeFromUserFile(username, friendName, 1);
     }
 
-    public static Object appendFriendReqToUserFile(String username, String friendName) throws Exception {
+    public static Object appendFriendReqToUserFile(String username, String friendName)
+            throws Exception {
         return appendToUserFile(username, friendName, 1);
     }
 
     public static Exception removeFriendFromUserFile(String username, String friendName) {
-        Exception o = removeFromUserFile(username, friendName, 0);
-        if ( o != null ) {
-            return o;
+        Exception object = removeFromUserFile(username, friendName, 0);
+        if ( object != null ) {
+            return object;
         }
         return removeFromUserFile(username, friendName, 1);
     }
 
-    private static Exception appendToUserFile(String username, String friendName, int index) {
-        Object o = parseUserFile(username);
-        if ( o instanceof Exception ) {
-            return (Exception) o;
+    public static Exception removeFriendRequestFromUserFile(String username, String friendName) {
+        Exception object = removeFromUserFile(username, friendName, 1);
+        if ( object != null ) {
+            return object;
         }
-        List<List<String>> wholeFile = (List<List<String>>) o;
+        return new AllIsWellException();
+    }
+
+    private static Exception appendToUserFile(String username, String friendName, int index) {
+        Object object = parseUserFile(username);
+        if ( object instanceof Exception ) {
+            return (Exception) object;
+        }
+        List<List<String>> wholeFile = (List<List<String>>) object;
         List<String> stringList = wholeFile.get(index);
         stringList.add(friendName);
         wholeFile.set(index, stringList);
@@ -155,12 +185,19 @@ class Data {
         return new AllIsWellException();
     }
 
+    /**
+     * Using this to remove data from the user file
+     * @param username username file to delete from
+     * @param friendName string to delete
+     * @param index 0 is friend list. 1 is friend requests.
+     * @return ExceptionObject from handlers.
+     */
     private static Exception removeFromUserFile(String username, String friendName, int index) {
-        Object o = parseUserFile(username);
-        if ( o instanceof Exception ) {
-            return (Exception) o;
+        Object object = parseUserFile(username);
+        if ( object instanceof Exception ) {
+            return (Exception) object;
         }
-        List<List<String>> wholeFile = (List<List<String>>) o;
+        List<List<String>> wholeFile = (List<List<String>>) object;
 
         List<String> stringList = wholeFile.get(index);
         stringList.remove(friendName);
@@ -192,7 +229,8 @@ class Data {
             try {
                 friends = new ArrayList<>(Arrays.asList(friendLine.split(separator)));
             } catch (Exception e) {
-                System.out.println("Error while loading friends for " + userName + " maybe he just doesn't have any friends" + e);
+                System.out.println("Error while loading friends for " + userName
+                                   + " maybe he just doesn't have any friends" + e);
             }
         }
 
@@ -211,7 +249,8 @@ class Data {
             try {
                 requests = new ArrayList<>(Arrays.asList(requestLine.split(separator)));
             } catch (Exception e) {
-                System.out.println("Error while loading friend requests for " + userName + " maybe he just doesn't have any friends " + e);
+                System.out.println("Error while loading friend requests for " + userName
+                                   + " maybe he just doesn't have any friends " + e);
             }
         }
 
@@ -264,19 +303,16 @@ class Data {
     }
 
     private static String listToString(List<String> list) {
-        if ( list.size() == 0 ) return "";
+        if ( list.size() == 0 ) {
+            return "";
+        }
 
         StringBuilder res = new StringBuilder("\"");
-        for ( String s : list )
+        for ( String s : list ) {
             res.append(s).append(separator);
+        }
         String result = res.toString();
 
         return result.substring(0, result.length() - 2);
-    }
-
-    public static void printList(List<String> l) {
-        for ( String s : l )
-            System.out.print(s + " ");
-        System.out.println();
     }
 }

@@ -6,58 +6,18 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2805f7e8-1275-4efb-b1bc-b35efbb599db" name="Default" comment="Deleting speex from voice">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Checkstyle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/view/RequestRespond.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/DeleteFriendRequest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/ErrorBoxController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/LoginScreen.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/MainScreen.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/RequestController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/RespondController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fagiClient/src/view/RequestRespond.fxml" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/ErrorBoxController.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/controller/ErrorBoxController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/LoginScreen.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/controller/LoginScreen.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/MainScreen.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/controller/MainScreen.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/RequestController.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/controller/RequestController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/controller/RespondController.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/controller/RespondController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/model/Chat.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/model/Chat.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/model/Conversation.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/model/Conversation.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/model/JActionList.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/model/JActionList.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/ChatManager.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/Communication.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/InputHandler.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/ListCellRenderer.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/ListCellRenderer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/MessageListener.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/VoiceReceiver.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/VoiceReceiver.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/VoiceRecorder.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/VoiceRecorder.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/network/VoiceSystem.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/VoiceSystem.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/view/ErrorBox.fxml" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/view/ErrorBox.fxml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/view/FriendRequest.fxml" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/view/FriendRequest.fxml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/view/LoginScreen.fxml" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/view/LoginScreen.fxml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/view/MainScreen.fxml" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/view/MainScreen.fxml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fagiClient/src/view/VoiceChat.fxml" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/view/VoiceChat.fxml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/exceptions/AllIsWellException.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/exceptions/AllIsWellException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/exceptions/NoSuchUserException.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/exceptions/NoSuchUserException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/exceptions/PasswordException.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/exceptions/PasswordException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/exceptions/UserExistsException.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/exceptions/UserExistsException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/exceptions/UserOnlineException.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/exceptions/UserOnlineException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/CreateUser.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/CreateUser.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/FriendDelete.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/FriendDelete.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/FriendRequest.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/GetFriends.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/GetFriends.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/GetRequests.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/GetRequests.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/GetSound.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/GetSound.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/Login.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/Login.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/Logout.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/Logout.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/Message.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/Message.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/TextMessage.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/TextMessage.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/shared/src/model/VoiceMessage.java" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/VoiceMessage.java" />
+    <list default="true" id="2805f7e8-1275-4efb-b1bc-b35efbb599db" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/FriendList.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequestList.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/shared/src/com/fagi/model/ResponseList.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TODO" afterPath="$PROJECT_DIR$/TODO" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Checkstyle.xml" afterPath="$PROJECT_DIR$/Checkstyle.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java" afterPath="$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiClient/src/main/FagiApp.java" afterPath="$PROJECT_DIR$/fagiClient/src/main/FagiApp.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiServer/src/Data.java" afterPath="$PROJECT_DIR$/fagiServer/src/Data.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiServer/src/User.java" afterPath="$PROJECT_DIR$/fagiServer/src/User.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fagiServer/src/Worker.java" afterPath="$PROJECT_DIR$/fagiServer/src/Worker.java" />
     </list>
     <ignored path="Fagi.iws" />
@@ -83,28 +43,40 @@
     <splitter split-orientation="horizontal" split-proportion="0.6833085">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="MessageListener.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java">
+          <file leaf-file-name="FriendList.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendList.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
+                  <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
                   <folding>
-                    <element signature="imports" expanded="false" />
-                    <element signature="e#1391#1392#0" expanded="false" />
-                    <element signature="e#1441#1442#0" expanded="false" />
-                    <element signature="e#4237#4238#0" expanded="false" />
-                    <element signature="e#4268#4269#0" expanded="false" />
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#356#357#0" expanded="true" />
+                    <element signature="e#389#390#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/.gitignore">
+          <file leaf-file-name="FriendRequestList.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequestList.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-                  <folding />
+                  <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ResponseList.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/ResponseList.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="28" column="28" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -113,40 +85,34 @@
             <entry file="file://$PROJECT_DIR$/users/test">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
+                  <caret line="0" column="7" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="humus" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/users/humus">
+          <file leaf-file-name="userIndex.fagi" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/users/userIndex.fagi">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="MainScreen.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/controller/MainScreen.java">
+          <file leaf-file-name="Worker.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/fagiServer/src/Worker.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="240" column="30" selection-start-line="240" selection-start-column="30" selection-end-line="240" selection-end-column="30" />
+                <state vertical-scroll-proportion="0.63582677">
+                  <caret line="95" column="46" selection-start-line="95" selection-start-column="46" selection-end-line="95" selection-end-column="46" />
                   <folding>
+                    <element signature="e#0#6417#0" expanded="true" />
                     <element signature="imports" expanded="true" />
+                    <element signature="e#4143#4144#0" expanded="true" />
+                    <element signature="e#4184#4185#0" expanded="true" />
+                    <marker date="1438441418837" expanded="true" signature="6258:6322" placeholder="{...}" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="RespondController.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/controller/RespondController.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
-                  <folding />
                 </state>
               </provider>
             </entry>
@@ -155,18 +121,10 @@
             <entry file="file://$PROJECT_DIR$/fagiClient/src/main/FagiApp.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ChatManager.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-                  <folding />
+                  <caret line="108" column="12" selection-start-line="108" selection-start-column="12" selection-end-line="108" selection-end-column="12" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -175,7 +133,7 @@
             <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/DeleteFriendRequest.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="17" column="57" selection-start-line="17" selection-start-column="55" selection-end-line="17" selection-end-column="55" />
+                  <caret line="17" column="55" selection-start-line="17" selection-start-column="55" selection-end-line="17" selection-end-column="55" />
                   <folding>
                     <element signature="e#0#562#0" expanded="true" />
                     <element signature="e#480#481#0" expanded="true" />
@@ -184,11 +142,23 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Checkstyle.xml" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Checkstyle.xml">
+          <file leaf-file-name="InputHandler.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.21438849">
-                  <caret line="156" column="34" selection-start-line="156" selection-start-column="28" selection-end-line="156" selection-end-column="34" />
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Communication.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="76" column="36" selection-start-line="76" selection-start-column="36" selection-end-line="76" selection-end-column="36" />
                   <folding />
                 </state>
               </provider>
@@ -223,32 +193,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Communication.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="73" column="7" selection-start-line="73" selection-start-column="7" selection-end-line="73" selection-end-column="7" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="InputHandler.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="97" column="38" selection-start-line="97" selection-start-column="38" selection-end-line="97" selection-end-column="38" />
-                  <folding>
-                    <element signature="e#696#697#0" expanded="false" />
-                    <element signature="e#724#725#0" expanded="false" />
-                    <element signature="e#3411#3412#0" expanded="false" />
-                    <element signature="e#3442#3443#0" expanded="false" />
-                    <marker date="1438429431258" expanded="false" signature="198:411" placeholder="..." />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="Makefile" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/fagiClient/Makefile">
               <provider selected="true" editor-type-id="text-editor">
@@ -259,20 +203,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="TODO" pinned="false" current-in-tab="false">
+          <file leaf-file-name="TODO" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/TODO">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.26771653">
+                  <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="FriendRequest.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="FriendRequest.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.32963988">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
                   <folding>
                     <element signature="e#362#363#0" expanded="true" />
@@ -323,6 +267,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -363,9 +308,7 @@
         <option value="$PROJECT_DIR$/fagiClient/src/network/Communication.java" />
         <option value="$PROJECT_DIR$/fagiClient/src/view/LoginScreen.fxml" />
         <option value="$PROJECT_DIR$/users/dimmer" />
-        <option value="$PROJECT_DIR$/fagiServer/src/Data.java" />
         <option value="$PROJECT_DIR$/fagiClient/src/network/MessageListener.java" />
-        <option value="$PROJECT_DIR$/fagiServer/src/Worker.java" />
         <option value="$PROJECT_DIR$/fagiServer/src/Server.java" />
         <option value="$PROJECT_DIR$/fagiClient/Notes to self" />
         <option value="$PROJECT_DIR$/fagiClient/src/network/VoiceReceiver.java" />
@@ -375,7 +318,6 @@
         <option value="$PROJECT_DIR$/fagiClient/src/network/VoiceSystem.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/fagiClient/src/view/MainScreen.fxml" />
-        <option value="$PROJECT_DIR$/fagiClient/src/main/FagiApp.java" />
         <option value="$PROJECT_DIR$/fagiClient/src/controller/RespondController.java" />
         <option value="$PROJECT_DIR$/users/test" />
         <option value="$PROJECT_DIR$/users/humus" />
@@ -383,8 +325,18 @@
         <option value="$PROJECT_DIR$/fagiClient/src/controller/MainScreen.java" />
         <option value="$PROJECT_DIR$/shared/src/model/DeleteFriendRequest.java" />
         <option value="$PROJECT_DIR$/Checkstle.xml" />
-        <option value="$PROJECT_DIR$/Checkstyle.xml" />
         <option value="$PROJECT_DIR$/fagiClient/src/network/ChatManager.java" />
+        <option value="$PROJECT_DIR$/Checkstyle.xml" />
+        <option value="$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java" />
+        <option value="$PROJECT_DIR$/fagiServer/src/Data.java" />
+        <option value="$PROJECT_DIR$/shared/src/com/fagi/model/FriendList.java" />
+        <option value="$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequestList.java" />
+        <option value="$PROJECT_DIR$/fagiClient/src/main/FagiApp.java" />
+        <option value="$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java" />
+        <option value="$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java" />
+        <option value="$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java" />
+        <option value="$PROJECT_DIR$/fagiServer/src/Worker.java" />
+        <option value="$PROJECT_DIR$/shared/src/com/fagi/model/ResponseList.java" />
       </list>
     </option>
   </component>
@@ -404,6 +356,76 @@
     <option name="y" value="-8" />
     <option name="width" value="1616" />
     <option name="height" value="876" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Abstraction issuesJava</id>
+          </State>
+          <State>
+            <id>Android Lint</id>
+          </State>
+          <State>
+            <id>CSS</id>
+          </State>
+          <State>
+            <id>Code style issuesJava</id>
+          </State>
+          <State>
+            <id>GeneralScala</id>
+          </State>
+          <State>
+            <id>Groovy</id>
+          </State>
+          <State>
+            <id>ImportsJava</id>
+          </State>
+          <State>
+            <id>Inheritance issuesJava</id>
+          </State>
+          <State>
+            <id>Invalid elementsCSS</id>
+          </State>
+          <State>
+            <id>JSP Inspections</id>
+          </State>
+          <State>
+            <id>Java</id>
+          </State>
+          <State>
+            <id>JavaFX</id>
+          </State>
+          <State>
+            <id>Less</id>
+          </State>
+          <State>
+            <id>Logging issuesJava</id>
+          </State>
+          <State>
+            <id>PHP</id>
+          </State>
+          <State>
+            <id>Potentially confusing code constructsGroovy</id>
+          </State>
+          <State>
+            <id>Scala</id>
+          </State>
+          <State>
+            <id>UnusedPHP</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Android</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -588,7 +610,29 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fagi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fagi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fagiClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -615,6 +659,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fagi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Fagi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fagiClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fagi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="network" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -666,7 +736,7 @@
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/shared/src" />
-    <property name="settings.editor.selected.configurable" value="org.infernus.idea.checkstyle.CheckStyleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -1135,7 +1205,7 @@
       <workItem from="1438283036231" duration="1322000" />
       <workItem from="1438366352265" duration="5226000" />
       <workItem from="1438423129406" duration="3795000" />
-      <workItem from="1438427372721" duration="1970000" />
+      <workItem from="1438427372721" duration="11390000" />
     </task>
     <task id="LOCAL-00001" summary="Updated code structure, however, still need great refactoring. &#10;New features i.e. security, user and chat features needed.">
       <created>1410486695667</created>
@@ -1221,11 +1291,17 @@
       <option name="project" value="LOCAL" />
       <updated>1438282229725</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Updating package structure.">
+      <created>1438429493851</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1438429493851</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183879000" />
+    <option name="totallyTimeSpent" value="193299000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1253,11 +1329,13 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31234568" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3266399" sideWeight="0.4974293" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28514057" sideWeight="0.50771207" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5240642" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328877" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28514057" sideWeight="0.4922879" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32797858" sideWeight="0.4974293" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962963" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13946016" sideWeight="0.4990792" order="0" side_tool="false" content_ui="combo" />
@@ -1267,16 +1345,14 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19166666" sideWeight="0.50092083" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39892906" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962963" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39892906" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32987013" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3266399" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28514057" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1335,7 +1411,8 @@
     <MESSAGE value="Working recording and playback of audio.&#10;&#10;Updating structure. New Exceptions for:&#10; - User creation&#10; - Voice passing.&#10; &#10;Bug fixing on:&#10; - User creation&#10; - Messaging.&#10; - InputHandler in general" />
     <MESSAGE value="Updating structure for voice.&#10;&#10;Bug fixing for messaging." />
     <MESSAGE value="Deleting speex from voice" />
-    <option name="LAST_COMMIT_MESSAGE" value="Deleting speex from voice" />
+    <MESSAGE value="Updating package structure." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating package structure." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1347,7 +1424,7 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="11" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1356,80 +1433,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fagiServer/src/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#967#968#0" expanded="false" />
-            <element signature="e#1016#1017#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/GetFriends.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiServer/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="35" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#1248#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#353#354#0" expanded="false" />
-            <element signature="e#385#386#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="72" column="38" selection-start-line="72" selection-start-column="38" selection-end-line="72" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#696#697#0" expanded="false" />
-            <element signature="e#724#725#0" expanded="false" />
-            <element signature="e#3411#3412#0" expanded="false" />
-            <element signature="e#3442#3443#0" expanded="false" />
-            <marker date="1438429431258" expanded="false" signature="198:411" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="e#362#363#0" expanded="true" />
-            <element signature="e#414#415#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/Notes to self">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/GetRequests.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1554,13 +1557,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fagiServer/src/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="121" column="9" selection-start-line="121" selection-start-column="9" selection-end-line="121" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/javafx-src.zip!/javafx/event/Event.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33233082">
@@ -1583,16 +1579,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fagiServer/src/Worker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="166" column="23" selection-start-line="166" selection-start-column="23" selection-end-line="166" selection-end-column="23" />
-          <folding>
-            <marker date="1438429457306" expanded="true" signature="5386:5454" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fagiServer/src/User.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1605,14 +1591,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/GetFriends.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fagiServer/src/Server.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1622,28 +1600,6 @@
             <element signature="imports" expanded="false" />
             <element signature="e#353#354#0" expanded="false" />
             <element signature="e#385#386#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="73" column="7" selection-start-line="73" selection-start-column="7" selection-end-line="73" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="97" column="38" selection-start-line="97" selection-start-column="38" selection-end-line="97" selection-end-column="38" />
-          <folding>
-            <element signature="e#696#697#0" expanded="false" />
-            <element signature="e#724#725#0" expanded="false" />
-            <element signature="e#3411#3412#0" expanded="false" />
-            <element signature="e#3442#3443#0" expanded="false" />
-            <marker date="1438429431258" expanded="false" signature="198:411" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1694,28 +1650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1391#1392#0" expanded="false" />
-            <element signature="e#1441#1442#0" expanded="false" />
-            <element signature="e#4237#4238#0" expanded="false" />
-            <element signature="e#4268#4269#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/main/FagiApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1727,15 +1661,7 @@
     <entry file="file://$PROJECT_DIR$/users/humus">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/users/test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1745,7 +1671,42 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="240" column="30" selection-start-line="240" selection-start-column="30" selection-end-line="240" selection-end-column="30" />
           <folding>
+            <element signature="e#7708#7709#0" expanded="false" />
+            <element signature="e#7745#7746#0" expanded="false" />
+            <element signature="e#7806#7807#0" expanded="false" />
+            <element signature="e#7854#7855#0" expanded="false" />
+            <element signature="e#7893#7894#0" expanded="false" />
+            <element signature="e#7924#7925#0" expanded="false" />
+            <marker date="1438429457347" expanded="true" signature="207:982" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/javafx-src.zip!/javafx/stage/Stage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9285714">
+          <caret line="353" column="16" selection-start-line="353" selection-start-column="11" selection-end-line="353" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33267716">
+          <caret line="211" column="6" selection-start-line="211" selection-start-column="6" selection-end-line="211" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fagiServer/src/Data.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="295" column="43" selection-start-line="295" selection-start-column="38" selection-end-line="295" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#11076#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#3048#3049#0" expanded="true" />
+            <element signature="e#3096#3097#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1758,17 +1719,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TODO">
+    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/GetFriends.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.32963988">
+        <state vertical-scroll-proportion="0.0">
           <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
           <folding>
             <element signature="e#362#363#0" expanded="true" />
@@ -1777,10 +1738,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="88" column="35" selection-start-line="88" selection-start-column="35" selection-end-line="88" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3297#3298#0" expanded="true" />
+            <element signature="e#3334#3335#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Checkstyle.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="148" column="56" selection-start-line="148" selection-start-column="56" selection-end-line="148" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.26771653">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/Communication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="36" selection-start-line="76" selection-start-column="36" selection-end-line="76" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/util/stream/Stream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33267716">
+          <caret line="806" column="13" selection-start-line="806" selection-start-column="13" selection-end-line="806" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/DeleteFriendRequest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="57" selection-start-line="17" selection-start-column="55" selection-end-line="17" selection-end-column="55" />
+          <caret line="17" column="55" selection-start-line="17" selection-start-column="55" selection-end-line="17" selection-end-column="55" />
           <folding>
             <element signature="e#0#562#0" expanded="true" />
             <element signature="e#480#481#0" expanded="true" />
@@ -1788,19 +1793,95 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/ChatManager.java">
+    <entry file="file://$PROJECT_DIR$/fagiClient/src/main/FagiApp.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <caret line="108" column="12" selection-start-line="108" selection-start-column="12" selection-end-line="108" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/MessageListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33267716">
+          <caret line="24" column="35" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#356#357#0" expanded="true" />
+            <element signature="e#389#390#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fagiClient/src/com/fagi/network/InputHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/users/userIndex.fagi">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Checkstyle.xml">
+    <entry file="file://$PROJECT_DIR$/users/test">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21438849">
-          <caret line="156" column="34" selection-start-line="156" selection-start-column="28" selection-end-line="156" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="7" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/FriendRequestList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/src/com/fagi/model/ResponseList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="28" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fagiServer/src/Worker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.63582677">
+          <caret line="95" column="46" selection-start-line="95" selection-start-column="46" selection-end-line="95" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#6417#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#4143#4144#0" expanded="true" />
+            <element signature="e#4184#4185#0" expanded="true" />
+            <marker date="1438441418837" expanded="true" signature="6258:6322" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>

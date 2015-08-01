@@ -5,7 +5,7 @@ package com.fagi.network;/*
  * Handling in and output
  */
 
-import com.fagi.model.Message;
+import com.fagi.model.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -61,8 +61,9 @@ public class Communication {
 
     public Object handleObjects() {
         Object object = null;
-        while ( object == null )
+        while ( object == null ) {
             object = inputHandler.getLast();
+        }
         return object;
     }
 
@@ -70,22 +71,27 @@ public class Communication {
      * Getting the friend/friend request list from the server.
      * Using object to pass the correct get requests to the server.
      *
-     * @return List<String> which contains all of our friends as strings.
+     * @return FriendRequestList which contains all of our requests as strings.
      */
-    public List<String> getList(Object object) {
-        List<String> list = null;
-        sendObject(object);
-        try {
-            list = inputHandler.containsList();
-        } catch (IllegalArgumentException e) {
-            System.err.println("c iae: " + e.toString());
-        }
-        return list;
+    public FriendRequestList getRequests() {
+        sendObject(new GetRequests());
+        return inputHandler.containsRequests();
+    }
+
+    /**
+     * Getting the friend list from the server.
+     *
+     * @return FriendList which contains all of our friends as strings.
+     */
+    public FriendList getFriends() {
+        sendObject(new GetFriends());
+        return inputHandler.containsFriends();
     }
 
     // TODO: Need to close correctly?
     public void close() {
         inputHandler.close();
+        inputThread.interrupt();
         try {
             socket.close();
         } catch (IOException ioe) {

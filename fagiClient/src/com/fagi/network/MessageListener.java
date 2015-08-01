@@ -1,20 +1,21 @@
-package com.fagi.network;/*
+package com.fagi.network;
+/**
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
  * MessageListener.java
- *
- * For receiving messages and printing these to the conversation
  */
 
 import com.fagi.controller.MainScreen;
+import com.fagi.model.*;
+
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import com.fagi.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * For receiving messages and printing these to the conversation.
  * TODO: Add descriptions, add friend requests
  */
 public class MessageListener implements Runnable {
@@ -26,20 +27,12 @@ public class MessageListener implements Runnable {
     public final ArrayList<Object> unread = new ArrayList<>();
     private boolean running = true;
 
-    public MessageListener(Communication communication, ListView<String> contactList, ListView<String> requestList, MainScreen mainScreen) {
+    public MessageListener(Communication communication, ListView<String> contactList,
+                           ListView<String> requestList, MainScreen mainScreen) {
         this.communication = communication;
         this.contactList = contactList;
         this.requestList = requestList;
         this.mainScreen = mainScreen;
-    }
-
-    /**
-     * Updates the current conversation array.
-     *
-     * @param conversations new friend list to insert instead of previous one.
-     */
-    public void update(ArrayList<Conversation> conversations) {
-        this.conversations = conversations;
     }
 
     /**
@@ -56,9 +49,9 @@ public class MessageListener implements Runnable {
                     Thread.currentThread().interrupt();
                     return;
                 }
-                List<String> friends = communication.getList(new GetFriends());
+                FriendList friends = communication.getFriends();
                 update(contactList, friends);
-                List<String> requests = communication.getList(new GetRequests());
+                FriendRequestList requests = communication.getRequests();
                 update(requestList, requests);
 
                 message = communication.receiveMessage();
@@ -72,14 +65,23 @@ public class MessageListener implements Runnable {
     }
 
     /**
+     * Updates the current conversation array.
+     *
+     * @param conversations new friend list to insert instead of previous one.
+     */
+    public void update(ArrayList<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    /**
      * Internal use, will update given JActionList to display
      * information given by the input.
      *
      * @param list ListView to output input into.
      * @param input List of users.
      */
-    private void update(ListView<String> list, List<String> input) {
-        if ( input.isEmpty() ) { // TODO: Cheaper to not set if already empty?
+    private void update(ListView<String> list, ResponseList input) {
+        if ( input.getData().isEmpty() ) { // TODO: Cheaper to not set if already empty?
             Platform.runLater(() -> list.getItems().setAll(""));
             return;
         }
@@ -87,26 +89,32 @@ public class MessageListener implements Runnable {
         ObservableList<String> observableList = list.getItems();
 
         int modelSize = observableList.size();
-        if ( input.size() != modelSize ) {
-            Platform.runLater(() -> observableList.setAll(input));
+        if ( input.getData().size() != modelSize ) {
+            Platform.runLater(() -> observableList.setAll(input.getData()));
             return;
         }
 
-        for ( int i = 0; i < modelSize; i++ )
-            if ( !input.get(i).equals(observableList.get(i)) ) {
-                Platform.runLater(() -> observableList.setAll(input));
+        for ( int i = 0; i < modelSize; i++ ) {
+            if ( !input.getData().get(i).equals(observableList.get(i)) ) {
+                Platform.runLater(() -> observableList.setAll(input.getData()));
                 return;
             }
+        }
     }
 
     private void updateConversation(TextMessage message) {
         String chatBuddy = message.getSender();
         for ( Conversation conversation : conversations ) {
-            if ( !conversation.getChatBuddy().equals(chatBuddy) ) continue;
+            if ( !conversation.getChatBuddy().equals(chatBuddy) ) {
+                continue;
+            }
 
-            Platform.runLater(() -> conversation.getConversation().appendText(conversation.getChatBuddy() + ": " + message.getData() + "\n"));
-            if ( mainScreen.getConversationWindow().getContent().equals(conversation.getConversation()) )
+            Platform.runLater(() -> conversation.getConversation() .appendText(
+                    conversation.getChatBuddy() + ": " + message.getData() + "\n"));
+            if ( mainScreen.getConversationWindow().getContent().equals(
+                    conversation.getConversation()) ) {
                 return;
+            }
 
             unread.add(chatBuddy);
             //contactList.repaint(); Give the cell renderer an opportunity to remove highlight

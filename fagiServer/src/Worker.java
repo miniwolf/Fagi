@@ -8,13 +8,24 @@
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.UserOnlineException;
-import com.fagi.model.*;
+import com.fagi.model.CreateUser;
+import com.fagi.model.DeleteFriendRequest;
+import com.fagi.model.FriendDelete;
+import com.fagi.model.FriendList;
+import com.fagi.model.FriendRequest;
+import com.fagi.model.FriendRequestList;
+import com.fagi.model.GetFriends;
+import com.fagi.model.GetRequests;
+import com.fagi.model.Login;
+import com.fagi.model.Logout;
+import com.fagi.model.Message;
 
-import java.io.IOException;
 import java.io.EOFException;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -26,15 +37,15 @@ class Worker implements Runnable {
     private boolean running = true;
     private String myUserName;
 
-    public Worker(Socket s) throws IOException {
+    public Worker(Socket socket) throws IOException {
         System.out.println("Starting a worker thread");
-        oIn = new ObjectInputStream(s.getInputStream());
-        oOut = new ObjectOutputStream(s.getOutputStream());
+        oIn = new ObjectInputStream(socket.getInputStream());
+        oOut = new ObjectOutputStream(socket.getOutputStream());
     }
 
     @Override
     public void run() {
-        while ( running ) {
+        while (running) {
             try {
                 sendIncMessages();
                 Object input = oIn.readObject();
@@ -54,23 +65,24 @@ class Worker implements Runnable {
     }
 
     private void sendIncMessages() throws Exception {
-        while ( incMessages.size() > 0 )
+        while (incMessages.size() > 0) {
             oOut.writeObject(incMessages.remove());
+        }
     }
 
     private Object handleInput(Object input) {
         if ( input instanceof Message ) {
             Message arg = (Message) input;
             return handleMessage(arg);
-        } else if ( input instanceof Login) {
+        } else if ( input instanceof Login ) {
             Login arg = (Login) input;
             return handleLogin(arg);
-        } else if ( input instanceof Logout) {
+        } else if ( input instanceof Logout ) {
             Logout arg = (Logout) input;
             return handleLogout(arg);
         } else if ( input instanceof GetFriends ) {
             return handleGetFriends();
-        } else if ( input instanceof GetRequests) {
+        } else if ( input instanceof GetRequests ) {
             return handleGetRequests();
         } else if ( input instanceof CreateUser ) {
             CreateUser arg = (CreateUser) input;
@@ -81,11 +93,19 @@ class Worker implements Runnable {
         } else if ( input instanceof FriendDelete ) {
             FriendDelete arg = (FriendDelete) input;
             return handleFriendDelete(arg);
-        }/* else if ( input instanceof GetSound) {
-// TODO: Implement or at least think about it
-        }*/ else {
+        } else if ( input instanceof DeleteFriendRequest ) {
+            DeleteFriendRequest arg = (DeleteFriendRequest) input;
+            return handleDeleteFriendRequest(arg);
+        } else {
             return handleUnknownObject(input);
         }
+        // else if ( input instanceof GetSound) {
+        // TODO: Implement or at least think about it
+        //}
+    }
+
+    private Object handleDeleteFriendRequest(DeleteFriendRequest arg) {
+        return Data.removeFriendRequestFromUserFile(myUserName, arg.getFriendUsername());
     }
 
     private Object handleFriendDelete(FriendDelete arg) {
@@ -150,21 +170,23 @@ class Worker implements Runnable {
 
     private Object getOnlineFriends() {
         User me = Data.getUser(myUserName);
-        if ( me == null )
+        if ( me == null ) {
             return new NoSuchUserException();
-
-        return me.getFriends().stream().filter(Data::isUserOnline).collect(Collectors.toList());
+        }
+        return new FriendList(me.getFriends().stream().filter(Data::isUserOnline)
+                                .collect(Collectors.toList()));
     }
 
     private Object getFriendRequests() {
         User me = Data.getUser(myUserName);
-        if ( me == null )
+        if ( me == null ) {
             return new NoSuchUserException();
+        }
 
-        return me.getFriendReq();
+        return new FriendRequestList(me.getFriendReq());
     }
 
-    synchronized void addMessage(Message m) {
-        incMessages.add(m);
+    synchronized void addMessage(Message message) {
+        incMessages.add(message);
     }
 }
