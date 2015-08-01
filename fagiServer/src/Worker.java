@@ -5,19 +5,16 @@
  * Worker thread for each client.
  */
 
-import exceptions.AllIsWellException;
-import exceptions.NoSuchUserException;
-import exceptions.UserOnlineException;
-import model.*;
-import model.GetSound;
+import com.fagi.exceptions.AllIsWellException;
+import com.fagi.exceptions.NoSuchUserException;
+import com.fagi.exceptions.UserOnlineException;
+import com.fagi.model.*;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;

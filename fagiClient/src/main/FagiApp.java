@@ -2,26 +2,18 @@ package main;/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 
-import controller.LoginScreen;
-import controller.MainScreen;
-import controller.RespondController;
+import com.fagi.controller.LoginScreen;
+import com.fagi.controller.MainScreen;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import network.ChatManager;
-import network.Communication;
+import com.fagi.network.ChatManager;
+import com.fagi.network.Communication;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * JavaFX application class for handling GUI
@@ -66,7 +58,7 @@ public class FagiApp extends Application {
         try {
 
             LoginScreen controller = new LoginScreen();
-            FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/view/LoginScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/com/fagi/view/LoginScreen.fxml"));
             loader.setController(controller);
 
             scene.setRoot(loader.load());
@@ -92,26 +84,20 @@ public class FagiApp extends Application {
 
     /**
      * Opens the main window with all user interface for chatting.
-     * Switching controller to MainScreen.
+     * Switching com.fagi.controller to MainScreen.
      *
      * @param username Username logged in.
      * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {
-        /*try {
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println(e.toString());
-        }*/
         MainScreen controller = new MainScreen(username, communication);
-        FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/view/MainScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/com/fagi/view/MainScreen.fxml"));
         loader.setController(controller);
         try {
             scene.setRoot(loader.load());
         } catch (IOException e) {
             System.err.println(e.toString());
+            return;
         }
 
         this.primaryStage.setOnCloseRequest(event -> {

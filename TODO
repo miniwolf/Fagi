@@ -1,5 +1,7 @@
 Friend request -> receieve accept or reject.
 
+Delete friend request
+
 Unit test + Documentation
 
 SystemVoice
@@ -13,3 +15,7 @@ VoiceListener interfaces vs config class.
 User files update once per minute. Delete duplicates.
 
 DEBUG friendrequest printout on server.
+
+Closing the window in mainscreen from x button.
+
+Quit button on loginScreen send terminateConnectionException

@@ -5,7 +5,7 @@
  * User data object.
  */
 
-import exceptions.NoSuchUserException;
+import com.fagi.exceptions.NoSuchUserException;
 
 import java.util.ArrayList;
 import java.util.List;

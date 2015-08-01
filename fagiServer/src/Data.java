@@ -5,7 +5,7 @@
  * Contains and update information on users.
  */
 
-import exceptions.*;
+import com.fagi.exceptions.*;
 
 import java.io.*;
 import java.nio.file.FileSystems;
