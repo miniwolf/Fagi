@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="libjitsi">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/fagiClient/libjitsi.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
