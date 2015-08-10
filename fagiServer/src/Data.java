@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,6 +70,9 @@ class Data {
     }
 
     public static void userLogout(String userName) {
+        if ( userName == null ) {
+            return;
+        }
         if ( onlineUsers.containsKey(userName) ) {
             onlineUsers.remove(userName);
         } else {

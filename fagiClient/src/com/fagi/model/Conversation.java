@@ -14,7 +14,7 @@ public class Conversation {
 
     public Conversation(String chatBuddy) {
         this.chatBuddy = chatBuddy;
-        chat = new Chat(chatBuddy);
+        chat = new Chat();
     }
 
     public Chat getConversation() {

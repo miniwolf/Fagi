@@ -61,11 +61,16 @@ public class FagiApp extends Application {
     public void showLoginScreen() {
         try {
 
-            LoginScreen controller = new LoginScreen();
-            FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/com/fagi/view/LoginScreen.fxml"));
+            LoginScreen controller = new LoginScreen(this);
+            FXMLLoader loader =
+                    new FXMLLoader(controller.getClass()
+                                             .getResource("/com/fagi/view/LoginScreen.fxml"));
             loader.setController(controller);
 
             scene.setRoot(loader.load());
+            scene.getStylesheets().add(MainScreen.class
+                                                 .getResource("/com/fagi/style/LoginScreen.css")
+                                                 .toExternalForm());
             this.primaryStage.setOnCloseRequest(event -> {
                 try {
                     ChatManager.closeCommunication();
@@ -111,8 +116,8 @@ public class FagiApp extends Application {
 
         primaryStage.setResizable(true);
         controller.setPrimaryStage(primaryStage);
-        controller.initComponents();
         controller.initCommunication();
+        controller.initComponents();
         primaryStage.sizeToScene();
     }
 

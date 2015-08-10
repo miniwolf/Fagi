@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
+import java.lang.management.PlatformManagedObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,9 @@ public class MessageListener implements Runnable {
     public ArrayList<Conversation> conversations;
     private final ListView<String> contactList;
     private final ListView<String> requestList;
+    private List<ListCellRenderer> listCellRenderer;
     private final MainScreen mainScreen;
-    public final ArrayList<Object> unread = new ArrayList<>();
+    public final List<Object> unread = new ArrayList<>();
     private boolean running = true;
 
     public MessageListener(Communication communication, ListView<String> contactList,
@@ -117,7 +119,9 @@ public class MessageListener implements Runnable {
             }
 
             unread.add(chatBuddy);
-            //contactList.repaint(); Give the cell renderer an opportunity to remove highlight
+            listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))
+                            .forEach(cell -> Platform.runLater(
+                                    () -> cell.updateItem(chatBuddy, false)));
             return;
         }
         mainScreen.updateConversations(chatBuddy);
@@ -126,6 +130,10 @@ public class MessageListener implements Runnable {
 
     public void close() {
         running = false;
+    }
+
+    public void setListCellRenderer(List<ListCellRenderer> listCellRenderer) {
+        this.listCellRenderer = listCellRenderer;
     }
 }
 

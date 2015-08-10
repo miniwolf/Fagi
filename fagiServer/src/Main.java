@@ -1,12 +1,10 @@
 /*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Main.java
- *
- * Handling server start.
  */
 
 /**
- * Main class for starting up server.
+ * Handling server start.
  */
 class Main {
     public static void main(String[] args) throws Exception {

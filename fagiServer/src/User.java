@@ -9,6 +9,7 @@ import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.UserExistsException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,13 +21,13 @@ public class User {
     private final String pass;
     private final String userName;
     private List<String> friends;
-    private List<String> incFriendReq;
+    private volatile List<String> incFriendReq;
 
     public User(String name, String pass) {
         this.pass = pass;
         this.userName = name;
-        friends = new CopyOnWriteArrayList<>();
-        incFriendReq = new CopyOnWriteArrayList<>();
+        friends = new ArrayList<>();
+        incFriendReq = new ArrayList<>();
     }
 
     public String getPass() {
@@ -59,13 +60,8 @@ public class User {
         }
 
         if ( incFriendReq.contains(otherUser) ) {
-            Exception exception = other.removeFriendRequest(userName);
-            if ( exception instanceof AllIsWellException ) {
-                Data.makeFriends(this, other);
-                return removeFriendRequest(otherUser);
-            } else {
-                return exception;
-            }
+            Data.makeFriends(this, other);
+            return removeFriendRequest(otherUser);
         }
         return other.addFriendReq(userName);
     }
@@ -75,7 +71,7 @@ public class User {
             return new UserExistsException();
         }
         incFriendReq.remove(otherUser);
-        return new AllIsWellException();
+        return Data.removeFriendRequestFromUserFile(this.userName, otherUser);
     }
 
     private Exception addFriendReq(String userName) {
@@ -92,5 +88,13 @@ public class User {
 
     public void addFriends(List<String> friends) {
         this.friends = friends;
+    }
+
+    public Exception removeFriend(String otherUser) {
+        if ( !Data.findInUserFile(userName, otherUser, 0) ) {
+            return new UserExistsException();
+        }
+        friends.remove(otherUser);
+        return Data.removeFriendFromUserFile(this.userName, otherUser);
     }
 }

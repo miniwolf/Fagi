@@ -1,4 +1,5 @@
-package com.fagi.controller;/*
+package com.fagi.controller;
+/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * MainScreen.java
  *
@@ -12,23 +13,30 @@ import com.fagi.model.Logout;
 import com.fagi.model.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.network.ListCellRenderer;
 import com.fagi.network.MessageListener;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Write description
@@ -53,6 +61,7 @@ public class MainScreen {
     private MessageListener messageListener;
     private Thread messageThread;
     private Stage primaryStage;
+    private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
 
     /**
      * Creates new form ContactScreen
@@ -69,6 +78,8 @@ public class MainScreen {
         conversations = new ArrayList<>();
         messageListener = new MessageListener(communication, contactList, requestList, this);
         messageListener.update(conversations);
+        //listCellRenderer = new ListCellRenderer(messageListener, scrollPaneChat);
+        messageListener.setListCellRenderer(listCellRenderer);
         messageThread = new Thread(messageListener);
         messageThread.start();
     }
@@ -90,12 +101,53 @@ public class MainScreen {
             }
         });
 
-        scrollPaneChat.setContent(new Chat("nobody, that's sad."));
+        scrollPaneChat.setContent(new Chat());
+        //contactList.setCellFactory(param -> listCellRenderer);
 
-        //contactList.setCellFactory(param ->
-        // new ListCellRenderer(messageListener, scrollPaneChat));
+        contactList.setCellFactory(param -> {
+            ListCellRenderer renderer = new ListCellRenderer(messageListener, scrollPaneChat);
+            listCellRenderer.add(renderer);
+            return renderer;
+        });
 
         //    jContactList.setSelectionBackground(new Color(255, 153, 51));
+        /*contactList.setCellFactory(lv -> {
+            ListCell<String> cell = new ListCell<>();
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteItem = new MenuItem();
+            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+            String item = cell.getItem();
+            deleteItem.setOnAction(event -> {
+                System.out.println(item);
+                ChatManager.handleFriendDelete(item);
+            });
+            contextMenu.getItems().addAll(deleteItem); // Add deleteItem here
+
+            cell.textProperty().bind(cell.itemProperty());
+
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(contextMenu);
+                }
+            });
+
+            for ( Conversation conversation : messageListener.conversations ) {
+                if ( scrollPaneChat.getContent().equals(conversation.getConversation())
+                     && item.equals(conversation.getChatBuddy()) ) {
+                    cell.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY,
+                                                                    Insets.EMPTY)));
+                    return cell;
+                }
+            }
+
+            cell.setBackground(new Background(new BackgroundFill(messageListener.unread.indexOf(item) != -1
+                                                            ? Color.BLUE
+                                                            : Color.WHITE, CornerRadii.EMPTY,
+                                                            Insets.EMPTY)));
+            return cell;
+        });*/
     }
 
     private void handleMessage() {
@@ -167,16 +219,20 @@ public class MainScreen {
     @FXML
     void contactListClicked() {
         String chatBuddy = contactList.getFocusModel().getFocusedItem();
-        if ( chatBuddy == null || "".equals(chatBuddy) ) return;
+        if ( chatBuddy == null || "".equals(chatBuddy) ) {
+            return;
+        }
 
         boolean exists = false;
         for ( Conversation conversation : conversations ) {
             if ( conversation.getChatBuddy().equals(chatBuddy) ) {
                 scrollPaneChat.setContent(conversation.getConversation());
-                chatname.setText(chatBuddy);
+                chatname.setText("Chatroom with " + chatBuddy);
                 if ( messageListener.unread.indexOf(chatBuddy) != -1 ) {
                     messageListener.unread.remove(chatBuddy);
-                    //contactList.repaint();
+                    listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))
+                                    .forEach(cell -> Platform.runLater(
+                                            () -> cell.updateItem(chatBuddy, false)));
                 }
                 exists = true;
                 break;

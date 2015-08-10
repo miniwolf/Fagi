@@ -8,10 +8,8 @@ package com.fagi.model;/*
 import javafx.scene.control.TextArea;
 
 public class Chat extends TextArea {
-    private final String chatBuddy;
 
-    public Chat(String chatBuddy) {
-        this.chatBuddy = chatBuddy;
+    public Chat() {
         initComponents();
     }
 
@@ -23,6 +21,5 @@ public class Chat extends TextArea {
         setPrefHeight(59);
         setPrefWidth(20);
         setMinSize(1, 20);
-        setText("You are now chatting with: " + chatBuddy + "\n");
     }
 }

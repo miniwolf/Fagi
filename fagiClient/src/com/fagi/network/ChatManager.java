@@ -10,11 +10,7 @@ import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.PasswordException;
 import com.fagi.exceptions.UserExistsException;
 import com.fagi.exceptions.UserOnlineException;
-import com.fagi.model.CreateUser;
-import com.fagi.model.DeleteFriendRequest;
-import com.fagi.model.FriendRequest;
-import com.fagi.model.Login;
-import com.fagi.model.Logout;
+import com.fagi.model.*;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -60,8 +56,10 @@ public class ChatManager {
         }
 
         communication.sendObject(login);
-        Exception exception;
-        while ( (exception = communication.getNextException()) == null ) {}
+        Exception exception = null;
+        while ( exception == null ) {
+            exception = communication.getNextException();
+        }
         if ( exception instanceof AllIsWellException ) {
             application.showMainScreen(username, communication);
         } else {
@@ -84,8 +82,10 @@ public class ChatManager {
      */
     public static void handleLogout(Logout logout) {
         communication.sendObject(logout);
-        Exception exception;
-        while ( (exception = communication.getNextException()) == null ) {}
+        Exception exception = null;
+        while ( exception == null ) {
+            exception = communication.getNextException();
+        }
         if ( !(exception instanceof AllIsWellException) ) {
             System.err.println("Could not log out properly. "
                                + "Shut down and let server handle the exception");
@@ -125,8 +125,10 @@ public class ChatManager {
         }
         communication.sendObject(new CreateUser(username, password));
 
-        Exception exception;
-        while ( (exception = communication.getNextException()) == null ) {}
+        Exception exception = null;
+        while ( exception == null ) {
+            exception = communication.getNextException();
+        }
 
         if ( exception instanceof AllIsWellException ) {
             labelMessage.setText("User Created");
@@ -147,8 +149,10 @@ public class ChatManager {
         }
         communication.sendObject(friendRequest);
 
-        Exception exception;
-        while ( (exception = communication.getNextException()) == null ) { }
+        Exception exception = null;
+        while ( exception == null ) {
+            exception = communication.getNextException();
+        }
         if ( exception instanceof AllIsWellException ) {
             // TODO: Maybe use version of showErrorMessage on this too.
             JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeeded",
@@ -170,8 +174,10 @@ public class ChatManager {
      */
     public static void handleRequestDelete(FriendRequest friendRequest) {
         communication.sendObject(new DeleteFriendRequest(friendRequest.getFriendUsername()));
-        Exception exception;
-        while ( (exception = communication.getNextException()) == null ) {}
+        Exception exception = null;
+        while ( exception == null ) {
+            exception = communication.getNextException();
+        }
         if ( exception instanceof AllIsWellException ) {
             JOptionPane.showMessageDialog(null, "Successfully deleted.", "Success",
                                           JOptionPane.PLAIN_MESSAGE);
@@ -182,7 +188,30 @@ public class ChatManager {
         }
     }
 
-    // TODO : Make this shit work
+    /**
+     * @param friendName Name of the friend we want to remove.
+     */
+    public static void handleFriendDelete(String friendName) {
+        if ( friendName.length() == 0 ) {
+            return;
+        }
+        communication.sendObject(new DeleteFriend(friendName));
+
+        Exception exception = null;
+        while ( exception == null ) {
+            exception = communication.getNextException();
+        }
+        if ( !(exception instanceof AllIsWellException) ) {
+            System.out.println(exception.toString());
+        }
+    }
+
+    /**
+     * Pop up error message. Utility method for showing message to the user with
+     * an OK button.
+     * @param title     The title of the popup message
+     * @param message   Message to write to the user
+     */
     public static void showErrorMessage(String title, String message) {
         try {
             //URL f =

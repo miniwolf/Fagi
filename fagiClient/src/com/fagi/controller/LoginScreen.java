@@ -5,6 +5,8 @@ package com.fagi.controller;/*
  * Login screen for the IM-client part
  */
 
+import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -12,6 +14,7 @@ import javafx.stage.Stage;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import main.FagiApp;
 
 import java.io.IOException;
 
@@ -27,8 +30,14 @@ public class LoginScreen {
     @FXML private PasswordField password;
     @FXML private PasswordField passwordRepeat;
 
-    private boolean connected = false, creatingUser = false;
+    private boolean connected = false;
+    private boolean creatingUser = false;
     private Stage primaryStage;
+    private Application fagiApp;
+
+    public LoginScreen(FagiApp fagiApp) {
+        this.fagiApp = fagiApp;
+    }
 
     public void initComponents() {
         loginBtn.setOnKeyPressed(event -> {
@@ -80,5 +89,14 @@ public class LoginScreen {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    public void menuQuit() {
+        try {
+            ChatManager.closeCommunication();
+            fagiApp.stop();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
     }
 }

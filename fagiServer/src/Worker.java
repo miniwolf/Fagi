@@ -8,23 +8,14 @@
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.UserOnlineException;
-import com.fagi.model.CreateUser;
-import com.fagi.model.DeleteFriendRequest;
-import com.fagi.model.FriendDelete;
-import com.fagi.model.FriendList;
-import com.fagi.model.FriendRequest;
-import com.fagi.model.FriendRequestList;
-import com.fagi.model.GetFriends;
-import com.fagi.model.GetRequests;
-import com.fagi.model.Login;
-import com.fagi.model.Logout;
-import com.fagi.model.Message;
+import com.fagi.model.*;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -44,11 +35,13 @@ class Worker implements Runnable {
 
     @Override
     public void run() {
-        while (running) {
+        while ( running ) {
+            System.out.println("Running");
             try {
                 sendIncMessages();
                 Object input = oIn.readObject();
                 oOut.writeObject(handleInput(input));
+                oOut.reset();
             } catch (EOFException eof) {
                 running = false;
                 System.out.println("Logging out user " + myUserName);
@@ -61,6 +54,7 @@ class Worker implements Runnable {
                 Data.userLogout(myUserName);
             }
         }
+        System.out.println("Closing");
     }
 
     private void sendIncMessages() throws Exception {
@@ -89,12 +83,12 @@ class Worker implements Runnable {
         } else if ( input instanceof FriendRequest ) {
             FriendRequest arg = (FriendRequest) input;
             return handleFriendRequest(arg);
-        } else if ( input instanceof FriendDelete ) {
-            FriendDelete arg = (FriendDelete) input;
-            return handleFriendDelete(arg);
         } else if ( input instanceof DeleteFriendRequest ) {
             DeleteFriendRequest arg = (DeleteFriendRequest) input;
             return handleDeleteFriendRequest(arg);
+        } else if ( input instanceof DeleteFriend ) {
+            DeleteFriend arg = (DeleteFriend) input;
+            return handleDeleteFriend(arg);
         } else {
             return handleUnknownObject(input);
         }
@@ -103,13 +97,14 @@ class Worker implements Runnable {
         //}
     }
 
+    private Object handleDeleteFriend(DeleteFriend arg) {
+        System.out.println("Delete Friend");
+        return Data.getUser(myUserName).removeFriend(arg.getFriendUsername());
+    }
+
     private Object handleDeleteFriendRequest(DeleteFriendRequest arg) {
         System.out.println("DeleteFriendRequest");
         return Data.getUser(myUserName).removeFriendRequest(arg.getFriendUsername());
-    }
-
-    private Object handleFriendDelete(FriendDelete arg) {
-        return Data.removeFriendFromUserFile(myUserName, arg.getFriendUsername());
     }
 
     private Object handleGetFriends() {
@@ -176,7 +171,7 @@ class Worker implements Runnable {
         if ( me == null ) {
             return new NoSuchUserException();
         }
-
+        //return new FriendRequestList(me.getFriendReq().stream().collect(Collectors.toList()));
         return new FriendRequestList(me.getFriendReq());
     }
 

@@ -59,7 +59,7 @@
                             <TextArea fx:id="chatMessage" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="273.0" prefWidth="441.0" />
                         </content>
                      </ScrollPane>
-                     <Label fx:id="chatname" layoutX="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.0" prefWidth="60.0" text="ChatName" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                     <Label fx:id="chatname" layoutX="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.0" prefWidth="441.0" text="Chatroom with nobody that's sad" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0" />
                      <TextArea fx:id="message" layoutX="10.0" layoutY="309.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="380.0" text="Enter your message...." wrapText="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="75.0" />
                   <Button layoutX="400.0" layoutY="343.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#talkButtonClicked" prefHeight="25.0" prefWidth="55.0" text="Talk..." />
                  </children>

@@ -11,7 +11,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import com.fagi.model.Conversation;
 
 /**
  * TODO: Missing highlight from current chat.
@@ -25,20 +24,38 @@ public class ListCellRenderer extends ListCell<String> {
         this.scrollPaneChat = scrollPaneChat;
     }
 
+    @Override
     public void updateItem(String item, boolean empty) {
-        if ( null == item ) return;
-
         super.updateItem(item, empty);
         setText(item);
 
-        for ( Conversation conversation : listener.conversations )
-            if ( scrollPaneChat.getContent().equals(conversation.getConversation()) &&
-                    item.equals(conversation.getChatBuddy()) ) {
-                setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-                return;
+        if ( item != null && listener.unread.indexOf(item) != -1 ) {
+            if ( item.length() != 0 ) {
+                setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
             }
+        } else {
+            setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+        }
+        /*
+        if ( null == item || item.length() == 0 ) {
+            return;
+        }
 
-        setBackground(new Background(new BackgroundFill(listener.unread.indexOf(item) != -1 ? Color.BLUE : Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        setText(item);
+
+//        for ( Conversation conversation : listener.conversations ) {
+//            if ( scrollPaneChat.getContent().equals(conversation.getConversation())
+//                 && item.equals(conversation.getChatBuddy()) ) {
+//                setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY,
+//                                                                Insets.EMPTY)));
+//                return;
+//            }
+//        }
+        boolean b = listener.unread.indexOf(item) != -1;
+        setBackground(new Background(new BackgroundFill(b
+                                                        ? Color.BLUE
+                                                        : Color.WHITE, CornerRadii.EMPTY,
+                                                        Insets.EMPTY)));*/
     }
 
     /*public Component getListCellRendererComponent(JList paramlist, Object value, int index, boolean isSelected, boolean cellHasFocus) {

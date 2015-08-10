@@ -1,11 +1,5 @@
 Friend request -> receieve accept or reject.
 
-Friend request concurrency doesn't work.
-
-Delete friend request -> Concurrency problem
-
-Delete friend
-
 Unit test + Documentation
 
 SystemVoice
@@ -15,8 +9,8 @@ VoiceListener interfaces vs config class.
 User files update once per minute. Delete duplicates.
 Avoid duplicates
 
-Closing the window in mainscreen from x button.
-
 Quit button on loginScreen send terminateConnectionException
 
-New structure for receiving response.
+New structure for receiving response. JSON
+
+Star with system startup
