@@ -7,6 +7,7 @@ import java.util.Random;
  * Created by Marcus on 30-05-2016.
  */
 public class RSA implements EncryptionAlgorithm {
+    
     private final Random random;
     private final int keyLength;
     private final BigInteger e = BigInteger.valueOf(65537);
