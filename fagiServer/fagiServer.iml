@@ -8,6 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shared" />
+    <orderEntry type="module" module-name="fagiClient" />
   </component>
 </module>
-
