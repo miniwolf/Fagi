@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
 
 /**
  * TODO: Add description
@@ -82,7 +81,7 @@ public class Communication {
      * @return FriendRequestList which contains all of our requests as strings.
      */
     public FriendRequestList getRequests() {
-        sendObject(new GetRequests());
+        sendObject(new GetFriendRequests());
         return inputHandler.containsRequests();
     }
 

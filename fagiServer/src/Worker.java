@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -75,7 +74,7 @@ class Worker implements Runnable {
             return handleLogout();
         } else if ( input instanceof GetFriends ) {
             return handleGetFriends();
-        } else if ( input instanceof GetRequests ) {
+        } else if ( input instanceof GetFriendRequests) {
             return handleGetRequests();
         } else if ( input instanceof CreateUser ) {
             CreateUser arg = (CreateUser) input;
