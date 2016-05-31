@@ -49,6 +49,7 @@ public class Communication {
 
     public void sendObject(Object obj) {
         try {
+            // TODO : Convert object to byte[] and encrypt with server public key
             out.writeObject(obj);
             out.flush();
         } catch (IOException e) {
