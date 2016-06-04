@@ -2,14 +2,10 @@ import com.fagi.encryption.KeyStorage;
 import com.fagi.encryption.RSA;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.*;
 import java.security.KeyPair;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 
 /**
  * Created by Marcus on 04-06-2016.
@@ -20,7 +16,7 @@ public class Encryption {
     private RSA rsa;
 
     private Encryption() {
-        File f = new File(KeyStorage.PUBLICKEYFOLDER);
+        File f = new File(KeyStorage.PUBLICKEYFILE);
         if (!f.exists()) {
             this.rsa = new RSA();
             KeyPair key = (KeyPair) rsa.getKey().getKey();
