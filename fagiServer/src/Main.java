@@ -3,6 +3,10 @@
  * Main.java
  */
 
+import com.fagi.encryption.RSA;
+
+import java.io.File;
+
 /**
  * Handling server start.
  */

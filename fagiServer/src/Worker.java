@@ -5,6 +5,8 @@
  * Worker thread for each client.
  */
 
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.UserOnlineException;
@@ -24,7 +26,9 @@ class Worker implements Runnable {
     private ObjectInputStream oIn;
     private ObjectOutputStream oOut;
     private boolean running = true;
+    private boolean logedin = false;
     private String myUserName;
+    private EncryptionAlgorithm<AESKey> aes;
 
     public Worker(Socket socket) throws IOException {
         System.out.println("Starting a worker thread");

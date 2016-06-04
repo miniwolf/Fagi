@@ -1,37 +1,36 @@
 package com.fagi.encryption;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.*;
+import javax.crypto.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by Marcus on 30-05-2016.
+ * Created by Marcus on 04-06-2016.
  */
-public class RSA implements EncryptionAlgorithm<RSAKey> {
-    private RSAKey key;
-    private PublicKey encryptionKey;
+public class AES implements EncryptionAlgorithm<AESKey> {
+    private AESKey key;
 
-    public RSA() {
-        this(2000);
+    public AES() {
+        this(256);
     }
 
-    public RSA(int keyLength) {
-        generateKey(keyLength);
+    public AES(int keyLenght) {
+        generateKey(keyLenght);
     }
 
-    public RSA(KeyPair key) {
-        this.key = new RSAKey(key);
+    public AES(SecretKey key) {
+        this.key = new AESKey(key);
     }
 
-    public RSA(RSAKey key) { this.key = key; }
+    public AES(AESKey key) {
+        this.key = key;
+    }
 
     @Override
     public byte[] encrypt(byte[] msg) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, key.getKey());
             return cipher.doFinal(msg);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -50,8 +49,8 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
     @Override
     public byte[] decrypt(byte[] cipherText) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key.getKey().getPrivate());
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+            cipher.init(Cipher.DECRYPT_MODE, key.getKey());
             return cipher.doFinal(cipherText);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -70,9 +69,9 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
     @Override
     public void generateKey(int keyLength) {
         try {
-            KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-            keygen.initialize(keyLength);
-            key = new RSAKey(keygen.generateKeyPair());
+            KeyGenerator keygen = KeyGenerator.getInstance("AES");
+            keygen.init(keyLength);
+            this.key = new AESKey(keygen.generateKey());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -84,7 +83,7 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
     }
 
     @Override
-    public void setEncryptionKey(RSAKey key) {
-        this.encryptionKey = key.getKey().getPublic();
+    public void setEncryptionKey(AESKey key) {
+        this.key = key;
     }
 }
