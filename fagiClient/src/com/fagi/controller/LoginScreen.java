@@ -6,6 +6,7 @@ package com.fagi.controller;/*
  */
 
 import com.fagi.config.ServerConfig;
+import com.fagi.encryption.AES;
 import com.fagi.encryption.RSA;
 import com.fagi.encryption.RSAKey;
 import javafx.application.Application;
@@ -53,9 +54,7 @@ public class LoginScreen {
     public void initCommunication() {
         try {
             ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
-            RSA rsa = new RSA();
-            rsa.setEncryptionKey(new RSAKey(new KeyPair(config.getServerKey(), null)));
-            ChatManager.setCommunication(new Communication(config.getIp(), config.getPort(), rsa));
+            ChatManager.setCommunication(new Communication(config.getIp(), config.getPort(), new AES(), config.getServerKey()));
             messageLabel.setText("Connected to server: " + config.getName());
             connected = true;
         } catch (IOException ioe) {

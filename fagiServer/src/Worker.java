@@ -5,6 +5,7 @@
  * Worker thread for each client.
  */
 
+import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
@@ -27,7 +28,7 @@ class Worker implements Runnable {
     private ObjectInputStream oIn;
     private ObjectOutputStream oOut;
     private boolean running = true;
-    private boolean logedin = false;
+    private boolean sessionCreated = false;
     private String myUserName;
     private EncryptionAlgorithm<AESKey> aes;
 
@@ -68,7 +69,7 @@ class Worker implements Runnable {
     }
 
     private Object decryptAndConvertToObject(byte[] input) {
-        if (logedin) {
+        if (sessionCreated) {
             input = aes.decrypt(input);
         } else {
             input = Encryption.getInstance().getRSA().decrypt(input);
@@ -115,6 +116,11 @@ class Worker implements Runnable {
         } else if ( input instanceof DeleteFriend ) {
             DeleteFriend arg = (DeleteFriend) input;
             return handleDeleteFriend(arg);
+        } else if(input instanceof Session) {
+            Session s = (Session)input;
+            aes = new AES(s.getKey());
+            sessionCreated = true;
+            return new AllIsWellException();
         } else {
             return handleUnknownObject(input);
         }

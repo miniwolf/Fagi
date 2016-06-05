@@ -7,6 +7,7 @@ package com.fagi.network;/*
 
 import com.fagi.config.ServerConfig;
 import com.fagi.encryption.*;
+import com.fagi.exceptions.AllIsWellException;
 import com.fagi.model.*;
 
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
+import java.security.PublicKey;
+import java.security.cert.Extension;
 
 /**
  * TODO: Add description
@@ -28,21 +31,37 @@ public class Communication {
     private Thread inputThread;
     private EncryptionAlgorithm encryption;
 
-    public Communication(String host, int port, EncryptionAlgorithm encryption) throws IOException {
+    public Communication(String host, int port, EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
         this.encryption = encryption;
         this.host = host;
         this.port = port;
         try {
             socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
+
             inputHandler = new InputHandler(new ObjectInputStream(socket.getInputStream()));
             inputThread = new Thread(inputHandler);
             inputThread.setDaemon(true);
             inputThread.start();
+
+            createSession(encryption, serverKey);
         } catch (UnknownHostException Uhe) {
             System.err.println("c Uhe: " + Uhe);
         } catch (IOException ioe) {
             throw new IOException("c ioe: " + ioe.toString());
+        }
+    }
+
+    private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
+        RSA rsa = new RSA();
+        rsa.setEncryptionKey(new RSAKey(new KeyPair(serverKey, null)));
+        out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
+        out.flush();
+
+        Exception obj;
+        while ((obj = inputHandler.containsException()) == null) {}
+        if (obj instanceof AllIsWellException) {
+
         }
     }
 
@@ -56,7 +75,6 @@ public class Communication {
 
     public void sendObject(Object obj) {
         try {
-            // TODO : Convert object to byte[] and encrypt with server public key
             out.writeObject(encryption.encrypt(Conversion.convertToBytes(obj)));
             out.flush();
         } catch (IOException e) {
@@ -117,6 +135,4 @@ public class Communication {
     public Exception getNextException() {
         return inputHandler.containsException();
     }
-
-    public void setEncryption(EncryptionAlgorithm encryption) { this.encryption = encryption; }
 }

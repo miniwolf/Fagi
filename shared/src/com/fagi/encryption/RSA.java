@@ -29,7 +29,7 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
                 e.printStackTrace();
             }
         } else {
-            generateKey(2000);
+            generateKey(4096);
         }
     }
 
