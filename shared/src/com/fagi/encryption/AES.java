@@ -1,6 +1,8 @@
 package com.fagi.encryption;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -8,10 +10,12 @@ import java.security.NoSuchAlgorithmException;
  * Created by Marcus on 04-06-2016.
  */
 public class AES implements EncryptionAlgorithm<AESKey> {
+    byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    IvParameterSpec ivspec = new IvParameterSpec(iv);
     private AESKey key;
 
     public AES() {
-        this(256);
+        this(128);
     }
 
     public AES(int keyLenght) {
@@ -29,18 +33,10 @@ public class AES implements EncryptionAlgorithm<AESKey> {
     @Override
     public byte[] encrypt(byte[] msg) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key.getKey());
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, key.getKey(), ivspec);
             return cipher.doFinal(msg);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
         return null;
@@ -49,18 +45,10 @@ public class AES implements EncryptionAlgorithm<AESKey> {
     @Override
     public byte[] decrypt(byte[] cipherText) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key.getKey());
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, key.getKey(), ivspec);
             return cipher.doFinal(cipherText);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
         return null;

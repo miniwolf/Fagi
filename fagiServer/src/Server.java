@@ -5,46 +5,32 @@
  * Listening socket for incoming transmissions from clients.
  */
 
+import com.fagi.config.ServerConfig;
 import com.fagi.encryption.KeyStorage;
 import com.fagi.encryption.RSAKey;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
 class Server {
-    private final String configFile = "config/server.config";
+    private final String configFile = "config/serverinfo.config";
     private boolean running = true;
     private final int port;
 
     public Server(int port) {
         this.port = port;
-        File f = new File(configFile);
-        File dir = new File("config");
-
-        if (!f.exists()) {
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-
-            try {
-                f.createNewFile();
-                String ip = "127.0.0.1";
-                PublicKey pk = ((RSAKey) Encryption.getInstance().getRSA().getKey()).getKey().getPublic();
-                X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(pk.getEncoded());
-                String s = "ip:"+ ip + "\npk:";
-                FileOutputStream fos = new FileOutputStream(configFile);
-                fos.write(s.getBytes());
-                fos.write(x509EncodedKeySpec.getEncoded());
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            String name = "test";
+            String ip =  "localhost"; //getExternalIP();
+            PublicKey pk = ((RSAKey) Encryption.getInstance().getRSA().getKey()).getKey().getPublic();
+            ServerConfig config = new ServerConfig(name, ip, port, pk);
+            config.saveToPath(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -82,5 +68,19 @@ class Server {
         Socket s = ss.accept();
         Thread workerThread = new Thread(new Worker(s));
         workerThread.start();
+    }
+
+    private String getExternalIP() {
+        String ip = "";
+
+        try {
+            URL whatismyip = new URL("http://checkip.amazonaws.com");
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    whatismyip.openStream()));
+            ip = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ip;
     }
 }
