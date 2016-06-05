@@ -4,7 +4,10 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.File;
+import java.io.IOException;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * Created by Marcus on 30-05-2016.
@@ -14,7 +17,20 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
     private PublicKey encryptionKey;
 
     public RSA() {
-        this(2000);
+        File f = new File(KeyStorage.PUBLICKEYFILE);
+        if (f.exists()) {
+            try {
+                key = new RSAKey(KeyStorage.LoadKeyPair("RSA"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        } else {
+            generateKey(2000);
+        }
     }
 
     public RSA(int keyLength) {

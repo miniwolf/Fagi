@@ -5,6 +5,8 @@ package com.fagi.network;/*
  * Handling in and output
  */
 
+import com.fagi.config.ServerConfig;
+import com.fagi.encryption.*;
 import com.fagi.model.*;
 
 import java.io.IOException;
@@ -12,19 +14,24 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.KeyPair;
 
 /**
  * TODO: Add description
  */
 public class Communication {
     private ObjectOutputStream out;
-    private static final String host = "localhost";
-    private static final int port = 4242;
+    private final String host;
+    private final int port;
     private InputHandler inputHandler;
     private Socket socket;
     private Thread inputThread;
+    private EncryptionAlgorithm encryption;
 
-    public Communication() throws IOException {
+    public Communication(String host, int port, EncryptionAlgorithm encryption) throws IOException {
+        this.encryption = encryption;
+        this.host = host;
+        this.port = port;
         try {
             socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -50,7 +57,7 @@ public class Communication {
     public void sendObject(Object obj) {
         try {
             // TODO : Convert object to byte[] and encrypt with server public key
-            out.writeObject(obj);
+            out.writeObject(encryption.encrypt(Conversion.convertToBytes(obj)));
             out.flush();
         } catch (IOException e) {
             System.err.println("cso ioe: " + e.toString());
@@ -110,4 +117,6 @@ public class Communication {
     public Exception getNextException() {
         return inputHandler.containsException();
     }
+
+    public void setEncryption(EncryptionAlgorithm encryption) { this.encryption = encryption; }
 }

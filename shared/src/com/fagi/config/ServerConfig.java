@@ -45,7 +45,7 @@ public class ServerConfig implements Serializable {
         fos.close();
     }
 
-    public static ServerConfig xmlToServerConfig(String path) throws IOException, ClassNotFoundException {
+    public static ServerConfig pathToServerConfig(String path) throws IOException, ClassNotFoundException {
         Path p = Paths.get(path);
         byte[] data = Files.readAllBytes(p);
 

@@ -17,7 +17,7 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
 class Server {
-    private final String configFile = "config/serverconfig.xml";
+    private final String configFile = "config/serverinfo.config";
     private boolean running = true;
     private final int port;
 

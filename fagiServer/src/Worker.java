@@ -6,6 +6,7 @@
  */
 
 import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
@@ -43,7 +44,13 @@ class Worker implements Runnable {
             try {
                 sendIncMessages();
                 Object input = oIn.readObject();
+
+                if (input instanceof byte[]) {
+                    input = decryptAndConvertToObject((byte[])input);
+                }
+
                 oOut.writeObject(handleInput(input));
+
                 oOut.reset();
             } catch (EOFException eof) {
                 running = false;
@@ -58,6 +65,22 @@ class Worker implements Runnable {
             }
         }
         System.out.println("Closing");
+    }
+
+    private Object decryptAndConvertToObject(byte[] input) {
+        if (logedin) {
+            input = aes.decrypt(input);
+        } else {
+            input = Encryption.getInstance().getRSA().decrypt(input);
+        }
+        try {
+            return Conversion.convertFromBytes(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void sendIncMessages() throws Exception {
