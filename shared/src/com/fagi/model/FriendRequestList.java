@@ -11,8 +11,15 @@ import java.util.List;
  * FriendRequestList used as response object from server.
  * @author miniwolf
  */
-public class FriendRequestList extends ResponseList implements Serializable {
+public class FriendRequestList implements Serializable, ResponseList {
+    private final List<String> friendRequestList;
+
     public FriendRequestList(List<String> friendRequestList) {
-        super(friendRequestList);
+        this.friendRequestList = friendRequestList;
+    }
+
+    @Override
+    public List<String> getData() {
+        return friendRequestList;
     }
 }

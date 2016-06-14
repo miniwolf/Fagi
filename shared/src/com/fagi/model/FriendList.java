@@ -12,8 +12,15 @@ import java.util.List;
  *
  * @author miniwolf
  */
-public class FriendList extends ResponseList implements Serializable {
+public class FriendList implements Serializable, ResponseList {
+    private List<String> friendList;
+
     public FriendList(List<String> friendList) {
-        super(friendList);
+        this.friendList = friendList;
+    }
+
+    @Override
+    public List<String> getData() {
+        return friendList;
     }
 }

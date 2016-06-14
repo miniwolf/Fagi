@@ -23,6 +23,7 @@ class InputHandler implements Runnable {
     private final ObjectInputStream in;
     private boolean running = true;
 
+    // TODO : Get RSA object from Communication
     public InputHandler(ObjectInputStream in) {
         this.in = in;
     }
@@ -34,6 +35,7 @@ class InputHandler implements Runnable {
             while ( object == null && running ) {
                 try {
                     object = in.readObject();
+                    // TODO : Check if byte[], decrypt array, convert to object
                     inputs.add(object);
                 } catch (IOException ioe) {
                     if ( running ) {

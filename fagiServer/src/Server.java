@@ -5,16 +5,33 @@
  * Listening socket for incoming transmissions from clients.
  */
 
-import java.io.IOException;
+import com.fagi.config.ServerConfig;
+import com.fagi.encryption.KeyStorage;
+import com.fagi.encryption.RSAKey;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 
 class Server {
+    private final String configFile = "config/serverinfo.config";
     private boolean running = true;
     private final int port;
 
     public Server(int port) {
         this.port = port;
+        try {
+            String name = "test";
+            String ip =  "localhost"; //getExternalIP();
+            PublicKey pk = ((RSAKey) Encryption.getInstance().getRSA().getKey()).getKey().getPublic();
+            ServerConfig config = new ServerConfig(name, ip, port, pk);
+            config.saveToPath(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void start() {
@@ -35,12 +52,35 @@ class Server {
                 running = false;
             }
         }
+
         System.out.println("Stopping Server");
+
+        if(ss != null) {
+            try {
+                ss.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void workerCreation(ServerSocket ss) throws IOException {
         Socket s = ss.accept();
         Thread workerThread = new Thread(new Worker(s));
         workerThread.start();
+    }
+
+    private String getExternalIP() {
+        String ip = "";
+
+        try {
+            URL whatismyip = new URL("http://checkip.amazonaws.com");
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    whatismyip.openStream()));
+            ip = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ip;
     }
 }
