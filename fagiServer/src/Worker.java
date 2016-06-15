@@ -5,6 +5,10 @@
  * Worker thread for each client.
  */
 
+import com.fagi.encryption.AES;
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.UserOnlineException;
@@ -15,7 +19,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -25,7 +28,9 @@ class Worker implements Runnable {
     private ObjectInputStream oIn;
     private ObjectOutputStream oOut;
     private boolean running = true;
+    private boolean sessionCreated = false;
     private String myUserName;
+    private EncryptionAlgorithm<AESKey> aes;
 
     public Worker(Socket socket) throws IOException {
         System.out.println("Starting a worker thread");
@@ -40,7 +45,15 @@ class Worker implements Runnable {
             try {
                 sendIncMessages();
                 Object input = oIn.readObject();
-                oOut.writeObject(handleInput(input));
+
+                if (input instanceof byte[]) {
+                    input = decryptAndConvertToObject((byte[])input);
+                }
+
+                Object result = handleInput(input);
+
+                oOut.writeObject(aes.encrypt(Conversion.convertToBytes(result)));
+
                 oOut.reset();
             } catch (EOFException eof) {
                 running = false;
@@ -57,9 +70,25 @@ class Worker implements Runnable {
         System.out.println("Closing");
     }
 
+    private Object decryptAndConvertToObject(byte[] input) {
+        if (sessionCreated) {
+            input = aes.decrypt(input);
+        } else {
+            input = Encryption.getInstance().getRSA().decrypt(input);
+        }
+        try {
+            return Conversion.convertFromBytes(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private void sendIncMessages() throws Exception {
         while ( incMessages.size() > 0 ) {
-            oOut.writeObject(incMessages.remove());
+            oOut.writeObject(aes.encrypt(Conversion.convertToBytes(incMessages.remove())));
         }
     }
 
@@ -75,7 +104,7 @@ class Worker implements Runnable {
             return handleLogout();
         } else if ( input instanceof GetFriends ) {
             return handleGetFriends();
-        } else if ( input instanceof GetRequests ) {
+        } else if ( input instanceof GetFriendRequests) {
             return handleGetRequests();
         } else if ( input instanceof CreateUser ) {
             CreateUser arg = (CreateUser) input;
@@ -89,6 +118,11 @@ class Worker implements Runnable {
         } else if ( input instanceof DeleteFriend ) {
             DeleteFriend arg = (DeleteFriend) input;
             return handleDeleteFriend(arg);
+        } else if(input instanceof Session) {
+            Session s = (Session)input;
+            aes = new AES(s.getKey());
+            sessionCreated = true;
+            return new AllIsWellException();
         } else {
             return handleUnknownObject(input);
         }

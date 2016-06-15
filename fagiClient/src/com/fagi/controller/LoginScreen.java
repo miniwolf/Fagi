@@ -5,8 +5,11 @@ package com.fagi.controller;/*
  * Login screen for the IM-client part
  */
 
+import com.fagi.config.ServerConfig;
+import com.fagi.encryption.AES;
+import com.fagi.encryption.RSA;
+import com.fagi.encryption.RSAKey;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -17,6 +20,7 @@ import com.fagi.network.Communication;
 import main.FagiApp;
 
 import java.io.IOException;
+import java.security.KeyPair;
 
 /**
  * Controller class for the login screen, used by the JavaFX thread.
@@ -24,6 +28,7 @@ import java.io.IOException;
  * class.
  */
 public class LoginScreen {
+    private final String configFileLocation;
     @FXML private Button loginBtn;
     @FXML private Label messageLabel;
     @FXML private TextField username;
@@ -35,8 +40,9 @@ public class LoginScreen {
     private Stage primaryStage;
     private Application fagiApp;
 
-    public LoginScreen(FagiApp fagiApp) {
+    public LoginScreen(FagiApp fagiApp, String configFileLocation) {
         this.fagiApp = fagiApp;
+        this.configFileLocation = configFileLocation;
     }
 
     public void initComponents() {
@@ -47,11 +53,16 @@ public class LoginScreen {
 
     public void initCommunication() {
         try {
-            ChatManager.setCommunication(new Communication());
-            messageLabel.setText("Connected to server");
+            ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
+            AES aes = new AES();
+            aes.generateKey(128);
+            ChatManager.setCommunication(new Communication(config.getIp(), config.getPort(), aes, config.getServerKey()));
+            messageLabel.setText("Connected to server: " + config.getName());
             connected = true;
         } catch (IOException ioe) {
             messageLabel.setText("Connection refused");
+        } catch (ClassNotFoundException e) {
+            messageLabel.setText("Not a valid config file.");
         }
     }
 

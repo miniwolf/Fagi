@@ -60,8 +60,8 @@ public class FagiApp extends Application {
      */
     public void showLoginScreen() {
         try {
-
-            LoginScreen controller = new LoginScreen(this);
+            String configLocation = "config/serverinfo.config"; // TODO : Let the user browse for the file path
+            LoginScreen controller = new LoginScreen(this, configLocation);
             FXMLLoader loader =
                     new FXMLLoader(controller.getClass()
                                              .getResource("/com/fagi/view/LoginScreen.fxml"));
