@@ -5,13 +5,13 @@
  * User data object.
  */
 
-import com.fagi.exceptions.AllIsWellException;
-import com.fagi.exceptions.NoSuchUserException;
-import com.fagi.exceptions.UserExistsException;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserExists;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * TODO: Add description, password protection OTR:
@@ -50,13 +50,13 @@ public class User {
         friends.add(friend.getUserName());
     }
 
-    public Exception requestFriend(String otherUser) {
+    public Response requestFriend(String otherUser) {
         if ( Data.findInUserFile(userName, otherUser, 0) ) {
-            return new UserExistsException();
+            return new UserExists();
         }
         User other = Data.getUser(otherUser);
         if ( other == null ) {
-            return new NoSuchUserException();
+            return new NoSuchUser();
         }
 
         if ( incFriendReq.contains(otherUser) ) {
@@ -66,17 +66,17 @@ public class User {
         return other.addFriendReq(userName);
     }
 
-    public Exception removeFriendRequest(String otherUser) {
+    public Response removeFriendRequest(String otherUser) {
         if ( !Data.findInUserFile(userName, otherUser, 1) ) {
-            return new UserExistsException();
+            return new UserExists();
         }
         incFriendReq.remove(otherUser);
         return Data.removeFriendRequestFromUserFile(this.userName, otherUser);
     }
 
-    private Exception addFriendReq(String userName) {
+    private Response addFriendReq(String userName) {
         if ( incFriendReq.contains(userName) ) {
-            return new UserExistsException();
+            return new UserExists();
         }
         incFriendReq.add(userName);
         return Data.appendFriendReqToUserFile(this.userName, userName);
@@ -90,9 +90,9 @@ public class User {
         this.friends = friends;
     }
 
-    public Exception removeFriend(String otherUser) {
+    public Response removeFriend(String otherUser) {
         if ( !Data.findInUserFile(userName, otherUser, 0) ) {
-            return new UserExistsException();
+            return new UserExists();
         }
         friends.remove(otherUser);
         return Data.removeFriendFromUserFile(this.userName, otherUser);

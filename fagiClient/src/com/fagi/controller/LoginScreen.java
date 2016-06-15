@@ -6,7 +6,6 @@ package com.fagi.controller;/*
  */
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-import main.FagiApp;
+import com.fagi.main.FagiApp;
 
 import java.io.IOException;
 

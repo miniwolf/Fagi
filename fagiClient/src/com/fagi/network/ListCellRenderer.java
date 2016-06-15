@@ -29,12 +29,10 @@ public class ListCellRenderer extends ListCell<String> {
         super.updateItem(item, empty);
         setText(item);
 
-        if ( item != null && listener.unread.indexOf(item) != -1 ) {
-            if ( item.length() != 0 ) {
-                setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
-            }
-        } else {
+        if ( item == null || listener.unread.indexOf(item) == -1 ) {
             setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+        } else if ( item.length() != 0 ) {
+            setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
         }
         /*
         if ( null == item || item.length() == 0 ) {

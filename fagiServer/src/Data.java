@@ -3,11 +3,7 @@
  * Data.java
  */
 
-import com.fagi.exceptions.AllIsWellException;
-import com.fagi.exceptions.NoSuchUserException;
-import com.fagi.exceptions.PasswordException;
-import com.fagi.exceptions.UserExistsException;
-import com.fagi.exceptions.UserOnlineException;
+import com.fagi.responses.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,14 +25,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * Contains and update information on users.
  */
 class Data {
-    private static final Map<String, Worker> onlineUsers = new ConcurrentHashMap<>();
+    private static final Map<String, OutputWorker> onlineUsers = new ConcurrentHashMap<>();
     private static final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
     private static final String separator = "\",\"";
     private static final String indexFilePath = "users/userIndex.fagi";
 
     public static Object createUser(String userName, String pass) throws IOException {
         if ( registeredUsers.containsKey(userName) ) {
-            return new UserExistsException();
+            return new UserExists();
         }
 
         registeredUsers.put(userName, new User(userName, pass));
@@ -51,22 +47,22 @@ class Data {
         if ( !file.createNewFile() ) {
             System.out.println(userName + ". File already exists, supposed bug. Report please!");
         }
-        return new AllIsWellException();
+        return new AllIsWell();
     }
 
-    public static Exception userLogin(String userName, String pass, Worker worker) {
+    public static Object userLogin(String userName, String pass, OutputWorker worker) {
         if ( onlineUsers.containsKey(userName) ) {
-            return new UserOnlineException();
+            return new UserOnline();
         }
         User user = registeredUsers.get(userName);
         if ( user == null ) {
-            return new NoSuchUserException();
+            return new NoSuchUser();
         }
         if ( !user.getPass().equals(pass) ) {
-            return new PasswordException();
+            return new PasswordError();
         }
         onlineUsers.put(userName, worker);
-        return new AllIsWellException();
+        return new AllIsWell();
     }
 
     public static void userLogout(String userName) {
@@ -93,10 +89,13 @@ class Data {
     }
 
     public static User getUser(String name) {
+        if ( name == null ) {
+            return null;
+        }
         return registeredUsers.get(name);
     }
 
-    public static Worker getWorker(String userName) {
+    public static OutputWorker getWorker(String userName) {
         return onlineUsers.get(userName);
     }
 
@@ -146,51 +145,50 @@ class Data {
         }
     }
 
-    private static Object appendFriendToUserFile(String username, String friendName) {
-        Exception object = appendToUserFile(username, friendName, 0);
+    private static Response appendFriendToUserFile(String username, String friendName) {
+        Response object = appendToUserFile(username, friendName, 0);
         if ( object != null ) {
             return object;
         }
         return removeFromUserFile(username, friendName, 1);
     }
 
-    public static Exception appendFriendReqToUserFile(String username, String friendName) {
+    public static Response appendFriendReqToUserFile(String username, String friendName) {
         return appendToUserFile(username, friendName, 1);
     }
 
-    public static Exception removeFriendFromUserFile(String username, String friendName) {
-        Exception object = removeFromUserFile(username, friendName, 0);
+    public static Response removeFriendFromUserFile(String username, String friendName) {
+        Response object = removeFromUserFile(username, friendName, 0);
         if ( object != null ) {
             return object;
         }
         return removeFromUserFile(username, friendName, 1);
     }
 
-    public static Exception removeFriendRequestFromUserFile(String username, String friendName) {
-        Exception object = removeFromUserFile(username, friendName, 1);
+    public static Response removeFriendRequestFromUserFile(String username, String friendName) {
+        Response object = removeFromUserFile(username, friendName, 1);
         if ( object != null ) {
             return object;
         }
-        return new AllIsWellException();
+        return new AllIsWell();
     }
 
-    private static Exception appendToUserFile(String username, String friendName, int index) {
+    private static Response appendToUserFile(String username, String friendName, int index) {
         Object object = parseUserFile(username);
-        if ( object instanceof Exception ) {
-            return (Exception) object;
+        if ( object instanceof NoSuchUser ) {
+            return (NoSuchUser) object;
         }
         List<List<String>> wholeFile = (List<List<String>>) object;
         List<String> stringList = wholeFile.get(index);
         stringList.add(friendName);
         wholeFile.set(index, stringList);
         writeUserFile(username, wholeFile);
-        return new AllIsWellException();
+        return new AllIsWell();
     }
 
     public static boolean findInUserFile(String username, String friendName, int index) {
         Object object = parseUserFile(username);
-        // Usually NoSuchUserException
-        if ( object instanceof Exception ) {
+        if ( object instanceof NoSuchUser ) {
             return false;
         }
         List<List<String>> wholeFile = (List<List<String>>) object;
@@ -205,10 +203,10 @@ class Data {
      * @param index 0 is friend list. 1 is friend requests.
      * @return ExceptionObject from handlers.
      */
-    private static Exception removeFromUserFile(String username, String friendName, int index) {
+    private static Response removeFromUserFile(String username, String friendName, int index) {
         Object object = parseUserFile(username);
-        if ( object instanceof Exception ) {
-            return (Exception) object;
+        if ( object instanceof Response ) {
+            return (Response) object;
         }
         List<List<String>> wholeFile = (List<List<String>>) object;
 
@@ -216,7 +214,7 @@ class Data {
         stringList.remove(friendName);
         wholeFile.set(index, stringList);
         writeUserFile(username, wholeFile);
-        return new AllIsWellException();
+        return new AllIsWell();
     }
 
     private static Object parseUserFile(String userName) {
@@ -224,7 +222,7 @@ class Data {
 
         if ( !userFile.exists() ) {
             System.out.println(userName + " doesn't exist");
-            return new NoSuchUserException();
+            return new NoSuchUser();
         }
 
         BufferedReader reader = null;
