@@ -1,4 +1,4 @@
-package main;
+package com.fagi.main;
 /*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
@@ -56,7 +56,7 @@ public class FagiApp extends Application {
 
     /**
      * Shows initial window for login. This method will also be called
-     * when the user log out and the main screen shut down.
+     * when the user log out and the com.fagi.main screen shut down.
      */
     public void showLoginScreen() {
         try {
@@ -92,7 +92,7 @@ public class FagiApp extends Application {
     }
 
     /**
-     * Opens the main window with all user interface for chatting.
+     * Opens the com.fagi.main window with all user interface for chatting.
      * Switching com.fagi.controller to MainScreen.
      *
      * @param username      Username logged in.
