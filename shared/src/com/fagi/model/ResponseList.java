@@ -15,6 +15,18 @@ import java.util.List;
  *
  * @author miniwolf
  */
-public interface ResponseList extends Serializable {
-    List<String> getData();
+public class ResponseList implements Serializable {
+    List<String> data;
+
+    public ResponseList(List<String> friendRequestList) {
+        this.data = friendRequestList;
+    }
+
+    public List<String> getData() {
+        return data;
+    }
+
+    public void updateData(List<String> data) {
+        this.data = data;
+    }
 }

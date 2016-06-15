@@ -1,14 +1,5 @@
 Unit test + Documentation
 
-SystemVoice
+User files delete duplicates.
 
-VoiceListener interfaces vs config class.
-
-User files update once per minute. Delete duplicates.
-Avoid duplicates
-
-Quit button on loginScreen send terminateConnectionException
-
-New structure for receiving response. JSON
-
-Star with system startup
+Start with system startup

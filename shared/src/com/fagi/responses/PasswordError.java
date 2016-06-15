@@ -1,11 +1,10 @@
-package com.fagi.exceptions;/*
+package com.fagi.responses;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * PasswordException.java
  *
  * Object for handling password errors.
  */
 
-import java.io.Serializable;
-
-public class PasswordException extends Exception implements Serializable {
+public class PasswordError implements Response {
 }
