@@ -3,8 +3,6 @@
  * Data.java
  */
 
-import com.fagi.responses.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,6 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.PasswordError;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserExists;
+import com.fagi.responses.UserOnline;
 
 /**
  * TODO: Add description, maybe think about .fagi file ending
