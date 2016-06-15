@@ -6,13 +6,13 @@ package com.fagi.network;/*
  */
 
 import com.fagi.model.*;
+import com.fagi.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
 
 /**
  * TODO: Add description
@@ -60,29 +60,12 @@ public class Communication {
     }
 
     /**
-     * Do not use this method anymore.
-     * This might give you the wrong object or even none
-     * if it has not reached the input yet.
-     *
-     * @return Current object in the bottom of queue. (Newest Object)
-     * @deprecated use contains"Object" methods instead.
-     */
-    public Object handleObjects() {
-        Object object = null;
-        while ( object == null ) {
-            object = inputHandler.getLast();
-        }
-        return object;
-    }
-
-    /**
      * Getting the friend/friend request list from the server.
      * Using object to pass the correct get requests to the server.
      *
      * @return FriendRequestList which contains all of our requests as strings.
      */
     public FriendRequestList getRequests() {
-        sendObject(new GetRequests());
         return inputHandler.containsRequests();
     }
 
@@ -92,7 +75,6 @@ public class Communication {
      * @return FriendList which contains all of our friends as strings.
      */
     public FriendList getFriends() {
-        sendObject(new GetFriends());
         return inputHandler.containsFriends();
     }
 
@@ -107,7 +89,9 @@ public class Communication {
         }
     }
 
-    public Exception getNextException() {
-        return inputHandler.containsException();
+    public Response getNextResponse() {
+        Response response;
+        while ( (response = inputHandler.containsResponse()) == null ) {}
+        return response;
     }
 }

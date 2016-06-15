@@ -38,9 +38,12 @@ class Server {
         System.out.println("Stopping Server");
     }
 
-    private void workerCreation(ServerSocket ss) throws IOException {
-        Socket s = ss.accept();
-        Thread workerThread = new Thread(new Worker(s));
-        workerThread.start();
+    private void workerCreation(ServerSocket serverSocket) throws IOException {
+        Socket socket = serverSocket.accept();
+        OutputWorker outWorker = new OutputWorker(socket);
+        Thread outputWorker = new Thread(outWorker);
+        Thread inputWorker = new Thread(new InputWorker(socket, outWorker));
+        outputWorker.start();
+        inputWorker.start();
     }
 }

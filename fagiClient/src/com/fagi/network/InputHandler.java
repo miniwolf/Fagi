@@ -4,10 +4,8 @@ package com.fagi.network;
  * InputHandler.java
  */
 
-import com.fagi.model.FriendList;
-import com.fagi.model.FriendRequestList;
-import com.fagi.model.Message;
-import com.fagi.model.VoiceMessage;
+import com.fagi.model.*;
+import com.fagi.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,7 +32,7 @@ class InputHandler implements Runnable {
             while ( object == null && running ) {
                 try {
                     object = in.readObject();
-                    inputs.add(object);
+                    handleInput(object);
                 } catch (IOException ioe) {
                     if ( running ) {
                         System.err.println("i ioe: " + ioe.toString());
@@ -49,6 +47,16 @@ class InputHandler implements Runnable {
                 }
             }
             object = null;
+        }
+    }
+
+    private void handleInput(Object object) {
+        if ( object instanceof ResponseList ) {
+
+        } else if ( object instanceof Message ) {
+
+        } else {
+            inputs.add(object);
         }
     }
 
@@ -76,7 +84,7 @@ class InputHandler implements Runnable {
             inputs.remove(object);
             return (FriendRequestList) object;
         }
-        return new FriendRequestList(new ArrayList<>());
+        return null;
     }
 
     /**
@@ -96,7 +104,7 @@ class InputHandler implements Runnable {
             inputs.remove(object);
             return (FriendList) object;
         }
-        return new FriendList(new ArrayList<>());
+        return null;
     }
 
     public Message containsMessage() {
@@ -132,16 +140,16 @@ class InputHandler implements Runnable {
         return null;
     }
 
-    public Exception containsException() {
-        Exception exception;
+    public Response containsResponse() {
+        Response response;
         for ( Object object : inputs ) {
-            if ( !(object instanceof Exception ) ) {
+            if ( !(object instanceof Response ) ) {
                 continue;
             }
 
-            exception = (Exception) object;
+            response = (Response) object;
             inputs.remove(object);
-            return exception;
+            return response;
         }
         return null;
     }

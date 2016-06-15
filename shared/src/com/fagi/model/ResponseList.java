@@ -25,4 +25,8 @@ public class ResponseList implements Serializable {
     public List<String> getData() {
         return data;
     }
+
+    public void updateData(List<String> data) {
+        this.data = data;
+    }
 }
