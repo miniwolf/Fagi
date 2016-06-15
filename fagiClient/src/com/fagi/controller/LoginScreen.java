@@ -54,7 +54,9 @@ public class LoginScreen {
     public void initCommunication() {
         try {
             ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
-            ChatManager.setCommunication(new Communication(config.getIp(), config.getPort(), new AES(), config.getServerKey()));
+            AES aes = new AES();
+            aes.generateKey(128);
+            ChatManager.setCommunication(new Communication(config.getIp(), config.getPort(), aes, config.getServerKey()));
             messageLabel.setText("Connected to server: " + config.getName());
             connected = true;
         } catch (IOException ioe) {

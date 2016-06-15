@@ -39,7 +39,7 @@ public class Communication {
             socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
 
-            inputHandler = new InputHandler(new ObjectInputStream(socket.getInputStream()));
+            inputHandler = new InputHandler(new ObjectInputStream(socket.getInputStream()), encryption);
             inputThread = new Thread(inputHandler);
             inputThread.setDaemon(true);
             inputThread.start();

@@ -4,6 +4,8 @@ package com.fagi.network;
  * InputHandler.java
  */
 
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.model.FriendList;
 import com.fagi.model.FriendRequestList;
 import com.fagi.model.Message;
@@ -21,22 +23,22 @@ import java.util.concurrent.LinkedBlockingDeque;
 class InputHandler implements Runnable {
     private final LinkedBlockingDeque<Object> inputs = new LinkedBlockingDeque<>();
     private final ObjectInputStream in;
+    private final EncryptionAlgorithm encryption;
     private boolean running = true;
 
-    // TODO : Get RSA object from Communication
-    public InputHandler(ObjectInputStream in) {
+    public InputHandler(ObjectInputStream in, EncryptionAlgorithm encryption) {
         this.in = in;
+        this.encryption = encryption;
     }
 
     @Override
     public void run() {
-        Object object = null;
+        byte[] input = null;
         while ( running ) {
-            while ( object == null && running ) {
+            while ( input == null && running ) {
                 try {
-                    object = in.readObject();
-                    // TODO : Check if byte[], decrypt array, convert to object
-                    inputs.add(object);
+                    input = (byte[])in.readObject();
+                    inputs.add(Conversion.convertFromBytes(encryption.decrypt(input)));
                 } catch (IOException ioe) {
                     if ( running ) {
                         System.err.println("i ioe: " + ioe.toString());
@@ -50,7 +52,7 @@ class InputHandler implements Runnable {
                     // Fix: could be to implement JSON
                 }
             }
-            object = null;
+            input = null;
         }
     }
 

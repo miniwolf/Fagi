@@ -50,7 +50,9 @@ class Worker implements Runnable {
                     input = decryptAndConvertToObject((byte[])input);
                 }
 
-                oOut.writeObject(handleInput(input));
+                Object result = handleInput(input);
+
+                oOut.writeObject(aes.encrypt(Conversion.convertToBytes(result)));
 
                 oOut.reset();
             } catch (EOFException eof) {
@@ -86,7 +88,7 @@ class Worker implements Runnable {
 
     private void sendIncMessages() throws Exception {
         while ( incMessages.size() > 0 ) {
-            oOut.writeObject(incMessages.remove());
+            oOut.writeObject(aes.encrypt(Conversion.convertToBytes(incMessages.remove())));
         }
     }
 
