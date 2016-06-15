@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class MessageListener implements Runnable {
     private final Communication communication;
-    public ArrayList<Conversation> conversations;
+    private List<Conversation> conversations;
     private final ListView<String> contactList;
     private final ListView<String> requestList;
     private List<ListCellRenderer> listCellRenderer;
@@ -52,9 +52,13 @@ public class MessageListener implements Runnable {
                     return;
                 }
                 FriendList friends = communication.getFriends();
-                update(contactList, friends);
+                if ( friends != null ) {
+                    update(contactList, friends);
+                }
                 FriendRequestList requests = communication.getRequests();
-                update(requestList, requests);
+                if ( requests != null ) {
+                    update(requestList, requests);
+                }
 
                 message = communication.receiveMessage();
             }
@@ -71,7 +75,7 @@ public class MessageListener implements Runnable {
      *
      * @param conversations new friend list to insert instead of previous one.
      */
-    public void update(ArrayList<Conversation> conversations) {
+    public void update(List<Conversation> conversations) {
         this.conversations = conversations;
     }
 

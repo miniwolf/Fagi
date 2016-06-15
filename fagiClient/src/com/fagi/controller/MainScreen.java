@@ -6,7 +6,6 @@ package com.fagi.controller;
  * UserInterface, containing chat window and contact list
  */
 
-import com.fagi.exceptions.UserOnlineException;
 import com.fagi.model.Chat;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
@@ -15,24 +14,23 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
 import com.fagi.network.MessageListener;
+import com.fagi.network.handlers.TextMessageHandler;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserOnline;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,8 +55,9 @@ public class MainScreen {
 
     private final String username;
     private final Communication communication;
-    private ArrayList<Conversation> conversations;
+    private List<Conversation> conversations;
     private MessageListener messageListener;
+    private TextMessageHandler messageHandler;
     private Thread messageThread;
     private Stage primaryStage;
     private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
@@ -77,7 +76,8 @@ public class MainScreen {
     public void initCommunication() {
         conversations = new ArrayList<>();
         messageListener = new MessageListener(communication, contactList, requestList, this);
-        messageListener.update(conversations);
+        //messageListener.update(conversations);
+        messageHandler.update(conversations);
         //listCellRenderer = new ListCellRenderer(messageListener, scrollPaneChat);
         messageListener.setListCellRenderer(listCellRenderer);
         messageThread = new Thread(messageListener);
@@ -160,9 +160,8 @@ public class MainScreen {
             if ( conversation.getConversation() == chat ) {
                 communication.sendObject(new TextMessage(message.getText(), username,
                                                          conversation.getChatBuddy()));
-                Exception exception;
-                while ( (exception = communication.getNextException()) == null ) {}
-                if ( exception instanceof UserOnlineException ) {
+                Response response = communication.getNextResponse();
+                if ( response instanceof UserOnline ) {
                     conversation.getConversation().appendText("System: User went offline.");
                 }
                 break;
@@ -249,7 +248,8 @@ public class MainScreen {
     public void updateConversations(String chatBuddy) {
         Conversation conversation = new Conversation(chatBuddy);
         conversations.add(conversation);
-        messageListener.update(conversations);
+        //messageListener.update(conversations);
+        messageHandler.update(conversations);
     }
 
     @FXML
