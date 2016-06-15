@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-import main.FagiApp;
+import com.fagi.main.FagiApp;
 
 import java.io.IOException;
 import java.security.KeyPair;

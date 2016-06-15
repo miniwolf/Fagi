@@ -5,23 +5,26 @@ package com.fagi.network;
  */
 
 import com.fagi.controller.ErrorBoxController;
-import com.fagi.exceptions.AllIsWellException;
-import com.fagi.exceptions.NoSuchUserException;
-import com.fagi.exceptions.PasswordException;
-import com.fagi.exceptions.UserExistsException;
-import com.fagi.exceptions.UserOnlineException;
-import com.fagi.model.*;
+import com.fagi.main.FagiApp;
+import com.fagi.model.CreateUser;
+import com.fagi.model.DeleteFriend;
+import com.fagi.model.DeleteFriendRequest;
+import com.fagi.model.FriendRequest;
+import com.fagi.model.Login;
+import com.fagi.model.Logout;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.PasswordError;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserExists;
+import com.fagi.responses.UserOnline;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.FagiApp;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -39,7 +42,7 @@ public class ChatManager {
     /**
      * Sending a request to the server, asking for a login.
      * If the server cannot find a created user by the username it will return
-     * a NoSuchUserException.
+     * a NoSuchUser.
      * UserOnlineException will be returned if the user is already online, to avoid
      * multiple instances of the same user.
      * Wrong password will give PasswordException. This is done to distinguish
@@ -56,22 +59,18 @@ public class ChatManager {
         }
 
         communication.sendObject(login);
-        Exception exception = null;
-        while ( exception == null ) {
-            exception = communication.getNextException();
-        }
-        if ( exception instanceof AllIsWellException ) {
+        Response response = communication.getNextResponse();
+        if ( response instanceof AllIsWell ) {
             application.showMainScreen(username, communication);
         } else {
-            labelCreateUser.setText(exception instanceof NoSuchUserException
+            labelCreateUser.setText(response instanceof NoSuchUser
                                     ? "User doesn't exist"
-                                    : exception instanceof UserOnlineException
-                                      ? "You're already online"
-                                      : exception instanceof PasswordException
+                                    : response instanceof UserOnline
+                                      ? "You are already online"
+                                      : response instanceof PasswordError
                                         ? "Wrong password"
-                                        : "Unknown Exception: " + exception.toString());
+                                        : "Unknown Exception: " + response.toString());
         }
-
     }
 
     /**
@@ -82,13 +81,10 @@ public class ChatManager {
      */
     public static void handleLogout(Logout logout) {
         communication.sendObject(logout);
-        Exception exception = null;
-        while ( exception == null ) {
-            exception = communication.getNextException();
-        }
-        if ( !(exception instanceof AllIsWellException) ) {
+        Response response = communication.getNextResponse();
+        if ( !(response instanceof AllIsWell) ) {
             System.err.println("Could not log out properly. "
-                               + "Shut down and let server handle the exception");
+                               + "Shut down and let server handle the response");
         }
         communication.close();
         application.showLoginScreen();
@@ -125,14 +121,10 @@ public class ChatManager {
         }
         communication.sendObject(new CreateUser(username, password));
 
-        Exception exception = null;
-        while ( exception == null ) {
-            exception = communication.getNextException();
-        }
-
-        if ( exception instanceof AllIsWellException ) {
+        Response response = communication.getNextResponse();
+        if ( response instanceof AllIsWell ) {
             labelMessage.setText("User Created");
-        } else if ( exception instanceof UserExistsException ) {
+        } else if ( response instanceof UserExists ) {
             labelMessage.setText("Error: User already exists");
         }
     }
@@ -149,20 +141,17 @@ public class ChatManager {
         }
         communication.sendObject(friendRequest);
 
-        Exception exception = null;
-        while ( exception == null ) {
-            exception = communication.getNextException();
-        }
-        if ( exception instanceof AllIsWellException ) {
+        Response Response = communication.getNextResponse();
+        if ( Response instanceof AllIsWell ) {
             // TODO: Maybe use version of showErrorMessage on this too.
             JOptionPane.showMessageDialog(null, "User has been added.", "FriendRequest Succeeded",
                                           JOptionPane.PLAIN_MESSAGE);
-        } else if ( exception instanceof UserExistsException ) {
+        } else if ( Response instanceof UserExists ) {
             showErrorMessage("FriendRequest Failed", "Request has already been made.");
-        } else if ( exception instanceof NoSuchUserException ) {
+        } else if ( Response instanceof NoSuchUser ) {
             showErrorMessage("Error in friend request.", "Friend doesn't exist, try again.");
         } else {
-            System.out.println(exception.toString());
+            System.out.println(Response.toString());
         }
     }
 
@@ -174,17 +163,12 @@ public class ChatManager {
      */
     public static void handleRequestDelete(FriendRequest friendRequest) {
         communication.sendObject(new DeleteFriendRequest(friendRequest.getFriendUsername()));
-        Exception exception = null;
-        while ( exception == null ) {
-            exception = communication.getNextException();
-        }
-        if ( exception instanceof AllIsWellException ) {
+        Response response = communication.getNextResponse();
+        if ( response instanceof AllIsWell ) {
             JOptionPane.showMessageDialog(null, "Successfully deleted.", "Success",
                                           JOptionPane.PLAIN_MESSAGE);
         } else {
-            showErrorMessage("Delete Friend Request", "Somethign went wrong");
-            //JOptionPane.showMessageDialog(null, "Something went wrong.",
-            // "Error in delete request.", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage("Delete Friend Request", "Something went wrong");
         }
     }
 
@@ -197,12 +181,9 @@ public class ChatManager {
         }
         communication.sendObject(new DeleteFriend(friendName));
 
-        Exception exception = null;
-        while ( exception == null ) {
-            exception = communication.getNextException();
-        }
-        if ( !(exception instanceof AllIsWellException) ) {
-            System.out.println(exception.toString());
+        Response response = communication.getNextResponse();
+        if ( !(response instanceof AllIsWell) ) {
+            System.out.println(response.toString());
         }
     }
 
