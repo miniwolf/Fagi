@@ -11,8 +11,8 @@ import java.util.Queue;
 /**
  * @author miniwolf
  */
-public interface Handler {
-    void handle(InGoingMessages object);
+public interface Container {
+    void addObject(InGoingMessages object);
 
-    Runnable getRunnable();
+    Queue<InGoingMessages> getQueue();
 }

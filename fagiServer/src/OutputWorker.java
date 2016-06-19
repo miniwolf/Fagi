@@ -2,10 +2,9 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
-import com.fagi.model.FriendList;
-import com.fagi.model.FriendRequestList;
-import com.fagi.model.Message;
-import com.fagi.model.ResponseList;
+import com.fagi.model.messages.InGoingMessages;
+import com.fagi.model.messages.lists.*;
+import com.fagi.model.messages.message.Message;
 import com.fagi.responses.NoSuchUser;
 
 import java.io.IOException;
@@ -24,8 +23,8 @@ public class OutputWorker extends Worker {
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
     private ObjectOutputStream objOut;
 
-    private FriendList currentFriends = new FriendList(new ArrayList<>());
-    private FriendRequestList currentRequests = new FriendRequestList(new ArrayList<>());
+    private ListAccess currentFriends = new DefaultListAccess(new ArrayList<>());
+    private ListAccess currentRequests = new DefaultListAccess(new ArrayList<>());
 
     public OutputWorker(Socket socket) throws IOException {
         objOut = new ObjectOutputStream(socket.getOutputStream());
@@ -59,11 +58,11 @@ public class OutputWorker extends Worker {
         }
     }
 
-    private void checkForLists(Object responseObj, ResponseList currentList) throws IOException {
+    private void checkForLists(Object responseObj, ListAccess currentList) throws IOException {
         if ( responseObj instanceof NoSuchUser ) {
             return;
         }
-        ResponseList responseList = (ResponseList) responseObj;
+        ListAccess responseList = (ListAccess) ((InGoingMessages) responseObj).getAccess();
         if ( responseList.getData().isEmpty()
              || responseList.getData().size() == currentList.getData().size() ) {
             return;
@@ -83,7 +82,7 @@ public class OutputWorker extends Worker {
         if ( me == null ) {
             return new NoSuchUser();
         }
-        return new FriendList(me.getFriends().stream().filter(Data::isUserOnline)
+        return new DefaultListAccess(me.getFriends().stream().filter(Data::isUserOnline)
                                 .collect(Collectors.toList()));
     }
 
@@ -92,7 +91,7 @@ public class OutputWorker extends Worker {
         if ( me == null ) {
             return new NoSuchUser();
         }
-        return new FriendRequestList(me.getFriendReq());
+        return new DefaultListAccess(me.getFriendReq());
     }
 
     synchronized void addMessage(Message message) {

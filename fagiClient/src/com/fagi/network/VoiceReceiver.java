@@ -4,7 +4,7 @@
 
 package com.fagi.network;
 
-import com.fagi.model.VoiceMessage;
+import com.fagi.model.messages.message.VoiceMessage;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -28,7 +28,7 @@ public class VoiceReceiver implements VoiceSystem {
         line_out.start();
     }
 
-    public void playAudio(VoiceMessage message) {
+    public static void playAudio(VoiceMessage message) {
         line_out.write(message.getData(), 0, blockSize);
     }
 }
