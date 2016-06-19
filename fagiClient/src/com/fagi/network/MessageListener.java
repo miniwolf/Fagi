@@ -5,28 +5,25 @@ package com.fagi.network;
  */
 
 import com.fagi.controller.MainScreen;
-import com.fagi.model.*;
-
+import com.fagi.model.Conversation;
+import com.fagi.model.messages.lists.ListAccess;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
-import java.lang.management.PlatformManagedObject;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * For receiving messages and printing these to the conversation.
  * TODO: Add descriptions, add friend requests
  */
-public class MessageListener implements Runnable {
+public class MessageListener {
     private final Communication communication;
     private List<Conversation> conversations;
     private final ListView<String> contactList;
     private final ListView<String> requestList;
     private List<ListCellRenderer> listCellRenderer;
     private final MainScreen mainScreen;
-    public final List<Object> unread = new ArrayList<>();
     private boolean running = true;
 
     public MessageListener(Communication communication, ListView<String> contactList,
@@ -41,7 +38,7 @@ public class MessageListener implements Runnable {
      * Thread method, sending the text to the JTextArea
      * and updating our friend list.
      */
-    public void run() {
+    /*public void run() {
         while ( running ) {
             Message message = null;
             while ( message == null && running ) {
@@ -68,7 +65,7 @@ public class MessageListener implements Runnable {
                 new VoiceReceiver().playAudio((VoiceMessage) message);
             }
         }
-    }
+    }*/
 
     /**
      * Updates the current conversation array.
@@ -86,7 +83,7 @@ public class MessageListener implements Runnable {
      * @param list ListView to output input into.
      * @param input List of users.
      */
-    private void update(ListView<String> list, ResponseList input) {
+    private void update(ListView<String> list, ListAccess input) {
         if ( input.getData().isEmpty() ) { // TODO: Cheaper to not set if already empty?
             Platform.runLater(() -> list.getItems().setAll(""));
             return;
@@ -107,31 +104,6 @@ public class MessageListener implements Runnable {
             }
         }
     }
-
-    private void updateConversation(TextMessage message) {
-        String chatBuddy = message.getSender();
-        for ( Conversation conversation : conversations ) {
-            if ( !conversation.getChatBuddy().equals(chatBuddy) ) {
-                continue;
-            }
-
-            Platform.runLater(() -> conversation.getConversation() .appendText(
-                    conversation.getChatBuddy() + ": " + message.getData() + "\n"));
-            if ( mainScreen.getConversationWindow().getContent().equals(
-                    conversation.getConversation()) ) {
-                return;
-            }
-
-            unread.add(chatBuddy);
-            listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))
-                            .forEach(cell -> Platform.runLater(
-                                    () -> cell.updateItem(chatBuddy, false)));
-            return;
-        }
-        mainScreen.updateConversations(chatBuddy);
-        updateConversation(message);
-    }
-
     public void close() {
         running = false;
     }

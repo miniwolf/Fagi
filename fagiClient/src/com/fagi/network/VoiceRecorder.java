@@ -4,7 +4,7 @@
 
 package com.fagi.network;
 
-import com.fagi.model.VoiceMessage;
+import com.fagi.model.messages.message.VoiceMessage;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;

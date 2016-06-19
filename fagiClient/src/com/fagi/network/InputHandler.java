@@ -1,13 +1,16 @@
-package com.fagi.network;
 /*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * InputHandler.java
  */
 
-import com.fagi.model.FriendList;
-import com.fagi.model.FriendRequestList;
-import com.fagi.model.Message;
-import com.fagi.model.VoiceMessage;
+package com.fagi.network;
+
+import com.fagi.model.messages.InGoingMessages;
+import com.fagi.model.messages.lists.FriendList;
+import com.fagi.model.messages.lists.FriendRequestList;
+import com.fagi.model.messages.message.TextMessage;
+import com.fagi.model.messages.message.VoiceMessage;
+import com.fagi.network.handlers.Container;
 import com.fagi.responses.Response;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
@@ -18,15 +21,18 @@ import com.fagi.model.VoiceMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Handling every incoming object from the server.
  * TODO: Write description
  */
-class InputHandler implements Runnable {
+public class InputHandler implements Runnable {
     private final LinkedBlockingDeque<Object> inputs = new LinkedBlockingDeque<>();
+    private static final Map<Class, Container> containers =
+            new ConcurrentHashMap<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
     private boolean running = true;
@@ -62,95 +68,25 @@ class InputHandler implements Runnable {
     }
 
     private void handleInput(Object object) {
-        if ( object instanceof ResponseList ) {
-
-        } else if ( object instanceof Message ) {
-
+        if ( object instanceof FriendList ) {
+            containers.get(FriendList.class).addObject((InGoingMessages) object);
+        } else if ( object instanceof FriendRequestList ) {
+            containers.get(FriendRequestList.class).addObject((FriendRequestList) object);
+        } else if ( object instanceof TextMessage ) {
+            containers.get(TextMessage.class).addObject((TextMessage) object);
+        } else if ( object instanceof VoiceMessage ) {
+            containers.get(VoiceMessage.class).addObject((VoiceMessage) object);
         } else {
             inputs.add(object);
         }
     }
 
-    public Object getLast() {
-        if ( inputs.isEmpty() ) {
-            return null;
-        }
-        return inputs.pollLast();
-    }
-
     /**
-     * Checking our queue for a list from the server,
-     * if the list contains something not a string,
-     * we will throw an IllegalArgumentException.
+     * The server will return response objects to answer requests, or tell the client of an error
+     * occurring on the server.
      *
-     * @return FriendRequestList containing all the requests
-     * @throws IllegalArgumentException meaning the server
-     *         has given some illegal list
+     * @return Response object describing the error otherwise AllIsWellException
      */
-    public FriendRequestList containsRequests() throws IllegalArgumentException {
-        for ( Object object : inputs ) {
-            if ( !(object instanceof FriendRequestList) ) {
-                continue;
-            }
-            inputs.remove(object);
-            return (FriendRequestList) object;
-        }
-        return null;
-    }
-
-    /**
-     * Checking our queue for a list from the server,
-     * if the list contains something not a string,
-     * we will throw an IllegalArgumentException.
-     *
-     * @return FriendList containing all the friends
-     * @throws IllegalArgumentException meaning the server
-     *         has given some illegal list
-     */
-    public FriendList containsFriends() throws IllegalArgumentException {
-        for ( Object object : inputs ) {
-            if ( !(object instanceof FriendList) ) {
-                continue;
-            }
-            inputs.remove(object);
-            return (FriendList) object;
-        }
-        return null;
-    }
-
-    public Message containsMessage() {
-        Message message;
-        for ( Object object : inputs ) {
-            if ( !(object instanceof Message) ) {
-                continue;
-            }
-            message = (Message) object;
-            if ( !message.isSystemMessage() ) {
-                inputs.remove(object);
-                return message;
-            }
-        }
-        return null;
-    }
-
-    public void close() {
-        running = false;
-    }
-
-    public Message containsVoice() {
-        Message message;
-        for ( Object object : inputs ) {
-            if ( !(object instanceof VoiceMessage) ) {
-                continue;
-            }
-
-            message = (VoiceMessage) object;
-            inputs.remove(object);
-            return message;
-        }
-        return null;
-    }
-
     public Response containsResponse() {
         Response response;
         for ( Object object : inputs ) {
@@ -163,5 +99,13 @@ class InputHandler implements Runnable {
             return response;
         }
         return null;
+    }
+
+    public static void register(Class clazz, Container handler) {
+        containers.put(clazz, handler);
+    }
+
+    public void close() {
+        running = false;
     }
 }

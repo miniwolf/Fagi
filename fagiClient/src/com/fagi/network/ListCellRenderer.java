@@ -4,6 +4,7 @@
 
 package com.fagi.network;
 
+import com.fagi.network.handlers.ListMessageHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
@@ -16,20 +17,12 @@ import javafx.scene.paint.Color;
  * TODO: Missing highlight from current chat.
  */
 public class ListCellRenderer extends ListCell<String> {
-    private final MessageListener listener;
-    private final ScrollPane scrollPaneChat;
-
-    public ListCellRenderer(MessageListener listener, ScrollPane scrollPaneChat) {
-        this.listener = listener;
-        this.scrollPaneChat = scrollPaneChat;
-    }
-
     @Override
     public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
         setText(item);
 
-        if ( item == null || listener.unread.indexOf(item) == -1 ) {
+        if ( item == null || ListMessageHandler.unread.indexOf(item) == -1 ) {
             setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         } else if ( item.length() != 0 ) {
             setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));

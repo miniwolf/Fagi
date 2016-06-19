@@ -4,51 +4,38 @@
 
 package com.fagi.network.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import com.fagi.controller.MainScreen;
 import com.fagi.model.Conversation;
-import com.fagi.model.TextMessage;
-
-import com.fagi.network.Communication;
+import com.fagi.model.messages.InGoingMessages;
+import com.fagi.model.messages.message.TextMessage;
+import com.fagi.network.InputHandler;
 import com.fagi.network.ListCellRenderer;
-import javafx.application.Platform;
-import javafx.scene.control.ListView;
 
+import javafx.application.Platform;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author miniwolf
  */
-public class TextMessageHandler implements Handler<TextMessage> {
-    private Queue<TextMessage> queue = new LinkedBlockingQueue<>();
+public class TextMessageHandler implements Handler {
+    private Container container = new DefaultContainer();
+    private Runnable runnable = new DefaultThreadHandler(container, this);
+
     private List<Conversation> conversations;
-    private final List<Object> unread = new ArrayList<>();
     private List<ListCellRenderer> listCellRenderer;
+    private List<Object> unread = new ArrayList<>();
     private final MainScreen mainScreen;
 
-    public TextMessageHandler(Communication communication, ListView<String> contactList,
-                           ListView<String> requestList, MainScreen mainScreen) {
+    public TextMessageHandler(MainScreen mainScreen) {
+        InputHandler.register(TextMessage.class, container);
         this.mainScreen = mainScreen;
     }
 
     @Override
-    public void run() {
-        while ( !queue.isEmpty() ) {
-            updateConversation(queue.remove());
-        }
-    }
-
-    @Override
-    public void addObject(TextMessage textMessage) {
-        queue.add(textMessage);
-        this.notify();
-    }
-
-    private void updateConversation(TextMessage message) {
-        String chatBuddy = message.getSender();
+    public void handle(InGoingMessages inMessage) {
+        TextMessage message = (TextMessage) inMessage;
+        String chatBuddy = message.getMessage().getSender();
         for ( Conversation conversation : conversations ) {
             if ( !conversation.getChatBuddy().equals(chatBuddy) ) {
                 continue;
@@ -68,7 +55,12 @@ public class TextMessageHandler implements Handler<TextMessage> {
             return;
         }
         mainScreen.updateConversations(chatBuddy);
-        updateConversation(message);
+        handle(message);
+    }
+
+    @Override
+    public Runnable getRunnable() {
+        return runnable;
     }
 
     /**
@@ -78,5 +70,14 @@ public class TextMessageHandler implements Handler<TextMessage> {
      */
     public void update(List<Conversation> conversations) {
         this.conversations = conversations;
+    }
+
+    /**
+     * Updating the renderer for the list. Switching between when switching tabs
+     *
+     * @param listCellRenderer ListCellRenderer for rendering new objects.
+     */
+    public void setListCellRenderer(List<ListCellRenderer> listCellRenderer) {
+        this.listCellRenderer = listCellRenderer;
     }
 }

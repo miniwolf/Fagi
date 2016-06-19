@@ -2,8 +2,8 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
+import com.fagi.model.messages.message.Message;
 import com.fagi.responses.AllIsWell;
-import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.UserOnline;
 import com.fagi.model.*;
 
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.stream.Collectors;
 
 /**
  * @author miniwolf

@@ -85,25 +85,6 @@ public class Communication {
         }
     }
 
-    /**
-     * Getting the friend/friend request list from the server.
-     * Using object to pass the correct get requests to the server.
-     *
-     * @return FriendRequestList which contains all of our requests as strings.
-     */
-    public FriendRequestList getRequests() {
-        return inputHandler.containsRequests();
-    }
-
-    /**
-     * Getting the friend list from the server.
-     *
-     * @return FriendList which contains all of our friends as strings.
-     */
-    public FriendList getFriends() {
-        return inputHandler.containsFriends();
-    }
-
     // TODO: Need to close correctly?
     public void close() {
         inputHandler.close();

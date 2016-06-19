@@ -9,11 +9,11 @@ package com.fagi.controller;
 import com.fagi.model.Chat;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
-import com.fagi.model.TextMessage;
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
-import com.fagi.network.MessageListener;
+import com.fagi.network.handlers.ListMessageHandler;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserOnline;
@@ -56,14 +56,14 @@ public class MainScreen {
     private final String username;
     private final Communication communication;
     private List<Conversation> conversations;
-    private MessageListener messageListener;
-    private TextMessageHandler messageHandler;
-    private Thread messageThread;
     private Stage primaryStage;
     private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
 
+    private TextMessageHandler messageHandler;
+    private Thread messageThread;
+
     /**
-     * Creates new form ContactScreen
+     * Creates new form ContactScreen.
      *
      * @param username      which is used all around the class for knowing who the user is
      * @param communication granted by the LoginScreen class
@@ -73,15 +73,14 @@ public class MainScreen {
         this.communication = communication;
     }
 
+    /**
+     * Initiate all communication and handlers needed to contact the server.
+     */
     public void initCommunication() {
         conversations = new ArrayList<>();
-        messageListener = new MessageListener(communication, contactList, requestList, this);
-        //messageListener.update(conversations);
+        messageHandler = new TextMessageHandler(this);
         messageHandler.update(conversations);
-        //listCellRenderer = new ListCellRenderer(messageListener, scrollPaneChat);
-        messageListener.setListCellRenderer(listCellRenderer);
-        messageThread = new Thread(messageListener);
-        messageThread.start();
+        messageThread = new Thread(messageHandler.getRunnable());
     }
 
     /**
@@ -102,52 +101,11 @@ public class MainScreen {
         });
 
         scrollPaneChat.setContent(new Chat());
-        //contactList.setCellFactory(param -> listCellRenderer);
-
         contactList.setCellFactory(param -> {
-            ListCellRenderer renderer = new ListCellRenderer(messageListener, scrollPaneChat);
+            ListCellRenderer renderer = new ListCellRenderer();
             listCellRenderer.add(renderer);
             return renderer;
         });
-
-        //    jContactList.setSelectionBackground(new Color(255, 153, 51));
-        /*contactList.setCellFactory(lv -> {
-            ListCell<String> cell = new ListCell<>();
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem deleteItem = new MenuItem();
-            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
-            String item = cell.getItem();
-            deleteItem.setOnAction(event -> {
-                System.out.println(item);
-                ChatManager.handleFriendDelete(item);
-            });
-            contextMenu.getItems().addAll(deleteItem); // Add deleteItem here
-
-            cell.textProperty().bind(cell.itemProperty());
-
-            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                if (isNowEmpty) {
-                    cell.setContextMenu(null);
-                } else {
-                    cell.setContextMenu(contextMenu);
-                }
-            });
-
-            for ( Conversation conversation : messageListener.conversations ) {
-                if ( scrollPaneChat.getContent().equals(conversation.getConversation())
-                     && item.equals(conversation.getChatBuddy()) ) {
-                    cell.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY,
-                                                                    Insets.EMPTY)));
-                    return cell;
-                }
-            }
-
-            cell.setBackground(new Background(new BackgroundFill(messageListener.unread.indexOf(item) != -1
-                                                            ? Color.BLUE
-                                                            : Color.WHITE, CornerRadii.EMPTY,
-                                                            Insets.EMPTY)));
-            return cell;
-        });*/
     }
 
     private void handleMessage() {
@@ -181,7 +139,6 @@ public class MainScreen {
     @FXML
     void requestListClicked() {
         try {
-            //URL f = new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/RequestRespond.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/fagi/view/RequestRespond.fxml"));
             GridPane page = loader.load();
@@ -227,8 +184,8 @@ public class MainScreen {
             if ( conversation.getChatBuddy().equals(chatBuddy) ) {
                 scrollPaneChat.setContent(conversation.getConversation());
                 chatname.setText("Chatroom with " + chatBuddy);
-                if ( messageListener.unread.indexOf(chatBuddy) != -1 ) {
-                    messageListener.unread.remove(chatBuddy);
+                if ( ListMessageHandler.unread.indexOf(chatBuddy) != -1 ) {
+                    ListMessageHandler.unread.remove(chatBuddy);
                     listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))
                                     .forEach(cell -> Platform.runLater(
                                             () -> cell.updateItem(chatBuddy, false)));
@@ -254,9 +211,8 @@ public class MainScreen {
 
     @FXML
     void logoutRequest() {
-        messageListener.close();
         messageThread.interrupt();
-        /* Have to wait, else the listener will try asking
+        /* Have to wait, else the listener will
            request using the closed socket causing a SocketException. */
         while ( !messageThread.isInterrupted() ) { }
         ChatManager.handleLogout(new Logout());
@@ -270,8 +226,8 @@ public class MainScreen {
     @FXML
     void menuFriendRequest() {
         try {
-            // URL f = new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/FriendRequest.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
             GridPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Friend Request");
