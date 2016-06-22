@@ -5,32 +5,25 @@
 
 package com.fagi.network;
 
-import com.fagi.model.messages.InGoingMessages;
-import com.fagi.model.messages.lists.FriendList;
-import com.fagi.model.messages.lists.FriendRequestList;
-import com.fagi.model.messages.message.TextMessage;
-import com.fagi.model.messages.message.VoiceMessage;
-import com.fagi.network.handlers.Container;
-import com.fagi.responses.Response;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.model.FriendList;
-import com.fagi.model.FriendRequestList;
-import com.fagi.model.Message;
-import com.fagi.model.VoiceMessage;
+import com.fagi.model.messages.InGoingMessages;
+import com.fagi.network.handlers.container.Container;
+import com.fagi.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Handling every incoming object from the server.
  * TODO: Write description
  */
 public class InputHandler implements Runnable {
-    private final LinkedBlockingDeque<Object> inputs = new LinkedBlockingDeque<>();
+    private final Queue<Response> inputs = new LinkedBlockingQueue<>();
     private static final Map<Class, Container> containers =
             new ConcurrentHashMap<>();
     private final ObjectInputStream in;
@@ -67,18 +60,24 @@ public class InputHandler implements Runnable {
         }
     }
 
-    private void handleInput(Object object) {
-        if ( object instanceof FriendList ) {
-            containers.get(FriendList.class).addObject((InGoingMessages) object);
-        } else if ( object instanceof FriendRequestList ) {
-            containers.get(FriendRequestList.class).addObject((FriendRequestList) object);
-        } else if ( object instanceof TextMessage ) {
-            containers.get(TextMessage.class).addObject((TextMessage) object);
-        } else if ( object instanceof VoiceMessage ) {
-            containers.get(VoiceMessage.class).addObject((VoiceMessage) object);
-        } else {
-            inputs.add(object);
+    private void handleInput(Object input) {
+        if ( input instanceof Response ) {
+            inputs.add((Response) input);
+            return;
         }
+        while ( containers.size() < 4 ) { // TODO: Magic number hack
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Container container = InputHandler.containers.get(input.getClass());
+        if ( container == null ) {
+            System.err.println("Missing handler: " + input.getClass());
+            return;
+        }
+        container.addObject((InGoingMessages) input);
     }
 
     /**

@@ -8,6 +8,8 @@ import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.VoiceMessage;
 import com.fagi.network.InputHandler;
 import com.fagi.network.VoiceReceiver;
+import com.fagi.network.handlers.container.Container;
+import com.fagi.network.handlers.container.DefaultContainer;
 
 /**
  * @author miniwolf
@@ -17,6 +19,7 @@ public class VoiceMessageHandler implements Handler {
     private Runnable runnable = new DefaultThreadHandler(container, this);
 
     public VoiceMessageHandler() {
+        container.setThread(runnable);
         InputHandler.register(VoiceMessage.class, container);
     }
 

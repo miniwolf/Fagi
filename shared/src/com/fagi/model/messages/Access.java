@@ -4,11 +4,13 @@
 
 package com.fagi.model.messages;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * Created by miniwolf on 19-06-2016.
+ * Getting access to data is done using extension of this interface.
+ *
+ * @author miniwolf
  */
-public interface Access<T> {
+public interface Access<T> extends Serializable {
     T getData();
 }

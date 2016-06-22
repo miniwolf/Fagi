@@ -1,7 +1,5 @@
 package com.fagi.encryption;
 
-import java.math.BigInteger;
-
 /**
  * Created by Marcus on 31-05-2016.
  */

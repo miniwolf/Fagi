@@ -2,8 +2,15 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
-import com.fagi.model.messages.lists.*;
+import com.fagi.model.messages.lists.DefaultListAccess;
+import com.fagi.model.messages.lists.FriendList;
+import com.fagi.model.messages.lists.FriendRequestList;
+import com.fagi.model.messages.lists.ListAccess;
 import com.fagi.model.messages.message.Message;
 import com.fagi.responses.NoSuchUser;
 
@@ -22,7 +29,9 @@ public class OutputWorker extends Worker {
     private final Queue<Message> messages = new ConcurrentLinkedQueue<>();
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
     private ObjectOutputStream objOut;
+    private EncryptionAlgorithm<AESKey> aes;
 
+    private String myUserName = null;
     private ListAccess currentFriends = new DefaultListAccess(new ArrayList<>());
     private ListAccess currentRequests = new DefaultListAccess(new ArrayList<>());
 
@@ -39,12 +48,12 @@ public class OutputWorker extends Worker {
                 sendResponses();
                 objOut.reset();
                 while ( messages.isEmpty() && respondObjects.isEmpty() ) {
-                    checkForLists(getOnlineFriends(), currentFriends);
-                    checkForLists(getFriendRequests(), currentRequests);
+                    checkForLists();
                     Thread.sleep(100);
                 }
             } catch (IOException | InterruptedException ioe) {
                 running = false;
+                System.out.println(ioe.toString());
                 System.out.println("Logging out user " + myUserName);
                 Data.userLogout(myUserName);
             }
@@ -52,29 +61,41 @@ public class OutputWorker extends Worker {
         System.out.println("Closing");
     }
 
-    private void sendIncMessages() throws IOException {
-        while ( messages.size() > 0 ) {
-            objOut.writeObject(messages.remove());
+    private void checkForLists() throws IOException {
+        Object onlineFriends = getOnlineFriends();
+        if ( !(onlineFriends instanceof NoSuchUser) ) {
+            checkList(new FriendList((ListAccess) onlineFriends), currentFriends);
+        }
+        Object friendRequests = getFriendRequests();
+        if ( !(friendRequests instanceof NoSuchUser) ) {
+            checkList(new FriendRequestList((ListAccess) friendRequests), currentRequests);
         }
     }
 
-    private void checkForLists(Object responseObj, ListAccess currentList) throws IOException {
-        if ( responseObj instanceof NoSuchUser ) {
-            return;
+    private void sendIncMessages() throws IOException {
+        while ( messages.size() > 0 ) {
+            send(messages.remove());
         }
-        ListAccess responseList = (ListAccess) ((InGoingMessages) responseObj).getAccess();
+    }
+
+    private void checkList(InGoingMessages responseObj, ListAccess currentList) throws IOException {
+        ListAccess responseList = (ListAccess) responseObj.getAccess();
         if ( responseList.getData().isEmpty()
              || responseList.getData().size() == currentList.getData().size() ) {
             return;
         }
         currentList.updateData(responseList.getData());
-        objOut.writeObject(responseList);
+        send(responseObj);
     }
 
     private void sendResponses() throws IOException {
         while ( respondObjects.size() > 0 ) {
-            objOut.writeObject(respondObjects.remove());
+            send(respondObjects.remove());
         }
+    }
+
+    private void send(Object object) throws IOException {
+        objOut.writeObject(aes.encrypt(Conversion.convertToBytes(object)));
     }
 
     private Object getOnlineFriends() {
@@ -83,7 +104,7 @@ public class OutputWorker extends Worker {
             return new NoSuchUser();
         }
         return new DefaultListAccess(me.getFriends().stream().filter(Data::isUserOnline)
-                                .collect(Collectors.toList()));
+                                       .collect(Collectors.toList()));
     }
 
     private Object getFriendRequests() {
@@ -94,11 +115,19 @@ public class OutputWorker extends Worker {
         return new DefaultListAccess(me.getFriendReq());
     }
 
+    public void setAes(EncryptionAlgorithm<AESKey> aes) {
+        this.aes = aes;
+    }
+
     synchronized void addMessage(Message message) {
         messages.add(message);
     }
 
     synchronized void addResponse(Object responseObj) {
         respondObjects.add(responseObj);
+    }
+
+    public void setUserName(String userName) {
+        this.myUserName = userName;
     }
 }

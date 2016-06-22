@@ -1,14 +1,19 @@
-package com.fagi.network;/*
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Communication.java
  *
  * Handling in and output
  */
 
-import com.fagi.config.ServerConfig;
-import com.fagi.encryption.*;
-import com.fagi.exceptions.AllIsWellException;
-import com.fagi.model.*;
+package com.fagi.network;
+
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.encryption.RSA;
+import com.fagi.encryption.RSAKey;
+import com.fagi.model.Session;
+import com.fagi.responses.AllIsWell;
 import com.fagi.responses.Response;
 
 import java.io.IOException;
@@ -18,15 +23,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.security.PublicKey;
-import java.security.cert.Extension;
 
 /**
  * TODO: Add description
  */
 public class Communication {
     private ObjectOutputStream out;
-    private final String host;
-    private final int port;
     private InputHandler inputHandler;
     private Socket socket;
     private Thread inputThread;
@@ -34,8 +36,6 @@ public class Communication {
 
     public Communication(String host, int port, EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
         this.encryption = encryption;
-        this.host = host;
-        this.port = port;
         try {
             socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -59,19 +59,11 @@ public class Communication {
         out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
         out.flush();
 
-        Exception obj;
-        while ((obj = inputHandler.containsException()) == null) {}
-        if (obj instanceof AllIsWellException) {
+        Response obj;
+        while ((obj = inputHandler.containsResponse()) == null) {}
+        if (obj instanceof AllIsWell) {
 
         }
-    }
-
-    public Message receiveMessage() {
-        Message message = inputHandler.containsMessage();
-        if ( message == null ) {
-            return inputHandler.containsVoice();
-        }
-        return message;
     }
 
     public void sendObject(Object obj) {
