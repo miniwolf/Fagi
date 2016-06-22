@@ -11,6 +11,8 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.InputHandler;
 import com.fagi.network.ListCellRenderer;
 
+import com.fagi.network.handlers.container.Container;
+import com.fagi.network.handlers.container.DefaultContainer;
 import javafx.application.Platform;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class TextMessageHandler implements Handler {
     private final MainScreen mainScreen;
 
     public TextMessageHandler(MainScreen mainScreen) {
+        container.setThread(runnable);
         InputHandler.register(TextMessage.class, container);
         this.mainScreen = mainScreen;
     }
@@ -79,5 +82,9 @@ public class TextMessageHandler implements Handler {
      */
     public void setListCellRenderer(List<ListCellRenderer> listCellRenderer) {
         this.listCellRenderer = listCellRenderer;
+    }
+
+    public List<Object> getUnread() {
+        return unread;
     }
 }

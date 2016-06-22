@@ -4,7 +4,7 @@
 
 package com.fagi.network.handlers;
 
-import com.fagi.model.messages.InGoingMessages;
+import com.fagi.network.handlers.container.Container;
 
 /**
  * @author miniwolf
@@ -20,12 +20,14 @@ public class DefaultThreadHandler implements Runnable {
 
     @Override
     public void run() {
-        while ( Thread.interrupted() ) {
+        while ( !Thread.interrupted() ) {
             while ( !container.getQueue().isEmpty() ) {
                 handler.handle(container.getQueue().remove());
             }
             try {
-                wait();
+                synchronized (this) {
+                    wait();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

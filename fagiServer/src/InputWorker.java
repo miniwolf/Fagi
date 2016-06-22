@@ -2,10 +2,14 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
+import com.fagi.encryption.AES;
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.model.*;
 import com.fagi.model.messages.message.Message;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserOnline;
-import com.fagi.model.*;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -19,6 +23,10 @@ import java.net.SocketException;
 public class InputWorker extends Worker {
     private ObjectInputStream objIn;
     private OutputWorker out;
+    private String myUserName = null;
+
+    private EncryptionAlgorithm<AESKey> aes;
+    private boolean sessionCreated = false;
 
     public InputWorker(Socket socket, OutputWorker out) throws IOException {
         System.out.println("Starting an input thread");
@@ -32,6 +40,9 @@ public class InputWorker extends Worker {
             System.out.println("Running");
             try {
                 Object input = objIn.readObject();
+                if ( input instanceof byte[] ) {
+                    input = decryptAndConvertToObject((byte[]) input);
+                }
                 handleInput(input);
             } catch (EOFException | SocketException eof) {
                 running = false;
@@ -45,6 +56,17 @@ public class InputWorker extends Worker {
             }
         }
         System.out.println("Closing");
+    }
+
+    private Object decryptAndConvertToObject(byte[] input) {
+        input = sessionCreated ? aes.decrypt(input) :
+                Encryption.getInstance().getRSA().decrypt(input);
+        try {
+            return Conversion.convertFromBytes(input);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void handleInput(Object input) {
@@ -68,9 +90,19 @@ public class InputWorker extends Worker {
         } else if ( input instanceof DeleteFriend ) {
             DeleteFriend arg = (DeleteFriend) input;
             out.addResponse(handleDeleteFriend(arg));
+        } else if ( input instanceof Session ) {
+            Session arg = (Session) input;
+            out.addResponse(handleSession(arg));
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
+    }
+
+    private Object handleSession(Session arg) {
+        aes = new AES(arg.getKey());
+        out.setAes(aes);
+        sessionCreated = true;
+        return new AllIsWell();
     }
 
     private Object handleDeleteFriend(DeleteFriend arg) {
@@ -96,6 +128,7 @@ public class InputWorker extends Worker {
     private Object handleLogin(Login arg) {
         System.out.println("Login");
         myUserName = arg.getUsername();
+        out.setUserName(arg.getUsername());
         return Data.userLogin(arg.getUsername(), arg.getPassword(), out);
     }
 

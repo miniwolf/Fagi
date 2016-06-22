@@ -13,8 +13,9 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
-import com.fagi.network.handlers.ListMessageHandler;
+import com.fagi.network.handlers.ListHandler;
 import com.fagi.network.handlers.TextMessageHandler;
+import com.fagi.network.handlers.VoiceMessageHandler;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserOnline;
 
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: Write description
+ * TODO: Write description.
  */
 public class MainScreen {
     @FXML
@@ -61,6 +62,8 @@ public class MainScreen {
 
     private TextMessageHandler messageHandler;
     private Thread messageThread;
+    private Thread voiceThread;
+    private Thread listThread;
 
     /**
      * Creates new form ContactScreen.
@@ -80,7 +83,17 @@ public class MainScreen {
         conversations = new ArrayList<>();
         messageHandler = new TextMessageHandler(this);
         messageHandler.update(conversations);
+        messageHandler.setListCellRenderer(listCellRenderer);
         messageThread = new Thread(messageHandler.getRunnable());
+        messageThread.start();
+
+        VoiceMessageHandler voiceHandler = new VoiceMessageHandler();
+        voiceThread = new Thread(voiceHandler.getRunnable());
+        voiceThread.start();
+
+        ListHandler listHandler = new ListHandler(contactList, requestList);
+        listThread = new Thread(listHandler.getRunnable());
+        listThread.start();
     }
 
     /**
@@ -102,7 +115,7 @@ public class MainScreen {
 
         scrollPaneChat.setContent(new Chat());
         contactList.setCellFactory(param -> {
-            ListCellRenderer renderer = new ListCellRenderer();
+            ListCellRenderer renderer = new ListCellRenderer(messageHandler);
             listCellRenderer.add(renderer);
             return renderer;
         });
@@ -184,8 +197,8 @@ public class MainScreen {
             if ( conversation.getChatBuddy().equals(chatBuddy) ) {
                 scrollPaneChat.setContent(conversation.getConversation());
                 chatname.setText("Chatroom with " + chatBuddy);
-                if ( ListMessageHandler.unread.indexOf(chatBuddy) != -1 ) {
-                    ListMessageHandler.unread.remove(chatBuddy);
+                if ( messageHandler.getUnread().indexOf(chatBuddy) != -1 ) {
+                    messageHandler.getUnread().remove(chatBuddy);
                     listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))
                                     .forEach(cell -> Platform.runLater(
                                             () -> cell.updateItem(chatBuddy, false)));
@@ -197,6 +210,7 @@ public class MainScreen {
 
         if ( !exists ) {
             updateConversations(chatBuddy);
+            contactListClicked();
             return;
         }
         message.requestFocus();
@@ -205,17 +219,26 @@ public class MainScreen {
     public void updateConversations(String chatBuddy) {
         Conversation conversation = new Conversation(chatBuddy);
         conversations.add(conversation);
-        //messageListener.update(conversations);
         messageHandler.update(conversations);
     }
 
     @FXML
     void logoutRequest() {
-        messageThread.interrupt();
-        /* Have to wait, else the listener will
-           request using the closed socket causing a SocketException. */
-        while ( !messageThread.isInterrupted() ) { }
+        interrupt(messageThread);
+        interrupt(listThread);
+        interrupt(voiceThread);
         ChatManager.handleLogout(new Logout());
+    }
+
+    private void interrupt(Thread thread) {
+        thread.interrupt();
+        while ( !thread.isInterrupted() ) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

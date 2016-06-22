@@ -7,5 +7,4 @@
 
 abstract class Worker implements Runnable {
     boolean running = true;
-    String myUserName = null;
 }

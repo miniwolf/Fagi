@@ -4,25 +4,28 @@
 
 package com.fagi.network;
 
-import com.fagi.network.handlers.ListMessageHandler;
-import javafx.geometry.Insets;
+import com.fagi.network.handlers.TextMessageHandler;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 /**
  * TODO: Missing highlight from current chat.
  */
 public class ListCellRenderer extends ListCell<String> {
+    private TextMessageHandler textMessageHandler;
+
+    public ListCellRenderer(TextMessageHandler textMessageHandler) {
+        this.textMessageHandler = textMessageHandler;
+    }
+
     @Override
     public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
         setText(item);
 
-        if ( item == null || ListMessageHandler.unread.indexOf(item) == -1 ) {
+        if ( item == null || textMessageHandler.getUnread().indexOf(item) == -1 ) {
             setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         } else if ( item.length() != 0 ) {
             setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
