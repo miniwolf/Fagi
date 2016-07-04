@@ -43,13 +43,6 @@ html, body {
   padding-bottom:.5em;
 }
 
-.fagile-header-bar {
-  height:71px;
-  background:#F1F1F1;
-  border-bottom:1px solid #E5E5E5;
-  overflow:hidden;
-}
-
 .header .logo {
   margin:17px 0 0;
   float:left;
@@ -80,7 +73,7 @@ html, body {
 }
 
 .main {
-  margin:0 auto;
+  margin:0px auto;
   width:650px;
   padding-top:23px;
   padding-bottom:100px;
@@ -1229,21 +1222,21 @@ style type
   display:none;
 }
 
-.signuponepage .form-element.name label.firstname {
+.signuponepage .form-element.mu label.firstname {
   width:150px;
   margin-right:5px;
 }
 
-.signuponepage .form-element.name label.lastname {
+.signuponepage .form-element.mu label.lastname {
   width:150px;
 }
 
-.signuponepage .form-element.name label.firstname input,
-.signuponepage .form-element.name label.lastname input {
+.signuponepage .form-element.mu label.firstname input,
+.signuponepage .form-element.mu label.lastname input {
   direction:ltr;
 }
 
-.signuponepage .form-element.name .placeholder-text {
+.signuponepage .form-element.mu .placeholder-text {
   left:10px;
 }
 
@@ -1800,11 +1793,11 @@ span.i18n-phone-select-country-code {
     top:11px;
   }
 
-  .signuponepage .form-element.name label.firstname {
+  .signuponepage .form-element.mu label.firstname {
     width:133px;
   }
 
-  .signuponepage .form-element.name label.lastname {
+  .signuponepage .form-element.mu label.lastname {
     width:134px;
   }
 

@@ -1,0 +1,439 @@
+/*
+ * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+ */
+*:focused {
+
+}
+
+.maincontent {
+  -fx-background-color:#CCC;
+  -fx-pref-height:500px;
+  -fx-pref-width:1000px;
+}
+
+.menubar {
+  -fx-pref-width:35px;
+}
+
+.button {
+  -webkit-user-select: none;
+  -webkit-transition: background .3s;
+  transition: background .3s;
+  -fx-border-width:0px;
+  -fx-border-radius:50%;
+  -fx-cursor:default;
+  -fx-pref-height:48px;
+  -fx-pref-width:48px;
+  -fx-text-alignment:center;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  width: 48px;
+  z-index: 0;
+}
+
+.shape {
+  -fx-pref-height:24px;
+  -fx-pref-width:24px;
+}
+
+.chosen {
+  -fx-background-color:#0f9d58;
+}
+
+.button-shape {
+  -fx-background-color:#FFF;
+}
+
+.message-button {
+  -fx-pref-height:20px;
+  -fx-pref-width:20px;
+  -fx-shape: 'M 20 2 H 4 c -1.1 0 -1.99 0.9 -1.99 2 L 2 22 l 4 -4 h 14 c 1.1 0 2 -0.9 2 -2 V 4 c 0 -1.1 -0.9 -2 -2 -2 Z M 6 9 h 12 v 2 H 6 V 9 Z m 8 5 H 6 v -2 h 8 v 2 Z m 4 -6 H 6 V 6 h 12 v 2 Z';
+}
+
+.contact-button {
+  -fx-pref-width:22px;
+  -fx-pref-height:14px;
+  -fx-shape:'M 16 11 c 1.66 0 2.99 -1.34 2.99 -3 S 17.66 5 16 5 c -1.66 0 -3 1.34 -3 3 s 1.34 3 3 3 Z m -8 0 c 1.66 0 2.99 -1.34 2.99 -3 S 9.66 5 8 5 C 6.34 5 5 6.34 5 8 s 1.34 3 3 3 Z m 0 2 c -2.33 0 -7 1.17 -7 3.5 V 19 h 14 v -2.5 c 0 -2.33 -4.67 -3.5 -7 -3.5 Z m 8 0 c -0.29 0 -0.62 0.02 -0.97 0.05 c 1.16 0.84 1.97 1.97 1.97 3.45 V 19 h 6 v -2.5 c 0 -2.33 -4.67 -3.5 -7 -3.5 Z';
+}
+
+.list {
+  -fx-border-width:4px;
+  -fx-background-color: #FFF;
+  -fx-background-radius:4px 4px 0px 0px;
+  -fx-pref-width:400px;
+  -fx-pref-height:420px;
+}
+
+.search {
+  -fx-pref-width:400px;
+  -fx-min-height: 56px;
+  -fx-border-color:#F5F5F5;
+  -fx-border-style:solid;
+  -fx-border-width:0px 0px 1px 0px;
+}
+
+.search-icon {
+  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-position: -977px -170px;
+  -fx-background-repeat:no-repeat;
+  -fx-pref-height:24px;
+  -fx-pref-width:24px;
+}
+
+.contact {
+  -fx-font-family: 'Roboto','Arial',sans-serif;
+  -fx-pref-height: 72px;
+  -fx-cursor: default;
+  -fx-text-alignment:left;
+  -fx-background-color:#fff;
+  -fx-font-size:14px;
+}
+
+.contact .image {
+  -fx-pref-height: 40px;
+  -fx-pref-width:40px;
+  -fx-background-image:url(https://lh3.googleusercontent.com/-JixlDnkwFiU/AAAAAAAAAAI/AAAAAAAAAAA/tQ6lJMQfyhQ/s46-c-k-no/photo.jpg);
+  -fx-background-repeat:no-repeat;
+}
+
+.contact .mu {
+  -fx-pref-height:24px;
+  -fx-text-fill:#737373;
+  white-space: nowrap;
+  overflow: hidden;
+  left: 80px;
+  right: 24px;
+  top: 14px;
+}
+
+.message {
+  -fx-background-color: #E5E5E5;
+  -fx-pref-width: 400px;
+  -fx-pref-height: 410px;
+  -fx-background-radius: 3px 3px 0px 0px;
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 2, 6);
+}
+
+.message-title {
+  -fx-pref-height:36px;
+  -fx-padding: 0px 0px 0px 12px;
+  -fx-background-radius: 3px 3px 0px 0px;
+  -fx-cursor: hand;
+  -fx-background-color: #404040;
+}
+
+.message-title .icon {
+  -fx-padding:0 5px 0 0;
+  -fx-alignment:center;
+}
+
+.icon .picture {
+  -fx-background-repeat:no-repeat;
+  -fx-background-image: url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-position: -754px -182px;
+  -fx-pref-height: 14px;
+  -fx-pref-width: 14px;
+}
+
+.message-title .mu {
+  -fx-text-fill: #fff;
+  -fx-font-size: 13px;
+  -fx-pref-height:1em;
+}
+
+.message-title .last-seen {
+  -fx-text-fill: #e5e5e5;
+  -fx-font-size: 9px;
+  -fx-pref-height: 1em;
+}
+
+.icon {
+  -fx-opacity: .6;
+  -fx-cursor: hand;
+}
+
+.message-title .icon {
+  -fx-padding: 5px 6px 0px 0px;
+}
+
+.icon .button {
+  -fx-pref-height:24px;
+  -fx-pref-width:24px;
+  -fx-background-repeat:no-repeat;
+  -fx-background-color:transparent;
+  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+}
+
+.icon .button:hover {
+  -fx-opacity:1;
+  -fx-background-color: #737373;
+  -fx-background-radius:0px;
+}
+
+.icon .minimize {
+  -fx-background-position:-217px -21px;
+}
+
+.icon .popout {
+  -fx-background-position:-217px -230px;
+}
+
+.icon .close {
+  -fx-background-position:-159px -92px;
+}
+
+.outline {
+  -fx-border-color:#4D90FE;
+  -fx-border-width:1px;
+  -fx-border-style:solid;
+}
+
+.field .text {
+  line-height: 16px;
+  -fx-cursor: text;
+  -fx-pref-height:36px;
+  -fx-padding: 2px 0 2px 6px;
+  -fx-wrap-text:true;
+  -fx-background-color:#FFF;
+  -fx-font-family: 'Roboto';
+}
+
+.field .text .content {
+  -fx-background-color: transparent, white, transparent, white;
+}
+
+.field .text:focused .content {
+  -fx-background-color: transparent, white, transparent, white;
+}
+
+.field .area {
+  line-height: 16px;
+  -fx-cursor: text;
+  -fx-min-height: 18px;
+  -fx-padding: 2px 12px 2px 6px;
+  position: relative;
+  -fx-wrap-text:true;
+  -fx-border-width:0px;
+}
+
+.field .smiley {
+  -fx-background-color:transparent;
+  -fx-background-repeat:no-repeat;
+  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-position: -217px 0;
+  -fx-pref-height:20px;
+  -fx-pref-width:20px;
+}
+
+.message .text-content {
+  -fx-background-color:#eceff1;
+  -fx-pref-height:330px;
+}
+
+.message .field {
+  -fx-background-color: #fff;
+  -fx-min-height: 38px;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+}
+
+.message .text {
+  -fx-wrap-text:true;
+  -fx-pref-width:350px;
+  -fx-font-size:13px;
+}
+
+.holder {
+  -fx-padding:4px 4px 4px 10px;
+  -fx-background-radius:2px;
+}
+
+.holder .tip {
+  -fx-background-repeat:no-repeat;
+  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-position:-31px -30px;
+  -fx-pref-width:7px;
+  -fx-pref-height:10px;
+}
+
+.holder .background {
+  -fx-padding:0 0 0 42px;
+}
+
+.holder .text-holder {
+  -fx-background-color:#FFF;
+  -fx-padding: 7px 0 1px 9px;
+  -fx-background-radius:0 5px 5px 5px;
+}
+
+.holder .picture {
+  -fx-fit-to-height:32px;
+  -fx-fit-to-width:32px;
+  -fx-background-radius:50%;
+}
+
+.text-holder .text-message {
+  -fx-padding: 7px 0 1px 0;
+}
+
+.splitter {
+  -fx-pref-width:87px;
+}
+
+.scroll-bar {
+  -fx-pref-height: 16px;
+  -fx-pref-width: 16px;
+}
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+  -fx-shape:"";
+  -fx-padding:0;
+  -fx-pref-height:0;
+  -fx-pref-width:0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+  -fx-shape:"";
+  -fx-padding:0;
+  -fx-pref-width:0;
+  -fx-pref-height:0;
+}
+
+.scroll-bar .thumb, scroll-bar .track {
+  -fx-border-width: 0;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: rgba(0,0,0,.4);
+  -fx-effect:innershadow(three-pass-box, rgba(0,0,0,.25), 1, 1, 1, 1);
+}
+
+.scroll-bar .thumb {
+  -fx-background-color:rgba(0,0,0,.2);
+  -fx-fill: rgba(0,0,0,.6);
+  background-clip: padding-box;
+  -fx-border-width: 1px 1px 1px 6px;
+  -fx-border-style:solid;
+  -fx-border-color:transparent;
+  -fx-min-height:28px;
+  -fx-padding:100px 0 0;
+  -fx-effect:innershadow(three-pass-box, rgba(0,0,0,.1), 0, 0, 1, 1), innershadow(three-pass-box, rgba(0,0,0,.07), 0, 0, -1, 0);
+}
+
+.scroll-bar .track:hover {
+  -fx-background-color: rgba(0,0,0,.05);
+  -fx-effect:innershadow(three-pass-box, rgba(0,0,0,0.1), 1, 1, 0, 0);
+}
+.scroll-bar .track {
+  -fx-background-color:#FFF;
+  -fx-border-color:transparent;
+  -fx-border-style:solid;
+  -fx-border-width:0 0 0 4px;
+}
+
+.contact-list {
+  -fx-pref-width:382px;
+}
+
+.middle-holder {
+  -fx-pref-width:293px;
+}
+
+.rc-button,
+.rc-button:visited {
+  -fx-pref-height:27px;
+  -fx-pref-width:25px;
+  display: inline-block;
+  -fx-text-alignment: center;
+  -fx-text-fill: #444;
+  -fx-font-size: 14px;
+  -fx-font-weight: 700;
+  -fx-padding: 0 8px;
+  line-height: 36px;
+  -fx-border-radius: 3px;
+  transition: all 0.218s;
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #dcdcdc;
+  -fx-background-color: #f5f5f5 linear-gradient(top,#f5f5f5,#f1f1f1);
+  user-select: none;
+  cursor: default;
+}
+
+.rc-button:hover {
+  -fx-border-color: #C6C6C6;
+  -fx-border-style: solid;
+  -fx-border-width: 1px;
+  -fx-text-fill: #333;
+  text-decoration: none;
+  transition: all 0.0s;
+  -fx-background-color:#F8F8F8 linear-gradient(top, #F8F8F8, #F1F1F1);
+}
+
+.rc-button-submit,
+.rc-button-submit:visited {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #3079ed;
+  -fx-text-fill: #fff;
+  -fx-background-color: #4d90fe linear-gradient(top,#4d90fe,#4787ed);
+}
+.rc-button-submit:hover {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #2f5bb7;
+  -fx-text-fill: #fff;
+  -fx-background-color: #357ae8 linear-gradient(top,#4d90fe,#357ae8);
+}
+.rc-button-submit:active {
+  background-color: #357ae8 linear-gradient(top,#4d90fe,#357ae8);
+}
+.rc-button-red,
+.rc-button-red:visited {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: transparent;
+  -fx-text-fill: #fff;
+  -fx-background-color: #d14836 linear-gradient(top,#dd4b39,#d14836);
+}
+.rc-button-red:hover {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #b0281a;
+  -fx-text-fill: #fff;
+  -fx-background-color: #c53727 linear-gradient(top,#dd4b39,#c53727);
+}
+.rc-button-red:active {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #992a1b;
+  -fx-background-color: #b0281a linear-gradient(top,#dd4b39,#b0281a);
+}
+
+.rc-button-grey,
+.rc-button-grey:visited {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: transparent;
+  -fx-text-fill: #fff;
+  -fx-background-color: #dcdcdc linear-gradient(top,#8f8f8f,#dcdcdc);
+}
+.rc-button-grey:hover {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #8f8f8f;
+  -fx-text-fill: #fff;
+  -fx-background-color: #dcdcdc linear-gradient(top,#8f8f8f,#dcdcdc);
+}
+.rc-button-grey:active {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #8f8f8f;
+  -fx-background-color: #dcdcdc linear-gradient(top,#8f8f8f,#dcdcdc);
+}
+.rc-button-grey .text {
+  -fx-effect: innershadow(three-pass-box, #8f8f8f, 10, 0.0, 2, 2);
+}

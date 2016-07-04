@@ -9,10 +9,12 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -44,6 +46,7 @@ public class FagiApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.initStyle(StageStyle.UNDECORATED);
 
         scene = new Scene(new AnchorPane());
 
@@ -60,29 +63,17 @@ public class FagiApp extends Application {
      */
     public void showLoginScreen() {
         try {
-            String configLocation = "config/serverinfo.config"; // TODO : Let the user browse for the file path
+            // TODO : Let the user browse for the file path
+            String configLocation = "config/serverinfo.config";
             LoginScreen controller = new LoginScreen(this, configLocation);
-            FXMLLoader loader =
-                    new FXMLLoader(controller.getClass()
-                                             .getResource("/com/fagi/view/LoginScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    controller.getClass().getResource("/com/fagi/view/LoginScreen.fxml"));
             loader.setController(controller);
 
             scene.setRoot(loader.load());
-            scene.getStylesheets().add(MainScreen.class
-                                                 .getResource("/com/fagi/style/LoginScreen.css")
-                                                 .toExternalForm());
-            this.primaryStage.setOnCloseRequest(event -> {
-                try {
-                    ChatManager.closeCommunication();
-                    stop();
-                } catch (Exception e) {
-                    System.err.println(e.toString());
-                }
-            });
             primaryStage.setResizable(false);
             controller.setPrimaryStage(primaryStage);
             controller.initCommunication();
-            controller.initComponents();
             primaryStage.sizeToScene();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -100,7 +91,8 @@ public class FagiApp extends Application {
      */
     public void showMainScreen(String username, Communication communication) {
         MainScreen controller = new MainScreen(username, communication);
-        FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("/com/fagi/view/MainScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(
+                controller.getClass().getResource("/com/fagi/view/Main.fxml"));
         loader.setController(controller);
         try {
             scene.setRoot(loader.load());
@@ -113,15 +105,17 @@ public class FagiApp extends Application {
             event.consume();
             primaryStage.setIconified(true);
         });
-
-        primaryStage.setResizable(true);
         controller.setPrimaryStage(primaryStage);
         controller.initCommunication();
-        controller.initComponents();
         primaryStage.sizeToScene();
     }
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    @Override
+    public void stop() {
+        Platform.exit();
     }
 }

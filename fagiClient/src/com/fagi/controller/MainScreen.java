@@ -6,30 +6,20 @@ package com.fagi.controller;
  * UserInterface, containing chat window and contact list
  */
 
-import com.fagi.model.Chat;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
-import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
-import com.fagi.network.handlers.ListHandler;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.network.handlers.VoiceMessageHandler;
-import com.fagi.responses.Response;
-import com.fagi.responses.UserOnline;
-
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -41,18 +31,11 @@ import java.util.List;
  * TODO: Write description.
  */
 public class MainScreen {
-    @FXML
-    private ListView<String> contactList;
-    @FXML
-    private ListView<String> requestList;
-    @FXML
-    private ScrollPane scrollPaneChat;
-    @FXML
-    private TextArea chatMessage;
-    @FXML
-    private TextArea message;
-    @FXML
-    private Label chatname;
+    @FXML private Pane body;
+    @FXML private VBox contentList;
+
+    private double xOffset;
+    private double yOffset;
 
     private final String username;
     private final Communication communication;
@@ -90,16 +73,11 @@ public class MainScreen {
         VoiceMessageHandler voiceHandler = new VoiceMessageHandler();
         voiceThread = new Thread(voiceHandler.getRunnable());
         voiceThread.start();
-
-        ListHandler listHandler = new ListHandler(contactList, requestList);
-        listThread = new Thread(listHandler.getRunnable());
-        listThread.start();
     }
 
     /**
      * Callback from FagiApp class.
      * Used to initialize the form.
-     */
     public void initComponents() {
         message.setOnKeyPressed(event -> {
             if ( event.getSource() != message || event.getCode() != KeyCode.ENTER ) {
@@ -114,11 +92,12 @@ public class MainScreen {
         });
 
         scrollPaneChat.setContent(new Chat());
-        contactList.setCellFactory(param -> {
-            ListCellRenderer renderer = new ListCellRenderer(messageHandler);
-            listCellRenderer.add(renderer);
-            return renderer;
-        });
+        buildContactList();
+    }
+
+    private void buildContactList(List<Contact> list) {
+        ObservableList<Node> children = contactList.getChildren();
+        children.addAll(list.stream().map(Contact::build).collect(Collectors.toList()));
     }
 
     private void handleMessage() {
@@ -142,14 +121,14 @@ public class MainScreen {
         chat.appendText(username + ": " + message.getText() + "\n");
         message.setText("");
         message.requestFocus();
-    }
+    }*/
 
     @FXML
     void talkButtonClicked() {
 
     }
 
-    @FXML
+    /*@FXML
     void requestListClicked() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -214,7 +193,7 @@ public class MainScreen {
             return;
         }
         message.requestFocus();
-    }
+    }*/
 
     public void updateConversations(String chatBuddy) {
         Conversation conversation = new Conversation(chatBuddy);
@@ -269,15 +248,17 @@ public class MainScreen {
         }
     }
 
-    public ScrollPane getConversationWindow() {
-        return scrollPaneChat;
-    }
-
     public void setPrimaryStage(final Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    public void sendButtonClicked() {
-        handleMessage();
+    public void mousePressed(MouseEvent mouseEvent) {
+        xOffset = primaryStage.getX() - mouseEvent.getScreenX();
+        yOffset = primaryStage.getY() - mouseEvent.getScreenY();
+    }
+
+    public void mouseDragged(MouseEvent mouseEvent) {
+        primaryStage.setX(mouseEvent.getScreenX() + xOffset);
+        primaryStage.setY(mouseEvent.getScreenY() + yOffset);
     }
 }

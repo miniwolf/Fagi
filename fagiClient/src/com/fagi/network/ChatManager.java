@@ -91,6 +91,9 @@ public class ChatManager {
     }
 
     public static void closeCommunication() {
+        if ( communication == null ) {
+            return;
+        }
         communication.close();
     }
 

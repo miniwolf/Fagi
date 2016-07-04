@@ -14,6 +14,8 @@ import com.fagi.network.ListCellRenderer;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +48,10 @@ public class TextMessageHandler implements Handler {
 
             Platform.runLater(() -> conversation.getConversation().appendText(
                     conversation.getChatBuddy() + ": " + message.getData() + "\n"));
-            if ( mainScreen.getConversationWindow().getContent().equals(
+            /*if ( mainScreen.getConversationWindow().getContent().equals(
                     conversation.getConversation()) ) {
                 return;
-            }
+            }*/
 
             unread.add(chatBuddy);
             listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))

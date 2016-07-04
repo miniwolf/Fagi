@@ -1,9 +1,11 @@
-package com.fagi.controller;/*
+/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * LoginScreen.java
  *
  * Login screen for the IM-client part
  */
+
+package com.fagi.controller;
 
 import com.fagi.config.ServerConfig;
 import com.fagi.encryption.AES;
@@ -13,6 +15,7 @@ import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
@@ -28,29 +31,39 @@ import java.security.KeyPair;
  * class.
  */
 public class LoginScreen {
-    private final String configFileLocation;
     @FXML private Button loginBtn;
     @FXML private Label messageLabel;
     @FXML private TextField username;
     @FXML private PasswordField password;
     @FXML private PasswordField passwordRepeat;
 
+    private final String configFileLocation;
     private boolean connected = false;
     private boolean creatingUser = false;
     private Stage primaryStage;
     private Application fagiApp;
+    private double xOffset;
+    private double yOffset;
 
     public LoginScreen(FagiApp fagiApp, String configFileLocation) {
         this.fagiApp = fagiApp;
         this.configFileLocation = configFileLocation;
     }
 
-    public void initComponents() {
+    @FXML
+    public void initialize() {
         loginBtn.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) handleUserRequest();
+            if (event.getCode() == KeyCode.ENTER) {
+                handleUserRequest();
+            }
         });
     }
 
+    /**
+     * Setting up communication with the server, this is created when the UI has been loaded.
+     * This means that one should never call this before initComponents.
+     * Function calls in this method depends on the initComponents.
+     */
     public void initCommunication() {
         try {
             ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
@@ -67,9 +80,8 @@ public class LoginScreen {
     }
 
     @FXML
-    void menuCreateUserActionPerformed() {
+    public void handleCreateUser() {
         if ( !connected ) {
-            messageLabel.setText("Cannot create user, no connection");
             return;
         }
 
@@ -80,9 +92,9 @@ public class LoginScreen {
     }
 
     @FXML
-    void handleUserRequest() {
+    public void handleUserRequest() {
         if ( !connected ) {
-            messageLabel.setText("Cannot handle user requests, no connection"); return;
+            return;
         }
 
         if ( creatingUser ) {
@@ -102,12 +114,25 @@ public class LoginScreen {
         this.primaryStage = primaryStage;
     }
 
-    public void menuQuit() {
+    @FXML
+    public void handleQuit() {
         try {
             ChatManager.closeCommunication();
             fagiApp.stop();
         } catch (Exception e) {
             System.err.println(e.toString());
         }
+    }
+
+    @FXML
+    public void mousePressed(MouseEvent mouseEvent) {
+        xOffset = primaryStage.getX() - mouseEvent.getScreenX();
+        yOffset = primaryStage.getY() - mouseEvent.getScreenY();
+    }
+
+    @FXML
+    public void mouseDragged(MouseEvent mouseEvent) {
+        primaryStage.setX(mouseEvent.getScreenX() + xOffset);
+        primaryStage.setY(mouseEvent.getScreenY() + yOffset);
     }
 }

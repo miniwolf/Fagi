@@ -11,6 +11,8 @@ package com.fagi.model;/*
 public class Conversation {
     private final String chatBuddy;
     private final Chat chat;
+    private String name;
+    private String date;
 
     public Conversation(String chatBuddy) {
         this.chatBuddy = chatBuddy;
@@ -23,5 +25,13 @@ public class Conversation {
 
     public String getChatBuddy() {
         return chatBuddy;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
