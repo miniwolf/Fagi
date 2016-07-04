@@ -3,25 +3,19 @@
  * Data.java
  */
 
+import com.fagi.conversation.Conversation;
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.PasswordException;
 import com.fagi.exceptions.UserExistsException;
 import com.fagi.exceptions.UserOnlineException;
+import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,8 +25,76 @@ import java.util.concurrent.ConcurrentHashMap;
 class Data {
     private static final Map<String, Worker> onlineUsers = new ConcurrentHashMap<>();
     private static final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
+    private static final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
+    private static long nextConversationId = 0;
     private static final String separator = "\",\"";
     private static final String indexFilePath = "users/userIndex.fagi";
+    private static final String conversationsFolderPath = "conversations/";
+
+    /*
+        TODO : Create new conversation, store and load conversation list
+     */
+
+    public static synchronized Conversation createConversation(List<String> participants) {
+        Conversation con = new Conversation(nextConversationId);
+        nextConversationId++;
+
+        for (String participant: participants) {
+            con.addUser(participant);
+        }
+
+        conversations.put(con.getId(), con);
+
+        return con;
+    }
+
+    public static void storeConversation(Conversation con) throws IOException {
+        File folder = new File(conversationsFolderPath);
+        File file = new File(conversationsFolderPath + con.getId() + ".fagi");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        Gson gson = new Gson();
+
+        PrintWriter out = new PrintWriter(new FileWriter(conversationsFolderPath + con.getId() + ".fagi", false));
+        out.println(gson.toJson(con));
+        out.flush();
+        out.close();
+    }
+
+    public static void loadConversations() throws IOException {
+        File folder = new File(conversationsFolderPath);
+        if (!folder.exists()) return;
+
+        File[] files = folder.listFiles();
+        if (files == null) return;
+
+        for (File file: files) {
+            String json = "";
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while(reader.ready()) {
+                json += reader.readLine();
+            }
+
+            Gson gson = new Gson();
+
+            Conversation con = gson.fromJson(json, Conversation.class);
+            conversations.put(con.getId(), con);
+        }
+
+        Set<Long> keys = conversations.keySet();
+        if (keys.size() > 0)  {
+            setNextConversationId(Collections.max(keys) + 1);
+        } else {
+            setNextConversationId(0);
+        }
+    }
+
+    public static void setNextConversationId(long id) { nextConversationId = id; }
 
     public static Object createUser(String userName, String pass) throws IOException {
         if ( registeredUsers.containsKey(userName) ) {
