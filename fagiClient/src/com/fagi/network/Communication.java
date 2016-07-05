@@ -1,4 +1,4 @@
-package com.fagi.network;/*
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Communication.java
  *
@@ -14,11 +14,16 @@ import com.fagi.encryption.RSA;
 import com.fagi.encryption.RSAKey;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.encryption.RSA;
+import com.fagi.encryption.RSAKey;
+import com.fagi.model.Session;
 import com.fagi.config.ServerConfig;
 import com.fagi.conversation.*;
 import com.fagi.conversation.Conversation;
 import com.fagi.encryption.*;
-import com.fagi.exceptions.AllIsWellException;
 import com.fagi.model.*;
 import com.fagi.responses.Response;
 
