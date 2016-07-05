@@ -8,6 +8,7 @@
 package com.fagi.controller;
 
 import com.fagi.config.ServerConfig;
+import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.RSA;
 import com.fagi.encryption.RSAKey;
@@ -42,12 +43,12 @@ public class LoginScreen {
     private boolean creatingUser = false;
     private Stage primaryStage;
     private Application fagiApp;
-    private double xOffset;
-    private double yOffset;
+    private final Draggable draggable;
 
-    public LoginScreen(FagiApp fagiApp, String configFileLocation) {
+    public LoginScreen(FagiApp fagiApp, String configFileLocation, Stage primaryStage) {
         this.fagiApp = fagiApp;
         this.configFileLocation = configFileLocation;
+        draggable = new Draggable(primaryStage);
     }
 
     @FXML
@@ -126,13 +127,11 @@ public class LoginScreen {
 
     @FXML
     public void mousePressed(MouseEvent mouseEvent) {
-        xOffset = primaryStage.getX() - mouseEvent.getScreenX();
-        yOffset = primaryStage.getY() - mouseEvent.getScreenY();
+        draggable.mousePressed(mouseEvent);
     }
 
     @FXML
     public void mouseDragged(MouseEvent mouseEvent) {
-        primaryStage.setX(mouseEvent.getScreenX() + xOffset);
-        primaryStage.setY(mouseEvent.getScreenY() + yOffset);
+        draggable.mouseDragged(mouseEvent);
     }
 }

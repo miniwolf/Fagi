@@ -6,6 +6,7 @@ package com.fagi.controller;
  * UserInterface, containing chat window and contact list
  */
 
+import com.fagi.controller.utility.Draggable;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
 import com.fagi.network.ChatManager;
@@ -47,16 +48,18 @@ public class MainScreen {
     private Thread messageThread;
     private Thread voiceThread;
     private Thread listThread;
+    private Draggable draggable;
 
     /**
      * Creates new form ContactScreen.
-     *
-     * @param username      which is used all around the class for knowing who the user is
+     *  @param username      which is used all around the class for knowing who the user is
      * @param communication granted by the LoginScreen class
+     * @param primaryStage  primary stage used to create a draggable.
      */
-    public MainScreen(String username, Communication communication) {
+    public MainScreen(String username, Communication communication, Stage primaryStage) {
         this.username = username;
         this.communication = communication;
+        this.draggable = new Draggable(primaryStage);
     }
 
     /**
@@ -226,7 +229,7 @@ public class MainScreen {
      * TextField.
      */
     @FXML
-    void menuFriendRequest() {
+    public void showFriendRequestPopup() {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
@@ -253,12 +256,10 @@ public class MainScreen {
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
-        xOffset = primaryStage.getX() - mouseEvent.getScreenX();
-        yOffset = primaryStage.getY() - mouseEvent.getScreenY();
+        draggable.mousePressed(mouseEvent);
     }
 
     public void mouseDragged(MouseEvent mouseEvent) {
-        primaryStage.setX(mouseEvent.getScreenX() + xOffset);
-        primaryStage.setY(mouseEvent.getScreenY() + yOffset);
+        draggable.mouseDragged(mouseEvent);
     }
 }

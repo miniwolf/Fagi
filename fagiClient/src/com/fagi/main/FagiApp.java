@@ -5,6 +5,7 @@ package com.fagi.main;
 
 import com.fagi.controller.LoginScreen;
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.RequestController;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 
@@ -13,6 +14,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -65,18 +68,13 @@ public class FagiApp extends Application {
         try {
             // TODO : Let the user browse for the file path
             String configLocation = "config/serverinfo.config";
-            LoginScreen controller = new LoginScreen(this, configLocation);
+            LoginScreen controller = new LoginScreen(this, configLocation, primaryStage);
             FXMLLoader loader = new FXMLLoader(
                     controller.getClass().getResource("/com/fagi/view/LoginScreen.fxml"));
             loader.setController(controller);
-
             scene.setRoot(loader.load());
-            primaryStage.setResizable(false);
-            controller.setPrimaryStage(primaryStage);
             controller.initCommunication();
             primaryStage.sizeToScene();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             System.err.println(e.toString());
         }
@@ -90,7 +88,7 @@ public class FagiApp extends Application {
      * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {
-        MainScreen controller = new MainScreen(username, communication);
+        MainScreen controller = new MainScreen(username, communication, primaryStage);
         FXMLLoader loader = new FXMLLoader(
                 controller.getClass().getResource("/com/fagi/view/Main.fxml"));
         loader.setController(controller);
@@ -100,12 +98,6 @@ public class FagiApp extends Application {
             System.err.println(e.toString());
             return;
         }
-
-        this.primaryStage.setOnCloseRequest(event -> {
-            event.consume();
-            primaryStage.setIconified(true);
-        });
-        controller.setPrimaryStage(primaryStage);
         controller.initCommunication();
         primaryStage.sizeToScene();
     }
