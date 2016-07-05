@@ -5,13 +5,11 @@
  * User data object.
  */
 
-import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
 import com.fagi.exceptions.UserExistsException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * TODO: Add description, password protection OTR:
@@ -21,11 +19,13 @@ public class User {
     private final String pass;
     private final String userName;
     private List<String> friends;
+    private List<Long> conversationIDs;
     private volatile List<String> incFriendReq;
 
     public User(String name, String pass) {
         this.pass = pass;
         this.userName = name;
+        conversationIDs = new ArrayList<>();
         friends = new ArrayList<>();
         incFriendReq = new ArrayList<>();
     }
@@ -96,5 +96,13 @@ public class User {
         }
         friends.remove(otherUser);
         return Data.removeFriendFromUserFile(this.userName, otherUser);
+    }
+
+    public void addConversationID(long id) {
+        conversationIDs.add(id);
+    }
+
+    public void removeConversationID(long id) {
+        conversationIDs.remove(id);
     }
 }

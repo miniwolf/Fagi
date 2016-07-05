@@ -13,17 +13,17 @@ public abstract class Message<E> implements Serializable {
      */
     private final String sender;
     /**
-     * The message receiver
+     * The conversation
      */
-    private final String receiver;
+    private final long conversationID;
     /**
      * TODO: Deprecated?
      */
     private final boolean systemMessage;
 
-    public Message(String sender, String receiver) {
+    public Message(String sender, long conversationID) {
         this.sender = sender;
-        this.receiver = receiver;
+        this.conversationID = conversationID;
         systemMessage = false;
     }
 
@@ -31,8 +31,8 @@ public abstract class Message<E> implements Serializable {
         return sender;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public long getConversationID() {
+        return conversationID;
     }
 
     public boolean isSystemMessage() {

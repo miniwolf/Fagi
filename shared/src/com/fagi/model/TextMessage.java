@@ -16,8 +16,8 @@ public class TextMessage extends Message<String> {
     private final String text;
     private Timestamp timeStamp;
 
-    public TextMessage(String text, String sender, String receiver) {
-        super(sender, receiver);
+    public TextMessage(String text, String sender, long conversationID) {
+        super(sender, conversationID);
         this.text = text;
     }
 

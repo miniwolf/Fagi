@@ -1,9 +1,3 @@
-package com.fagi.network;
-/*
- * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * InputHandler.java
- */
-
 import com.fagi.conversation.Conversation;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
@@ -15,8 +9,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
- * Handling every incoming object from the server.
- * TODO: Write description
+ * Created by Marcus on 05-07-2016.
  */
 class InputHandler implements Runnable {
     private final LinkedBlockingDeque<Object> inputs = new LinkedBlockingDeque<>();

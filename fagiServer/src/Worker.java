@@ -5,13 +5,14 @@
  * Worker thread for each client.
  */
 
+import com.fagi.conversation.Conversation;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.exceptions.AllIsWellException;
 import com.fagi.exceptions.NoSuchUserException;
-import com.fagi.exceptions.UserOnlineException;
+import com.fagi.exceptions.UserExistsException;
 import com.fagi.model.*;
 
 import java.io.EOFException;
@@ -19,12 +20,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 class Worker implements Runnable {
     private final Queue<Message> incMessages = new ConcurrentLinkedQueue<>();
+    private final ConversationHandler handler;
     private ObjectInputStream oIn;
     private ObjectOutputStream oOut;
     private boolean running = true;
@@ -32,7 +36,8 @@ class Worker implements Runnable {
     private String myUserName;
     private EncryptionAlgorithm<AESKey> aes;
 
-    public Worker(Socket socket) throws IOException {
+    public Worker(Socket socket, ConversationHandler handler) throws IOException {
+        this.handler = handler;
         System.out.println("Starting a worker thread");
         oIn = new ObjectInputStream(socket.getInputStream());
         oOut = new ObjectOutputStream(socket.getOutputStream());
@@ -123,6 +128,19 @@ class Worker implements Runnable {
             aes = new AES(s.getKey());
             sessionCreated = true;
             return new AllIsWellException();
+        } else if(input instanceof CreateConversationRequest) {
+            CreateConversationRequest request = (CreateConversationRequest)input;
+
+            return handleCreateConversationRequest(request);
+        } else if(input instanceof AddParticipantRequest) {
+            AddParticipantRequest request = (AddParticipantRequest)input;
+            return handleAddParticipantRequest(request);
+        } else if(input instanceof RemoveParticipantRequest) {
+            RemoveParticipantRequest request = (RemoveParticipantRequest)input;
+            return handleRemoveParticipantRequest(request);
+        } else if(input instanceof UpdateHistoryRequest) {
+            UpdateHistoryRequest request = (UpdateHistoryRequest)input;
+            return handleUpdateHistoryRequest(request);
         } else {
             return handleUnknownObject(input);
         }
@@ -152,11 +170,9 @@ class Worker implements Runnable {
     private Object handleMessage(Message arg) {
         System.out.println("Message");
 
-        if ( Data.isUserOnline(arg.getSender()) && Data.isUserOnline(arg.getReceiver()) ) {
-            Data.getWorker(arg.getReceiver()).addMessage(arg);
-            return new AllIsWellException();
-        }
-        return new UserOnlineException();
+        handler.addMessage(arg);
+
+        return new AllIsWellException();
     }
 
     private Object handleLogin(Login arg) {
@@ -184,6 +200,65 @@ class Worker implements Runnable {
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
         return Data.getUser(myUserName).requestFriend(arg.getFriendUsername());
+    }
+
+    private Object handleCreateConversationRequest(CreateConversationRequest request) {
+        Conversation con = Data.createConversation(request.getParticipants());
+
+        for (String participant : request.getParticipants()) {
+            User user = Data.getUser(participant);
+
+            if (user == null) {
+                return new NoSuchUserException();
+            }
+
+            user.addConversationID(con.getId());
+        }
+
+        return con;
+    }
+
+    private Object handleAddParticipantRequest(AddParticipantRequest request) {
+        Conversation con = Data.getConversation(request.getId());
+        con.addUser(request.getParticipant());
+
+        User user = Data.getUser(request.getParticipant());
+
+        if (user == null) {
+            return new NoSuchUserException();
+        }
+
+        user.addConversationID(request.getId());
+
+        return new AllIsWellException();
+    }
+
+    private Object handleRemoveParticipantRequest(RemoveParticipantRequest request) {
+        Conversation con = Data.getConversation(request.getId());
+        con.removeUser(request.getParticipant());
+
+        User user = Data.getUser(request.getParticipant());
+
+        if (user == null) {
+            return new NoSuchUserException();
+        }
+
+        user.removeConversationID(request.getId());
+
+        return new AllIsWellException();
+    }
+
+    private Object handleUpdateHistoryRequest(UpdateHistoryRequest request) {
+        Conversation con = Data.getConversation(request.getId());
+        // TODO : Handle con == null
+
+        List<TextMessage> res = new ArrayList<>();
+
+        for (int i = request.getIndex() + 1; i < con.getMessages().size(); i++) {
+            res.add(con.getMessages().get(i));
+        }
+
+        return new HistoryUpdates(res, request.getId());
     }
 
     private Object handleUnknownObject(Object input) {

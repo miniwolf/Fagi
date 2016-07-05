@@ -1,9 +1,11 @@
 package com.fagi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class RemoveParticipantRequest {
+public class RemoveParticipantRequest implements Serializable {
     private final String participant;
     private final long id;
 

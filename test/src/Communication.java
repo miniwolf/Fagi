@@ -1,12 +1,3 @@
-package com.fagi.network;/*
- * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * Communication.java
- *
- * Handling in and output
- */
-
-import com.fagi.config.ServerConfig;
-import com.fagi.conversation.*;
 import com.fagi.conversation.Conversation;
 import com.fagi.encryption.*;
 import com.fagi.exceptions.AllIsWellException;
@@ -19,10 +10,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.security.PublicKey;
-import java.security.cert.Extension;
 
 /**
- * TODO: Add description
+ * Created by Marcus on 05-07-2016.
  */
 public class Communication {
     private ObjectOutputStream out;

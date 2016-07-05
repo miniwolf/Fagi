@@ -2,13 +2,14 @@ package com.fagi.conversation;
 
 import com.fagi.model.TextMessage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class Conversation {
+public class Conversation implements Serializable {
     private List<String> participants;
     private List<TextMessage> messages;
     private long id;

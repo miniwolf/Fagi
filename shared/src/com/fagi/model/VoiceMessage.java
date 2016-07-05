@@ -10,8 +10,8 @@ public class VoiceMessage extends Message<byte[]> {
      */
     private byte[] data;
 
-    public VoiceMessage(byte[] data, String sender, String receiver) {
-        super(sender, receiver);
+    public VoiceMessage(byte[] data, String sender, long conversationID) {
+        super(sender, conversationID);
         this.data = data;
     }
 

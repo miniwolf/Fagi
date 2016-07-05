@@ -94,6 +94,10 @@ class Data {
         }
     }
 
+    public static Conversation getConversation(long id) {
+        return conversations.get(id);
+    }
+
     public static void setNextConversationId(long id) { nextConversationId = id; }
 
     public static Object createUser(String userName, String pass) throws IOException {

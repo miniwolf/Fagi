@@ -20,6 +20,8 @@ class Server {
     private final String configFile = "config/serverinfo.config";
     private boolean running = true;
     private final int port;
+    private final ConversationHandler handler = new ConversationHandler();
+    private Thread conversationHandlerThread;
 
     public Server(int port) {
         this.port = port;
@@ -44,6 +46,14 @@ class Server {
             running = false;
         }
 
+        conversationHandlerThread = new Thread(handler);
+        conversationHandlerThread.start();
+        try {
+            Data.loadConversations();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         while ( running ) {
             try {
                 workerCreation(ss);
@@ -52,6 +62,8 @@ class Server {
                 running = false;
             }
         }
+
+        conversationHandlerThread.interrupt();
 
         System.out.println("Stopping Server");
 
@@ -66,7 +78,7 @@ class Server {
 
     private void workerCreation(ServerSocket ss) throws IOException {
         Socket s = ss.accept();
-        Thread workerThread = new Thread(new Worker(s));
+        Thread workerThread = new Thread(new Worker(s, handler));
         workerThread.start();
     }
 
