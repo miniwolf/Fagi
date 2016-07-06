@@ -1,9 +1,11 @@
 package com.fagi.video;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -49,12 +51,24 @@ public class VideoCapture
             System.out.println("Webcam: " + webcam.getName());
         } else {
             System.out.println("No webcam detected");
+            return;
         }
-        ByteBuffer imageBytes = webcam.getImageBytes();
-        FileOutputStream fos = new FileOutputStream("c:/dat-video-dawg.mov");
-        fos.write(imageBytes.array());
-        fos.close();
-        webcam.close();
+
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
+
+        WebcamPanel panel = new WebcamPanel(webcam);
+        panel.setFPSDisplayed(true);
+        panel.setDisplayDebugInfo(true);
+        panel.setImageSizeDisplayed(true);
+        panel.setMirrored(true);
+
+        JFrame window = new JFrame("Test webcam panel");
+        window.add(panel);
+        window.setResizable(true);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.pack();
+        window.setVisible(true);
+
         System.out.println("Video recorded in file");
     }
 }
