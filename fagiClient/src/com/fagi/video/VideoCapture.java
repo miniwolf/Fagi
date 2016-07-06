@@ -64,10 +64,12 @@ public class VideoCapture
             }
         }
 
-        System.out.println("Final viewsize - Height: " + currentViewSize.height + " - Width: " + currentViewSize.width);
+        System.out.println("Final viewsize - Height: " + currentViewSize.height + " - Width: " + currentViewSize.width + " FPS: " + webcam.getFPS());
         webcam.setViewSize(currentViewSize);
 
-        WebcamPanel panel = new WebcamPanel(webcam);
+        WebcamPanel panel = new WebcamPanel(webcam, currentViewSize, true);
+        panel.setSize(currentViewSize);
+        panel.setFPSLimit(webcam.getFPS());
         panel.setFPSDisplayed(true);
         panel.setDisplayDebugInfo(true);
         panel.setImageSizeDisplayed(true);
