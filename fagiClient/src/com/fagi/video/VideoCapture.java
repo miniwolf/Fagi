@@ -54,12 +54,18 @@ public class VideoCapture
         System.out.println("Webcam FPS: " + webcam.getFPS());
         System.out.println("Viewsizes");
         Dimension[] viewSizes = webcam.getViewSizes();
+        Dimension currentViewSize = webcam.getViewSize();
+        System.out.println("Initial viewsize - Height: " + currentViewSize.height + " - Width: " + currentViewSize.width);
         for (int i = 0; i < viewSizes.length; i++){
-            System.out.println("Viewsize - Height: " + viewSizes[i].height + " - Width: " + viewSizes[i].width);
+            Dimension tempDimension = viewSizes[i];
+            System.out.println("Viewsize - Height: " + tempDimension.height + " - Width: " + tempDimension.width);
+            if (currentViewSize.height < tempDimension.height || currentViewSize.width < tempDimension.width){
+                currentViewSize = tempDimension;
+            }
         }
-        Dimension viewSize = webcam.getViewSize();
-        System.out.println("Current viewsize - Height: " + viewSize.height + " - Width: " + viewSize.width);
-        //webcam.setViewSize(WebcamResolution.VGA.getSize());
+
+        System.out.println("Final viewsize - Height: " + currentViewSize.height + " - Width: " + currentViewSize.width);
+        webcam.setViewSize(currentViewSize);
 
         WebcamPanel panel = new WebcamPanel(webcam);
         panel.setFPSDisplayed(true);
