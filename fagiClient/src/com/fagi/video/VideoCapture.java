@@ -42,17 +42,20 @@ public class VideoCapture
         }
     }
 
-    public void CaptureVideo(long frameCount) throws InterruptedException, IOException {
-        if (frameCount <= 0){
-            System.out.println("The hell you doin'?");
-            return;
-        }
+    public void CaptureVideo() throws InterruptedException, IOException {
         Webcam webcam = Webcam.getDefault();
         if (webcam != null) {
             System.out.println("Webcam: " + webcam.getName());
         } else {
             System.out.println("No webcam detected");
             return;
+        }
+
+        System.out.println("Webcam FPS: " + webcam.getFPS());
+        System.out.println("Viewsizes");
+        Dimension[] viewSizes = webcam.getViewSizes();
+        for (int i = 0; i < viewSizes.length; i++){
+            System.out.println("Viewsize - Height: " + viewSizes[i].height + " - Width: " + viewSizes[i].width);
         }
 
         webcam.setViewSize(WebcamResolution.VGA.getSize());
@@ -63,14 +66,13 @@ public class VideoCapture
         panel.setImageSizeDisplayed(true);
         panel.setMirrored(true);
 
-        JFrame window = new JFrame("Test webcam panel");
+        JFrame window = new JFrame("Webcam JFrame");
         window.add(panel);
         window.setResizable(true);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.pack();
         window.setVisible(true);
-
-        System.out.println("Video recorded in file");
+        System.out.println("Video frame opened");
     }
 
 
