@@ -1,6 +1,7 @@
 package com.fagi.video;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamMotionDetector;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 
@@ -71,4 +72,6 @@ public class VideoCapture
 
         System.out.println("Video recorded in file");
     }
+
+
 }
