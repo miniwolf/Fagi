@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class VideoCapture
 {
@@ -19,7 +20,7 @@ public class VideoCapture
         }
         if (webcam != null){
             if (!webcam.isOpen()){
-                webcam.open();
+               webcam.open();
             }
             // get image
             BufferedImage image = webcam.getImage();
