@@ -57,8 +57,9 @@ public class VideoCapture
         for (int i = 0; i < viewSizes.length; i++){
             System.out.println("Viewsize - Height: " + viewSizes[i].height + " - Width: " + viewSizes[i].width);
         }
-
-        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        Dimension viewSize = webcam.getViewSize();
+        System.out.println("Current viewsize - Height: " + viewSize.height + " - Width: " + viewSize.width);
+        //webcam.setViewSize(WebcamResolution.VGA.getSize());
 
         WebcamPanel panel = new WebcamPanel(webcam);
         panel.setFPSDisplayed(true);
