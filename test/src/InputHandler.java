@@ -1,8 +1,3 @@
-import com.fagi.conversation.Conversation;
-import com.fagi.encryption.Conversion;
-import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.model.*;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -11,7 +6,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 /**
  * Created by Marcus on 05-07-2016.
  */
-class InputHandler implements Runnable {
+public class InputHandler implements Runnable {
     private final LinkedBlockingDeque<Object> inputs = new LinkedBlockingDeque<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;

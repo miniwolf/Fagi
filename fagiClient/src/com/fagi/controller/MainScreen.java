@@ -206,9 +206,10 @@ public class MainScreen {
 
     @FXML
     void logoutRequest() {
-        interrupt(messageThread);
-        interrupt(listThread);
-        interrupt(voiceThread);
+        //interrupt(messageThread);
+        //interrupt(listThread);
+        //interrupt(voiceThread);
+
         ChatManager.handleLogout(new Logout());
     }
 

@@ -36,7 +36,7 @@ public class VoiceRecorder implements VoiceSystem, Runnable {
         while ( running ) {
             byte[] buffer = new byte[blockSize * 2];
             line_in.read(buffer, 0, blockSize);
-            communication.sendObject(new VoiceMessage(buffer, "test", "humus"));
+            communication.sendObject(new VoiceMessage(buffer, "test", 0));
         }
     }
 

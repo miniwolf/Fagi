@@ -5,22 +5,18 @@
 
 package com.fagi.network;
 
-import com.fagi.model.messages.InGoingMessages;
-import com.fagi.model.messages.lists.FriendList;
-import com.fagi.model.messages.lists.FriendRequestList;
-import com.fagi.model.messages.message.TextMessage;
-import com.fagi.model.messages.message.VoiceMessage;
-import com.fagi.network.handlers.Container;
-import com.fagi.responses.Response;
 import com.fagi.conversation.Conversation;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.model.HistoryUpdates;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class InputHandler implements Runnable {
     private final Queue<Response> inputs = new LinkedBlockingQueue<>();
+    private final List<Object> unhandledObjects = new ArrayList<>();
     private static final Map<Class, Container> containers =
             new ConcurrentHashMap<>();
     private final ObjectInputStream in;
@@ -51,6 +48,11 @@ public class InputHandler implements Runnable {
                 try {
                     input = (byte[])in.readObject();
                     handleInput(Conversion.convertFromBytes(encryption.decrypt(input)));
+
+                    for ( int i = 0; i < unhandledObjects.size(); i++ ) {
+                        Object obj = unhandledObjects.remove(i);
+                        handleInput(obj);
+                    }
                 } catch (IOException ioe) {
                     if ( running ) {
                         System.err.println("i ioe: " + ioe.toString());
@@ -73,16 +75,10 @@ public class InputHandler implements Runnable {
             inputs.add((Response) input);
             return;
         }
-        while ( containers.size() < 4 ) { // TODO: Magic number hack
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         Container container = InputHandler.containers.get(input.getClass());
         if ( container == null ) {
             System.err.println("Missing handler: " + input.getClass());
+            unhandledObjects.add(input);
             return;
         }
         container.addObject((InGoingMessages) input);

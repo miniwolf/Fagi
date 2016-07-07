@@ -3,6 +3,8 @@
  * Data.java
  */
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,10 +16,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.fagi.conversation.Conversation;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
@@ -46,9 +51,7 @@ class Data {
         Conversation con = new Conversation(nextConversationId);
         nextConversationId++;
 
-        for (String participant: participants) {
-            con.addUser(participant);
-        }
+        participants.forEach(con::addUser);
 
         conversations.put(con.getId(), con);
 
@@ -58,10 +61,10 @@ class Data {
     public static void storeConversation(Conversation con) throws IOException {
         File folder = new File(conversationsFolderPath);
         File file = new File(conversationsFolderPath + con.getId() + ".fagi");
-        if (!folder.exists()) {
+        if ( !folder.exists() ) {
             folder.mkdir();
         }
-        if (!file.exists()) {
+        if ( !file.exists() ) {
             file.createNewFile();
         }
 
@@ -75,15 +78,19 @@ class Data {
 
     public static void loadConversations() throws IOException {
         File folder = new File(conversationsFolderPath);
-        if (!folder.exists()) return;
+        if ( !folder.exists() ) {
+            return;
+        }
 
         File[] files = folder.listFiles();
-        if (files == null) return;
+        if ( files == null ) {
+            return;
+        }
 
-        for (File file: files) {
+        for ( File file : files ) {
             String json = "";
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            while(reader.ready()) {
+            while ( reader.ready() ) {
                 json += reader.readLine();
             }
 
@@ -94,7 +101,7 @@ class Data {
         }
 
         Set<Long> keys = conversations.keySet();
-        if (keys.size() > 0)  {
+        if ( keys.size() > 0 ) {
             setNextConversationId(Collections.max(keys) + 1);
         } else {
             setNextConversationId(0);
@@ -105,7 +112,9 @@ class Data {
         return conversations.get(id);
     }
 
-    public static void setNextConversationId(long id) { nextConversationId = id; }
+    public static void setNextConversationId(long id) {
+        nextConversationId = id;
+    }
 
     public static Object createUser(String userName, String pass) throws IOException {
         if ( registeredUsers.containsKey(userName) ) {
@@ -275,9 +284,10 @@ class Data {
 
     /**
      * Using this to remove data from the user file
-     * @param username username file to delete from
+     *
+     * @param username   username file to delete from
      * @param friendName string to delete
-     * @param index 0 is friend list. 1 is friend requests.
+     * @param index      0 is friend list. 1 is friend requests.
      * @return ExceptionObject from handlers.
      */
     private static Response removeFromUserFile(String username, String friendName, int index) {
@@ -324,7 +334,7 @@ class Data {
 
         String requestLine = null;
         try {
-            if (reader != null) {
+            if ( reader != null ) {
                 requestLine = reader.readLine();
             }
         } catch (IOException e) {
@@ -347,7 +357,7 @@ class Data {
         result.add(requests);
 
         try {
-            if (reader != null) {
+            if ( reader != null ) {
                 reader.close();
             }
         } catch (IOException e) {

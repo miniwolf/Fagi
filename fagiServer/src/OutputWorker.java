@@ -12,6 +12,7 @@ import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.lists.ListAccess;
 import com.fagi.model.messages.message.Message;
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.NoSuchUser;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  * @author miniwolf
  */
 public class OutputWorker extends Worker {
-    private final Queue<Message> messages = new ConcurrentLinkedQueue<>();
+    private final Queue<InGoingMessages> messages = new ConcurrentLinkedQueue<>();
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
     private ObjectOutputStream objOut;
     private EncryptionAlgorithm<AESKey> aes;
@@ -58,6 +59,13 @@ public class OutputWorker extends Worker {
                 Data.userLogout(myUserName);
             }
         }
+        if ( !respondObjects.isEmpty() ) {
+            try {
+                sendResponses();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("Closing");
     }
 
@@ -69,12 +77,6 @@ public class OutputWorker extends Worker {
         Object friendRequests = getFriendRequests();
         if ( !(friendRequests instanceof NoSuchUser) ) {
             checkList(new FriendRequestList((ListAccess) friendRequests), currentRequests);
-        }
-    }
-
-    private void sendIncMessages() throws IOException {
-        while ( messages.size() > 0 ) {
-            send(messages.remove());
         }
     }
 
@@ -94,8 +96,17 @@ public class OutputWorker extends Worker {
         }
     }
 
+    private void sendIncMessages() throws IOException {
+        while ( messages.size() > 0 ) {
+            send(messages.remove());
+        }
+    }
+
     private void send(Object object) throws IOException {
+        System.out.println("so: " + object.toString());
         objOut.writeObject(aes.encrypt(Conversion.convertToBytes(object)));
+        System.out.println("so sent");
+        objOut.flush();
     }
 
     private Object getOnlineFriends() {
@@ -119,7 +130,7 @@ public class OutputWorker extends Worker {
         this.aes = aes;
     }
 
-    synchronized void addMessage(Message message) {
+    synchronized void addMessage(TextMessage message) {
         messages.add(message);
     }
 

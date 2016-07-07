@@ -80,7 +80,7 @@ class Server {
         Socket socket = serverSocket.accept();
         OutputWorker outWorker = new OutputWorker(socket);
         Thread outputWorker = new Thread(outWorker);
-        Thread inputWorker = new Thread(new InputWorker(socket, outWorker));
+        Thread inputWorker = new Thread(new InputWorker(socket, outWorker, handler));
         outputWorker.start();
         inputWorker.start();
     }

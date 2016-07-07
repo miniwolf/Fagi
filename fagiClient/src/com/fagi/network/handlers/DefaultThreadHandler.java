@@ -29,7 +29,7 @@ public class DefaultThreadHandler implements Runnable {
                     wait();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Stopped the thread handler");
             }
         }
     }

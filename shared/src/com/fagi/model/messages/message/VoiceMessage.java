@@ -15,8 +15,8 @@ public class VoiceMessage implements InGoingMessages, VoiceAccess {
 
     private Message message;
 
-    public VoiceMessage(byte[] data, String sender, String receiver) {
-        message = new DefaultMessage(sender, receiver);
+    public VoiceMessage(byte[] data, String sender, long conversationID) {
+        message = new DefaultMessage(sender, conversationID);
         this.data = data;
     }
 

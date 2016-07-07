@@ -18,9 +18,9 @@ public class TextMessage implements InGoingMessages, TextAccess {
      */
     private String data;
 
-    public TextMessage(String data, String sender, String receiver) {
+    public TextMessage(String data, String sender, long conversationID) {
         this.data = data;
-        message = new DefaultMessage(sender, receiver);
+        message = new DefaultMessage(sender, conversationID);
     }
 
     @Override
@@ -28,6 +28,7 @@ public class TextMessage implements InGoingMessages, TextAccess {
         return this;
     }
 
+    @Override
     public Message getMessage() {
         return message;
     }

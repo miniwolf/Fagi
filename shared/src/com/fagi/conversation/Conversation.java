@@ -1,6 +1,6 @@
 package com.fagi.conversation;
 
-import com.fagi.model.TextMessage;
+import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;

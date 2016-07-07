@@ -6,10 +6,15 @@ import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.model.*;
-import com.fagi.model.messages.message.Message;
+import com.fagi.model.CreateUser;
+import com.fagi.model.DeleteFriend;
+import com.fagi.model.DeleteFriendRequest;
+import com.fagi.model.FriendRequest;
+import com.fagi.model.Login;
+import com.fagi.model.Logout;
+import com.fagi.model.Session;
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
-import com.fagi.responses.UserOnline;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -21,6 +26,7 @@ import java.net.SocketException;
  * @author miniwolf
  */
 public class InputWorker extends Worker {
+    private final ConversationHandler handler;
     private ObjectInputStream objIn;
     private OutputWorker out;
     private String myUserName = null;
@@ -28,7 +34,8 @@ public class InputWorker extends Worker {
     private EncryptionAlgorithm<AESKey> aes;
     private boolean sessionCreated = false;
 
-    public InputWorker(Socket socket, OutputWorker out) throws IOException {
+    public InputWorker(Socket socket, OutputWorker out, ConversationHandler handler) throws IOException {
+        this.handler = handler;
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
         this.out = out;
@@ -70,14 +77,15 @@ public class InputWorker extends Worker {
     }
 
     private void handleInput(Object input) {
-        if ( input instanceof Message ) {
-            Message arg = (Message) input;
-            out.addResponse(handleMessage(arg));
+        if ( input instanceof TextMessage ) {
+            TextMessage arg = (TextMessage) input;
+            out.addResponse(handleTextMessage(arg));
         } else if ( input instanceof Login ) {
             Login arg = (Login) input;
             out.addResponse(handleLogin(arg));
         } else if ( input instanceof Logout ) {
             out.addResponse(handleLogout());
+            out.running = false;
         } else if ( input instanceof CreateUser ) {
             CreateUser arg = (CreateUser) input;
             out.addResponse(handleCreateUser(arg));
@@ -115,14 +123,12 @@ public class InputWorker extends Worker {
         return Data.getUser(myUserName).removeFriendRequest(arg.getFriendUsername());
     }
 
-    private Object handleMessage(Message arg) {
+    private Object handleTextMessage(TextMessage arg) {
         System.out.println("Message");
 
-        if ( Data.isUserOnline(arg.getSender()) && Data.isUserOnline(arg.getReceiver()) ) {
-            Data.getWorker(arg.getReceiver()).addMessage(arg);
-            return new AllIsWell();
-        }
-        return new UserOnline();
+        handler.addMessage(arg);
+
+        return new AllIsWell();
     }
 
     private Object handleLogin(Login arg) {

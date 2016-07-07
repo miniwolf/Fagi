@@ -1,7 +1,9 @@
 import com.fagi.conversation.Conversation;
 import com.fagi.encryption.*;
-import com.fagi.exceptions.AllIsWellException;
-import com.fagi.model.*;
+import com.fagi.model.HistoryUpdates;
+import com.fagi.model.Session;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -50,9 +52,9 @@ public class Communication {
         out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
         out.flush();
 
-        Exception obj;
+        Response obj;
         while ((obj = inputHandler.containsException()) == null) {}
-        if (obj instanceof AllIsWellException) {
+        if (obj instanceof AllIsWell ) {
 
         }
     }

@@ -9,11 +9,11 @@ package com.fagi.model.messages.message;
  */
 public class DefaultMessage implements Message {
     private String sender;
-    private String receiver;
+    private long conversationID;
 
-    public DefaultMessage(String sender, String receiver) {
+    public DefaultMessage(String sender, long conversationID) {
         this.sender = sender;
-        this.receiver = receiver;
+        this.conversationID = conversationID;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class DefaultMessage implements Message {
     }
 
     @Override
-    public String getReceiver() {
-        return receiver;
+    public long getConversationID() {
+        return conversationID;
     }
 }

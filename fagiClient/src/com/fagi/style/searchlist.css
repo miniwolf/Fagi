@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+ */
+
+.title {
+  -fx-background-color: #fff;
+  -fx-border-color: rgba(0,0,0,.1);
+  -fx-border-width: 0 0 1px 0;
+  -fx-border-style:solid;
+  -fx-font-size:14px;
+  margin: 0 14px 2px;
+  overflow: hidden;
+  -fx-padding: 4px 0;
+}
+
+.title .text {
+  -fx-fill:#737373;
+  -fx-font-size:14px;
+  -fx-font-weight:normal;
+}

@@ -67,6 +67,21 @@
   -fx-pref-height:420px;
 }
 
+.list:focused {
+  -fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, -fx-body-color;
+  -fx-text-box-border:none;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.list .list-content {
+  -fx-background-color:#FFF;
+}
+
+.scroll-pane > .viewport {
+  -fx-background-color:#FFF;
+}
+
 .search {
   -fx-pref-width:400px;
   -fx-min-height: 56px;
@@ -81,6 +96,28 @@
   -fx-background-repeat:no-repeat;
   -fx-pref-height:24px;
   -fx-pref-width:24px;
+}
+
+.search .search-area {
+  -fx-padding:16px 32px 6px 24px;
+  -fx-text-box-border:none;
+  -fx-effect:none;
+  -fx-text-alignment:left;
+  outline: none;
+  box-sizing: border-box;
+  -fx-font-family:'Roboto';
+  -fx-font-size:14px;
+  -fx-text-overrun:ellipsis;
+  -fx-pref-height:22px;
+  -fx-pref-width:290px;
+  -fx-fill-height:18px;
+}
+
+.search-area:focused {
+  -fx-text-box-border:none;
+  -fx-background-color:white;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
 }
 
 .contact {
