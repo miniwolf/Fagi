@@ -21,7 +21,7 @@ public class ConversationHandler implements Runnable {
 
                 conversation.addMessage(message);
                 Data.storeConversation(conversation);
-            } catch (InterruptedException | IOException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

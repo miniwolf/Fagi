@@ -1,15 +1,20 @@
 package com.fagi.model;
 
+import com.fagi.model.messages.Access;
+import com.fagi.model.messages.InGoingMessages;
+
 import java.io.Serializable;
 
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class AddParticipantRequest implements Serializable {
+public class AddParticipantRequest implements Serializable, InGoingMessages, Access<AddParticipantRequest> {
+    private String sender;
     private final String participant;
     private final long id;
 
-    public AddParticipantRequest(String username, long id) {
+    public AddParticipantRequest(String sender, String username, long id) {
+        this.sender = sender;
         this.participant = username;
         this.id = id;
     }
@@ -20,5 +25,19 @@ public class AddParticipantRequest implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    @Override
+    public AddParticipantRequest getData() {
+        return this;
+    }
+
+    @Override
+    public Access getAccess() {
+        return this;
     }
 }

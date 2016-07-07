@@ -1,5 +1,7 @@
 package com.fagi.conversation;
 
+import com.fagi.model.messages.Access;
+import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.util.List;
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class Conversation implements Serializable {
+public class Conversation implements Serializable, InGoingMessages, Access<Conversation> {
     private List<String> participants;
     private List<TextMessage> messages;
     private long id;
@@ -18,6 +20,10 @@ public class Conversation implements Serializable {
         this.id = id;
         participants = new ArrayList<>();
         messages = new ArrayList<>();
+    }
+
+    public Conversation() {
+
     }
 
     public void addUser(String username) {
@@ -38,5 +44,15 @@ public class Conversation implements Serializable {
 
     public List<String> getParticipants() {
         return participants;
+    }
+
+    @Override
+    public Conversation getData() {
+        return this;
+    }
+
+    @Override
+    public Access getAccess() {
+        return this;
     }
 }

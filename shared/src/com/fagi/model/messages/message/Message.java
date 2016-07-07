@@ -10,9 +10,14 @@ package com.fagi.model.messages.message;/*
  */
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public interface Message extends Serializable {
     String getSender();
 
     long getConversationID();
+
+    void setTimestamp(Timestamp timeStamp);
+
+    Timestamp getTimestamp();
 }

@@ -5,7 +5,6 @@
  * User data object.
  */
 
-import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserExists;
@@ -53,7 +52,7 @@ public class User {
     }
 
     public Response requestFriend(String otherUser) {
-        if ( Data.findInUserFile(userName, otherUser, 0) ) {
+        if ( friends.contains(otherUser) ) {
             return new UserExists();
         }
         User other = Data.getUser(otherUser);
@@ -69,11 +68,11 @@ public class User {
     }
 
     public Response removeFriendRequest(String otherUser) {
-        if ( !Data.findInUserFile(userName, otherUser, 1) ) {
+        if ( !incFriendReq.contains(otherUser) ) {
             return new UserExists();
         }
         incFriendReq.remove(otherUser);
-        return Data.removeFriendRequestFromUserFile(this.userName, otherUser);
+        return Data.storeUser(this);
     }
 
     private Response addFriendReq(String userName) {
@@ -81,23 +80,15 @@ public class User {
             return new UserExists();
         }
         incFriendReq.add(userName);
-        return Data.appendFriendReqToUserFile(this.userName, userName);
-    }
-
-    public void addFriendReqs(List<String> friendReqs) {
-        incFriendReq = friendReqs;
-    }
-
-    public void addFriends(List<String> friends) {
-        this.friends = friends;
+        return Data.storeUser(this);
     }
 
     public Response removeFriend(String otherUser) {
-        if ( !Data.findInUserFile(userName, otherUser, 0) ) {
+        if ( !friends.contains(otherUser)) {
             return new UserExists();
         }
         friends.remove(otherUser);
-        return Data.removeFriendFromUserFile(this.userName, otherUser);
+        return Data.storeUser(this);
     }
 
     public void addConversationID(long id) {

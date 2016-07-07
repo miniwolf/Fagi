@@ -7,11 +7,13 @@ package com.fagi.model.messages.message;
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 
+import java.sql.Timestamp;
+
 /**
  * @author miniwolf
  */
 public class TextMessage implements InGoingMessages, TextAccess {
-    private Message message;
+    private DefaultMessage message;
 
     /**
      * Contains text message.

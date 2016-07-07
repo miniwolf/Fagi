@@ -2,25 +2,23 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
+import com.fagi.conversation.Conversation;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.model.CreateUser;
-import com.fagi.model.DeleteFriend;
-import com.fagi.model.DeleteFriendRequest;
-import com.fagi.model.FriendRequest;
-import com.fagi.model.Login;
-import com.fagi.model.Logout;
-import com.fagi.model.Session;
+import com.fagi.model.*;
 import com.fagi.model.messages.message.TextMessage;
-import com.fagi.responses.AllIsWell;
+import com.fagi.responses.*;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author miniwolf
@@ -79,6 +77,7 @@ public class InputWorker extends Worker {
     private void handleInput(Object input) {
         if ( input instanceof TextMessage ) {
             TextMessage arg = (TextMessage) input;
+            arg.getMessage().setTimestamp(new Timestamp(System.currentTimeMillis()));
             out.addResponse(handleTextMessage(arg));
         } else if ( input instanceof Login ) {
             Login arg = (Login) input;
@@ -101,9 +100,124 @@ public class InputWorker extends Worker {
         } else if ( input instanceof Session ) {
             Session arg = (Session) input;
             out.addResponse(handleSession(arg));
+        } else if ( input instanceof AddParticipantRequest) {
+            AddParticipantRequest request = (AddParticipantRequest)input;
+            out.addResponse(handleAddParticipant(request));
+        } else if ( input instanceof CreateConversationRequest) {
+            CreateConversationRequest request = (CreateConversationRequest)input;
+            Object response = handleCreateConversation(request);
+            if (!(response instanceof NoSuchUser)) {
+                out.addResponse(new AllIsWell());
+            }
+            out.addResponse(response);
+        } else if ( input instanceof RemoveParticipantRequest) {
+            RemoveParticipantRequest request = (RemoveParticipantRequest)input;
+            out.addResponse(handleRemoveParticipant(request));
+        } else if ( input instanceof UpdateHistoryRequest) {
+            UpdateHistoryRequest request = (UpdateHistoryRequest)input;
+
+            Object response = handleUpdateHistory(request);
+
+            if ( (response instanceof HistoryUpdates) ) {
+                out.addResponse(new AllIsWell());
+            }
+            out.addResponse(response);
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
+    }
+
+    private Object handleUpdateHistory(UpdateHistoryRequest request) {
+        Conversation con = Data.getConversation(request.getId());
+        if (con == null) {
+            return new NoSuchConversation();
+        }
+
+        if (!con.getParticipants().contains(request.getSender())) {
+            return new Unauthorized();
+        }
+
+        List<TextMessage> res = new ArrayList<>();
+
+        for (int i = request.getIndex() + 1; i < con.getMessages().size(); i++) {
+            res.add(con.getMessages().get(i));
+        }
+
+        return new HistoryUpdates(res, request.getId());
+    }
+
+    private Object handleRemoveParticipant(RemoveParticipantRequest request) {
+        Conversation con = Data.getConversation(request.getId());
+        if (con == null) {
+            return new NoSuchConversation();
+        }
+
+        if (!con.getParticipants().contains(request.getSender())) {
+            return new Unauthorized();
+        }
+
+        User user = Data.getUser(request.getParticipant());
+        if (user == null) {
+            return new NoSuchUser();
+        }
+
+        user.removeConversationID(request.getId());
+        con.removeUser(request.getParticipant());
+        Data.storeConversation(con);
+        Data.storeUser(user);
+
+        return new AllIsWell();
+    }
+
+    private Object handleCreateConversation(CreateConversationRequest request) {
+        ArrayList<User> users = new ArrayList<>();
+        for (String username : request.getParticipants()) {
+            User u = Data.getUser(username);
+            if (u == null) {
+                return new NoSuchUser();
+            }
+
+            users.add(u);
+        }
+
+        Conversation con = Data.createConversation(request.getParticipants());
+
+        for (User user : users) {
+            user.addConversationID(con.getId());
+            Data.storeUser(user);
+        }
+
+        Data.storeConversation(con);
+
+        return con;
+    }
+
+    private Object handleAddParticipant(AddParticipantRequest request) {
+        Conversation con = Data.getConversation(request.getId());
+        if (con == null) {
+            return new NoSuchConversation();
+        }
+
+        if (!con.getParticipants().contains(request.getSender())) {
+            return new Unauthorized();
+        }
+
+        if (con.getParticipants().contains(request.getParticipant())) {
+            return new UserExists();
+        }
+
+        User user = Data.getUser(request.getParticipant());
+        if (user == null) {
+            return new NoSuchUser();
+        }
+
+        con.addUser(user.getUserName());
+        user.addConversationID(con.getId());
+
+        Data.storeConversation(con);
+        Data.storeUser(user);
+
+        return new AllIsWell();
     }
 
     private Object handleSession(Session arg) {
@@ -125,6 +239,15 @@ public class InputWorker extends Worker {
 
     private Object handleTextMessage(TextMessage arg) {
         System.out.println("Message");
+
+        Conversation con = Data.getConversation(arg.getMessage().getConversationID());
+        if (con == null) {
+            return new NoSuchConversation();
+        }
+
+        if (!con.getParticipants().contains(arg.getMessage().getSender())) {
+            return new Unauthorized();
+        }
 
         handler.addMessage(arg);
 
