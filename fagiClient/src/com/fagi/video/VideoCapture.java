@@ -1,5 +1,6 @@
 package com.fagi.video;
 
+import com.fagi.model.Video;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamMotionDetector;
 import com.github.sarxos.webcam.WebcamPanel;
@@ -11,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ import java.util.List;
  */
 public class VideoCapture
 {
-    public void GetWebcamPicture() throws IOException
+    public void GetWebcamPicture(boolean isAlert) throws IOException
     {
         Webcam webcam = Webcam.getDefault();
         if (webcam != null) {
@@ -36,7 +38,11 @@ public class VideoCapture
             ByteBuffer imageBytes = webcam.getImageBytes();
 
             // save image to PNG file
-            ImageIO.write(image, "PNG", new File("webcam-pic-plix.png"));
+            if (isAlert){
+                ImageIO.write(image, "PNG", new File("webcam-alert-" + new Date().getTime() + ".png"));
+            } else {
+                ImageIO.write(image, "PNG", new File("webcam-pic-plix.png"));
+            }
 
             webcam.close();
         }
