@@ -280,7 +280,7 @@ public class MainScreen {
             return;
         }
 
-        communication.sendObject(new SearchUsersRequest(searchString));
+        communication.sendObject(new SearchUsersRequest(username, searchString));
     }
 
     public void setPrimaryStage(final Stage primaryStage) {
