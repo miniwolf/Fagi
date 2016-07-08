@@ -168,6 +168,7 @@ class Data {
                 Gson gson = new Gson();
 
                 User user = gson.fromJson(json, User.class);
+                //TODO Display exception to user concerning invalid userIndex file.
                 registeredUsers.put(user.getUserName(), user);
             }
         } catch (IOException ie) {

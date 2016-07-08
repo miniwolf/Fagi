@@ -103,22 +103,22 @@ public class ChatManager {
      * @param passRepeat   for checking repeated password is equal.
      * @param labelMessage JLabel for writing status messages to the user.
      */
-    public static void handleCreateUser(String username, String password, String passRepeat,
+    public static boolean handleCreateUser(String username, String password, String passRepeat,
                                         Label labelMessage) {
         if ( isEmpty(username) || isEmpty(password) || isEmpty(passRepeat) ) {
             labelMessage.setText("Fields can't be empty");
-            return;
+            return false;
         }
 
         if ( !password.equals(passRepeat) ) {
             labelMessage.setText("Password's must match");
-            return;
+            return false;
         }
 
         if ( !isValid(username) ) {
             System.out.println(username);
             labelMessage.setText("Username may not contain special symbols");
-            return;
+            return false;
         } else {
             password = deleteIllegalCharacters(password);
         }
@@ -129,7 +129,9 @@ public class ChatManager {
             labelMessage.setText("User Created");
         } else if ( response instanceof UserExists ) {
             labelMessage.setText("Error: User already exists");
+            return false;
         }
+        return true;
     }
 
     /**

@@ -5,6 +5,7 @@ package com.fagi.main;
 
 import com.fagi.controller.LoginScreen;
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.MasterController;
 import com.fagi.controller.RequestController;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -68,13 +69,14 @@ public class FagiApp extends Application {
         try {
             // TODO : Let the user browse for the file path
             String configLocation = "config/serverinfo.config";
-            LoginScreen controller = new LoginScreen(this, configLocation, primaryStage);
+            MasterController controller = new MasterController(this, configLocation, primaryStage);
             FXMLLoader loader = new FXMLLoader(
-                    controller.getClass().getResource("/com/fagi/view/LoginScreen.fxml"));
+                    controller.getClass().getResource("/com/fagi/view/Master.fxml"));
             loader.setController(controller);
             scene.setRoot(loader.load());
             controller.initCommunication();
             primaryStage.sizeToScene();
+            controller.setPrimaryStage(primaryStage);
         } catch (IOException e) {
             System.err.println(e.toString());
         }
