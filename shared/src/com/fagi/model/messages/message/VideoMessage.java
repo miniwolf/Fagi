@@ -1,22 +1,21 @@
-package com.fagi.model;
+package com.fagi.model.messages.message;
 
-import com.github.sarxos.webcam.Webcam;
+import com.fagi.model.messages.Access;
+import com.fagi.model.messages.InGoingMessages;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Sidheag on 2016-07-07.
  */
-public class Video implements Serializable {
+public class VideoMessage implements InGoingMessages, VideoAcess {
     transient ArrayList<BufferedImage> images;
+    private Message message;
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
@@ -35,11 +34,21 @@ public class Video implements Serializable {
         }
     }
 
-    public Video(ArrayList<BufferedImage> imageList){
-        images = imageList;
+    public VideoMessage(ArrayList<BufferedImage> buffImgs, String sender, long conversationID){
+        images = buffImgs;
+        message = new DefaultMessage(sender, conversationID);
     }
 
-    public ArrayList<BufferedImage> getImageList(){
+    @Override
+    public Access getAccess() { return this; }
+
+    @Override
+    public ArrayList<BufferedImage> getData() {
         return images;
+    }
+
+    @Override
+    public Message getMessage() {
+        return null;
     }
 }

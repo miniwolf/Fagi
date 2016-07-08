@@ -14,6 +14,7 @@ import com.fagi.model.Login;
 import com.fagi.model.Logout;
 import com.fagi.model.Session;
 import com.fagi.model.messages.message.TextMessage;
+import com.fagi.model.messages.message.VideoMessage;
 import com.fagi.responses.AllIsWell;
 
 import java.io.EOFException;
@@ -27,6 +28,7 @@ import java.net.SocketException;
  */
 public class InputWorker extends Worker {
     private final ConversationHandler handler;
+    private final VideoConversationHandler videoHandler;
     private ObjectInputStream objIn;
     private OutputWorker out;
     private String myUserName = null;
@@ -34,8 +36,9 @@ public class InputWorker extends Worker {
     private EncryptionAlgorithm<AESKey> aes;
     private boolean sessionCreated = false;
 
-    public InputWorker(Socket socket, OutputWorker out, ConversationHandler handler) throws IOException {
+    public InputWorker(Socket socket, OutputWorker out, ConversationHandler handler, VideoConversationHandler videoHandler) throws IOException {
         this.handler = handler;
+        this.videoHandler = videoHandler;
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
         this.out = out;
@@ -101,6 +104,9 @@ public class InputWorker extends Worker {
         } else if ( input instanceof Session ) {
             Session arg = (Session) input;
             out.addResponse(handleSession(arg));
+        } else if (input instanceof VideoMessage){
+            VideoMessage arg = (VideoMessage) input;
+            out.addResponse(handleVideoMessage(arg));
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
@@ -127,6 +133,13 @@ public class InputWorker extends Worker {
         System.out.println("Message");
 
         handler.addMessage(arg);
+
+        return new AllIsWell();
+    }
+
+    private Object handleVideoMessage(VideoMessage arg){
+        System.out.println("Video-transmission chunk");
+        videoHandler.addMessage(arg);
 
         return new AllIsWell();
     }

@@ -13,6 +13,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
 import com.fagi.network.handlers.TextMessageHandler;
+import com.fagi.network.handlers.VideoMessageHandler;
 import com.fagi.network.handlers.VoiceMessageHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,8 +46,10 @@ public class MainScreen {
     private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
 
     private TextMessageHandler messageHandler;
+    private VideoMessageHandler videoHandler;
     private Thread messageThread;
     private Thread voiceThread;
+    private Thread videoThread;
     private Thread listThread;
     private Draggable draggable;
 
@@ -76,6 +79,10 @@ public class MainScreen {
         VoiceMessageHandler voiceHandler = new VoiceMessageHandler();
         voiceThread = new Thread(voiceHandler.getRunnable());
         voiceThread.start();
+
+        videoHandler = new VideoMessageHandler(this);
+        videoThread = new Thread(videoHandler.getRunnable());
+        videoThread.start();
     }
 
     /**

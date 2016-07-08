@@ -1,6 +1,5 @@
 package com.fagi.video;
 
-import com.fagi.model.Video;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamMotionDetector;
 import com.github.sarxos.webcam.WebcamPanel;

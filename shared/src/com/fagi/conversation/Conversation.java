@@ -1,6 +1,7 @@
 package com.fagi.conversation;
 
 import com.fagi.model.messages.message.TextMessage;
+import com.fagi.model.messages.message.VideoMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 public class Conversation implements Serializable {
     private List<String> participants;
     private List<TextMessage> messages;
+    private List<VideoMessage> videoMessages;
     private long id;
 
     public Conversation(long id) {
@@ -32,6 +34,10 @@ public class Conversation implements Serializable {
 
     public void addMessage(TextMessage message) {
         messages.add(message);
+    }
+
+    public void addMessage(VideoMessage message) {
+        videoMessages.add(message);
     }
 
     public List<TextMessage> getMessages() { return messages; }

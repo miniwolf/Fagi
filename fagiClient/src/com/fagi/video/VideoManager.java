@@ -1,13 +1,10 @@
 package com.fagi.video;
 
-import com.fagi.model.Video;
-import com.fagi.network.ChatManager;
+import com.fagi.model.messages.message.VideoMessage;
 import com.fagi.network.Communication;
 import com.github.sarxos.webcam.Webcam;
-import main.FagiApp;
 
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 /**
@@ -32,8 +29,14 @@ public class VideoManager {
     }
 
     public static void handleVideoTransmission(){
+        System.out.println("Video transmission");
         // To prevent exceptions when requesting webcam
         Webcam webcam = VideoManager.activeCam;
+        if (webcam != null) {
+            System.out.println("Webcam: " + webcam.getName());
+        } else {
+            System.out.println("No webcam detected");
+        }
         if (webcam.isOpen()){
             webcam.close();
         }
@@ -63,7 +66,7 @@ public class VideoManager {
                     System.out.println("Seconds passed: " + secs);
                     secs++;
                     System.out.println("Passing images (" + buffImgs.size() + ")");
-                    communication.sendObject(new Video(buffImgs));
+                    communication.sendObject(new VideoMessage(buffImgs, "Blarney Sten", 0));
                     buffImgs.clear();
                     System.out.println("Images passed");
                 }

@@ -21,6 +21,7 @@ class Server {
     private boolean running = true;
     private final int port;
     private final ConversationHandler handler = new ConversationHandler();
+    private final VideoConversationHandler videoHandler = new VideoConversationHandler();
     private Thread conversationHandlerThread;
 
     public Server(int port) {
@@ -80,7 +81,7 @@ class Server {
         Socket socket = serverSocket.accept();
         OutputWorker outWorker = new OutputWorker(socket);
         Thread outputWorker = new Thread(outWorker);
-        Thread inputWorker = new Thread(new InputWorker(socket, outWorker, handler));
+        Thread inputWorker = new Thread(new InputWorker(socket, outWorker, handler, videoHandler));
         outputWorker.start();
         inputWorker.start();
     }

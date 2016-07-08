@@ -1,6 +1,5 @@
 import com.fagi.config.ServerConfig;
 import com.fagi.encryption.AES;
-import com.fagi.model.Video;
 import com.fagi.network.Communication;
 import com.fagi.video.MotionTracker;
 import com.fagi.video.VideoCapture;

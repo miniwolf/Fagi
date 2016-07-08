@@ -13,6 +13,7 @@ import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.lists.ListAccess;
 import com.fagi.model.messages.message.Message;
 import com.fagi.model.messages.message.TextMessage;
+import com.fagi.model.messages.message.VideoMessage;
 import com.fagi.responses.NoSuchUser;
 
 import java.io.IOException;
@@ -131,6 +132,10 @@ public class OutputWorker extends Worker {
     }
 
     synchronized void addMessage(TextMessage message) {
+        messages.add(message);
+    }
+
+    synchronized void addMessage(VideoMessage message) {
         messages.add(message);
     }
 
