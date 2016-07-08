@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+  -->
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<VBox fx:id="contentList" styleClass="contact-list"
+      stylesheets="@../style/searchlist.css"
+      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <Pane styleClass="title">
+        <VBox.margin>
+            <Insets bottom="2.0" left="14.0" right="14.0"/>
+        </VBox.margin>
+        <Label styleClass="text" text="Fag clients"/>
+    </Pane>
+</VBox>

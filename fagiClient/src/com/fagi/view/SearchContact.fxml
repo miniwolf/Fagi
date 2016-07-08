@@ -1,0 +1,38 @@
+<!--
+  ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+  -->
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+
+<HBox styleClass="search-item" stylesheets="@../style/searchlist.css"
+      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <Pane styleClass="clicker-holder">
+        <HBox.margin>
+            <Insets bottom="8.0" right="16.0" top="8.0"/>
+        </HBox.margin>
+        <Pane layoutX="16.0" layoutY="12.0" styleClass="clicker"/>
+    </Pane>
+    <Pane styleClass="picture-holder">
+        <HBox.margin>
+            <Insets bottom="8.0" right="16.0" top="8.0"/>
+        </HBox.margin>
+        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <viewport>
+                <Rectangle2D/>
+            </viewport>
+            <Image url="https://lh3.googleusercontent.com/-vulNIfi6UUM/AAAAAAAAAAI/AAAAAAAAAHY/kMOt0UOZyn8/s36-c-k-no/photo.jpg"/>
+        </ImageView>
+    </Pane>
+    <Pane layoutY="18.0" maxHeight="-Infinity" styleClass="name-holder">
+        <HBox.margin>
+            <Insets top="18.0"/>
+        </HBox.margin>
+        <Label styleClass="text" text="Marcus Haagh"/>
+    </Pane>
+</HBox>

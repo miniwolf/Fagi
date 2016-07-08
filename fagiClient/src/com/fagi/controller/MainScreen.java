@@ -16,7 +16,9 @@ import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.network.handlers.VoiceMessageHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -33,7 +35,7 @@ import java.util.List;
  */
 public class MainScreen {
     @FXML private Pane body;
-    @FXML private VBox contentList;
+    @FXML private ScrollPane listContent;
 
     private double xOffset;
     private double yOffset;
@@ -262,5 +264,9 @@ public class MainScreen {
 
     public void mouseDragged(MouseEvent mouseEvent) {
         draggable.mouseDragged(mouseEvent);
+    }
+
+    public void setScrollPaneContent(Parent parent) {
+        listContent.setContent(parent);
     }
 }

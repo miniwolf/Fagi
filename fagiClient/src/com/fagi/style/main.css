@@ -78,6 +78,10 @@
   -fx-background-color:#FFF;
 }
 
+.list-content:focused {
+  -fx-background-insets: 0, 0, 0;
+}
+
 .scroll-pane > .viewport {
   -fx-background-color:#FFF;
 }
@@ -229,7 +233,7 @@
 }
 
 .field .text {
-  line-height: 16px;
+  -fx-line-height: 16px;
   -fx-cursor: text;
   -fx-pref-height:36px;
   -fx-padding: 2px 0 2px 6px;

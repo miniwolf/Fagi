@@ -10,11 +10,47 @@
   -fx-font-size:14px;
   margin: 0 14px 2px;
   overflow: hidden;
-  -fx-padding: 4px 0;
 }
 
 .title .text {
+  -fx-font-family:'Roboto, Arial, sans-serif';
   -fx-fill:#737373;
   -fx-font-size:14px;
   -fx-font-weight:normal;
+  -fx-padding:4px 0;
+}
+
+.search-item {
+  -fx-min-height: 46px;
+}
+
+.clicker-holder .clicker {
+  -fx-background-image: url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-repeat:no-repeat;
+  -fx-background-position:-107px -120px;
+  -fx-pref-height:16px;
+  -fx-pref-width:16px;
+  cursor: pointer;
+}
+
+.search-item .picture-holder {
+  -fx-margin: 16px 16px 16px 0;
+}
+
+.picture-holder .picture {
+  -fx-border-radius: 50%;
+  -fx-pref-height: 40px;
+  -fx-pref-width: 40px;
+}
+
+.search-item .name-holder {
+  -fx-alignment:center;
+  -fx-min-height: 36px;
+}
+
+.name-holder .text {
+  -fx-font-family:'Roboto';
+  -fx-text-fill:#404040;
+  -fx-font-size: 14px;
+  -fx-text-overrun: ellipsis;
 }
