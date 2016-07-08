@@ -9,16 +9,22 @@ package com.fagi.controller;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
+import com.fagi.model.SearchUsersRequest;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
+import com.fagi.network.handlers.SearchHandler;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.network.handlers.VoiceMessageHandler;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -34,8 +40,11 @@ import java.util.List;
  * TODO: Write description.
  */
 public class MainScreen {
+    private String searchedString = "";
+
     @FXML private Pane body;
     @FXML private ScrollPane listContent;
+    @FXML private TextField searchBox;
 
     private double xOffset;
     private double yOffset;
@@ -51,6 +60,8 @@ public class MainScreen {
     private Thread voiceThread;
     private Thread listThread;
     private Draggable draggable;
+    private SearchHandler searchHandler;
+    private Thread searchThread;
 
     /**
      * Creates new form ContactScreen.
@@ -78,6 +89,13 @@ public class MainScreen {
         VoiceMessageHandler voiceHandler = new VoiceMessageHandler();
         voiceThread = new Thread(voiceHandler.getRunnable());
         voiceThread.start();
+
+        searchHandler = new SearchHandler(this);
+        searchThread = new Thread(searchHandler.getRunnable());
+        searchThread.start();
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchUser(newValue);
+        });
     }
 
     /**
@@ -208,9 +226,10 @@ public class MainScreen {
 
     @FXML
     void logoutRequest() {
-        //interrupt(messageThread);
-        //interrupt(listThread);
-        //interrupt(voiceThread);
+        interrupt(messageThread);
+//        interrupt(listThread);
+        interrupt(voiceThread);
+        interrupt(searchThread);
 
         ChatManager.handleLogout(new Logout());
     }
@@ -252,6 +271,16 @@ public class MainScreen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void searchUser(String searchString) {
+        if (searchString.isEmpty()) {
+            // TODO : Show friend list
+            return;
+        }
+
+        communication.sendObject(new SearchUsersRequest(searchString));
     }
 
     public void setPrimaryStage(final Stage primaryStage) {

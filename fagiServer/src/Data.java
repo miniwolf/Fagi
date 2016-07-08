@@ -12,11 +12,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
@@ -224,5 +222,9 @@ class Data {
 
     public static OutputWorker getWorker(String userName) {
         return onlineUsers.get(userName);
+    }
+
+    public static List<String> getUserNames() {
+        return registeredUsers.values().stream().map(User::getUserName).collect(Collectors.toCollection(ArrayList::new));
     }
 }

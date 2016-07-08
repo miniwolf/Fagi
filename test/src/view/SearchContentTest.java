@@ -63,6 +63,7 @@ public class SearchContentTest extends Application {
 
             HBox searchContact = FXMLLoader.load(controller.getClass().getResource("/com/fagi/view/SearchContact.fxml"));
             HBox searchContact2 = FXMLLoader.load(controller.getClass().getResource("/com/fagi/view/SearchContact.fxml"));
+
             searchContentController.addToContentList(searchContact);
             searchContentController.addToContentList(searchContact2);
 

@@ -19,6 +19,7 @@ import java.net.SocketException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author miniwolf
@@ -122,6 +123,15 @@ public class InputWorker extends Worker {
                 out.addResponse(new AllIsWell());
             }
             out.addResponse(response);
+        } else if ( input instanceof SearchUsersRequest) {
+            SearchUsersRequest request = (SearchUsersRequest)input;
+            out.addResponse(new AllIsWell());
+            out.addResponse(new SearchUsersResult(Data.getUserNames().stream()
+                                                                     .parallel()
+                                                                     .filter(username -> username.startsWith(request.getSearchString()))
+                                                                     .filter(username -> !username.equals(request.getSender()))
+                                                                     .sorted()
+                                                                     .collect(Collectors.toList())));
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
