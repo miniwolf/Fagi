@@ -124,32 +124,6 @@
   -fx-faint-focus-color: transparent;
 }
 
-.contact {
-  -fx-font-family: 'Roboto','Arial',sans-serif;
-  -fx-pref-height: 72px;
-  -fx-cursor: default;
-  -fx-text-alignment:left;
-  -fx-background-color:#fff;
-  -fx-font-size:14px;
-}
-
-.contact .image {
-  -fx-pref-height: 40px;
-  -fx-pref-width:40px;
-  -fx-background-image:url(https://lh3.googleusercontent.com/-JixlDnkwFiU/AAAAAAAAAAI/AAAAAAAAAAA/tQ6lJMQfyhQ/s46-c-k-no/photo.jpg);
-  -fx-background-repeat:no-repeat;
-}
-
-.contact .mu {
-  -fx-pref-height:24px;
-  -fx-text-fill:#737373;
-  white-space: nowrap;
-  overflow: hidden;
-  left: 80px;
-  right: 24px;
-  top: 14px;
-}
-
 .message {
   -fx-background-color: #E5E5E5;
   -fx-pref-width: 400px;
