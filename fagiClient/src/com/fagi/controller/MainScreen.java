@@ -40,8 +40,6 @@ import java.util.List;
  * TODO: Write description.
  */
 public class MainScreen {
-    private String searchedString = "";
-
     @FXML private Pane body;
     @FXML private ScrollPane listContent;
     @FXML private TextField searchBox;
