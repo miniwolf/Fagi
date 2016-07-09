@@ -32,8 +32,7 @@ public class InputDistributor implements Runnable {
                 container.addObject(input);
             }
         } catch(InterruptedException e) {
-            e.printStackTrace();
-            stop();
+            running = false;
         }
     }
 

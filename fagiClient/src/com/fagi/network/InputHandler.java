@@ -32,6 +32,7 @@ public class InputHandler implements Runnable {
             new ConcurrentHashMap<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
+    private final Thread distributorThread;
     private boolean running = true;
     private InputDistributor distributor;
 
@@ -39,8 +40,8 @@ public class InputHandler implements Runnable {
         this.in = in;
         this.encryption = encryption;
         distributor = new InputDistributor(containers);
-        Thread thread = new Thread(distributor);
-        thread.start();
+        distributorThread = new Thread(distributor);
+        distributorThread.start();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class InputHandler implements Runnable {
                         System.err.println("i ioe: " + ioe.toString());
                         ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
                     }
-                    return;
+                    running = false;
                 } catch (ClassNotFoundException cnfe) {
                     // Shared files are not the same on both side of the server
                     System.err.println(cnfe.getMessage());
@@ -107,6 +108,7 @@ public class InputHandler implements Runnable {
     public void close() {
         running = false;
         distributor.stop();
+        distributorThread.interrupt();
     }
 
     public Conversation containsConversation() {
