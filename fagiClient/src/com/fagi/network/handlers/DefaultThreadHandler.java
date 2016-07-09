@@ -12,6 +12,7 @@ import com.fagi.network.handlers.container.Container;
 public class DefaultThreadHandler implements Runnable {
     private Container container;
     private Handler handler;
+    private boolean running = true;
 
     public DefaultThreadHandler(Container container, Handler handler) {
         this.container = container;
@@ -20,7 +21,8 @@ public class DefaultThreadHandler implements Runnable {
 
     @Override
     public void run() {
-        while ( !Thread.interrupted() ) {
+        while ( running ) {
+            System.out.println("Handling messages");
             while ( !container.getQueue().isEmpty() ) {
                 handler.handle(container.getQueue().remove());
             }
@@ -29,6 +31,7 @@ public class DefaultThreadHandler implements Runnable {
                     wait();
                 }
             } catch (InterruptedException e) {
+                running = false;
                 System.out.println("Stopped the thread handler");
             }
         }

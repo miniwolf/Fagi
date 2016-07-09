@@ -55,10 +55,7 @@ public class MainScreen {
     private TextMessageHandler messageHandler;
     private Thread messageThread;
     private Thread voiceThread;
-    private Thread listThread;
     private Draggable draggable;
-    private SearchHandler searchHandler;
-    private Thread searchThread;
     private GeneralHandler generalHandler;
     private Thread generalHandlerThread;
     private FriendList friendList;
@@ -229,7 +226,6 @@ public class MainScreen {
     @FXML
     void logoutRequest() {
         interrupt(messageThread);
-//        interrupt(listThread);
         interrupt(voiceThread);
         generalHandler.stop();
         interrupt(generalHandlerThread);
