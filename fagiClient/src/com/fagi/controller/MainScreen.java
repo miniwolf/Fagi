@@ -10,12 +10,11 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
+import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
-import com.fagi.network.handlers.SearchHandler;
-import com.fagi.network.handlers.TextMessageHandler;
-import com.fagi.network.handlers.VoiceMessageHandler;
+import com.fagi.network.handlers.*;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,6 +59,9 @@ public class MainScreen {
     private Draggable draggable;
     private SearchHandler searchHandler;
     private Thread searchThread;
+    private GeneralHandler generalHandler;
+    private Thread generalHandlerThread;
+    private FriendList friendList;
 
     /**
      * Creates new form ContactScreen.
@@ -88,9 +90,11 @@ public class MainScreen {
         voiceThread = new Thread(voiceHandler.getRunnable());
         voiceThread.start();
 
-        searchHandler = new SearchHandler(this);
-        searchThread = new Thread(searchHandler.getRunnable());
-        searchThread.start();
+        GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
+        generalHandler = factory.construct();
+        generalHandlerThread = new Thread(generalHandler.getRunnable());
+        generalHandlerThread.start();
+
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
             searchUser(newValue);
         });
@@ -227,7 +231,8 @@ public class MainScreen {
         interrupt(messageThread);
 //        interrupt(listThread);
         interrupt(voiceThread);
-        interrupt(searchThread);
+        generalHandler.stop();
+        interrupt(generalHandlerThread);
 
         ChatManager.handleLogout(new Logout());
     }
@@ -274,7 +279,8 @@ public class MainScreen {
     @FXML
     public void searchUser(String searchString) {
         if (searchString.isEmpty()) {
-            // TODO : Show friend list
+            FriendListHandler handler = new FriendListHandler(this);
+            handler.handle(friendList);
             return;
         }
 
@@ -295,5 +301,9 @@ public class MainScreen {
 
     public void setScrollPaneContent(Parent parent) {
         listContent.setContent(parent);
+    }
+
+    public void setFriendList(FriendList friendList) {
+        this.friendList = friendList;
     }
 }

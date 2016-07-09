@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 /**
  * @author miniwolf
  */
-public class SearchContentController {
+public class ContentController {
     @FXML private VBox contentList;
 
     public void addToContentList(Parent parent) {

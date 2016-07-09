@@ -28,16 +28,19 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class InputHandler implements Runnable {
     private final Queue<Response> inputs = new LinkedBlockingQueue<>();
-    private final List<Object> unhandledObjects = new ArrayList<>();
     private static final Map<Class, Container> containers =
             new ConcurrentHashMap<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
     private boolean running = true;
+    private InputDistributor distributor;
 
     public InputHandler(ObjectInputStream in, EncryptionAlgorithm encryption) {
         this.in = in;
         this.encryption = encryption;
+        distributor = new InputDistributor(containers);
+        Thread thread = new Thread(distributor);
+        thread.start();
     }
 
     @Override
@@ -48,11 +51,6 @@ public class InputHandler implements Runnable {
                 try {
                     input = (byte[])in.readObject();
                     handleInput(Conversion.convertFromBytes(encryption.decrypt(input)));
-
-                    for ( int i = 0; i < unhandledObjects.size(); i++ ) {
-                        Object obj = unhandledObjects.remove(i);
-                        handleInput(obj);
-                    }
                 } catch (IOException ioe) {
                     if ( running ) {
                         System.err.println("i ioe: " + ioe.toString());
@@ -75,13 +73,7 @@ public class InputHandler implements Runnable {
             inputs.add((Response) input);
             return;
         }
-        Container container = InputHandler.containers.get(input.getClass());
-        if ( container == null ) {
-            System.err.println("Missing handler: " + input.getClass());
-            unhandledObjects.add(input);
-            return;
-        }
-        container.addObject((InGoingMessages) input);
+        distributor.addMessage((InGoingMessages)input);
     }
 
     /**
@@ -108,8 +100,13 @@ public class InputHandler implements Runnable {
         containers.put(clazz, handler);
     }
 
+    public static void unregister(Class clazz) {
+        containers.remove(clazz);
+    }
+
     public void close() {
         running = false;
+        distributor.stop();
     }
 
     public Conversation containsConversation() {

@@ -53,15 +53,17 @@ public class InputWorker extends Worker {
             } catch (EOFException | SocketException eof) {
                 running = false;
                 System.out.println("Logging out user " + myUserName);
+                out.running = false;
                 Data.userLogout(myUserName);
             } catch (Exception e) {
                 running = false;
+                out.running = false;
                 System.out.println("Something went wrong in a input worker while loop " + e);
                 System.out.println("Logging out user " + myUserName);
                 Data.userLogout(myUserName);
             }
         }
-        System.out.println("Closing");
+        System.out.println("Closing input");
     }
 
     private Object decryptAndConvertToObject(byte[] input) {
@@ -126,12 +128,13 @@ public class InputWorker extends Worker {
         } else if ( input instanceof SearchUsersRequest) {
             SearchUsersRequest request = (SearchUsersRequest)input;
             out.addResponse(new AllIsWell());
-            out.addResponse(new SearchUsersResult(Data.getUserNames().stream()
-                                                                     .parallel()
-                                                                     .filter(username -> username.startsWith(request.getSearchString()))
-                                                                     .filter(username -> !username.equals(request.getSender()))
-                                                                     .sorted()
-                                                                     .collect(Collectors.toList())));
+            SearchUsersResult result = new SearchUsersResult(Data.getUserNames().stream()
+                                                                                .parallel()
+                                                                                .filter(username -> username.startsWith(request.getSearchString()))
+                                                                                .filter(username -> !username.equals(request.getSender()))
+                                                                                .sorted()
+                                                                                .collect(Collectors.toList()));
+            out.addResponse(result);
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
