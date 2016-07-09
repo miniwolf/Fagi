@@ -5,10 +5,7 @@
 package view;
 
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.SearchContentController;
-import com.fagi.main.FagiApp;
-import com.fagi.network.ChatManager;
-import com.fagi.network.Communication;
+import com.fagi.controller.ContentController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -56,16 +53,16 @@ public class SearchContentTest extends Application {
         }
 
         try {
-            SearchContentController searchContentController = new SearchContentController();
+            ContentController contentController = new ContentController();
             FXMLLoader contentLoader = new FXMLLoader(controller.getClass().getResource("/com/fagi/view/SearchContent.fxml"));
-            contentLoader.setController(searchContentController);
+            contentLoader.setController(contentController);
             VBox searchContent = contentLoader.load();
 
             HBox searchContact = FXMLLoader.load(controller.getClass().getResource("/com/fagi/view/SearchContact.fxml"));
             HBox searchContact2 = FXMLLoader.load(controller.getClass().getResource("/com/fagi/view/SearchContact.fxml"));
 
-            searchContentController.addToContentList(searchContact);
-            searchContentController.addToContentList(searchContact2);
+            contentController.addToContentList(searchContact);
+            contentController.addToContentList(searchContact2);
 
             controller.setScrollPaneContent(searchContent);
         } catch (IOException e) {

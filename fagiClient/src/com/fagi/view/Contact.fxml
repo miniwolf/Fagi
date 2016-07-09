@@ -15,10 +15,10 @@
     </Pane>
     <Pane layoutX="80.0">
         <HBox layoutY="14.0" styleClass="content-text">
-            <Label styleClass="mu" text="Marcus Haagh" />
+            <Label fx:id="userName" styleClass="mu" text="Marcus Haagh" />
             <Pane HBox.hgrow="ALWAYS" />
-            <Label styleClass="date" text="2 Jul"/>
+            <Label fx:id="date" styleClass="date" text="2 Jul"/>
         </HBox>
-        <Label layoutY="33.0" styleClass="mu" text="You: Hej Marcus" />
+        <Label fx:id="lastMessage" layoutY="33.0" styleClass="mu" text="You: Hej Marcus" />
     </Pane>
 </Pane>

@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -48,7 +50,7 @@ public class OutputWorker extends Worker {
                 sendIncMessages();
                 sendResponses();
                 objOut.reset();
-                while ( messages.isEmpty() && respondObjects.isEmpty() ) {
+                while ( messages.isEmpty() && respondObjects.isEmpty() && running ) {
                     checkForLists();
                     Thread.sleep(100);
                 }
@@ -66,7 +68,7 @@ public class OutputWorker extends Worker {
                 e.printStackTrace();
             }
         }
-        System.out.println("Closing");
+        System.out.println("Closing output");
     }
 
     private void checkForLists() throws IOException {
@@ -82,10 +84,11 @@ public class OutputWorker extends Worker {
 
     private void checkList(InGoingMessages responseObj, ListAccess currentList) throws IOException {
         ListAccess responseList = (ListAccess) responseObj.getAccess();
-        if ( responseList.getData().isEmpty()
-             || responseList.getData().size() == currentList.getData().size() ) {
+
+        if ( equalLists(responseList.getData(), currentList.getData()) ) {
             return;
         }
+
         currentList.updateData(responseList.getData());
         send(responseObj);
     }
@@ -140,5 +143,26 @@ public class OutputWorker extends Worker {
 
     public void setUserName(String userName) {
         this.myUserName = userName;
+    }
+
+    private boolean equalLists(List<String> one, List<String> two){
+        if (one == null && two == null){
+            return true;
+        }
+
+        if((one == null && two != null)
+                || one != null && two == null
+                || one.size() != two.size()){
+            return false;
+        }
+
+        //to avoid messing the order of the lists we will use a copy
+        //as noted in comments by A. R. S.
+        one = new ArrayList<String>(one);
+        two = new ArrayList<String>(two);
+
+        Collections.sort(one);
+        Collections.sort(two);
+        return one.equals(two);
     }
 }
