@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <VBox fx:id="contentList" styleClass="contact-list"
-      stylesheets="@../style/searchlist.css"
+      stylesheets="@../../style/searchlist.css"
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane styleClass="title">
         <VBox.margin>

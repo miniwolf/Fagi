@@ -1,12 +1,10 @@
 package com.fagi.network.handlers;
 
+import com.fagi.controller.ContentController;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.SearchContactController;
-import com.fagi.controller.ContentController;
 import com.fagi.model.SearchUsersResult;
 import com.fagi.model.messages.InGoingMessages;
-import com.fagi.network.handlers.container.Container;
-import com.fagi.network.handlers.container.DefaultContainer;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -36,7 +34,7 @@ public class SearchHandler implements Handler {
 
             for (String username : result.getData()) {
                 SearchContactController controller = new SearchContactController();
-                FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/SearchContact.fxml"));
+                FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/SearchContact.fxml"));
                 loader.setController(controller);
                 HBox searchContact = loader.load();
 
