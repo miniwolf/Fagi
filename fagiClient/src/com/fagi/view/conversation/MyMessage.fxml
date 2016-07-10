@@ -1,0 +1,22 @@
+<!--
+  ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+  -->
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<HBox layoutX="10.0" layoutY="10.0" styleClass="holder, me"
+      stylesheets="@../../style/conversation.css"
+      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <Pane HBox.hgrow="ALWAYS"/>
+    <Pane styleClass="text-holder">
+        <Label layoutX="9.0" styleClass="text-message" fx:id="message"/>
+    </Pane>
+    <Pane maxHeight="-Infinity" styleClass="tip">
+        <Pane layoutX="-6.0" layoutY="-8.0" styleClass="circle"/>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eceff1" height="10.0"
+                   layoutX="-8.0" layoutY="-10.0" stroke="TRANSPARENT"
+                   strokeType="INSIDE" width="20.0"/>
+    </Pane>
+</HBox>
