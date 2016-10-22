@@ -652,6 +652,8 @@ html, body {
   display: block;
   -fx-pref-height: 96px;
   -fx-pref-width: 96px;
+  -fx-border-radius: 25;
+  -fx-background-radius: 25;
   -fx-background-size: 96px;
   -fx-background-repeat: no-repeat;
   -fx-background-image:url(https://ssl.gstatic.com/accounts/ui/avatar_2x.png);

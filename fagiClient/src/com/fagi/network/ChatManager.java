@@ -49,10 +49,9 @@ public class ChatManager {
      * between wrong username and wrong password. (Better user experience...)
      *
      * @param login           contains the login object.
-     * @param username        string from the textField.getText method.
      * @param labelCreateUser respond to the user is posted here.
      */
-    public static void handleLogin(Login login, String username, Label labelCreateUser) {
+    public static void handleLogin(Login login, Label labelCreateUser) {
         if ( isEmpty(login.getUsername()) || isEmpty(login.getPassword()) ) {
             labelCreateUser.setText("Fields cannot be empty");
             return;
@@ -61,7 +60,7 @@ public class ChatManager {
         communication.sendObject(login);
         Response response = communication.getNextResponse();
         if ( response instanceof AllIsWell ) {
-            application.showMainScreen(username, communication);
+            application.showMainScreen(login.getUsername(), communication);
         } else {
             labelCreateUser.setText(response instanceof NoSuchUser
                                     ? "User doesn't exist"
