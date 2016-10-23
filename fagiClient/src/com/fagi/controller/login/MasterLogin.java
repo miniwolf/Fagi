@@ -35,7 +35,7 @@ public class MasterLogin {
 
     private String messageLabel;
 
-    private LoginState state;
+    private LoginState state = LoginState.LOGIN;
 
     private final FagiApp fagiApp;
     private final String configFileLocation;
@@ -133,15 +133,12 @@ public class MasterLogin {
         showScreen(state);
     }
 
-
-
     private void showScreen(LoginState screen) {
         StringBuilder resourcePath = new StringBuilder();
         if ( !setupController(screen, resourcePath) ) {
             return;
         }
-
-        controller.setMessage(messageLabel);
+        loader = new FXMLLoader(getClass().getResource(resourcePath.toString()));
         loader.setController(controller);
 
         try {
@@ -149,13 +146,7 @@ public class MasterLogin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        FXMLLoader contentLoader = new FXMLLoader(getClass().getResource(resourcePath.toString()));
-        contentLoader.setController(this);
-        try {
-            primaryStage.getScene().setRoot(contentLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        controller.setMessage(messageLabel);
     }
 
     private boolean setupController(LoginState screen, StringBuilder resourcePath) {
