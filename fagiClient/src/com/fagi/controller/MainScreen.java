@@ -10,6 +10,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.model.Conversation;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
+import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -58,7 +59,7 @@ public class MainScreen {
     private Draggable draggable;
     private GeneralHandler generalHandler;
     private Thread generalHandlerThread;
-    private FriendList friendList;
+    private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
 
     /**
      * Creates new form ContactScreen.
