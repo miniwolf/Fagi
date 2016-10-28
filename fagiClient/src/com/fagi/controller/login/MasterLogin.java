@@ -60,7 +60,7 @@ public class MasterLogin {
         this.primaryStage = primaryStage;
         this.scene = scene;
 
-        loader = new FXMLLoader(getClass().getResource("/com/fagi/view/Master.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/com/fagi/view/login/Master.fxml"));
         showScreen(state);
         initCommunication();
         primaryStage.sizeToScene();
@@ -152,15 +152,15 @@ public class MasterLogin {
     private boolean setupController(LoginState screen, StringBuilder resourcePath) {
         switch (screen) {
             case LOGIN:
-                resourcePath.append("/com/fagi/view/LoginScreen.fxml");
+                resourcePath.append("/com/fagi/view/login/LoginScreen.fxml");
                 controller = new LoginScreenController(this);
                 break;
             case USERNAME:
-                resourcePath.append("/com/fagi/view/CreateUserName.fxml");
+                resourcePath.append("/com/fagi/view/login/CreateUserName.fxml");
                 controller = new CreateUserNameController(this);
                 break;
             case PASSWORD:
-                resourcePath.append("/com/fagi/view/CreatePassword.fxml");
+                resourcePath.append("/com/fagi/view/login/CreatePassword.fxml");
                 controller = new CreatePasswordController(this);
                 break;
             default:
