@@ -54,7 +54,7 @@ public class InputHandler implements Runnable {
                     handleInput(Conversion.convertFromBytes(encryption.decrypt(input)));
                 } catch (IOException ioe) {
                     if ( running ) {
-                        System.err.println("i ioe: " + ioe.toString());
+                        System.err.println("inputhandler ioe: " + ioe.toString());
                         ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
                     }
                     running = false;

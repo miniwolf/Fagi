@@ -199,12 +199,7 @@ public class ChatManager {
      */
     public static void showErrorMessage(String title, String message) {
         try {
-            //URL f =
-            // new File("D:/Github/Fagi/fagiClient/src/com.fagi.view/RequestRespond.fxml")
-            // .toURI().toURL();
-            FXMLLoader loader =
-                    new FXMLLoader(ErrorBoxController.class
-                                              .getResource("/com/fagi/view/ErrorBox.fxml"));
+            FXMLLoader loader = new FXMLLoader(ErrorBoxController.class.getResource("/com/fagi/view/ErrorBox.fxml"));
             Pane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle(title);

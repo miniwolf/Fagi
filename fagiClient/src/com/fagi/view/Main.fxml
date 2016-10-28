@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <Pane fx:id="body" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
-      styleClass="maincontent" stylesheets="@../style/main.css, @../style/searchlist.css"
+      styleClass="maincontent" stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane layoutX="32.0" layoutY="14.0" styleClass="menubar">
         <Pane layoutX="6.0" layoutY="57.0" styleClass="shape">

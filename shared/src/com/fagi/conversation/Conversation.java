@@ -6,6 +6,7 @@ import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     private List<String> participants;
     private List<TextMessage> messages;
     private long id;
+    private Date lastMessageDate;
 
     public Conversation(long id) {
         this.id = id;
@@ -54,5 +56,9 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     @Override
     public Access getAccess() {
         return this;
+    }
+
+    public Date getLastMessageDate() {
+        return lastMessageDate;
     }
 }

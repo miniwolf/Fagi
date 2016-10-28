@@ -28,7 +28,7 @@ public class SearchHandler implements Handler {
 
         try {
             ContentController contentController = new ContentController();
-            FXMLLoader contentLoader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/SearchContent.fxml"));
+            FXMLLoader contentLoader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/SearchContent.fxml"));
             contentLoader.setController(contentController);
             VBox searchContent = contentLoader.load();
 

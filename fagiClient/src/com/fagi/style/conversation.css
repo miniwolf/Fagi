@@ -16,6 +16,7 @@
   -fx-background-radius: 3px 3px 0px 0px;
   -fx-cursor: hand;
   -fx-background-color: #404040;
+  -fx-font-family: 'Roboto','Arial',sans-serif;
 }
 
 .message-title .icon {
@@ -34,7 +35,9 @@
 .message-title .mu {
   -fx-text-fill: #fff;
   -fx-font-size: 13px;
-  -fx-pref-height:1em;
+  /*-fx-wrap-text: false;*/
+  /*-fx-text-overrun: word-ellipsis;*/
+  /*-fx-pref-height:1em;*/
 }
 
 .message-title .last-seen {

@@ -7,23 +7,21 @@ package com.fagi.controller;
  */
 
 import com.fagi.controller.utility.Draggable;
-import com.fagi.model.Conversation;
+import com.fagi.conversation.Conversation;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
+import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
 import com.fagi.network.handlers.*;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -34,6 +32,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * TODO: Write description.
@@ -48,7 +47,7 @@ public class MainScreen {
 
     private final String username;
     private final Communication communication;
-    private List<Conversation> conversations;
+    private List<com.fagi.conversation.Conversation> conversations;
     private Stage primaryStage;
     private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
 
@@ -58,7 +57,8 @@ public class MainScreen {
     private Draggable draggable;
     private GeneralHandler generalHandler;
     private Thread generalHandlerThread;
-    private FriendList friendList;
+    private Conversation conversation = new Conversation();
+    private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
 
     /**
      * Creates new form ContactScreen.
@@ -78,7 +78,7 @@ public class MainScreen {
     public void initCommunication() {
         conversations = new ArrayList<>();
         messageHandler = new TextMessageHandler(this);
-        messageHandler.update(conversations);
+        //messageHandler.update(conversations);
         messageHandler.setListCellRenderer(listCellRenderer);
         messageThread = new Thread(messageHandler.getRunnable());
         messageThread.start();
@@ -218,9 +218,11 @@ public class MainScreen {
     }*/
 
     public void updateConversations(String chatBuddy) {
-        Conversation conversation = new Conversation(chatBuddy);
-        conversations.add(conversation);
-        messageHandler.update(conversations);
+        //Conversation conversation = new Conversation(chatBuddy);
+        Optional<Conversation> first = conversations.stream().filter(con -> con.getParticipants()
+                .contains(chatBuddy)).findFirst();
+        //conversations.add(conversation);
+        //messageHandler.update(conversations);
     }
 
     @FXML
@@ -301,5 +303,31 @@ public class MainScreen {
 
     public void setFriendList(FriendList friendList) {
         this.friendList = friendList;
+    }
+
+    public void setConversation(Conversation conversation) {
+        ConversationController controller = new ConversationController(conversation);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
+        loader.setController(controller);
+        VBox conversationBox = null;
+        try {
+            conversationBox = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        body.getChildren().add(conversationBox);
+        this.conversation = conversation;
+    }
+
+    public void addConversation(Conversation conversation) {
+        conversations.add(conversation);
+    }
+
+    public Communication getCommunication() {
+        return communication;
+    }
+
+    public List<Conversation> getConversations() {
+        return conversations;
     }
 }

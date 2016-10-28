@@ -29,13 +29,13 @@ public class FriendListHandler implements Handler {
 
         try {
             ContentController contentController = new ContentController();
-            FXMLLoader contentLoader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/ContactContent.fxml"));
+            FXMLLoader contentLoader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/ContactContent.fxml"));
             contentLoader.setController(contentController);
             VBox contactContent = contentLoader.load();
 
             for (String username : friendList.getAccess().getData()) {
-                ContactController contactController = new ContactController();
-                FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/Contact.fxml"));
+                ContactController contactController = new ContactController(mainScreen);
+                FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/Contact.fxml"));
                 loader.setController(contactController);
                 Pane pane = loader.load();
 

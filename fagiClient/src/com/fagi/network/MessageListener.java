@@ -5,7 +5,7 @@ package com.fagi.network;
  */
 
 import com.fagi.controller.MainScreen;
-import com.fagi.model.Conversation;
+import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.lists.ListAccess;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
