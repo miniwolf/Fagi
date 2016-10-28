@@ -231,7 +231,7 @@ input .form-error {
   -fx-text-fill: #444;
   -fx-font-size: 14px;
   -fx-font-weight: 700;
-  -fx-pref-height: 25px;
+  -fx-pref-height: 36px;
   -fx-padding: 0 8px;
   line-height: 36px;
   -fx-border-radius: 3px;
@@ -652,6 +652,8 @@ html, body {
   display: block;
   -fx-pref-height: 96px;
   -fx-pref-width: 96px;
+  -fx-border-radius: 25;
+  -fx-background-radius: 25;
   -fx-background-size: 96px;
   -fx-background-repeat: no-repeat;
   -fx-background-image:url(https://ssl.gstatic.com/accounts/ui/avatar_2x.png);

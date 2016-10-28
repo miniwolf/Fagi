@@ -3,10 +3,8 @@ package com.fagi.main;
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 
-import com.fagi.controller.LoginScreen;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.MasterController;
-import com.fagi.controller.RequestController;
+import com.fagi.controller.login.MasterLogin;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 
@@ -15,13 +13,10 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * JavaFX application class for handling GUI.
@@ -66,20 +61,9 @@ public class FagiApp extends Application {
      * when the user log out and the com.fagi.main screen shut down.
      */
     public void showLoginScreen() {
-        try {
-            // TODO : Let the user browse for the file path
-            String configLocation = "config/serverinfo.config";
-            MasterController controller = new MasterController(this, configLocation, primaryStage);
-            FXMLLoader loader = new FXMLLoader(
-                    controller.getClass().getResource("/com/fagi/view/Master.fxml"));
-            loader.setController(controller);
-            scene.setRoot(loader.load());
-            controller.initCommunication();
-            primaryStage.sizeToScene();
-            controller.setPrimaryStage(primaryStage);
-        } catch (IOException e) {
-            System.err.println(e.toString());
-        }
+        // TODO : Let the user browse for the file path
+        String configLocation = "config/serverinfo.config";
+        MasterLogin controller = new MasterLogin(this, configLocation, primaryStage, scene);
     }
 
     /**

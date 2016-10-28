@@ -1,6 +1,0 @@
-<!--
-  ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
-  -->
-
-<?import javafx.scene.layout.VBox?>
-<VBox fx:id="contentList" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"/>
