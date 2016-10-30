@@ -31,13 +31,7 @@
 }
 
 .contact .name {
-  -fx-fill: #737373;
-}
-
-.contact .date {
   -fx-fill: #404040;
-  -fx-font-size: 12px;
-  -fx-padding:3px 0 0 0;
 }
 
 .contact .content-text {

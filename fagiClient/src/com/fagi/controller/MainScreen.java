@@ -16,6 +16,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
 import com.fagi.network.handlers.*;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -41,6 +42,10 @@ public class MainScreen {
     @FXML private Pane body;
     @FXML private ScrollPane listContent;
     @FXML private TextField searchBox;
+    @FXML private Pane messages;
+    @FXML private Pane contacts;
+
+    private Pane currentPane;
 
     private double xOffset;
     private double yOffset;
@@ -95,6 +100,12 @@ public class MainScreen {
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
             searchUser(newValue);
         });
+    }
+
+    @FXML
+    public void initialize() {
+        currentPane = messages;
+        changeMenu("messages");
     }
 
     /**
@@ -305,17 +316,36 @@ public class MainScreen {
         this.friendList = friendList;
     }
 
+    public void changeMenu(String menu) {
+        currentPane.getStyleClass().removeAll("chosen");
+        currentPane.getStyleClass().add("button-shape");
+
+        switch ( menu ) {
+            case "Contacts":
+                currentPane = contacts;
+                break;
+            case "Messages":
+                currentPane = messages;
+                break;
+        }
+
+        currentPane.getStyleClass().removeAll("button-shape");
+        currentPane.getStyleClass().add("chosen");
+    }
+
     public void setConversation(Conversation conversation) {
+        if ( this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
+            return;
+        }
         ConversationController controller = new ConversationController(conversation);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
         loader.setController(controller);
-        VBox conversationBox = null;
         try {
-            conversationBox = loader.load();
+            VBox conversationBox = loader.load();
+            body.getChildren().add(conversationBox);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        body.getChildren().add(conversationBox);
         this.conversation = conversation;
     }
 

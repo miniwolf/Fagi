@@ -10,10 +10,10 @@
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane layoutX="32.0" layoutY="14.0" styleClass="menubar">
         <Pane layoutX="6.0" layoutY="57.0" styleClass="shape">
-            <Pane styleClass="chosen, message-button"/>
+            <Pane fx:id="messages" styleClass="message-button, button-shape"/>
         </Pane>
         <Pane layoutX="6.0" layoutY="14.0" styleClass="shape">
-            <Pane styleClass="contact-button, button-shape"/>
+            <Pane fx:id="contacts" styleClass="contact-button, button-shape"/>
         </Pane>
     </Pane>
     <VBox layoutX="80.0" layoutY="80.0" styleClass="list">
