@@ -13,19 +13,16 @@ import java.util.List;
  * Created by Marcus on 04-07-2016.
  */
 public class Conversation implements Serializable, InGoingMessages, Access<Conversation> {
-    private List<String> participants;
-    private List<TextMessage> messages;
+    private List<String> participants = new ArrayList<>();
+    private List<TextMessage> messages = new ArrayList<>();
     private long id;
     private Date lastMessageDate;
 
     public Conversation(long id) {
         this.id = id;
-        participants = new ArrayList<>();
-        messages = new ArrayList<>();
     }
 
     public Conversation() {
-
     }
 
     public void addUser(String username) {

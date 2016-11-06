@@ -334,7 +334,7 @@ public class MainScreen {
     }
 
     public void setConversation(Conversation conversation) {
-        if ( this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
+        if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
             return;
         }
         ConversationController controller = new ConversationController(conversation);
@@ -359,5 +359,9 @@ public class MainScreen {
 
     public List<Conversation> getConversations() {
         return conversations;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

@@ -29,11 +29,12 @@ public class ContactController {
     @FXML
     public void openConversation() {
         Conversation conversation;
-        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() == 1 && con.getParticipants().contains(userName.getText())).findFirst();
+        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(userName.getText())).findFirst();
         if ( optConversation.isPresent() ) {
             conversation = optConversation.get();
         } else {
             List<String> participants = new ArrayList<>();
+            participants.add(mainScreen.getUsername());
             participants.add(userName.getText());
             mainScreen.getCommunication().sendObject(new CreateConversationRequest(participants));
             conversation = waitForConversation();
@@ -43,7 +44,7 @@ public class ContactController {
 
     private Conversation waitForConversation() {
         Optional<Conversation> optConversation;
-        while ( !(optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() == 1 && con.getParticipants().contains(userName.getText())).findFirst()).isPresent() ) {
+        while ( !(optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(userName.getText())).findFirst()).isPresent() ) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
