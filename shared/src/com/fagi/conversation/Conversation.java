@@ -40,6 +40,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
 
     public void addMessage(TextMessage message) {
         messages.add(message);
+        lastMessageDate = new Date();
     }
 
     public List<TextMessage> getMessages() { return messages; }

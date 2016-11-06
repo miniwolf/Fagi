@@ -18,6 +18,6 @@
                 <Image url="https://lh3.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/8-c-HHIriAg/s46-c-k-no/photo.jpg"/>
             </ImageView>
         </Pane>
-        <Label fx:id="name" styleClass="mu" text="Zargess"/>
+        <Label fx:id="userName" styleClass="mu" text="Zargess"/>
     </HBox>
 </AnchorPane>

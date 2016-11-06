@@ -25,7 +25,6 @@ public class InputDistributor implements Runnable {
                 InGoingMessages input = messages.take();
                 Container container = containers.get(input.getClass());
                 if ( container == null ) {
-                    System.err.println("Missing handler: " + input.getClass());
                     messages.put(input);
                     continue;
                 }
