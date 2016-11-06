@@ -37,7 +37,7 @@ public class TextMessageHandler implements Handler {
     @Override
     public void handle(InGoingMessages inMessage) {
         TextMessage message = (TextMessage) inMessage;
-        String chatBuddy = message.getMessage().getSender();
+        String chatBuddy = message.getMessageInfo().getSender();
         /*for ( Conversation conversation : conversations ) {
             if ( !conversation.getChatBuddy().equals(chatBuddy) ) {
                 continue;

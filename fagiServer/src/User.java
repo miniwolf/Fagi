@@ -98,4 +98,8 @@ public class User {
     public void removeConversationID(long id) {
         conversationIDs.remove(id);
     }
+
+    public List<Long> getConversationIDs() {
+        return conversationIDs;
+    }
 }

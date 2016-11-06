@@ -51,6 +51,7 @@ class Server {
         try {
             Data.loadConversations();
         } catch (IOException e) {
+            // TODO : FUCK YOU!
             e.printStackTrace();
         }
 

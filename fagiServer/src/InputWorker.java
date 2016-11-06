@@ -80,7 +80,7 @@ public class InputWorker extends Worker {
     private void handleInput(Object input) {
         if ( input instanceof TextMessage ) {
             TextMessage arg = (TextMessage) input;
-            arg.getMessage().setTimestamp(new Timestamp(System.currentTimeMillis()));
+            arg.getMessageInfo().setTimestamp(new Timestamp(System.currentTimeMillis()));
             out.addResponse(handleTextMessage(arg));
         } else if ( input instanceof Login ) {
             Login arg = (Login) input;
@@ -125,6 +125,10 @@ public class InputWorker extends Worker {
                 out.addResponse(new AllIsWell());
             }
             out.addResponse(response);
+        } else if (input instanceof GetConversationsRequest) {
+            GetConversationsRequest request = (GetConversationsRequest)input;
+
+            Object response = handleGetConversationsRequest(request);
         } else if ( input instanceof SearchUsersRequest) {
             SearchUsersRequest request = (SearchUsersRequest)input;
             out.addResponse(new AllIsWell());
@@ -236,6 +240,16 @@ public class InputWorker extends Worker {
         return new AllIsWell();
     }
 
+    // TODO : Make the user give a list of conversations based on a list of filtering
+    private Object handleGetConversationsRequest(GetConversationsRequest request) {
+        User user = Data.getUser(request.getUserName());
+
+        return user
+                .getConversationIDs()
+                .parallelStream()
+                .map(Data::getConversation);
+    }
+
     private Object handleSession(Session arg) {
         aes = new AES(arg.getKey());
         out.setAes(aes);
@@ -254,14 +268,14 @@ public class InputWorker extends Worker {
     }
 
     private Object handleTextMessage(TextMessage arg) {
-        System.out.println("Message");
+        System.out.println("MessageInfo");
 
-        Conversation con = Data.getConversation(arg.getMessage().getConversationID());
+        Conversation con = Data.getConversation(arg.getMessageInfo().getConversationID());
         if (con == null) {
             return new NoSuchConversation();
         }
 
-        if (!con.getParticipants().contains(arg.getMessage().getSender())) {
+        if (!con.getParticipants().contains(arg.getMessageInfo().getSender())) {
             return new Unauthorized();
         }
 

@@ -5,13 +5,11 @@
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.lists.ListAccess;
-import com.fagi.model.messages.message.Message;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.NoSuchUser;
 

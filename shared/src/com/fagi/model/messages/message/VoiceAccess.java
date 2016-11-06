@@ -13,5 +13,5 @@ public interface VoiceAccess extends Access<byte[]> {
     @Override
     byte[] getData();
 
-    Message getMessage();
+    MessageInfo getMessageInfo();
 }

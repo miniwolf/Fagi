@@ -40,7 +40,7 @@ public class MessageListener {
      */
     /*public void run() {
         while ( running ) {
-            Message message = null;
+            MessageInfo message = null;
             while ( message == null && running ) {
                 try {
                     Thread.sleep(10);
