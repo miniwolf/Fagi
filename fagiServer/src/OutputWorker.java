@@ -108,7 +108,6 @@ public class OutputWorker extends Worker {
     private void send(Object object) throws IOException {
         System.out.println("so: " + object.toString());
         objOut.writeObject(aes.encrypt(Conversion.convertToBytes(object)));
-        System.out.println("so sent");
         objOut.flush();
     }
 

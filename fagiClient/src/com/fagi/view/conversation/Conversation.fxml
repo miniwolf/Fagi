@@ -4,7 +4,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Rectangle?>
 <VBox layoutX="573.0" layoutY="90.0" styleClass="message" stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <HBox styleClass="message-title">
         <Pane styleClass="icon">

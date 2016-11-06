@@ -9,7 +9,11 @@
   -fx-text-alignment:left;
   -fx-background-color:#fff;
   -fx-font-size:14px;
-  -fx-pref-width:380px;
+  -fx-pref-width:398px;
+}
+
+.contact:hover {
+  -fx-background-color: #f5f5f5;
 }
 
 .contact .image {
@@ -27,16 +31,10 @@
 }
 
 .contact .name {
-  -fx-fill: #737373;
-}
-
-.contact .date {
   -fx-fill: #404040;
-  -fx-font-size: 12px;
-  -fx-padding:3px 0 0 0;
 }
 
 .contact .content-text {
   -fx-pref-height:25px;
-  -fx-pref-width:290px;
+  -fx-pref-width:305px;
 }

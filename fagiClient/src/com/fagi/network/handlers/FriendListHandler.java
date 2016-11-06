@@ -34,7 +34,7 @@ public class FriendListHandler implements Handler {
             VBox contactContent = contentLoader.load();
 
             for (String username : friendList.getAccess().getData()) {
-                ContactController contactController = new ContactController();
+                ContactController contactController = new ContactController(mainScreen);
                 FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/Contact.fxml"));
                 loader.setController(contactController);
                 Pane pane = loader.load();

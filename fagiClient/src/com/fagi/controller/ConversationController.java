@@ -4,23 +4,20 @@
 
 package com.fagi.controller;
 
-import com.fagi.model.Conversation;
-
+import com.fagi.conversation.Conversation;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
-import java.io.IOException;
+import java.util.Date;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * @author miniwolf
  */
 public class ConversationController {
-    @FXML Label name;
-    @FXML Label date;
+    @FXML private Label name;
+    @FXML private Label date;
     private Conversation conversation;
 
     public ConversationController(Conversation conversation) {
@@ -29,7 +26,18 @@ public class ConversationController {
 
     @FXML
     public void initialize() {
-        name.setText(conversation.getName());
-        date.setText(conversation.getDate());
+        String titleNames = conversation.getParticipants().stream().collect(Collectors.joining(", "));
+        name.setText(titleNames);
+        String dateString = dateToString(conversation.getLastMessageDate());
+        date.setText(dateString);
+    }
+
+    private String dateToString(Date s) {
+        if ( s == null ) {
+            return "";
+        } else {
+            // Convert into something like "active 3 mo ago" "active 1 w ago"
+            return "active 3 mo ago";
+        }
     }
 }

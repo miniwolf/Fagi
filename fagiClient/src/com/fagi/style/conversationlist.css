@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+ */
+.item-holder {
+    -fx-font-family: 'Roboto', 'Arial', sans-serif;
+    -fx-cursor: default;
+    -fx-text-alignment: left;
+    -fx-background-color: #fff;
+    -fx-font-size: 14px;
+    -fx-padding: 16px 24px;
+}
+
+.conversation-item {
+    -fx-pref-width:351px;
+    -fx-alignment: center-left;
+}
+
+.conversation-item:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.conversation-item .image {
+    -fx-pref-height: 40px;
+    -fx-pref-width:40px;
+}
+
+.conversation-item .mu {
+    -fx-pref-height:24px;
+    -fx-text-fill:#404040;
+    -fx-padding: 0 0 0 16px;
+}
+
+.conversation-item .picture-holder {
+    -fx-pref-height:40px;
+}

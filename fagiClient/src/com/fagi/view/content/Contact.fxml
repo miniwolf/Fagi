@@ -1,24 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.HBox?>
+
 <?import javafx.scene.control.Label?>
-<Pane styleClass="contact" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
-    <Pane layoutX="24.0" layoutY="16.0" styleClass="image">
-        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="https://lh3.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/8-c-HHIriAg/s46-c-k-no/photo.jpg" />
-        </ImageView>
-    </Pane>
-    <Pane layoutX="80.0">
-        <HBox layoutY="14.0" styleClass="content-text">
-            <Label fx:id="userName" styleClass="mu" text="Marcus Haagh" />
-            <Pane HBox.hgrow="ALWAYS" />
-            <Label fx:id="date" styleClass="date" text="2 Jul"/>
-        </HBox>
-        <Label fx:id="lastMessage" layoutY="33.0" styleClass="mu" text="You: Hej Marcus" />
-    </Pane>
-</Pane>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<AnchorPane styleClass="item-holder" stylesheets="@../../style/conversationlist.css"
+            xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox layoutX="24.0" layoutY="16.0" styleClass="conversation-item" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Pane styleClass="image">
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="https://lh3.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/8-c-HHIriAg/s46-c-k-no/photo.jpg"/>
+            </ImageView>
+        </Pane>
+        <Label fx:id="name" styleClass="mu" text="Zargess"/>
+    </HBox>
+</AnchorPane>
