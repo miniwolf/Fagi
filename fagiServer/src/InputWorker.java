@@ -198,6 +198,7 @@ public class InputWorker extends Worker {
         for (User user : users) {
             user.addConversationID(con.getId());
             Data.storeUser(user);
+            Data.getWorker(user.getUserName()).addResponse(con);
         }
 
         Data.storeConversation(con);
