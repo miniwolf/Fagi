@@ -7,6 +7,7 @@ package com.fagi.controller.login;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -31,6 +32,7 @@ public class LoginScreenController implements LoginController {
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> username.getParent().requestFocus());
         // TODO: Preinsert the values from username and password
     }
 
