@@ -228,6 +228,8 @@ public class InputWorker extends Worker {
         con.addUser(user.getUserName());
         user.addConversationID(con.getId());
 
+        Data.getWorker(user.getUserName()).addResponse(con);
+
         Data.storeConversation(con);
         Data.storeUser(user);
 
