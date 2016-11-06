@@ -11,7 +11,7 @@
 }
 
 .conversation-item {
-    -fx-pref-width:351px;
+    -fx-pref-width:350px;
     -fx-alignment: center-left;
 }
 
