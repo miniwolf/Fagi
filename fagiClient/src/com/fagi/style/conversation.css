@@ -32,18 +32,15 @@
   -fx-pref-width: 14px;
 }
 
-.message-title .mu {
+.middle-holder .mu {
   -fx-text-fill: #fff;
   -fx-font-size: 13px;
-  /*-fx-wrap-text: false;*/
-  /*-fx-text-overrun: word-ellipsis;*/
-  /*-fx-pref-height:1em;*/
 }
 
-.message-title .last-seen {
+.middle-holder .last-seen {
+  -fx-pref-height: 0px;
   -fx-text-fill: #e5e5e5;
   -fx-font-size: 9px;
-  -fx-pref-height: 1em;
 }
 
 .icon {
@@ -91,6 +88,7 @@
   -fx-line-height: 16px;
   -fx-cursor: text;
   -fx-pref-height:36px;
+  -fx-min-height:36px;
   -fx-padding: 2px 0 2px 6px;
   -fx-wrap-text:true;
   -fx-background-color:#FFF;
@@ -125,6 +123,8 @@
 }
 
 .message .text-content {
+  -fx-pref-height: 86px;
+  -fx-pref-width: 382px;
   -fx-background-color:#eceff1;
 }
 

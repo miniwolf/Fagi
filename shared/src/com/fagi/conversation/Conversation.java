@@ -16,7 +16,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     private List<String> participants = new ArrayList<>();
     private List<TextMessage> messages = new ArrayList<>();
     private long id;
-    private Date lastMessageDate;
+    private Date lastMessageDate = new Date();
 
     public Conversation(long id) {
         this.id = id;

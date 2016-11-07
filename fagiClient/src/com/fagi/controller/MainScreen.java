@@ -12,6 +12,7 @@ import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
@@ -39,329 +40,211 @@ import java.util.Optional;
  * TODO: Write description.
  */
 public class MainScreen {
-    @FXML private Pane body;
-    @FXML private ScrollPane listContent;
-    @FXML private TextField searchBox;
-    @FXML private Pane messages;
-    @FXML private Pane contacts;
+	@FXML private Pane body;
+	@FXML private ScrollPane listContent;
+	@FXML private TextField searchBox;
+	@FXML private Pane messages;
+	@FXML private Pane contacts;
 
-    private Pane currentPane;
+	private Pane currentPane;
 
-    private double xOffset;
-    private double yOffset;
+	private final String username;
+	private final Communication communication;
+	private List<com.fagi.conversation.Conversation> conversations;
+	private Stage primaryStage;
+	private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
 
-    private final String username;
-    private final Communication communication;
-    private List<com.fagi.conversation.Conversation> conversations;
-    private Stage primaryStage;
-    private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
+	private TextMessageHandler messageHandler;
+	private Thread messageThread;
+	private Thread voiceThread;
+	private Draggable draggable;
+	private GeneralHandler generalHandler;
+	private Thread generalHandlerThread;
+	private Conversation conversation = new Conversation();
+	private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
 
-    private TextMessageHandler messageHandler;
-    private Thread messageThread;
-    private Thread voiceThread;
-    private Draggable draggable;
-    private GeneralHandler generalHandler;
-    private Thread generalHandlerThread;
-    private Conversation conversation = new Conversation();
-    private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
+	/**
+	 * Creates new form ContactScreen.
+	 *
+	 * @param username      which is used all around the class for knowing who the user is
+	 * @param communication granted by the LoginScreen class
+	 * @param primaryStage  primary stage used to create a draggable.
+	 */
+	public MainScreen(String username, Communication communication, Stage primaryStage) {
+		this.username = username;
+		this.communication = communication;
+		this.draggable = new Draggable(primaryStage);
+	}
 
-    /**
-     * Creates new form ContactScreen.
-     *  @param username      which is used all around the class for knowing who the user is
-     * @param communication granted by the LoginScreen class
-     * @param primaryStage  primary stage used to create a draggable.
-     */
-    public MainScreen(String username, Communication communication, Stage primaryStage) {
-        this.username = username;
-        this.communication = communication;
-        this.draggable = new Draggable(primaryStage);
-    }
+	/**
+	 * Initiate all communication and handlers needed to contact the server.
+	 */
+	public void initCommunication() {
+		conversations = new ArrayList<>();
+		messageHandler = new TextMessageHandler(this);
+		//messageHandler.update(conversations);
+		messageHandler.setListCellRenderer(listCellRenderer);
+		messageThread = new Thread(messageHandler.getRunnable());
+		messageThread.start();
 
-    /**
-     * Initiate all communication and handlers needed to contact the server.
-     */
-    public void initCommunication() {
-        conversations = new ArrayList<>();
-        messageHandler = new TextMessageHandler(this);
-        //messageHandler.update(conversations);
-        messageHandler.setListCellRenderer(listCellRenderer);
-        messageThread = new Thread(messageHandler.getRunnable());
-        messageThread.start();
+		VoiceMessageHandler voiceHandler = new VoiceMessageHandler();
+		voiceThread = new Thread(voiceHandler.getRunnable());
+		voiceThread.start();
 
-        VoiceMessageHandler voiceHandler = new VoiceMessageHandler();
-        voiceThread = new Thread(voiceHandler.getRunnable());
-        voiceThread.start();
+		GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
+		generalHandler = factory.construct();
+		generalHandlerThread = new Thread(generalHandler.getRunnable());
+		generalHandlerThread.start();
 
-        GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
-        generalHandler = factory.construct();
-        generalHandlerThread = new Thread(generalHandler.getRunnable());
-        generalHandlerThread.start();
+		searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
+			searchUser(newValue);
+		});
+	}
 
-        searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchUser(newValue);
-        });
-    }
+	@FXML
+	public void initialize() {
+		currentPane = messages;
+		changeMenu("messages");
+	}
 
-    @FXML
-    public void initialize() {
-        currentPane = messages;
-        changeMenu("messages");
-    }
+	@FXML
+	void talkButtonClicked() {
 
-    /**
-     * Callback from FagiApp class.
-     * Used to initialize the form.
-    public void initComponents() {
-        message.setOnKeyPressed(event -> {
-            if ( event.getSource() != message || event.getCode() != KeyCode.ENTER ) {
-                return;
-            }
-            if ( event.isControlDown() ) {
-                message.appendText("\n");
-            } else {
-                handleMessage();
-                event.consume();
-            }
-        });
+	}
 
-        scrollPaneChat.setContent(new Chat());
-        buildContactList();
-    }
+	public void updateConversations(TextMessage message) {
+		Optional<Conversation> first = conversations.stream().filter(con -> con.getId()
+				== message.getMessage().getConversationID()).findFirst();
+		//conversations.add(conversation);
+		//messageHandler.update(conversations);
+	}
 
-    private void buildContactList(List<Contact> list) {
-        ObservableList<Node> children = contactList.getChildren();
-        children.addAll(list.stream().map(Contact::build).collect(Collectors.toList()));
-    }
+	@FXML
+	void logoutRequest() {
+		interrupt(messageThread);
+		interrupt(voiceThread);
+		generalHandler.stop();
+		interrupt(generalHandlerThread);
 
-    private void handleMessage() {
-        if ( message.getText().equals("") ) {
-            return;
-        }
+		ChatManager.handleLogout(new Logout());
+	}
 
-        Chat chat = (Chat) scrollPaneChat.getContent();
-        for ( Conversation conversation : conversations ) {
-            if ( conversation.getConversation() == chat ) {
-                communication.sendObject(new TextMessage(message.getText(), username,
-                                                         conversation.getChatBuddy()));
-                Response response = communication.getNextResponse();
-                if ( response instanceof UserOnline ) {
-                    conversation.getConversation().appendText("System: User went offline.");
-                }
-                break;
-            }
-        }
+	private void interrupt(Thread thread) {
+		thread.interrupt();
+		while ( !thread.isInterrupted() ) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-        chat.appendText(username + ": " + message.getText() + "\n");
-        message.setText("");
-        message.requestFocus();
-    }*/
+	/**
+	 * Opens a dialog to send a friend request to the server. When the user clicks
+	 * Send Request, the method will call ChatManager with the content of the request
+	 * TextField.
+	 */
+	@FXML
+	public void showFriendRequestPopup() {
+		try {
+			FXMLLoader loader = new FXMLLoader(
+					getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
+			GridPane page = loader.load();
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Friend Request");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
 
-    @FXML
-    void talkButtonClicked() {
+			Scene scene = new Scene(page);
+			dialogStage.setScene(scene);
 
-    }
+			RequestController controller = loader.getController();
+			controller.setStage(dialogStage);
 
-    /*@FXML
-    void requestListClicked() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/fagi/view/RequestRespond.fxml"));
-            GridPane page = loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Friend Request Respond");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+			dialogStage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+	@FXML
+	public void searchUser(String searchString) {
+		if ( searchString.isEmpty() ) {
+			FriendListHandler handler = new FriendListHandler(this);
+			handler.handle(friendList);
+			return;
+		}
 
-            requestList.setOnMouseClicked(event -> {
-                if ( event.getSource() != requestList
-                     || !event.getButton().equals(MouseButton.PRIMARY) ) {
-                    return;
-                }
+		communication.sendObject(new SearchUsersRequest(username, searchString));
+	}
 
-                String user = requestList.getFocusModel().getFocusedItem();
-                if ( user == null || user.length() == 0 ) {
-                    return;
-                }
+	public void setPrimaryStage(final Stage primaryStage) {
+		this.primaryStage = primaryStage;
+	}
 
-                RespondController controller = loader.getController();
-                controller.setStage(dialogStage);
-                controller.setRequestName(user);
+	public void mousePressed(MouseEvent mouseEvent) {
+		draggable.mousePressed(mouseEvent);
+	}
 
-                dialogStage.showAndWait();
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	public void mouseDragged(MouseEvent mouseEvent) {
+		draggable.mouseDragged(mouseEvent);
+	}
 
-    @FXML
-    void contactListClicked() {
-        String chatBuddy = contactList.getFocusModel().getFocusedItem();
-        if ( chatBuddy == null || "".equals(chatBuddy) ) {
-            return;
-        }
+	public void setScrollPaneContent(Parent parent) {
+		listContent.setContent(parent);
+	}
 
-        boolean exists = false;
-        for ( Conversation conversation : conversations ) {
-            if ( conversation.getChatBuddy().equals(chatBuddy) ) {
-                scrollPaneChat.setContent(conversation.getConversation());
-                chatname.setText("Chatroom with " + chatBuddy);
-                if ( messageHandler.getUnread().indexOf(chatBuddy) != -1 ) {
-                    messageHandler.getUnread().remove(chatBuddy);
-                    listCellRenderer.stream().filter(cell -> chatBuddy.equals(cell.getText()))
-                                    .forEach(cell -> Platform.runLater(
-                                            () -> cell.updateItem(chatBuddy, false)));
-                }
-                exists = true;
-                break;
-            }
-        }
+	public void setFriendList(FriendList friendList) {
+		this.friendList = friendList;
+	}
 
-        if ( !exists ) {
-            updateConversations(chatBuddy);
-            contactListClicked();
-            return;
-        }
-        message.requestFocus();
-    }*/
+	public void changeMenu(String menu) {
+		currentPane.getStyleClass().removeAll("chosen");
+		currentPane.getStyleClass().add("button-shape");
 
-    public void updateConversations(String chatBuddy) {
-        //Conversation conversation = new Conversation(chatBuddy);
-        Optional<Conversation> first = conversations.stream().filter(con -> con.getParticipants()
-                .contains(chatBuddy)).findFirst();
-        //conversations.add(conversation);
-        //messageHandler.update(conversations);
-    }
+		switch ( menu ) {
+			case "Contacts":
+				currentPane = contacts;
+				break;
+			case "Messages":
+				currentPane = messages;
+				break;
+		}
 
-    @FXML
-    void logoutRequest() {
-        interrupt(messageThread);
-        interrupt(voiceThread);
-        generalHandler.stop();
-        interrupt(generalHandlerThread);
+		currentPane.getStyleClass().removeAll("button-shape");
+		currentPane.getStyleClass().add("chosen");
+	}
 
-        ChatManager.handleLogout(new Logout());
-    }
+	public void setConversation(Conversation conversation) {
+		if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
+			return;
+		}
+		ConversationController controller = new ConversationController(conversation);
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
+		loader.setController(controller);
+		try {
+			VBox conversationBox = loader.load();
+			body.getChildren().add(conversationBox);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.conversation = conversation;
+	}
 
-    private void interrupt(Thread thread) {
-        thread.interrupt();
-        while ( !thread.isInterrupted() ) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	public void addConversation(Conversation conversation) {
+		conversations.add(conversation);
+	}
 
-    /**
-     * Opens a dialog to send a friend request to the server. When the user clicks
-     * Send Request, the method will call ChatManager with the content of the request
-     * TextField.
-     */
-    @FXML
-    public void showFriendRequestPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
-            GridPane page = loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Friend Request");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+	public Communication getCommunication() {
+		return communication;
+	}
 
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+	public List<Conversation> getConversations() {
+		return conversations;
+	}
 
-            RequestController controller = loader.getController();
-            controller.setStage(dialogStage);
-
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void searchUser(String searchString) {
-        if (searchString.isEmpty()) {
-            FriendListHandler handler = new FriendListHandler(this);
-            handler.handle(friendList);
-            return;
-        }
-
-        communication.sendObject(new SearchUsersRequest(username, searchString));
-    }
-
-    public void setPrimaryStage(final Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
-
-    public void mousePressed(MouseEvent mouseEvent) {
-        draggable.mousePressed(mouseEvent);
-    }
-
-    public void mouseDragged(MouseEvent mouseEvent) {
-        draggable.mouseDragged(mouseEvent);
-    }
-
-    public void setScrollPaneContent(Parent parent) {
-        listContent.setContent(parent);
-    }
-
-    public void setFriendList(FriendList friendList) {
-        this.friendList = friendList;
-    }
-
-    public void changeMenu(String menu) {
-        currentPane.getStyleClass().removeAll("chosen");
-        currentPane.getStyleClass().add("button-shape");
-
-        switch ( menu ) {
-            case "Contacts":
-                currentPane = contacts;
-                break;
-            case "Messages":
-                currentPane = messages;
-                break;
-        }
-
-        currentPane.getStyleClass().removeAll("button-shape");
-        currentPane.getStyleClass().add("chosen");
-    }
-
-    public void setConversation(Conversation conversation) {
-        if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
-            return;
-        }
-        ConversationController controller = new ConversationController(conversation);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
-        loader.setController(controller);
-        try {
-            VBox conversationBox = loader.load();
-            body.getChildren().add(conversationBox);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.conversation = conversation;
-    }
-
-    public void addConversation(Conversation conversation) {
-        conversations.add(conversation);
-    }
-
-    public Communication getCommunication() {
-        return communication;
-    }
-
-    public List<Conversation> getConversations() {
-        return conversations;
-    }
-
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 }

@@ -56,7 +56,7 @@ public class TextMessageHandler implements Handler {
                                     () -> cell.updateItem(chatBuddy, false)));
             return;
         }*/
-        mainScreen.updateConversations(chatBuddy);
+        mainScreen.updateConversations(message);
         handle(message);
     }
 
