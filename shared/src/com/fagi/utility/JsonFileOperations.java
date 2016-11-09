@@ -1,4 +1,4 @@
-package utility;
+package com.fagi.utility;
 
 import com.google.gson.Gson;
 
