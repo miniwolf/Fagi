@@ -4,6 +4,7 @@
  */
 
 import com.fagi.conversation.Conversation;
+import com.fagi.utility.JsonFileOperations;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -50,50 +51,11 @@ class Data {
     }
 
     public static void storeConversation(Conversation con) {
-        try {
-            File folder = new File(conversationsFolderPath);
-            File file = new File(conversationsFolderPath + con.getId() + ".fagi");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            Gson gson = new Gson();
-
-            PrintWriter out = new PrintWriter(new FileWriter(conversationsFolderPath + con.getId() + ".fagi", false));
-            out.println(gson.toJson(con));
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JsonFileOperations.storeConversation(con);
     }
 
-    public static void loadConversations() throws IOException {
-        File folder = new File(conversationsFolderPath);
-        if ( !folder.exists() ) {
-            return;
-        }
-
-        File[] files = folder.listFiles();
-        if ( files == null ) {
-            return;
-        }
-
-        for ( File file : files ) {
-            String json = "";
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            while ( reader.ready() ) {
-                json += reader.readLine();
-            }
-
-            Gson gson = new Gson();
-
-            Conversation con = gson.fromJson(json, Conversation.class);
-            conversations.put(con.getId(), con);
-        }
+    public static void loadConversations() {
+        JsonFileOperations.loadAllConversations().forEach(c -> conversations.put(c.getId(), c));
 
         Set<Long> keys = conversations.keySet();
         if ( keys.size() > 0 ) {

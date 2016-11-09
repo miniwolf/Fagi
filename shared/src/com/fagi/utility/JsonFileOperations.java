@@ -1,17 +1,23 @@
 package com.fagi.utility;
 
+import com.fagi.conversation.Conversation;
 import com.google.gson.Gson;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by costa on 09-11-2016.
  */
 public class JsonFileOperations {
-    public static <T extends Serializable> void StoreObjectToFile(T object, String folderPath, String fileName) {
+    public static final String CONVERSATION_FOLDER_PATH = "conversations/";
+    public static final String FAGI_EXTENSION = ".fagi";
+
+    public static <T extends Serializable> void storeObjectToFile(T object, String folderPath, String fileName) {
         try {
             File folder = new File(folderPath);
-            File file = new File(folderPath + fileName + ".fagi");
+            File file = new File(folderPath + fileName + FAGI_EXTENSION);
             if (!folder.exists()) {
                 folder.mkdir();
             }
@@ -21,7 +27,7 @@ public class JsonFileOperations {
 
             Gson gson = new Gson();
 
-            PrintWriter out = new PrintWriter(new FileWriter(folderPath + fileName + ".fagi", false));
+            PrintWriter out = new PrintWriter(new FileWriter(folderPath + fileName + FAGI_EXTENSION, false));
             out.println(gson.toJson(object));
             out.flush();
             out.close();
@@ -30,7 +36,7 @@ public class JsonFileOperations {
         }
     }
 
-    public static <T extends Serializable> T LoadObjectFromFile(String fileName, Class<T> clazz) {
+    public static <T extends Serializable> T loadObjectFromFile(String fileName, Class<T> clazz) {
         T res = null;
         try {
             File file = new File(fileName);
@@ -49,5 +55,29 @@ public class JsonFileOperations {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static <T extends Serializable> List<T> loadAllObjectsInFolder(String folderName, Class<T> clazz) {
+        List<T> res = new ArrayList<>();
+
+        File folder = new File(folderName);
+        if (!folder.exists()) return res;
+
+        File[] files = folder.listFiles();
+        if (files == null) return res;
+
+        for (File file : files) {
+            res.add(loadObjectFromFile(file.getAbsolutePath(), clazz));
+        }
+
+        return res;
+    }
+
+    public static void storeConversation(Conversation c) {
+        storeObjectToFile(c, CONVERSATION_FOLDER_PATH, c.getId() + "");
+    }
+
+    public static List<Conversation> loadAllConversations() {
+        return loadAllObjectsInFolder(CONVERSATION_FOLDER_PATH, Conversation.class);
     }
 }
