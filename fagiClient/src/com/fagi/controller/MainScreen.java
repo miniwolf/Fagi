@@ -76,23 +76,12 @@ public class MainScreen {
 		this.draggable = new Draggable(primaryStage);
 	}
 
-	/**
-	 * Initiate all communication and handlers needed to contact the server.
-	 */
-	public void initCommunication() {
-		conversations = new ArrayList<>();
-		messageHandler = new TextMessageHandler(this);
-		messageThread = new Thread(messageHandler.getRunnable());
-		messageThread.start();
-
     /**
      * Initiate all communication and handlers needed to contact the server.
      */
     public void initCommunication() {
         conversations = JsonFileOperations.loadAllConversations();
         messageHandler = new TextMessageHandler(this);
-        //messageHandler.update(conversations);
-        messageHandler.setListCellRenderer(listCellRenderer);
         messageThread = new Thread(messageHandler.getRunnable());
         messageThread.start();
 
@@ -120,7 +109,7 @@ public class MainScreen {
 	@FXML
 	void logoutRequest() {
 		interrupt(messageThread);
-		interrupt(voiceThread);
+		//interrupt(voiceThread);
 		generalHandler.stop();
 		interrupt(generalHandlerThread);
 

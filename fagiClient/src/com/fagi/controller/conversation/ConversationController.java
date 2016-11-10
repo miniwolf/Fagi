@@ -81,7 +81,7 @@ public class ConversationController {
 	}
 
 	public void addMessage(TextMessage message) {
-		HBox load = getBox(message.getMessage().getSender().equals(username)
+		HBox load = getBox(message.getMessageInfo().getSender().equals(username)
 				? "/com/fagi/view/conversation/MyMessage.fxml"
 				: "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
 		Platform.runLater(() -> chat.getChildren().add(load));
