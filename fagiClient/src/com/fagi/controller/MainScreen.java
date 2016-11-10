@@ -6,18 +6,16 @@ package com.fagi.controller;
  * UserInterface, containing chat window and contact list
  */
 
+import com.fagi.controller.conversation.ConversationController;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
-import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-import com.fagi.network.ListCellRenderer;
 import com.fagi.network.handlers.*;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,7 +32,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * TODO: Write description.
@@ -52,7 +49,6 @@ public class MainScreen {
 	private final Communication communication;
 	private List<com.fagi.conversation.Conversation> conversations;
 	private Stage primaryStage;
-	private List<ListCellRenderer> listCellRenderer = new ArrayList<>();
 
 	private TextMessageHandler messageHandler;
 	private Thread messageThread;
@@ -62,6 +58,8 @@ public class MainScreen {
 	private Thread generalHandlerThread;
 	private Conversation conversation = new Conversation();
 	private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
+	private boolean currentConversation;
+	private ConversationController conversationController;
 
 	/**
 	 * Creates new form ContactScreen.
@@ -82,8 +80,6 @@ public class MainScreen {
 	public void initCommunication() {
 		conversations = new ArrayList<>();
 		messageHandler = new TextMessageHandler(this);
-		//messageHandler.update(conversations);
-		messageHandler.setListCellRenderer(listCellRenderer);
 		messageThread = new Thread(messageHandler.getRunnable());
 		messageThread.start();
 
@@ -110,13 +106,6 @@ public class MainScreen {
 	@FXML
 	void talkButtonClicked() {
 
-	}
-
-	public void updateConversations(TextMessage message) {
-		Optional<Conversation> first = conversations.stream().filter(con -> con.getId()
-				== message.getMessage().getConversationID()).findFirst();
-		//conversations.add(conversation);
-		//messageHandler.update(conversations);
 	}
 
 	@FXML
@@ -220,7 +209,7 @@ public class MainScreen {
 		if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
 			return;
 		}
-		ConversationController controller = new ConversationController(conversation);
+		ConversationController controller = new ConversationController(conversation, communication, username);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
 		loader.setController(controller);
 		try {
@@ -229,6 +218,7 @@ public class MainScreen {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.conversationController = controller;
 		this.conversation = conversation;
 	}
 
@@ -246,5 +236,13 @@ public class MainScreen {
 
 	public String getUsername() {
 		return username;
+	}
+
+	public Conversation getCurrentConversation() {
+		return conversation;
+	}
+
+	public ConversationController getConversationController() {
+		return conversationController;
 	}
 }

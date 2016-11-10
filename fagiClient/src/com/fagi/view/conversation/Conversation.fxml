@@ -18,21 +18,19 @@
         <Pane styleClass="icon">
             <Pane layoutY="12.0" styleClass="picture" />
         </Pane>
-      <VBox alignment="CENTER_LEFT" styleClass="middle-holder">
-         <children>
-               <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS" />
-               <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER" />
-         </children>
-      </VBox>
+        <VBox alignment="CENTER_LEFT" styleClass="middle-holder">
+            <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS"/>
+            <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER"/>
+        </VBox>
         <HBox styleClass="icon">
             <Button styleClass="icon, minimize" />
             <Button styleClass="icon, popout" />
             <Button styleClass="icon, close" />
         </HBox>
     </HBox>
-    <Pane styleClass="text-content" VBox.vgrow="ALWAYS" />
-    <ScrollPane styleClass="text-content" VBox.vgrow="SOMETIMES">
-        <VBox styleClass="text-content" />
+    <Pane VBox.vgrow="ALWAYS" />
+    <ScrollPane VBox.vgrow="SOMETIMES">
+        <VBox fx:id="chat" />
     </ScrollPane>
     <Pane styleClass="outline, field">
         <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" />
