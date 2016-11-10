@@ -16,6 +16,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.ListCellRenderer;
 import com.fagi.network.handlers.*;
+import com.fagi.utility.JsonFileOperations;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -81,7 +82,7 @@ public class MainScreen {
      * Initiate all communication and handlers needed to contact the server.
      */
     public void initCommunication() {
-        conversations = new ArrayList<>();
+        conversations = JsonFileOperations.loadAllConversations();
         messageHandler = new TextMessageHandler(this);
         //messageHandler.update(conversations);
         messageHandler.setListCellRenderer(listCellRenderer);
