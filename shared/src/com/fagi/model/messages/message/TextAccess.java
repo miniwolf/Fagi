@@ -13,5 +13,5 @@ public interface TextAccess extends Access<String> {
     @Override
     String getData();
 
-    Message getMessage();
+    MessageInfo getMessageInfo();
 }

@@ -5,7 +5,9 @@ import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -58,5 +60,17 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
 
     public Date getLastMessageDate() {
         return lastMessageDate;
+    }
+
+    public List<TextMessage> getMessagesFromTimePoint(Timestamp time) {
+        List<TextMessage> res = new ArrayList<>();
+        for (int i = messages.size() - 1; i >= 0; i--) {
+            TextMessage message = messages.get(i);
+            if (message.getMessageInfo().getTimestamp().compareTo(time) > 0) {
+                res.add(message);
+            }
+        }
+        Collections.reverse(res);
+        return res;
     }
 }

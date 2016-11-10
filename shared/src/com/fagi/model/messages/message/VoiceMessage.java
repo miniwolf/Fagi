@@ -13,10 +13,10 @@ public class VoiceMessage implements InGoingMessages, VoiceAccess {
      */
     private byte[] data;
 
-    private Message message;
+    private MessageInfo messageInfo;
 
     public VoiceMessage(byte[] data, String sender, long conversationID) {
-        message = new DefaultMessage(sender, conversationID);
+        messageInfo = new DefaultMessageInfo(sender, conversationID);
         this.data = data;
     }
 
@@ -25,9 +25,8 @@ public class VoiceMessage implements InGoingMessages, VoiceAccess {
         return data;
     }
 
-    @Override
-    public Message getMessage() {
-        return message;
+    public MessageInfo getMessageInfo() {
+        return messageInfo;
     }
 
     @Override

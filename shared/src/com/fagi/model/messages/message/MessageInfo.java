@@ -4,7 +4,7 @@
 
 package com.fagi.model.messages.message;/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * Message.java
+ * MessageInfo.java
  *
  * Serializable object to send messages to server.
  */
@@ -12,7 +12,7 @@ package com.fagi.model.messages.message;/*
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public interface Message extends Serializable {
+public interface MessageInfo extends Serializable {
     String getSender();
 
     long getConversationID();

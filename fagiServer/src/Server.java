@@ -48,11 +48,7 @@ class Server {
 
         conversationHandlerThread = new Thread(handler);
         conversationHandlerThread.start();
-        try {
-            Data.loadConversations();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Data.loadConversations();
 
         while ( running ) {
             try {

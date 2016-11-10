@@ -4,8 +4,6 @@
 
 package com.fagi.model.messages;
 
-import com.fagi.model.messages.message.Message;
-
 import java.io.Serializable;
 
 /**

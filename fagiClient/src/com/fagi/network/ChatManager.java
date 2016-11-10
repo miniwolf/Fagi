@@ -195,7 +195,7 @@ public class ChatManager {
      * Pop up error message. Utility method for showing message to the user with
      * an OK button.
      * @param title     The title of the popup message
-     * @param message   Message to write to the user
+     * @param message   MessageInfo to write to the user
      */
     public static void showErrorMessage(String title, String message) {
         try {

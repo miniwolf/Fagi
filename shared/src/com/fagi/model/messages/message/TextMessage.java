@@ -7,13 +7,11 @@ package com.fagi.model.messages.message;
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 
-import java.sql.Timestamp;
-
 /**
  * @author miniwolf
  */
 public class TextMessage implements InGoingMessages, TextAccess {
-    private DefaultMessage message;
+    private DefaultMessageInfo message;
 
     /**
      * Contains text message.
@@ -22,7 +20,7 @@ public class TextMessage implements InGoingMessages, TextAccess {
 
     public TextMessage(String data, String sender, long conversationID) {
         this.data = data;
-        message = new DefaultMessage(sender, conversationID);
+        message = new DefaultMessageInfo(sender, conversationID);
     }
 
     @Override
@@ -31,7 +29,7 @@ public class TextMessage implements InGoingMessages, TextAccess {
     }
 
     @Override
-    public Message getMessage() {
+    public MessageInfo getMessageInfo() {
         return message;
     }
 

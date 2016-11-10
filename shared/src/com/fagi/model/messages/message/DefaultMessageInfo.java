@@ -9,17 +9,17 @@ import java.sql.Timestamp;
 /**
  * @author miniwolf
  */
-public class DefaultMessage implements Message {
+public class DefaultMessageInfo implements MessageInfo {
     private String sender;
     private long conversationID;
     private Timestamp timestamp;
 
-    public DefaultMessage(String sender, long conversationID) {
+    public DefaultMessageInfo(String sender, long conversationID) {
         this.sender = sender;
         this.conversationID = conversationID;
     }
 
-    public DefaultMessage() {}
+    public DefaultMessageInfo() {}
 
     @Override
     public String getSender() {

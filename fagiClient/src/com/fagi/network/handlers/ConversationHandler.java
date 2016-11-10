@@ -3,6 +3,7 @@ package com.fagi.network.handlers;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.InGoingMessages;
+import com.fagi.utility.JsonFileOperations;
 
 /**
  * @author miniwolf
@@ -21,6 +22,7 @@ public class ConversationHandler implements Handler {
     @Override
     public void handle(InGoingMessages object) {
         Conversation conversation = (Conversation) object;
+        JsonFileOperations.storeConversation(conversation);
         mainScreen.addConversation(conversation);
     }
 

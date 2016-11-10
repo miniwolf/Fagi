@@ -31,9 +31,9 @@ public class TextMessageHandler implements Handler {
 	@Override
 	public void handle(InGoingMessages inMessage) {
 		TextMessage message = (TextMessage) inMessage;
-		Optional<Conversation> first = mainScreen.getConversations().stream().filter(c -> c.getId() == message.getMessage().getConversationID()).findFirst();
+		Optional<Conversation> first = mainScreen.getConversations().stream().filter(c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
 		if ( !first.isPresent() ) {
-			System.err.println("Server sent a message before it sent the conversation of ID '" + message.getMessage().getConversationID() + "'to the profile.");
+			System.err.println("Server sent a message before it sent the conversation of ID '" + message.getMessageInfo().getConversationID() + "'to the profile.");
 			return;
 		}
 		Conversation conversation = first.get();
