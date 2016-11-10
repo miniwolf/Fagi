@@ -4,6 +4,7 @@
 
 package com.fagi.controller.login;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,7 +29,8 @@ public class CreateUserNameController implements LoginController {
 
     @FXML
     public void initialize() {
-        masterLogin.initialize(loginBtn);
+        masterLogin.initialize(username);
+        Platform.runLater(() -> username.getParent().requestFocus());
     }
 
     @Override
@@ -43,6 +45,10 @@ public class CreateUserNameController implements LoginController {
 
     @Override
     public void next() {
+        if ( "".equals(username.getText()) ) {
+            messageLabel.setText("Username cannot be empty");
+            return;
+        }
         masterLogin.setUsername(username.getText());
         masterLogin.next();
     }

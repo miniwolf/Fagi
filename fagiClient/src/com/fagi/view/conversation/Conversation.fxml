@@ -1,17 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<VBox layoutX="573.0" layoutY="90.0" styleClass="message" stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox layoutX="573.0" layoutY="90.0" styleClass="message" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <HBox styleClass="message-title">
         <Pane styleClass="icon">
             <Pane layoutY="12.0" styleClass="picture" />
         </Pane>
-        <VBox styleClass="middle-holder">
-            <Label fx:id="name" styleClass="mu" />
-            <Label fx:id="date" styleClass="last-seen" />
+        <VBox alignment="CENTER_LEFT" styleClass="middle-holder">
+            <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS"/>
+            <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER"/>
         </VBox>
         <HBox styleClass="icon">
             <Button styleClass="icon, minimize" />
@@ -19,14 +28,18 @@
             <Button styleClass="icon, close" />
         </HBox>
     </HBox>
-    <Pane styleClass="text-content" VBox.vgrow="ALWAYS" />
-    <ScrollPane styleClass="text-content" VBox.vgrow="SOMETIMES">
-        <VBox prefHeight="86.0" prefWidth="382.0" styleClass="text-content"/>
+    <Pane VBox.vgrow="ALWAYS" />
+    <ScrollPane VBox.vgrow="SOMETIMES">
+        <VBox fx:id="chat" />
     </ScrollPane>
     <Pane styleClass="outline, field">
-        <Button layoutX="8.0" layoutY="8.0" mnemonicParsing="false" styleClass="icon, smiley" />
+        <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" />
         <Pane layoutX="28.0" styleClass="area">
-            <TextArea fx:id="message" layoutY="1.0" minHeight="-Infinity" promptText="Send a message" styleClass="text" />
+            <TextArea fx:id="message" layoutY="1.0" promptText="Send a message" styleClass="text" />
         </Pane>
     </Pane>
+   <stylesheets>
+      <URL value="@../../style/conversation.css" />
+      <URL value="@../../style/main.css" />
+   </stylesheets>
 </VBox>

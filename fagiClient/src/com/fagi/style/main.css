@@ -1,10 +1,6 @@
 /*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
-*:focused {
-
-}
-
 .maincontent {
   -fx-background-color:#CCC;
   -fx-pref-height:500px;
@@ -82,10 +78,6 @@
   -fx-background-insets: 0, 0, 0;
 }
 
-.scroll-pane > .viewport {
-  -fx-background-color:#FFF;
-}
-
 .search {
   -fx-pref-width:400px;
   -fx-min-height: 56px;
@@ -128,56 +120,59 @@
   -fx-pref-width:87px;
 }
 
-.scroll-bar {
-  -fx-pref-height: 16px;
-  -fx-pref-width: 16px;
-}
-.scroll-bar .increment-button, .scroll-bar .decrement-button {
-  -fx-shape:"";
-  -fx-padding:0;
-  -fx-pref-height:0;
-  -fx-pref-width:0;
-}
+/*.scroll-pane > .viewport {*/
+  /*-fx-background-color:#FFF;*/
+/*}*/
+/*.scroll-bar {*/
+  /*-fx-pref-height: 16px;*/
+  /*-fx-pref-width: 16px;*/
+/*}*/
+/*.scroll-bar .increment-button, .scroll-bar .decrement-button {*/
+  /*-fx-shape:"";*/
+  /*-fx-padding:0;*/
+  /*-fx-pref-height:0;*/
+  /*-fx-pref-width:0;*/
+/*}*/
 
-.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
-  -fx-shape:"";
-  -fx-padding:0;
-  -fx-pref-width:0;
-  -fx-pref-height:0;
-}
+/*.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {*/
+  /*-fx-shape:"";*/
+  /*-fx-padding:0;*/
+  /*-fx-pref-width:0;*/
+  /*-fx-pref-height:0;*/
+/*}*/
 
-.scroll-bar .thumb, scroll-bar .track {
-  -fx-background-color:#eceff1;
-  -fx-border-width: 0;
-}
+/*.scroll-bar .thumb, scroll-bar .track {*/
+  /*-fx-background-color:#eceff1;*/
+  /*-fx-border-width: 0;*/
+/*}*/
 
-.scroll-bar .thumb:hover {
-  -fx-background-color: rgba(0,0,0,.4);
-  -fx-effect:innershadow(three-pass-box, rgba(0,0,0,.25), 1, 1, 1, 1);
-}
+/*.scroll-bar .thumb:hover {*/
+  /*-fx-background-color: rgba(0,0,0,.4);*/
+  /*-fx-effect:innershadow(three-pass-box, rgba(0,0,0,.25), 1, 1, 1, 1);*/
+/*}*/
 
-.scroll-bar .thumb {
-  -fx-background-color:rgba(0,0,0,.2);
-  -fx-fill: rgba(0,0,0,.6);
-  background-clip: padding-box;
-  -fx-border-width: 1px 1px 1px 6px;
-  -fx-border-style:solid;
-  -fx-border-color:transparent;
-  -fx-min-height:28px;
-  -fx-padding:100px 0 0;
-  -fx-effect:innershadow(three-pass-box, rgba(0,0,0,.1), 0, 0, 1, 1), innershadow(three-pass-box, rgba(0,0,0,.07), 0, 0, -1, 0);
-}
+/*.scroll-bar .thumb {*/
+  /*-fx-background-color:rgba(0,0,0,.2);*/
+  /*-fx-fill: rgba(0,0,0,.6);*/
+  /*background-clip: padding-box;*/
+  /*-fx-border-width: 1px 1px 1px 6px;*/
+  /*-fx-border-style:solid;*/
+  /*-fx-border-color:transparent;*/
+  /*-fx-min-height:28px;*/
+  /*-fx-padding:100px 0 0;*/
+  /*-fx-effect:innershadow(three-pass-box, rgba(0,0,0,.1), 0, 0, 1, 1), innershadow(three-pass-box, rgba(0,0,0,.07), 0, 0, -1, 0);*/
+/*}*/
 
-.scroll-bar .track:hover {
-  -fx-background-color: rgba(0,0,0,.05);
-  -fx-effect:innershadow(three-pass-box, rgba(0,0,0,0.1), 1, 1, 0, 0);
-}
-.scroll-bar .track {
-  -fx-background-color:#FFF;
-  -fx-border-color:transparent;
-  -fx-border-style:solid;
-  -fx-border-width:0 0 0 4px;
-}
+/*.scroll-bar .track:hover {*/
+  /*-fx-background-color: rgba(0,0,0,.05);*/
+  /*-fx-effect:innershadow(three-pass-box, rgba(0,0,0,0.1), 1, 1, 0, 0);*/
+/*}*/
+/*.scroll-bar .track {*/
+  /*-fx-background-color:#FFF;*/
+  /*-fx-border-color:transparent;*/
+  /*-fx-border-style:solid;*/
+  /*-fx-border-width:0 0 0 4px;*/
+/*}*/
 
 .contact-list {
   -fx-pref-width:382px;

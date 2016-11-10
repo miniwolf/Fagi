@@ -13,6 +13,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -100,12 +101,10 @@ public class MasterLogin {
 
     /**
      * Assigns the Enter button as a shortcut for the next method in the controller
-     * @param button Button works as a placeholder for the eventlistener
+     * @param element works as a placeholder for the eventlistener
      */
-    public void initialize(Button button) {
-        showScreen(LoginState.LOGIN);
-
-        button.setOnKeyPressed(event -> {
+    public void initialize(Node element) {
+        element.setOnKeyPressed(event -> {
             if ( event.getCode() == KeyCode.ENTER ) {
                 controller.next();
             }
