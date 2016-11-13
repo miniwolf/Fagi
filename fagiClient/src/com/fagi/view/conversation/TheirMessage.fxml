@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.GridPane?>
 <HBox styleClass="holder, their" stylesheets="@../../style/conversation.css"
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
@@ -14,6 +15,8 @@
     </ImageView>
     <Pane maxHeight="-Infinity" styleClass="tip" />
     <Pane styleClass="text-holder, their">
-        <Label layoutX="9.0" styleClass="text-message" fx:id="message"/>
+        <GridPane styleClass="text-fix">
+            <Label layoutX="9.0" styleClass="text-message" fx:id="message"/>
+        </GridPane>
     </Pane>
 </HBox>

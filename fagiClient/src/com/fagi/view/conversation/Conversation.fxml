@@ -19,8 +19,8 @@
             <Pane layoutY="12.0" styleClass="picture" />
         </Pane>
         <VBox alignment="CENTER_LEFT" styleClass="middle-holder">
-            <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS"/>
-            <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER"/>
+            <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS" />
+            <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER" />
         </VBox>
         <HBox styleClass="icon">
             <Button styleClass="icon, minimize" />
@@ -28,8 +28,8 @@
             <Button styleClass="icon, close" />
         </HBox>
     </HBox>
-    <Pane VBox.vgrow="ALWAYS" />
-    <ScrollPane VBox.vgrow="SOMETIMES">
+    <Pane styleClass="message-holder" VBox.vgrow="ALWAYS" />
+    <ScrollPane styleClass="message-holder" vbarPolicy="NEVER" vvalue="1.0" VBox.vgrow="SOMETIMES">
         <VBox fx:id="chat" />
     </ScrollPane>
     <Pane styleClass="outline, field">
