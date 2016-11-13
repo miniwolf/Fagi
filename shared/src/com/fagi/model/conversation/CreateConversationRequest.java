@@ -1,4 +1,4 @@
-package com.fagi.model;
+package com.fagi.model.conversation;
 
 import java.io.Serializable;
 import java.util.List;

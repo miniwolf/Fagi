@@ -19,9 +19,19 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     private List<TextMessage> messages = new ArrayList<>();
     private long id;
     private Date lastMessageDate = null;
+    private ConversationType type;
 
-    public Conversation(long id) {
+    public Conversation(Conversation con) {
+        this.participants = con.participants;
+        this.messages = con.messages;
+        this.id = con.getId();
+        this.lastMessageDate = con.lastMessageDate;
+        this.type = con.getType();
+    }
+
+    public Conversation(long id, ConversationType type) {
         this.id = id;
+        this.type = type;
     }
 
     public Conversation() {
@@ -48,6 +58,10 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         return participants;
     }
 
+    public ConversationType getType() {
+        return type;
+    }
+
     @Override
     public Conversation getData() {
         return this;
@@ -62,7 +76,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         return lastMessageDate;
     }
 
-    public List<TextMessage> getMessagesFromTimePoint(Timestamp time) {
+    public List<TextMessage> getMessagesFromDate(Timestamp time) {
         List<TextMessage> res = new ArrayList<>();
         for (int i = messages.size() - 1; i >= 0; i--) {
             TextMessage message = messages.get(i);
@@ -72,5 +86,9 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         }
         Collections.reverse(res);
         return res;
+    }
+
+    public void setType(ConversationType type) {
+        this.type = type;
     }
 }

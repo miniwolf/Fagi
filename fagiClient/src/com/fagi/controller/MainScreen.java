@@ -11,6 +11,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
+import com.fagi.model.conversation.GetConversationPlaceholders;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;

@@ -1,7 +1,7 @@
 package com.fagi.controller;
 
 import com.fagi.conversation.Conversation;
-import com.fagi.model.CreateConversationRequest;
+import com.fagi.model.conversation.CreateConversationRequest;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

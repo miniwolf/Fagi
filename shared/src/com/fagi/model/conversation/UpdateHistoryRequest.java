@@ -1,4 +1,4 @@
-package com.fagi.model;
+package com.fagi.model.conversation;
 
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
