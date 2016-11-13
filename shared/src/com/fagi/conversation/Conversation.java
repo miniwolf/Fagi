@@ -6,17 +6,16 @@ import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by Marcus on 04-07-2016.
  */
 public class Conversation implements Serializable, InGoingMessages, Access<Conversation> {
     private List<String> participants = new ArrayList<>();
-    private List<TextMessage> messages = new ArrayList<>();
+    private Set<TextMessage> messages = new ConcurrentSkipListSet<>();
     private long id;
     private Date lastMessageDate = null;
     private ConversationType type;
@@ -32,6 +31,11 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     public Conversation(long id, ConversationType type) {
         this.id = id;
         this.type = type;
+    }
+
+    public Conversation(long id) {
+        this.id = id;
+        this.type = ConversationType.Real;
     }
 
     public Conversation() {
@@ -52,7 +56,11 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         lastMessageDate = new Date();
     }
 
-    public List<TextMessage> getMessages() { return messages; }
+    public void addMessageNoDate(TextMessage message) {
+        messages.add(message);
+    }
+
+    public Set<TextMessage> getMessages() { return messages; }
 
     public List<String> getParticipants() {
         return participants;
@@ -77,18 +85,10 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     }
 
     public List<TextMessage> getMessagesFromDate(Timestamp time) {
-        List<TextMessage> res = new ArrayList<>();
-        for (int i = messages.size() - 1; i >= 0; i--) {
-            TextMessage message = messages.get(i);
-            if (message.getMessageInfo().getTimestamp().compareTo(time) > 0) {
-                res.add(message);
-            }
-        }
-        Collections.reverse(res);
-        return res;
-    }
-
-    public void setType(ConversationType type) {
-        this.type = type;
+        return messages
+                .stream()
+                .filter(x -> x.getMessageInfo().getTimestamp().compareTo(time) > 0)
+                .sorted((e1, e2) -> e1.getMessageInfo().getTimestamp().compareTo(e2.getMessageInfo().getTimestamp()))
+                .collect(Collectors.toList());
     }
 }

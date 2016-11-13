@@ -3,6 +3,7 @@
  */
 
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationDataUpdate;
 import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.encryption.AES;
@@ -160,12 +161,7 @@ public class InputWorker extends Worker {
             return new Unauthorized();
         }
 
-        Conversation conversation = Data.getConversation(request.getId());
-
-        Conversation res = new Conversation(conversation);
-        res.setType(ConversationType.Merge);
-
-        return res;
+        return new ConversationDataUpdate(request.getId(), Data.getConversation(request.getId()).getMessages());
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
@@ -176,9 +172,7 @@ public class InputWorker extends Worker {
         });
 
         request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {
-            Conversation res = new Conversation(x.getId(), ConversationType.Merge);
-
-            Data.getConversation(x.getId()).getMessagesFromDate(new Timestamp(x.getLastMessageDate().getTime())).forEach(res::addMessage);
+            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), Data.getConversation(x.getId()).getMessagesFromDate(new Timestamp(x.getLastMessageDate().getTime())));
 
             out.addResponse(res);
         });
