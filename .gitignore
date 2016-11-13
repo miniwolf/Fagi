@@ -1,6 +1,6 @@
 *.class
 *~
-
+/conversations
 .idea
 out
 users
@@ -8,6 +8,4 @@ users
 *.iml
 *.key
 *.config
-*.fagi
-*.fagi
 *.fagi

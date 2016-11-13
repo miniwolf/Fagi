@@ -16,7 +16,7 @@
     <Pane maxHeight="-Infinity" styleClass="tip" />
     <Pane styleClass="text-holder, their">
         <GridPane styleClass="text-fix">
-            <Label layoutX="9.0" styleClass="text-message" fx:id="message"/>
+            <Label fx:id="message" styleClass="text-message" wrapText="true" />
         </GridPane>
     </Pane>
 </HBox>
