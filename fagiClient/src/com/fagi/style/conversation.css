@@ -127,7 +127,12 @@
 }
 
 .message .message-holder {
-  -fx-pref-width: 382px;
+  -fx-fit-to-width: true;
+  -fx-pref-width: inherit;
+  -fx-background-color:#eceff1;
+}
+
+.message-holder .viewport {
   -fx-background-color:#eceff1;
 }
 
@@ -225,6 +230,12 @@
 }
 
 .holder .text-holder {
+  -fx-background-color: #cfd8dc;
+  -fx-background-radius: 5px 0 5px 5px;
+  -fx-padding: 7px 0 1px 9px;
+}
+
+.text-holder .text-fix {
   -fx-padding: 7px 0 1px 9px;
 }
 
@@ -245,5 +256,21 @@
 }
 
 .text-holder .text-message {
-  -fx-padding: 7px 0 1px 0;
+  -fx-max-width: 368px;
+  -fx-background-color: transparent;
+}
+
+.uiguide {
+  -fx-background: none;
+  -fx-max-height: 8px;
+  -fx-pref-width: 7px;
+}
+
+.uiguide .ui-icon {
+  -fx-border-width: 8px, 0, 0, 0;
+  -fx-border-radius: 25px;
+  -fx-pref-width: 16px;
+  -fx-pref-height: 16px;
+  -fx-border-style: solid;
+  -fx-border-color: #cfd8dc;
 }
