@@ -6,21 +6,22 @@ import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Marcus on 05-07-2016.
  */
 public class HistoryUpdates implements Serializable, InGoingMessages, Access<HistoryUpdates> {
 
-    private final List<TextMessage> updates;
+    private final Set<TextMessage> updates;
     private final long id;
 
-    public HistoryUpdates(List<TextMessage> updates, long id) {
+    public HistoryUpdates(Set<TextMessage> updates, long id) {
         this.updates = updates;
         this.id = id;
     }
 
-    public List<TextMessage> getUpdates() {
+    public Set<TextMessage> getUpdates() {
         return updates;
     }
 

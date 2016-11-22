@@ -4,20 +4,21 @@ import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Marcus on 13-11-2016.
  */
 public class ConversationDataUpdate implements Serializable {
-    private final List<TextMessage> data;
+    private final Set<TextMessage> data;
     private final long id;
 
-    public ConversationDataUpdate(long id, List<TextMessage> data) {
+    public ConversationDataUpdate(long id, Set<TextMessage> data) {
         this.id = id;
         this.data = data;
     }
 
-    public List<TextMessage> getData() {
+    public Set<TextMessage> getData() {
         return data;
     }
 

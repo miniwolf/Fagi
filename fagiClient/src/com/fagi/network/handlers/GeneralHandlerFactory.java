@@ -23,7 +23,7 @@ public class GeneralHandlerFactory {
         GeneralHandler.registerHandler(SearchUsersResult.class, new SearchHandler(mainScreen));
         GeneralHandler.registerHandler(FriendList.class, new FriendListHandler(mainScreen));
         GeneralHandler.registerHandler(Conversation.class, new ConversationHandler(mainScreen));
-        GeneralHandler.registerHandler(ConversationDataUpdate.class, new ConversationDataUpdateHandler());
+        GeneralHandler.registerHandler(ConversationDataUpdate.class, new ConversationDataUpdateHandler(mainScreen));
 
         return handler;
     }

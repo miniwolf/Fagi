@@ -17,14 +17,14 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     private List<String> participants = new ArrayList<>();
     private Set<TextMessage> messages = new ConcurrentSkipListSet<>();
     private long id;
-    private Date lastMessageDate = null;
+    private Date dateLastMessageDate = null;
     private ConversationType type;
 
     public Conversation(Conversation con) {
         this.participants = con.participants;
         this.messages = con.messages;
         this.id = con.getId();
-        this.lastMessageDate = con.lastMessageDate;
+        this.dateLastMessageDate = con.dateLastMessageDate;
         this.type = con.getType();
     }
 
@@ -53,7 +53,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
 
     public void addMessage(TextMessage message) {
         messages.add(message);
-        lastMessageDate = new Date();
+        dateLastMessageDate = new Date();
     }
 
     public void addMessageNoDate(TextMessage message) {
@@ -80,15 +80,15 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         return this;
     }
 
-    public Date getLastMessageDate() {
-        return lastMessageDate;
+    public Date getDateLastMessageDate() {
+        return dateLastMessageDate;
     }
 
-    public List<TextMessage> getMessagesFromDate(Timestamp time) {
-        return messages
-                .stream()
-                .filter(x -> x.getMessageInfo().getTimestamp().compareTo(time) > 0)
-                .sorted((e1, e2) -> e1.getMessageInfo().getTimestamp().compareTo(e2.getMessageInfo().getTimestamp()))
-                .collect(Collectors.toList());
+    public Set<TextMessage> getMessagesFromDate(Timestamp time) {
+            return messages
+                    .stream()
+                    .filter(x -> x.getMessageInfo().getTimestamp().compareTo(time) > 0)
+                    .sorted(Comparator.comparing(e -> e.getMessageInfo().getTimestamp()))
+                    .collect(Collectors.toSet());
     }
 }

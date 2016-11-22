@@ -45,7 +45,7 @@ public class ConversationController {
 		String titleNames = conversation.getParticipants().stream().collect(Collectors.joining(", "));
 		name.setText(titleNames);
 
-		String dateString = dateToString(conversation.getLastMessageDate());
+		String dateString = dateToString(conversation.getDateLastMessageDate());
 		if ( "".equals(dateString) ) {
 			date.setMinHeight(Region.USE_PREF_SIZE);
 		}

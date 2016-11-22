@@ -23,6 +23,7 @@ import java.net.SocketException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -179,20 +180,18 @@ public class InputWorker extends Worker {
     }
 
     private Object handleUpdateHistory(UpdateHistoryRequest request) {
+        User user = Data.getUser(request.getSender());
+
+        if (!user.getConversationIDs().contains(request.getId())) {
+            return new Unauthorized();
+        }
+
         Conversation con = Data.getConversation(request.getId());
         if (con == null) {
             return new NoSuchConversation();
         }
 
-        if (!con.getParticipants().contains(request.getSender())) {
-            return new Unauthorized();
-        }
-
-        List<TextMessage> res = new ArrayList<>();
-
-        for (int i = request.getIndex() + 1; i < con.getMessages().size(); i++) {
-            res.add(con.getMessages().get(i));
-        }
+        Set<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
 
         return new HistoryUpdates(res, request.getId());
     }
