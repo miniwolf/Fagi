@@ -151,10 +151,10 @@
   -fx-background-color:rgba(0,0,0,.4);
 }
 
-.message-scroller > .scroll-bar .increment-button,
-.message-scroller > .scroll-bar .increment-arrow,
-.message-scroller > .scroll-bar .decrement-arrow,
-.message-scroller > .scroll-bar .decrement-button {
+.message-scroller > .scroll-bar:vertical .increment-button,
+.message-scroller > .scroll-bar:vertical .increment-arrow,
+.message-scroller > .scroll-bar:vertical .decrement-arrow,
+.message-scroller > .scroll-bar:vertical .decrement-button {
   -fx-shape: " ";
   -fx-padding:0;
 }
@@ -190,6 +190,7 @@
 }
 
 .their .tip {
+  -fx-min-width: 7px;
   -fx-background-position:-31px -30px;
 }
 
@@ -232,21 +233,11 @@
 .holder .text-holder {
   -fx-background-color: #cfd8dc;
   -fx-background-radius: 5px 0 5px 5px;
-  -fx-padding: 7px 0 1px 9px;
+  -fx-padding: 7px 0 1px 0;
 }
 
 .text-holder .text-fix {
-  -fx-padding: 7px 0 1px 9px;
-}
-
-.holder .their {
-  -fx-background-color:#FFF;
-  -fx-background-radius:0 5px 5px 5px;
-}
-
-.holder .me {
-  -fx-background-color: #cfd8dc;
-  -fx-background-radius:5px 0 5px 5px;
+  -fx-padding: 7px 0 1px 0;
 }
 
 .holder .picture {
@@ -255,9 +246,18 @@
   -fx-background-radius:50%;
 }
 
-.text-holder .text-message {
-  -fx-max-width: 368px;
-  -fx-background-color: transparent;
+.text-message {
+  -fx-padding: 7px 9px 7px 9px;
+}
+
+.their .text-message {
+  -fx-background-color:#FFF;
+  -fx-background-radius:0 5px 5px 5px;
+}
+
+.me .text-message {
+  -fx-background-color: #cfd8dc;
+  -fx-background-radius:5px 0 5px 5px;
 }
 
 .uiguide {

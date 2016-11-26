@@ -1,22 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.GridPane?>
-<HBox styleClass="holder, their" stylesheets="@../../style/conversation.css"
-      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<HBox styleClass="holder, their" stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
         <Image url="https://lh5.googleusercontent.com/-HuqNw2gS7KA/AAAAAAAAAAI/AAAAAAAAATk/06-Td0R7Gdk/s32-c-k-no/photo.jpg" />
     </ImageView>
     <Pane maxHeight="-Infinity" styleClass="tip" />
-    <Pane styleClass="text-holder, their">
-        <GridPane styleClass="text-fix">
-            <Label fx:id="message" styleClass="text-message" wrapText="true" />
-        </GridPane>
-    </Pane>
+    <Label fx:id="message21" styleClass="text-message" wrapText="true"/>
 </HBox>

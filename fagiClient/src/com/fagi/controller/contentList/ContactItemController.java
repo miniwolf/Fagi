@@ -1,5 +1,6 @@
-package com.fagi.controller;
+package com.fagi.controller.contentList;
 
+import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.CreateConversationRequest;
 import javafx.fxml.FXML;
@@ -12,13 +13,13 @@ import java.util.Optional;
 /**
  * @author miniwolf and zargess
  */
-public class ContactController {
+public class ContactItemController {
     private final MainScreen mainScreen;
     @FXML private Label userName;
     @FXML private Label date;
     @FXML private Label lastMessage;
 
-    public ContactController(MainScreen mainScreen) {
+    public ContactItemController(MainScreen mainScreen) {
         this.mainScreen = mainScreen;
     }
 
