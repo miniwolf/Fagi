@@ -31,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -117,13 +118,13 @@ public class MainScreen {
         contentLoader.setController(contentController);
         try {
             VBox messagesContent = contentLoader.load();
-            Platform.runLater(() -> setScrollPaneContent(PaneContent.messages, messagesContent));
+            setScrollPaneContent(PaneContent.messages, messagesContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         for ( Conversation conversation : conversations ) {
-            MessageItemController messageItemController = new MessageItemController();
+            MessageItemController messageItemController = new MessageItemController(this, conversation.getId());
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
             loader.setController(messageItemController);
@@ -269,7 +270,7 @@ public class MainScreen {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
         loader.setController(controller);
         try {
-            VBox conversationBox = loader.load();
+            BorderPane conversationBox = loader.load();
             body.getChildren().add(conversationBox);
         } catch (IOException e) {
             e.printStackTrace();

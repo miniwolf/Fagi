@@ -14,5 +14,5 @@
         <Image url="https://lh5.googleusercontent.com/-HuqNw2gS7KA/AAAAAAAAAAI/AAAAAAAAATk/06-Td0R7Gdk/s32-c-k-no/photo.jpg" />
     </ImageView>
     <Pane maxHeight="-Infinity" styleClass="tip" />
-    <Label fx:id="message21" styleClass="text-message" wrapText="true"/>
+    <Label fx:id="message" styleClass="text-message" wrapText="true"/>
 </HBox>

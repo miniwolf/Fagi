@@ -1,5 +1,7 @@
 package com.fagi.controller.contentList;
 
+import com.fagi.action.ActionableImpl;
+import com.fagi.action.items.OpenConversation;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.CreateConversationRequest;
@@ -13,14 +15,20 @@ import java.util.Optional;
 /**
  * @author miniwolf and zargess
  */
-public class ContactItemController {
-    private final MainScreen mainScreen;
+public class ContactItemController extends ActionableImpl<ItemActions> {
     @FXML private Label userName;
     @FXML private Label date;
     @FXML private Label lastMessage;
 
+    private final MainScreen mainScreen;
+
     public ContactItemController(MainScreen mainScreen) {
         this.mainScreen = mainScreen;
+    }
+
+    @FXML
+    public void initialize() {
+        AddAction(ItemActions.OpenConversation, ItemActions.CreateOpenConversation(mainScreen, userName));
     }
 
     public void setUserName(String userName) {
@@ -29,29 +37,6 @@ public class ContactItemController {
 
     @FXML
     public void openConversation() {
-        Conversation conversation;
-        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(userName.getText())).findFirst();
-        if ( optConversation.isPresent() ) {
-            conversation = optConversation.get();
-        } else {
-            List<String> participants = new ArrayList<>();
-            participants.add(mainScreen.getUsername());
-            participants.add(userName.getText());
-            mainScreen.getCommunication().sendObject(new CreateConversationRequest(participants));
-            conversation = waitForConversation();
-        }
-        mainScreen.setConversation(conversation);
-    }
-
-    private Conversation waitForConversation() {
-        Optional<Conversation> optConversation;
-        while ( !(optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(userName.getText())).findFirst()).isPresent() ) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return optConversation.get();
+        ExecuteAction(ItemActions.OpenConversation);
     }
 }
