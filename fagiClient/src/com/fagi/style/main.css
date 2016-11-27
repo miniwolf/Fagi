@@ -17,9 +17,6 @@
   transition: background .3s;
   -fx-border-width:0px;
   -fx-border-radius:50%;
-  -fx-cursor:default;
-  -fx-pref-height:48px;
-  -fx-pref-width:48px;
   -fx-text-alignment:center;
   outline: none;
   overflow: hidden;
@@ -41,6 +38,7 @@
 
 .button-shape {
   -fx-background-color:#FFF;
+  -fx-cursor: hand;
 }
 
 .message-button {
@@ -200,7 +198,7 @@
   -fx-border-color: #dcdcdc;
   -fx-background-color: #f5f5f5 linear-gradient(top,#f5f5f5,#f1f1f1);
   user-select: none;
-  cursor: default;
+  -fx-cursor: default;
 }
 
 .rc-button:hover {

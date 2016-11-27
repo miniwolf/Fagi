@@ -1,6 +1,6 @@
 package com.fagi.network.handlers;
 
-import com.fagi.controller.ContentController;
+import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.SearchContactController;
 import com.fagi.model.SearchUsersResult;
@@ -43,7 +43,7 @@ public class SearchHandler implements Handler {
                 contentController.addToContentList(searchContact);
             }
 
-            Platform.runLater(() ->  mainScreen.setScrollPaneContent(searchContent));
+            Platform.runLater(() ->  mainScreen.setScrollPaneContent(mainScreen.getCurrentPaneContent(), searchContent));
         } catch (IOException e) {
             e.printStackTrace();
         }

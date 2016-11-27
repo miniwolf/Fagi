@@ -2,7 +2,7 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
-package com.fagi.controller;
+package com.fagi.controller.contentList;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;

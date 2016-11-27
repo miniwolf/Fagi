@@ -2,6 +2,15 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
+.button {
+  -fx-border-width: 0;
+  -fx-border-style: solid;
+  -fx-border-color: transparent;
+  -fx-padding: 0;
+  -fx-background-color: transparent;
+  -fx-font-family: 'Roboto','Arial',sans-serif;
+}
+
 .message {
   -fx-background-color: #E5E5E5;
   -fx-pref-width: 400px;
@@ -21,15 +30,17 @@
 
 .message-title .icon {
   -fx-padding:0 5px 0 0;
-  -fx-alignment:center;
+  -fx-alignment:top-left;
 }
 
-.icon .picture {
+.message-title .picture {
   -fx-background-repeat:no-repeat;
-  -fx-background-image: url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
-  -fx-background-position: -754px -182px;
+  -fx-background-image: url(https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png);
+  -fx-background-position: -474px -340px;
+  -fx-background-size: 617px, 557px;
   -fx-pref-height: 14px;
   -fx-pref-width: 14px;
+  -fx-padding: 0 5px 0 0;
 }
 
 .middle-holder .mu {
@@ -49,7 +60,7 @@
 }
 
 .message-title .icon {
-  -fx-padding: 5px 6px 0px 0px;
+  -fx-padding: 6px 6px 0px 0px;
 }
 
 .icon .button {
@@ -127,13 +138,48 @@
 }
 
 .message .message-holder {
-  -fx-fit-to-width: true;
   -fx-pref-width: inherit;
   -fx-background-color:#eceff1;
 }
 
 .message-holder .viewport {
   -fx-background-color:#eceff1;
+}
+
+.message .settingsmenu {
+  -fx-pref-width: inherit;
+  -fx-padding: 0 9px;
+  -fx-background-color: white;
+}
+
+.settingsmenu .togglelist {
+  -fx-padding: 4px 0 0 0;
+}
+
+.toggle-holder {
+  -fx-padding: 10px 5px 3px 11px;
+}
+
+.toggle-holder .item {
+  -fx-min-width: 210px;
+}
+
+.item .button-wrapper {
+  -fx-padding: -3px 18px 0 0;
+}
+
+.toggle-message {
+  -fx-font-family: 'Roboto', 'Arial', sans-serif;
+  -fx-font-size: 13px;
+}
+
+.button-wrapper .check-box {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -107px -505px;
+  -fx-background-size: 617px, 557px;
+  -fx-pref-width: 16px;
+  -fx-pref-height: 16px;
 }
 
 .message-scroller > * {
@@ -151,10 +197,10 @@
   -fx-background-color:rgba(0,0,0,.4);
 }
 
-.message-scroller > .scroll-bar .increment-button,
-.message-scroller > .scroll-bar .increment-arrow,
-.message-scroller > .scroll-bar .decrement-arrow,
-.message-scroller > .scroll-bar .decrement-button {
+.message-scroller > .scroll-bar:vertical .increment-button,
+.message-scroller > .scroll-bar:vertical .increment-arrow,
+.message-scroller > .scroll-bar:vertical .decrement-arrow,
+.message-scroller > .scroll-bar:vertical .decrement-button {
   -fx-shape: " ";
   -fx-padding:0;
 }
@@ -190,6 +236,7 @@
 }
 
 .their .tip {
+  -fx-min-width: 7px;
   -fx-background-position:-31px -30px;
 }
 
@@ -232,21 +279,11 @@
 .holder .text-holder {
   -fx-background-color: #cfd8dc;
   -fx-background-radius: 5px 0 5px 5px;
-  -fx-padding: 7px 0 1px 9px;
+  -fx-padding: 7px 0 1px 0;
 }
 
 .text-holder .text-fix {
-  -fx-padding: 7px 0 1px 9px;
-}
-
-.holder .their {
-  -fx-background-color:#FFF;
-  -fx-background-radius:0 5px 5px 5px;
-}
-
-.holder .me {
-  -fx-background-color: #cfd8dc;
-  -fx-background-radius:5px 0 5px 5px;
+  -fx-padding: 7px 0 1px 0;
 }
 
 .holder .picture {
@@ -255,9 +292,18 @@
   -fx-background-radius:50%;
 }
 
-.text-holder .text-message {
-  -fx-max-width: 368px;
-  -fx-background-color: transparent;
+.text-message {
+  -fx-padding: 7px 9px 7px 9px;
+}
+
+.their .text-message {
+  -fx-background-color:#FFF;
+  -fx-background-radius:0 5px 5px 5px;
+}
+
+.me .text-message {
+  -fx-background-color: #cfd8dc;
+  -fx-background-radius:5px 0 5px 5px;
 }
 
 .uiguide {
@@ -273,4 +319,54 @@
   -fx-pref-height: 16px;
   -fx-border-style: solid;
   -fx-border-color: #cfd8dc;
+}
+
+.chatmenu {
+  -fx-background-color: #eceff1;
+  -fx-pref-height: 36px;
+  -fx-padding: 3px 0 0 0;
+  -fx-border-style: solid;
+  -fx-border-color: rgba(0,0,0,.1);
+  -fx-border-width: 0 0 1px 0;
+}
+
+.settings {
+  -fx-pref-height: inherit;
+  -fx-pref-width: inherit;
+}
+
+.chatsettings-holder {
+  -fx-padding: 2px 8px 5px 0;
+  -fx-opacity: .6;
+  -fx-max-width: 24px;
+  -fx-max-height: 24px;
+}
+
+.settings-filler {
+  -fx-shape: "M0 0h24v24H0z";
+  -fx-pref-width: 22px;
+  -fx-pref-height: 22px;
+}
+
+.settingsbutton {
+  -fx-fill: #262626;
+  -fx-background-color: #262626;
+  -fx-pref-height: 18px;
+  -fx-pref-width: 18px;
+  -fx-shape: "M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z";
+}
+
+.addpeople-holder {
+  -fx-opacity: .6;
+  -fx-pref-height: 28px;
+  -fx-pref-width: 28px;
+}
+
+.addpeoplebutton {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url(https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png);
+  -fx-background-position: -560px -17px;
+  -fx-background-size: 617px, 557px;
+  -fx-pref-width: 29px;
+  -fx-pref-height: 29px;
 }
