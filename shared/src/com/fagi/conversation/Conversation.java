@@ -17,14 +17,15 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     private List<String> participants = new ArrayList<>();
     private Set<TextMessage> messages = new ConcurrentSkipListSet<>();
     private long id;
-    private Date dateLastMessageDate = null;
+    private Date lastMessageDate = null;
     private ConversationType type;
+    private TextMessage lastMessage;
 
     public Conversation(Conversation con) {
         this.participants = con.participants;
         this.messages = con.messages;
         this.id = con.getId();
-        this.dateLastMessageDate = con.dateLastMessageDate;
+        this.lastMessageDate = con.lastMessageDate;
         this.type = con.getType();
     }
 
@@ -53,7 +54,8 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
 
     public void addMessage(TextMessage message) {
         messages.add(message);
-        dateLastMessageDate = new Date();
+        lastMessageDate = new Date();
+        lastMessage = message;
     }
 
     public void addMessageNoDate(TextMessage message) {
@@ -80,8 +82,8 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         return this;
     }
 
-    public Date getDateLastMessageDate() {
-        return dateLastMessageDate;
+    public Date getLastMessageDate() {
+        return lastMessageDate;
     }
 
     public Set<TextMessage> getMessagesFromDate(Timestamp time) {
@@ -99,7 +101,12 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     public Conversation getPlaceholder() {
         Conversation placeholder = new Conversation(id, ConversationType.Placeholder);
         participants.forEach(placeholder::addUser);
-        placeholder.dateLastMessageDate = dateLastMessageDate;
+        placeholder.lastMessageDate = lastMessageDate;
+        placeholder.lastMessage = lastMessage;
         return placeholder;
+    }
+
+    public TextMessage getLastMessage() {
+        return lastMessage;
     }
 }
