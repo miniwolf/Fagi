@@ -134,7 +134,9 @@
 }
 
 .message-scroller {
+  -fx-fit-to-width: true;
   -fx-pref-width: 382px;
+  -fx-max-height: 290px;
 }
 
 .message .message-holder {
@@ -212,9 +214,7 @@
 .message .field {
   -fx-background-color: #fff;
   -fx-min-height: 38px;
-  overflow-x: hidden;
-  overflow-y: visible;
-  position: relative;
+  -fx-pref-width: 400px;
 }
 
 .message .text {
@@ -330,6 +330,17 @@
   -fx-border-width: 0 0 1px 0;
 }
 
+.chatmenu .button {
+  -fx-background-color: #fff;
+  -fx-color: #404040;
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-border-radius: 2px;
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #D9D9D9;
+}
+
 .settings {
   -fx-pref-height: inherit;
   -fx-pref-width: inherit;
@@ -369,4 +380,22 @@
   -fx-background-size: 617px, 557px;
   -fx-pref-width: 29px;
   -fx-pref-height: 29px;
+}
+.XX {
+  -fx-border-color: #d8d8d8;
+  -fx-border-style: solid;
+  -fx-border-width: 1px 0 0 0;
+}
+
+.vr {
+  -fx-padding: 14px 5px 5px 4px;
+}
+
+.vr > .bu {
+  -fx-pref-width: 31px;
+  -fx-pref-height: 31px;
+  -fx-cursor: pointer;
+  -fx-padding: 0;
+  -fx-margin: 0 12px 0 0;
+  -fx-alignment: center-left;
 }
