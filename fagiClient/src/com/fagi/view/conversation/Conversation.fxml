@@ -89,7 +89,7 @@
    <bottom>
       <Pane>
          <Pane/>
-         <Pane styleClass="outline, field" visible="false">
+         <Pane styleClass="outline, field">
             <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley"/>
             <Pane layoutX="28.0" styleClass="area">
                <TextArea fx:id="message" layoutY="1.0" promptText="Send a message" styleClass="text"/>

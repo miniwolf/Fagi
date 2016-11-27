@@ -10,7 +10,7 @@ import com.fagi.model.messages.InGoingMessages;
 /**
  * @author miniwolf
  */
-public class TextMessage implements InGoingMessages, TextAccess {
+public class TextMessage implements InGoingMessages, TextAccess, Comparable<TextMessage> {
     private DefaultMessageInfo message;
 
     /**
@@ -36,5 +36,29 @@ public class TextMessage implements InGoingMessages, TextAccess {
     @Override
     public String getData() {
         return data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TextMessage)) return false;
+
+        TextMessage message1 = (TextMessage) o;
+
+        if (!message.equals(message1.message)) return false;
+        return data.equals(message1.data);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = message.hashCode();
+        result = 31 * result + data.hashCode();
+        return result;
+    }
+
+    @Override
+    public int compareTo(TextMessage other) {
+        return message.getTimestamp().compareTo(other.getMessageInfo().getTimestamp());
     }
 }

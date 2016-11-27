@@ -5,12 +5,16 @@
 package com.fagi.network.handlers;
 
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationType;
+import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
+import com.fagi.utility.JsonFileOperations;
 
 import java.util.Optional;
 
@@ -37,10 +41,18 @@ public class TextMessageHandler implements Handler {
 			return;
 		}
 		Conversation conversation = first.get();
-		if ( mainScreen.getCurrentConversation().getId() == conversation.getId() ) {
-			mainScreen.getConversationController().addMessage(message);
-		}
+        ConversationController controller = mainScreen.getConversationController();
+
+        if (conversation.getType() == ConversationType.Placeholder) {
+            conversation.setType(ConversationType.Real);
+            mainScreen.getCommunication().sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
+        }
+
+        if ( mainScreen.getCurrentConversation().getId() == conversation.getId() && controller != null ) {
+            controller.addMessage(message);
+        }
 		conversation.getData().addMessage(message);
+        JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
 	}
 
 	@Override

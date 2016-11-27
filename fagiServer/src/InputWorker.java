@@ -3,11 +3,15 @@
  */
 
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationDataUpdate;
+import com.fagi.conversation.ConversationType;
+import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.model.*;
+import com.fagi.model.conversation.*;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.*;
 
@@ -19,6 +23,7 @@ import java.net.SocketException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -126,9 +131,15 @@ public class InputWorker extends Worker {
             }
             out.addResponse(response);
         } else if (input instanceof GetConversationsRequest) {
-            GetConversationsRequest request = (GetConversationsRequest)input;
+            GetConversationsRequest request = (GetConversationsRequest) input;
 
-            Object response = handleGetConversationsRequest(request);
+            handleGetConversations(request);
+        } else if (input instanceof GetAllConversationDataRequest) {
+            GetAllConversationDataRequest request = (GetAllConversationDataRequest) input;
+
+            Object result = handleGetAllConversationDataRequest(request);
+
+            out.addResponse(result);
         } else if ( input instanceof SearchUsersRequest) {
             SearchUsersRequest request = (SearchUsersRequest)input;
             out.addResponse(new AllIsWell());
@@ -144,21 +155,43 @@ public class InputWorker extends Worker {
         }
     }
 
+    private Object handleGetAllConversationDataRequest(GetAllConversationDataRequest request) {
+        User user = Data.getUser(request.getSender());
+
+        if (!user.getConversationIDs().contains(request.getId())) {
+            return new Unauthorized();
+        }
+
+        return new ConversationDataUpdate(request.getId(), Data.getConversation(request.getId()).getMessages());
+    }
+
+    private void handleGetConversations(GetConversationsRequest request) {
+        User user = Data.getUser(request.getUserName());
+
+        user.getConversationIDs().stream().filter(x -> request.getFilters().stream().filter(y -> y.getId() == x).count() == 0).forEach(x -> {
+            out.addResponse(Data.getConversation(x).getPlaceholder());
+        });
+
+        request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {
+            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), Data.getConversation(x.getId()).getMessagesFromDate(new Timestamp(x.getLastMessageDate().getTime())));
+
+            out.addResponse(res);
+        });
+    }
+
     private Object handleUpdateHistory(UpdateHistoryRequest request) {
+        User user = Data.getUser(request.getSender());
+
+        if (!user.getConversationIDs().contains(request.getId())) {
+            return new Unauthorized();
+        }
+
         Conversation con = Data.getConversation(request.getId());
         if (con == null) {
             return new NoSuchConversation();
         }
 
-        if (!con.getParticipants().contains(request.getSender())) {
-            return new Unauthorized();
-        }
-
-        List<TextMessage> res = new ArrayList<>();
-
-        for (int i = request.getIndex() + 1; i < con.getMessages().size(); i++) {
-            res.add(con.getMessages().get(i));
-        }
+        Set<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
 
         return new HistoryUpdates(res, request.getId());
     }
@@ -238,16 +271,6 @@ public class InputWorker extends Worker {
         Data.storeUser(user);
 
         return new AllIsWell();
-    }
-
-    // TODO : Make the user give a list of conversations based on a list of filtering
-    private Object handleGetConversationsRequest(GetConversationsRequest request) {
-        User user = Data.getUser(request.getUserName());
-
-        return user
-                .getConversationIDs()
-                .parallelStream()
-                .map(Data::getConversation);
     }
 
     private Object handleSession(Session arg) {

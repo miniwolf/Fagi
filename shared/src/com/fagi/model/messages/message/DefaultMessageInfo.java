@@ -40,4 +40,25 @@ public class DefaultMessageInfo implements MessageInfo {
     public Timestamp getTimestamp() {
         return timestamp;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultMessageInfo)) return false;
+
+        DefaultMessageInfo that = (DefaultMessageInfo) o;
+
+        if (conversationID != that.conversationID) return false;
+        if (!sender.equals(that.sender)) return false;
+        return timestamp.equals(that.timestamp);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sender.hashCode();
+        result = 31 * result + (int) (conversationID ^ (conversationID >>> 32));
+        result = 31 * result + timestamp.hashCode();
+        return result;
+    }
 }
