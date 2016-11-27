@@ -87,6 +87,11 @@ public class ConversationController {
 		Platform.runLater(() -> chat.getChildren().add(load));
 	}
 
+	public void redrawMessages() {
+		chat.getChildren().clear();
+		fillChat();
+	}
+
 	private HBox getBox(String resource, String message) {
 		HBox load = null;
 		try {

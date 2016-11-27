@@ -77,7 +77,19 @@ public class JsonFileOperations {
         storeObjectToFile(c, CONVERSATION_FOLDER_PATH, c.getId() + "");
     }
 
+    public static void storeClientConversation(Conversation c, String username) {
+        File clientFolder = new File(username + "/");
+        if (!clientFolder.exists()) {
+            clientFolder.mkdir();
+        }
+        storeObjectToFile(c, username + "/" + CONVERSATION_FOLDER_PATH, c.getId() + "");
+    }
+
     public static List<Conversation> loadAllConversations() {
         return loadAllObjectsInFolder(CONVERSATION_FOLDER_PATH, Conversation.class);
+    }
+
+    public static List<Conversation> loadAllClientConversations(String username) {
+        return loadAllObjectsInFolder(username + "/" + CONVERSATION_FOLDER_PATH, Conversation.class);
     }
 }

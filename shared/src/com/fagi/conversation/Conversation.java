@@ -91,4 +91,15 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
                     .sorted(Comparator.comparing(e -> e.getMessageInfo().getTimestamp()))
                     .collect(Collectors.toSet());
     }
+
+    public void setType(ConversationType type) {
+        this.type = type;
+    }
+
+    public Conversation getPlaceholder() {
+        Conversation placeholder = new Conversation(id, ConversationType.Placeholder);
+        participants.forEach(placeholder::addUser);
+        placeholder.dateLastMessageDate = dateLastMessageDate;
+        return placeholder;
+    }
 }

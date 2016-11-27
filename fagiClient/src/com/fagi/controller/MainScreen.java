@@ -9,8 +9,12 @@ package com.fagi.controller;
 import com.fagi.controller.conversation.ConversationController;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationFilter;
+import com.fagi.conversation.ConversationType;
+import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
+import com.fagi.model.conversation.GetConversationsRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
@@ -34,6 +38,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TODO: Write description.
@@ -80,7 +85,7 @@ public class MainScreen {
      * Initiate all communication and handlers needed to contact the server.
      */
     public void initCommunication() {
-        conversations = JsonFileOperations.loadAllConversations();
+        conversations = JsonFileOperations.loadAllClientConversations(username);
         messageHandler = new TextMessageHandler(this);
         messageThread = new Thread(messageHandler.getRunnable());
         messageThread.start();
@@ -93,6 +98,8 @@ public class MainScreen {
 		searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
 			searchUser(newValue);
 		});
+
+		updateConversationListFromServer(conversations);
 	}
 
 	@FXML
@@ -207,6 +214,12 @@ public class MainScreen {
 		if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
 			return;
 		}
+
+		if (conversation.getType() == ConversationType.Placeholder) {
+			conversation.setType(ConversationType.Real);
+			this.communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
+		}
+
 		ConversationController controller = new ConversationController(conversation, communication, username);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
 		loader.setController(controller);
@@ -242,5 +255,11 @@ public class MainScreen {
 
 	public ConversationController getConversationController() {
 		return conversationController;
+	}
+
+	private void updateConversationListFromServer(List<Conversation> conversations) {
+		List<ConversationFilter> filters = conversations.stream().map(x -> new ConversationFilter(x.getId(), x.getDateLastMessageDate())).collect(Collectors.toList());
+
+		communication.sendObject(new GetConversationsRequest(username, filters));
 	}
 }

@@ -169,7 +169,7 @@ public class InputWorker extends Worker {
         User user = Data.getUser(request.getUserName());
 
         user.getConversationIDs().stream().filter(x -> request.getFilters().stream().filter(y -> y.getId() == x).count() == 0).forEach(x -> {
-            out.addResponse(new Conversation(x, ConversationType.Placeholder));
+            out.addResponse(Data.getConversation(x).getPlaceholder());
         });
 
         request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {

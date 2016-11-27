@@ -30,9 +30,9 @@ public class VoiceServer extends VoiceServerThread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("RECEIVED: " + Arrays.toString(receivePacket.getData()));
+            System.out.println("RECEIVED: " + Arrays.toString(receivePacket.getConversationData()));
 
-            byte[] audioData = receivePacket.getData();
+            byte[] audioData = receivePacket.getConversationData();
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.fagi.conversation;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by costa on 12-11-2016.
