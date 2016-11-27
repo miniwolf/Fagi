@@ -265,6 +265,7 @@ public class MainScreen {
 	}
 
 	public void addConversation(Conversation conversation) {
+	    // TODO : Update conversation list
 		conversations.add(conversation);
 	}
 

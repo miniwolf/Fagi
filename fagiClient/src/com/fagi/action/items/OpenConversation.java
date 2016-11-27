@@ -3,7 +3,7 @@ package com.fagi.action.items;
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
-import com.fagi.model.CreateConversationRequest;
+import com.fagi.model.conversation.CreateConversationRequest;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
