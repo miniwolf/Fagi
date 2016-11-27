@@ -13,10 +13,12 @@ public class DefaultMessageInfo implements MessageInfo {
     private String sender;
     private long conversationID;
     private Timestamp timestamp;
+    private long currentTime;
 
     public DefaultMessageInfo(String sender, long conversationID) {
         this.sender = sender;
         this.conversationID = conversationID;
+        currentTime = System.currentTimeMillis();
     }
 
     public DefaultMessageInfo() {}
@@ -50,7 +52,7 @@ public class DefaultMessageInfo implements MessageInfo {
 
         if (conversationID != that.conversationID) return false;
         if (!sender.equals(that.sender)) return false;
-        return timestamp.equals(that.timestamp);
+        return timestamp.equals(that.timestamp) && that.currentTime == currentTime;
 
     }
 
@@ -59,6 +61,7 @@ public class DefaultMessageInfo implements MessageInfo {
         int result = sender.hashCode();
         result = 31 * result + (int) (conversationID ^ (conversationID >>> 32));
         result = 31 * result + timestamp.hashCode();
+        result = 31 * result + Long.hashCode(currentTime);
         return result;
     }
 }

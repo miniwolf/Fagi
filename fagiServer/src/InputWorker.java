@@ -173,6 +173,7 @@ public class InputWorker extends Worker {
         });
 
         request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {
+            // TODO : Send last message
             ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), Data.getConversation(x.getId()).getMessagesFromDate(new Timestamp(x.getLastMessageDate().getTime())));
 
             out.addResponse(res);
