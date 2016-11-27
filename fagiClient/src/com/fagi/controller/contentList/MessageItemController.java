@@ -16,12 +16,14 @@ import java.util.TimerTask;
  * @author miniwolf
  */
 public class MessageItemController extends ActionableImpl<ItemActions> {
-    @FXML private Label username;
+    @FXML private Label usernameLabel;
     @FXML private Label date;
     @FXML private Label lastMessage;
     private Date dateInstance;
+    private final String username;
 
-    public MessageItemController(MainScreen mainScreen, long ID) {
+    public MessageItemController(MainScreen mainScreen, long ID, String username) {
+        this.username = username;
         AddAction(ItemActions.OpenConversation, ItemActions.OpenConversationFromID(mainScreen, ID));
     }
 
@@ -37,7 +39,7 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
     }
 
     public void setUsers(List<String> username) {
-        this.username.setText(String.join(", ", username));
+        this.usernameLabel.setText(String.join(", ", username));
     }
 
     public void setDate(Date date) {
@@ -51,13 +53,13 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
         long diffDays = diff / (24 * 60 * 60 * 1000);
         if ( diffDays != 0 ) {
-            SimpleDateFormat format = new SimpleDateFormat(diffDays > 365 ? "MM/dd/yyyy" : diffDays < 7 ? "EEE" : "MMM d");
+            SimpleDateFormat format = new SimpleDateFormat(diffDays > 365 ? "MM/dd/yyyy" : diffDays < 7 ? "EEEE" : "MMM d");
             return format.format(date);
         }
 
         long diffHours = diff / (60 * 60 * 1000) % 24;
         if ( diffHours != 0 ) {
-            SimpleDateFormat format = new SimpleDateFormat("k");
+            SimpleDateFormat format = new SimpleDateFormat("h:mm a");
             return format.format(date);
         }
 
@@ -68,8 +70,9 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
         return "now";
     }
 
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage.setText(lastMessage);
+    public void setLastMessage(String lastMessage, String sender) {
+        String senderString = (sender.equals(username) ? "You" : sender);
+        this.lastMessage.setText(senderString + ": " + lastMessage);
     }
 
     @FXML

@@ -17,8 +17,6 @@
   transition: background .3s;
   -fx-border-width:0px;
   -fx-border-radius:50%;
-  -fx-pref-height:48px;
-  -fx-pref-width:48px;
   -fx-text-alignment:center;
   outline: none;
   overflow: hidden;

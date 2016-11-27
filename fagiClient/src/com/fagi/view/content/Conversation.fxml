@@ -16,7 +16,7 @@
     </Pane>
     <Pane layoutX="80.0">
         <HBox layoutY="14.0" styleClass="content-text">
-            <Label fx:id="username" styleClass="mu" />
+            <Label fx:id="usernameLabel" styleClass="mu" />
             <Pane HBox.hgrow="ALWAYS" />
             <Label fx:id="date" styleClass="date" text="2 Jul"/>
         </HBox>

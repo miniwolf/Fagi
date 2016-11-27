@@ -15,6 +15,7 @@ import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.handlers.FriendListHandler;
@@ -98,6 +99,7 @@ public class MainScreen {
     public void initCommunication() {
         conversations = JsonFileOperations.loadAllConversations();
         setupConversationList();
+        setupContactList();
         messageHandler = new TextMessageHandler(this);
         messageThread = new Thread(messageHandler.getRunnable());
         messageThread.start();
@@ -112,6 +114,18 @@ public class MainScreen {
         });
     }
 
+    private void setupContactList() {
+        ContentController contentController = new ContentController();
+        FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
+        contentLoader.setController(contentController);
+        try {
+            VBox contactContent = contentLoader.load();
+            setScrollPaneContent(PaneContent.contacts, contactContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setupConversationList() {
         ContentController contentController = new ContentController();
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
@@ -124,7 +138,7 @@ public class MainScreen {
         }
 
         for ( Conversation conversation : conversations ) {
-            MessageItemController messageItemController = new MessageItemController(this, conversation.getId());
+            MessageItemController messageItemController = new MessageItemController(this, conversation.getId(), username);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
             loader.setController(messageItemController);
@@ -132,7 +146,8 @@ public class MainScreen {
                 Pane pane = loader.load();
 
                 messageItemController.setUsers(conversation.getParticipants());
-                messageItemController.setLastMessage(conversation.getMessages().get(conversation.getMessages().size() - 1).getData());
+                TextMessage lastMessage = conversation.getMessages().get(conversation.getMessages().size() - 1);
+                messageItemController.setLastMessage(lastMessage.getData(), lastMessage.getMessageInfo().getSender());
                 messageItemController.setDate(conversation.getLastMessageDate());
                 contentController.addToContentList(pane);
             } catch (IOException e) {
