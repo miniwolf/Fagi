@@ -45,7 +45,7 @@ public class ConversationController {
 		String titleNames = conversation.getParticipants().stream().collect(Collectors.joining(", "));
 		name.setText(titleNames);
 
-		String dateString = dateToString(conversation.getDateLastMessageDate());
+		String dateString = dateToString(conversation.getLastMessageDate());
 		if ( "".equals(dateString) ) {
 			date.setMinHeight(Region.USE_PREF_SIZE);
 		}
@@ -104,4 +104,9 @@ public class ConversationController {
 		}
 		return load;
 	}
+
+    @FXML
+    public void closeConversation() {
+
+    }
 }

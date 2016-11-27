@@ -30,7 +30,7 @@
   -fx-background-position:-107px -120px;
   -fx-pref-height:16px;
   -fx-pref-width:16px;
-  cursor: pointer;
+  -fx-cursor: pointer;
 }
 
 .search-item .picture-holder {
