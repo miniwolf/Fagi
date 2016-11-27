@@ -26,20 +26,24 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         this.messages = con.messages;
         this.id = con.getId();
         this.lastMessageDate = con.lastMessageDate;
+        this.lastMessage = con.getLastMessage();
         this.type = con.getType();
     }
 
     public Conversation(long id, ConversationType type) {
         this.id = id;
         this.type = type;
+        lastMessageDate = new Date();
     }
 
     public Conversation(long id) {
         this.id = id;
         this.type = ConversationType.Real;
+        lastMessageDate = new Date();
     }
 
     public Conversation() {
+        lastMessageDate = new Date();
     }
 
     public void addUser(String username) {

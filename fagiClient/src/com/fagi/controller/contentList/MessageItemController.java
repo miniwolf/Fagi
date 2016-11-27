@@ -16,6 +16,7 @@ import java.util.TimerTask;
  * @author miniwolf
  */
 public class MessageItemController extends ActionableImpl<ItemActions> {
+    private final long ID;
     @FXML private Label usernameLabel;
     @FXML private Label date;
     @FXML private Label lastMessage;
@@ -24,6 +25,7 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
     public MessageItemController(MainScreen mainScreen, long ID, String username) {
         this.username = username;
+        this.ID = ID;
         AddAction(ItemActions.OpenConversation, ItemActions.OpenConversationFromID(mainScreen, ID));
     }
 
@@ -46,7 +48,15 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
         this.dateInstance = date;
     }
 
+    public long getID() {
+        return ID;
+    }
+
     private String convertDate(Date date) {
+        if (date == null) {
+            return "";
+        }
+
         long now = new Date().getTime();
         long then = date.getTime();
         long diff = now - then;

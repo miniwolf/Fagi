@@ -161,8 +161,9 @@ public class InputWorker extends Worker {
         if (!user.getConversationIDs().contains(request.getId())) {
             return new Unauthorized();
         }
-
-        return new ConversationDataUpdate(request.getId(), Data.getConversation(request.getId()).getMessages());
+        Conversation conversation = Data.getConversation(request.getId());
+        Timestamp lastMessageReceived = new Timestamp(conversation.getLastMessageDate().getTime());
+        return new ConversationDataUpdate(request.getId(), conversation.getMessages(), lastMessageReceived, conversation.getLastMessage());
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
@@ -173,8 +174,10 @@ public class InputWorker extends Worker {
         });
 
         request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {
-            // TODO : Send last message
-            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), Data.getConversation(x.getId()).getMessagesFromDate(new Timestamp(x.getLastMessageDate().getTime())));
+            Conversation conversation = Data.getConversation(x.getId());
+            Timestamp time = new Timestamp(x.getLastMessageDate().getTime());
+            Timestamp lastMessageReceived = new Timestamp(conversation.getLastMessageDate().getTime());
+            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), conversation.getMessagesFromDate(time), lastMessageReceived, conversation.getLastMessage());
 
             out.addResponse(res);
         });
