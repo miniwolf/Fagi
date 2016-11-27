@@ -47,7 +47,6 @@ public class TextMessage implements InGoingMessages, TextAccess, Comparable<Text
 
         if (!message.equals(message1.message)) return false;
         return data.equals(message1.data);
-
     }
 
     @Override

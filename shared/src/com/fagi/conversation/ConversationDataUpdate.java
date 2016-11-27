@@ -5,7 +5,7 @@ import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -13,11 +13,15 @@ import java.util.Set;
  */
 public class ConversationDataUpdate implements Serializable, InGoingMessages, Access<ConversationDataUpdate> {
     private final Set<TextMessage> data;
+    private Timestamp lastMessageDate;
+    private final TextMessage lastMessage;
     private final long id;
 
-    public ConversationDataUpdate(long id, Set<TextMessage> data) {
+    public ConversationDataUpdate(long id, Set<TextMessage> data, Timestamp lastMessageDate, TextMessage lastMessage) {
         this.id = id;
         this.data = data;
+        this.lastMessageDate = lastMessageDate;
+        this.lastMessage = lastMessage;
     }
 
     public Set<TextMessage> getConversationData() {
@@ -26,6 +30,14 @@ public class ConversationDataUpdate implements Serializable, InGoingMessages, Ac
 
     public long getId() {
         return id;
+    }
+
+    public Timestamp getLastMessageDate() {
+        return lastMessageDate;
+    }
+
+    public TextMessage getLastMessage() {
+        return lastMessage;
     }
 
     @Override
