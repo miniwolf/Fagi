@@ -65,7 +65,7 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
         long diffMinutes = diff / (60 * 1000) % 60;
         if ( diffMinutes != 0 ) {
-            return Long.toString(diffMinutes);
+            return Long.toString(diffMinutes) + " min";
         }
         return "now";
     }

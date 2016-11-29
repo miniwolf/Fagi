@@ -46,6 +46,7 @@
 .middle-holder .mu {
   -fx-text-fill: #fff;
   -fx-font-size: 13px;
+  -fx-margin: 0 12px 0 0;
 }
 
 .middle-holder .last-seen {
@@ -176,12 +177,22 @@
 }
 
 .button-wrapper .check-box {
+  -fx-cursor: hand;
+  -fx-pref-width: 16px;
+  -fx-pref-height: 16px;
+}
+
+.button-wrapper .toggled {
   -fx-background-repeat: no-repeat;
+
   -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -107px -505px;
   -fx-background-size: 617px, 557px;
-  -fx-pref-width: 16px;
-  -fx-pref-height: 16px;
+}
+
+.button-wrapper .untoggled {
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -107px -120px;
 }
 
 .message-scroller > * {
@@ -330,15 +341,24 @@
   -fx-border-width: 0 0 1px 0;
 }
 
-.chatmenu .button {
+.zbg {
   -fx-background-color: #fff;
-  -fx-color: #404040;
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.05), 0, 0, 0, 1);
+  -fx-text-fill: #404040;
   -fx-font-size: 11px;
   -fx-font-weight: bold;
   -fx-border-radius: 2px;
   -fx-border-width: 1px;
   -fx-border-style: solid;
+  -fx-pref-width: 54px;
   -fx-border-color: #D9D9D9;
+  -fx-background-size: 617px, 557px;
+}
+.zbg:hover {
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.1), 0, 0, 0, 2);
+  -fx-background-color: #fff;
+  -fx-background-image: linear-gradient(top,transparent,transparent);
+  -fx-border-color: #b8b8b8;
 }
 
 .settings {
@@ -398,4 +418,43 @@
   -fx-padding: 0;
   -fx-margin: 0 12px 0 0;
   -fx-alignment: center-left;
+}
+
+.archive {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -49px -17px;
+}
+
+.delete {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -98px -451px;
+}
+
+.block {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -511px -136px;
+}
+
+.RU {
+  -fx-border-style: solid;
+  -fx-border-width: 1px 0 0 0;
+  -fx-border-color: #c3c3c3;
+  -fx-background-color: #e5e5e5;
+  -fx-padding: 10px;
+}
+
+.ewgz9b {
+  -fx-pref-height: 32px;
+}
+
+.gh60ub {
+  -fx-padding: 0 0 0 5px;
+}
+
+.cmx6we {
+  -fx-border-radius: 2px;
+  -fx-padding: 7px 0;
 }

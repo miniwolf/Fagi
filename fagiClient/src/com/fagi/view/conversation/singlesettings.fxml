@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane styleClass="message" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <VBox>
+         <children>
+            <HBox alignment="CENTER_LEFT" styleClass="message-title">
+               <children>
+                  <Pane>
+                     <children>
+                        <Pane layoutY="12.0" styleClass="picture" />
+                     </children>
+                  </Pane>
+                  <VBox styleClass="middle-holder">
+                     <children>
+                        <Label fx:id="name1" styleClass="mu" VBox.vgrow="ALWAYS" />
+                        <Label fx:id="date1" styleClass="last-seen" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+                  <HBox styleClass="icon">
+                     <children>
+                        <Button styleClass="minimize" />
+                        <Button styleClass="popout" />
+                        <Button styleClass="close" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <bottom>
+      <HBox spacing="5.0" styleClass="RU">
+         <children>
+            <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" visible="false" />
+               </children>
+            </VBox>
+            <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button defaultButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="OK">
+                     <styleClass>
+                        <String fx:value="zbg" />
+                        <String fx:value="cmx6we" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <BorderPane styleClass="settingsmenu" BorderPane.alignment="CENTER">
+         <top>
+            <VBox styleClass="togglelist" BorderPane.alignment="TOP_LEFT">
+               <children>
+                  <HBox alignment="CENTER_LEFT" styleClass="toggle-holder">
+                     <children>
+                        <Pane styleClass="button-wrapper">
+                           <children>
+                              <HBox styleClass="item">
+                                 <children>
+                                    <Pane styleClass="button-wrapper">
+                                       <children>
+                                          <Button layoutY="3.0" mnemonicParsing="false">
+                                             <styleClass>
+                                                <String fx:value="check-box" />
+                                                <String fx:value="untoggled" />
+                                             </styleClass></Button>
+                                       </children>
+                                    </Pane>
+                                    <Label styleClass="toggle-message" text="Label" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </Pane>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="14.0" styleClass="toggle-holder">
+                     <children>
+                        <Pane styleClass="button-wrapper">
+                           <children>
+                              <HBox styleClass="item">
+                                 <children>
+                                    <Pane styleClass="button-wrapper">
+                                       <children>
+                                          <Button mnemonicParsing="false">
+                                             <styleClass>
+                                                <String fx:value="check-box" />
+                                                <String fx:value="toggled" />
+                                             </styleClass></Button>
+                                       </children>
+                                    </Pane>
+                                    <Label styleClass="toggle-message" text="Label" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </Pane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <VBox BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="11.0" />
+               </BorderPane.margin>
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <styleClass>
+                        <String fx:value="vr" />
+                        <String fx:value="XX" />
+                     </styleClass>
+                     <children>
+                        <Button mnemonicParsing="false">
+                           <HBox.margin>
+                              <Insets right="12.0" />
+                           </HBox.margin>
+                           <styleClass>
+                              <String fx:value="zbg" />
+                              <String fx:value="archive" />
+                              <String fx:value="bu" />
+                           </styleClass>
+                        </Button>
+                        <Label text="Archive Conversation" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" styleClass="vr">
+                     <children>
+                        <Button mnemonicParsing="false">
+                           <styleClass>
+                              <String fx:value="zbg" />
+                              <String fx:value="delete" />
+                              <String fx:value="bu" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets right="12.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label text="Delete Conversation" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="110.0" styleClass="vr">
+                     <children>
+                        <Button mnemonicParsing="false">
+                           <styleClass>
+                              <String fx:value="zbg" />
+                              <String fx:value="block" />
+                              <String fx:value="bu" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets right="12.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label text="Block Marcus" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </center>
+   <stylesheets>
+      <URL value="@../../style/conversation.css" />
+      <URL value="@../../style/main.css" />
+   </stylesheets>
+</BorderPane>

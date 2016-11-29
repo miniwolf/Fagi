@@ -15,8 +15,6 @@
   -webkit-user-select: none;
   -webkit-transition: background .3s;
   transition: background .3s;
-  -fx-border-width:0px;
-  -fx-border-radius:50%;
   -fx-text-alignment:center;
   outline: none;
   overflow: hidden;
