@@ -438,6 +438,13 @@
   -fx-background-position: -511px -136px;
 }
 
+.leave {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -457px -149px;
+  -fx-background-size: auto;
+}
+
 .RU {
   -fx-border-style: solid;
   -fx-border-width: 1px 0 0 0;
