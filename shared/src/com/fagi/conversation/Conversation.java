@@ -36,12 +36,6 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         lastMessageDate = new Date();
     }
 
-    public Conversation(long id) {
-        this.id = id;
-        this.type = ConversationType.Real;
-        lastMessageDate = new Date();
-    }
-
     public Conversation() {
         lastMessageDate = new Date();
     }

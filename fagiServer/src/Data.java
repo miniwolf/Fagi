@@ -4,6 +4,7 @@
  */
 
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationType;
 import com.fagi.utility.JsonFileOperations;
 import com.google.gson.Gson;
 
@@ -40,7 +41,8 @@ class Data {
      */
 
     public static synchronized Conversation createConversation(List<String> participants) {
-        Conversation con = new Conversation(nextConversationId);
+        ConversationType type = participants.size() > 2 ? ConversationType.Multi : ConversationType.Single;
+        Conversation con = new Conversation(nextConversationId, type);
         nextConversationId++;
 
         participants.forEach(con::addUser);
