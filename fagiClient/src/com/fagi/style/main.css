@@ -1,6 +1,10 @@
 /*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
+.persistent-prompt:focused {
+  -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
+}
+
 .maincontent {
   -fx-background-color:#CCC;
   -fx-pref-height:500px;
@@ -66,8 +70,18 @@
   -fx-faint-focus-color: transparent;
 }
 
+.list .focused {
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #4d90fe;
+}
+
 .list .list-content {
-  -fx-background-color:#FFF;
+  -fx-background-color: #FFF;
+}
+
+.list-content > .viewport {
+  -fx-background-color: #FFF;
 }
 
 .list-content:focused {

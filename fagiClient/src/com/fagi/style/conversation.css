@@ -223,6 +223,10 @@
 }
 
 .message .field {
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 4, 0, 0, 0);
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: rgba(0,0,0,.1) transparent transparent transparent;
   -fx-background-color: #fff;
   -fx-min-height: 38px;
   -fx-pref-width: 400px;

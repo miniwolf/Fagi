@@ -14,6 +14,7 @@ import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
+import com.fagi.handler.SearchHandler;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -27,6 +28,8 @@ import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -43,26 +46,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Map;
 
 /**
  * TODO: Write description.
  */
 public class MainScreen {
-    @FXML
-    private Pane body;
-    @FXML
-    private Pane messages;
-    @FXML
-    private Pane contacts;
-    @FXML
-    private ScrollPane listContent;
-    @FXML
-    private TextField searchBox;
+    @FXML private Pane body;
+    @FXML private Pane messages;
+    @FXML private Pane contacts;
+    @FXML private ScrollPane listContent;
+    @FXML private Pane searchHeader;
+    @FXML private TextField searchBox;
+    private Map<Node, SearchHandler> handlers = new HashMap<>();
 
     public enum PaneContent {
         contacts, messages
@@ -85,7 +82,6 @@ public class MainScreen {
     private Thread generalHandlerThread;
     private Conversation conversation = new Conversation();
     private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
-    private boolean currentConversation;
     private ConversationController conversationController;
 
     /**
@@ -128,6 +124,13 @@ public class MainScreen {
         currentPane = messages;
         currentPaneContent = PaneContent.messages;
         changeMenuStyle("messages");
+
+        addListenerToSearchField(new SearchHandler(searchBox, searchHeader));
+    }
+
+    private void addListenerToSearchField(SearchHandler searchHandler) {
+        searchBox.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) ->
+                searchHandler.ToggleFocus(oldPropertyValue));
     }
 
     @FXML
