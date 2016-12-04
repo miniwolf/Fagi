@@ -159,7 +159,12 @@ public class InputWorker extends Worker {
                     .sorted()
                     .collect(Collectors.toList());
 
-            SearchUsersResult result = new SearchUsersResult(usernames, friends);
+            List<String> nonFriends = usernames
+                    .stream()
+                    .filter(username -> !friends.contains(username))
+                    .collect(Collectors.toList());
+
+            SearchUsersResult result = new SearchUsersResult(nonFriends, friends);
             out.addResponse(result);
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
