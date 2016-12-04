@@ -32,7 +32,8 @@ public class SearchHandler implements Handler {
             contentLoader.setController(contentController);
             VBox searchContent = contentLoader.load();
 
-            for (String username : result.getData()) {
+            // TODO : Do something similar with friends
+            for (String username : result.getData().getUsernames()) {
                 SearchContactController controller = new SearchContactController();
                 FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/SearchContact.fxml"));
                 loader.setController(controller);

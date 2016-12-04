@@ -9,16 +9,25 @@ import java.util.List;
 /**
  * Created by Marcus on 08-07-2016.
  */
-public class SearchUsersResult implements Serializable, InGoingMessages, Access<List<String>> {
+public class SearchUsersResult implements Serializable, InGoingMessages, Access<SearchUsersResult> {
     private List<String> usernames;
+    private List<String> friends;
 
-    public SearchUsersResult(List<String> usernames) {
+    public SearchUsersResult(List<String> usernames, List<String> friends) {
         this.usernames = usernames;
     }
 
-    @Override
-    public List<String> getData() {
+    public List<String> getUsernames() {
         return usernames;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    @Override
+    public SearchUsersResult getData() {
+        return this;
     }
 
     @Override

@@ -141,14 +141,25 @@ public class InputWorker extends Worker {
 
             out.addResponse(result);
         } else if ( input instanceof SearchUsersRequest) {
+            User user = Data.getUser(this.myUserName);
             SearchUsersRequest request = (SearchUsersRequest)input;
             out.addResponse(new AllIsWell());
-            SearchUsersResult result = new SearchUsersResult(Data.getUserNames().stream()
-                                                                                .parallel()
-                                                                                .filter(username -> username.startsWith(request.getSearchString()))
-                                                                                .filter(username -> !username.equals(request.getSender()))
-                                                                                .sorted()
-                                                                                .collect(Collectors.toList()));
+
+            List<String> usernames = Data
+                    .getUserNames()
+                    .stream()
+                    .filter(username -> username.startsWith(request.getSearchString()))
+                    .filter(username -> !username.equals(request.getSender()))
+                    .sorted()
+                    .collect(Collectors.toList());
+
+            List<String> friends = usernames
+                    .stream()
+                    .filter(username -> user.getFriends().contains(username))
+                    .sorted()
+                    .collect(Collectors.toList());
+
+            SearchUsersResult result = new SearchUsersResult(usernames, friends);
             out.addResponse(result);
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
