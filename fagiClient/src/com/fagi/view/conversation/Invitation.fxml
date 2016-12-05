@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane styleClass="message" xmlns="http://javafx.com/javafx/8.0.60"
+            xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../../style/conversation.css, @../../style/invitation.css">
+    <top>
+        <VBox>
+            <HBox alignment="CENTER_LEFT" styleClass="message-title">
+                <Pane>
+                    <Pane layoutY="12.0" styleClass="picture"/>
+                </Pane>
+                <VBox styleClass="middle-holder">
+                    <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS"/>
+                    <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER"/>
+                </VBox>
+                <HBox styleClass="icon">
+                    <Button styleClass="minimize"/>
+                    <Button styleClass="popout"/>
+                    <Button styleClass="close"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <BorderPane styleClass="message-holder">
+            <top>
+                <HBox styleClass="chatmenu" BorderPane.alignment="CENTER">
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <HBox alignment="CENTER_RIGHT">
+                        <Pane styleClass="chatsettings-holder">
+                            <Pane styleClass="settings-filler"/>
+                            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="settingsbutton"/>
+                        </Pane>
+                    </HBox>
+                </HBox>
+            </top>
+            <center>
+                <VBox alignment="TOP_CENTER" fillWidth="false" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets bottom="8.0" left="14.0" right="14.0" top="8.0"/>
+                    </BorderPane.margin>
+                    <Pane prefHeight="200.0" prefWidth="200.0" styleClass="ebeE0d">
+                        <Pane layoutX="22.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0"
+                              styleClass="W4rVif"/>
+                    </Pane>
+                    <Label styleClass="mopgBe" text="Start a conversation with"/>
+                    <Pane>
+                        <HBox alignment="CENTER_LEFT" layoutX="2.0" layoutY="1.0"
+                              styleClass="Zcetzc">
+                            <TextField prefWidth="336.0" promptText="Enter a message"
+                                       styleClass="vE, persistent-prompt"/>
+                        </HBox>
+                        <Pane layoutX="348.0" layoutY="32.5" prefHeight="200.0" prefWidth="200.0"
+                              styleClass="ci"/>
+                    </Pane>
+                    <Pane styleClass="Y6eeve"/>
+                    <Button mnemonicParsing="false" styleClass="zbg" text="Send Invitation"/>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

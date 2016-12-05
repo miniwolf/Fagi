@@ -61,7 +61,7 @@ public class MasterLogin {
         this.primaryStage = primaryStage;
         this.scene = scene;
 
-        loader = new FXMLLoader(getClass().getResource("/com/fagi/view/login/Master.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/com/fagi/view/Master.fxml"));
         showScreen(state);
         initCommunication();
         primaryStage.sizeToScene();
@@ -101,10 +101,10 @@ public class MasterLogin {
 
     /**
      * Assigns the Enter button as a shortcut for the next method in the controller
-     * @param element works as a placeholder for the eventlistener
+     * @param node Node works as a placeholder for the eventlistener
      */
-    public void initialize(Node element) {
-        element.setOnKeyPressed(event -> {
+    public void initialize(Node node) {
+        node.setOnKeyPressed(event -> {
             if ( event.getCode() == KeyCode.ENTER ) {
                 controller.next();
             }

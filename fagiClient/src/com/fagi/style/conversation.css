@@ -236,6 +236,7 @@
   -fx-wrap-text:true;
   -fx-pref-width:350px;
   -fx-font-size:13px;
+  -fx-font-family: 'Roboto','Arial',sans-serif;
 }
 
 .holder {
@@ -346,23 +347,27 @@
 }
 
 .zbg {
-  -fx-background-color: #fff;
-  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.05), 0, 0, 0, 1);
-  -fx-text-fill: #404040;
-  -fx-font-size: 11px;
-  -fx-font-weight: bold;
+  -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,.05), 0, 0, 1, 0);
+  -fx-background-color: #427fed;
+  -fx-text-fill: #fff;
+  -fx-min-width: 54px;
+  -fx-padding: 7px 12px 7px 12px;
+  -fx-margin: 0 16px 0 0;
+  -fx-border-style:solid;
+  -fx-border-width:1px;
+  -fx-border-color:transparent;
   -fx-border-radius: 2px;
-  -fx-border-width: 1px;
-  -fx-border-style: solid;
-  -fx-pref-width: 54px;
-  -fx-border-color: #D9D9D9;
   -fx-background-size: 617px, 557px;
 }
 .zbg:hover {
-  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.1), 0, 0, 0, 2);
-  -fx-background-color: #fff;
-  -fx-background-image: linear-gradient(top,transparent,transparent);
-  -fx-border-color: #b8b8b8;
+  -fx-effect: dropshadow(three-pass-box, #2f69c2, 0, 0, 0, 1);
+  -fx-background-color: #4285f4;
+}
+
+.zbg .text {
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-alignment: center;
 }
 
 .settings {
@@ -392,6 +397,7 @@
 }
 
 .addpeople-holder {
+  -fx-margin: 5px 0 0 0;
   -fx-opacity: .6;
   -fx-pref-height: 28px;
   -fx-pref-width: 28px;

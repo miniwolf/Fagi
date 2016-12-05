@@ -1,0 +1,66 @@
+/*
+ * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
+ */
+
+.persistent-prompt:focused {
+  -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
+}
+
+.ebeE0d {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -1197px -133px;
+  -fx-pref-height: 82px;
+  -fx-pref-width: 68px;
+}
+
+.W4rVif {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position:-128px -95px;
+  -fx-pref-height: 24px;
+  -fx-pref-width: 24px;
+}
+
+.mopgBe {
+  -fx-padding: 10px 0;
+}
+
+.mopgBe .text {
+  -fx-font-size: 16px;
+  -fx-text-fill: #37474f;
+}
+
+.Zcetzc {
+  -fx-background-color: #fff;
+  -fx-pref-height: 40px;
+  -fx-text-alignment: left;
+  -fx-border-radius: 2px;
+  -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,.15), 2, 0, 0, 1);
+  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  white-space: nowrap;
+  -fx-padding: 0 5px;
+}
+
+.Y6eeve {
+  -fx-margin: 5px 0 0 0;
+  -fx-pref-height: 20px;
+  -fx-text-fill: #445a64;
+}
+
+.ci {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -449px -138px;
+  -fx-pref-width: 7px;
+  -fx-max-height: 10px;
+}
+
+.vE {
+  -fx-background-color: #fff;
+  -fx-border: none;
+  -fx-line-height: 16px;
+  -fx-min-height: 18px;
+  -fx-padding:2px 0 2px 6px;
+  -fx-wrap-text: true;
+}
