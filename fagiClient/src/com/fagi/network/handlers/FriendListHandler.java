@@ -1,5 +1,6 @@
 package com.fagi.network.handlers;
 
+import com.fagi.action.items.OpenConversation;
 import com.fagi.controller.contentList.ContactItemController;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.MainScreen;
@@ -34,11 +35,12 @@ public class FriendListHandler implements Handler {
             VBox contactContent = contentLoader.load();
 
             for (String username : friendList.getAccess().getData()) {
-                ContactItemController contactItemController = new ContactItemController(mainScreen);
+                ContactItemController contactItemController = new ContactItemController();
                 FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/Contact.fxml"));
                 loader.setController(contactItemController);
                 Pane pane = loader.load();
 
+                contactItemController.assign(new OpenConversation(mainScreen, contactItemController.getUserName()));
                 contactItemController.setUserName(username);
                 contentController.addToContentList(pane);
             }

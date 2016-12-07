@@ -1,6 +1,7 @@
 package com.fagi.controller.contentList;
 
 import com.fagi.action.ActionableImpl;
+import com.fagi.action.items.OpenConversationFromID;
 import com.fagi.controller.MainScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,16 +16,15 @@ import java.util.TimerTask;
 /**
  * @author miniwolf
  */
-public class MessageItemController extends ActionableImpl<ItemActions> {
+public class MessageItemController extends ActionableImpl {
     @FXML private Label usernameLabel;
     @FXML private Label date;
     @FXML private Label lastMessage;
     private Date dateInstance;
     private final String username;
 
-    public MessageItemController(MainScreen mainScreen, long ID, String username) {
+    public MessageItemController(String username) {
         this.username = username;
-        AddAction(ItemActions.OpenConversation, ItemActions.OpenConversationFromID(mainScreen, ID));
     }
 
     @FXML
@@ -77,6 +77,5 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
     @FXML
     public void openConversation() {
-        ExecuteAction(ItemActions.OpenConversation);
     }
 }

@@ -6,6 +6,7 @@
  */
 package com.fagi.controller;
 
+import com.fagi.action.items.OpenConversationFromID;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.contentList.MessageItemController;
 import com.fagi.controller.conversation.ConversationController;
@@ -28,8 +29,6 @@ import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -120,7 +119,7 @@ public class MainScreen {
     }
 
     @FXML
-    public void initialize() {
+    void initialize() {
         currentPane = messages;
         currentPaneContent = PaneContent.messages;
         changeMenuStyle("messages");
@@ -130,7 +129,7 @@ public class MainScreen {
 
     private void addListenerToSearchField(SearchHandler searchHandler) {
         searchBox.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) ->
-                searchHandler.ToggleFocus(oldPropertyValue));
+                searchHandler.toggleFocus(oldPropertyValue));
     }
 
     @FXML
@@ -248,25 +247,6 @@ public class MainScreen {
     }
 
     public void setConversation(Conversation conversation) {
-        if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
-            return;
-        }
-
-        if ( conversation.getType() == ConversationType.Placeholder ) {
-            conversation.setType(ConversationType.Real);
-            this.communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
-        }
-
-        ConversationController controller = new ConversationController(conversation, communication, username);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
-        loader.setController(controller);
-        try {
-            BorderPane conversationBox = loader.load();
-            body.getChildren().add(conversationBox);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.conversationController = controller;
         this.conversation = conversation;
     }
 
@@ -330,7 +310,8 @@ public class MainScreen {
         }
 
         for ( Conversation conversation : conversations ) {
-            MessageItemController messageItemController = new MessageItemController(this, conversation.getId(), username);
+            MessageItemController messageItemController = new MessageItemController(username);
+            messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
             loader.setController(messageItemController);
@@ -349,5 +330,13 @@ public class MainScreen {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void addElement(Node node) {
+        body.getChildren().add(node);
+    }
+
+    public void setConversationController(ConversationController conversationController) {
+        this.conversationController = conversationController;
     }
 }

@@ -15,7 +15,7 @@ public class SearchHandler {
         this.searchHeader = searchHeader;
     }
 
-    public void ToggleFocus(Boolean focusValue) {
+    public void toggleFocus(Boolean focusValue) {
         if ( focusValue ) {
             searchHeader.getStyleClass().remove("focused");
             searchBox.setPromptText("New conversation");

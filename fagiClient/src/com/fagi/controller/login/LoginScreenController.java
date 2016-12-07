@@ -50,7 +50,7 @@ public class LoginScreenController implements LoginController {
 
     @Override
     public void next() {
-        masterLogin.next();
+        handleLogin();
     }
 
     @Override
