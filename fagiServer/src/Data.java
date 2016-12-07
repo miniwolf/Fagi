@@ -4,6 +4,7 @@
  */
 
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationType;
 import com.fagi.utility.JsonFileOperations;
 import com.google.gson.Gson;
 
@@ -33,14 +34,17 @@ class Data {
     private static final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
     private static final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
     private static long nextConversationId = 0;
-    private static final String conversationsFolderPath = "conversations/";
 
     /*
         TODO : Create new conversation, store and load conversation list
      */
 
     public static synchronized Conversation createConversation(List<String> participants) {
-        Conversation con = new Conversation(nextConversationId);
+        ConversationType type = participants.size() > 2 ? ConversationType.Multi : ConversationType.Single;
+
+        String name = participants.stream().reduce("", (a, b) -> a + ", " + b);
+
+        Conversation con = new Conversation(nextConversationId, name, type);
         nextConversationId++;
 
         participants.forEach(con::addUser);

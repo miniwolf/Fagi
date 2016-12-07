@@ -6,12 +6,7 @@ package com.fagi.network;
 
 import com.fagi.controller.ErrorBoxController;
 import com.fagi.main.FagiApp;
-import com.fagi.model.CreateUser;
-import com.fagi.model.DeleteFriend;
-import com.fagi.model.DeleteFriendRequest;
-import com.fagi.model.FriendRequest;
-import com.fagi.model.Login;
-import com.fagi.model.Logout;
+import com.fagi.model.*;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
@@ -114,13 +109,12 @@ public class ChatManager {
             return false;
         }
 
-        if ( !isValid(username) ) {
+        if ( !isValidUserName(username) ) {
             System.out.println(username);
             labelMessage.setText("Username may not contain special symbols");
             return false;
-        } else {
-            password = deleteIllegalCharacters(password);
         }
+
         communication.sendObject(new CreateUser(username, password));
 
         Response response = communication.getNextResponse();
@@ -219,13 +213,19 @@ public class ChatManager {
     }
 
     /**
-     * @param string which is escaped in all the illegal characters.
-     * @return String the escaped string.
+     * Checks if a given username is available
+     * @param username username from the CreateUserNameScreen
+     * @return true if the username is available
      */
-    private static String deleteIllegalCharacters(String string) {
-        string = string.replace("\"", "'");
-        string = string.replace(",", ";");
-        return string;
+    public static boolean checkIfUserNameIsAvailable(String username) {
+        UserNameAvailableRequest request = new UserNameAvailableRequest(username);
+
+        communication.sendObject(request);
+        Response response = communication.getNextResponse();
+
+        System.out.println(response.getClass());
+
+        return response instanceof AllIsWell;
     }
 
     public static void setCommunication(Communication communication) {
@@ -236,11 +236,11 @@ public class ChatManager {
         ChatManager.application = application;
     }
 
-    private static boolean isEmpty(String string) {
-        return string.equals("");
+    public static boolean isValidUserName(String string) {
+        return Pattern.matches("\\w*", string);
     }
 
-    private static boolean isValid(String string) {
-        return Pattern.matches("\\w*", string);
+    private static boolean isEmpty(String string) {
+        return string.equals("");
     }
 }

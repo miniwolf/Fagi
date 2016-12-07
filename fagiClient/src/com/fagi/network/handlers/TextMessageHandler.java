@@ -46,7 +46,9 @@ public class TextMessageHandler implements Handler {
         ConversationController controller = mainScreen.getConversationController();
 
         if (conversation.getType() == ConversationType.Placeholder) {
-            conversation.setType(ConversationType.Real);
+			ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
+
+            conversation.setType(type);
             mainScreen.getCommunication().sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
         }
 

@@ -4,7 +4,6 @@
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationDataUpdate;
-import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
@@ -141,34 +140,51 @@ public class InputWorker extends Worker {
 
             out.addResponse(result);
         } else if ( input instanceof SearchUsersRequest) {
-            User user = Data.getUser(this.myUserName);
             SearchUsersRequest request = (SearchUsersRequest)input;
-            out.addResponse(new AllIsWell());
 
-            List<String> usernames = Data
-                    .getUserNames()
-                    .stream()
-                    .filter(username -> username.startsWith(request.getSearchString()))
-                    .filter(username -> !username.equals(request.getSender()))
-                    .sorted()
-                    .collect(Collectors.toList());
-
-            List<String> friends = usernames
-                    .stream()
-                    .filter(username -> user.getFriends().contains(username))
-                    .sorted()
-                    .collect(Collectors.toList());
-
-            List<String> nonFriends = usernames
-                    .stream()
-                    .filter(username -> !friends.contains(username))
-                    .collect(Collectors.toList());
-
-            SearchUsersResult result = new SearchUsersResult(nonFriends, friends);
-            out.addResponse(result);
+            out.addResponse(handleSearchUsersRequest(request));
+        } else if ( input instanceof UserNameAvailableRequest) {
+            UserNameAvailableRequest request = (UserNameAvailableRequest) input;
+            out.addResponse(handleUserNameAvailableRequest(request));
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
+    }
+
+    private Object handleUserNameAvailableRequest(UserNameAvailableRequest request) {
+        if (Data.getUser(request.getUsername()) == null) {
+            return new AllIsWell();
+        } else {
+            return new UserExists();
+        }
+    }
+
+    private Object handleSearchUsersRequest(SearchUsersRequest request) {
+        User user = Data.getUser(this.myUserName);
+        out.addResponse(new AllIsWell());
+
+        List<String> usernames = Data
+                .getUserNames()
+                .stream()
+                .filter(username -> username.startsWith(request.getSearchString()))
+                .filter(username -> !username.equals(request.getSender()))
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<String> friends = usernames
+                .stream()
+                .filter(username -> user.getFriends().contains(username))
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<String> nonFriends = usernames
+                .stream()
+                .filter(username -> !friends.contains(username))
+                .collect(Collectors.toList());
+
+        SearchUsersResult result = new SearchUsersResult(nonFriends, friends);
+
+        return result;
     }
 
     private Object handleGetAllConversationDataRequest(GetAllConversationDataRequest request) {

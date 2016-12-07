@@ -250,7 +250,8 @@ public class MainScreen {
         }
 
 		if (conversation.getType() == ConversationType.Placeholder) {
-			conversation.setType(ConversationType.Real);
+            ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
+			conversation.setType(type);
 			this.communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
 		}
 
