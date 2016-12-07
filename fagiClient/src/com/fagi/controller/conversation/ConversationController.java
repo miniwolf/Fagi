@@ -11,11 +11,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,13 +31,17 @@ public class ConversationController {
 	@FXML private Label date;
 	@FXML private TextArea message;
 	@FXML private VBox chat;
+	@FXML private ScrollPane scroller;
 
-	private Conversation conversation;
+    private final Stage primaryStage;
+    private Conversation conversation;
 	private Communication communication;
 	private String username;
+	private boolean isUserScrolling = false;
 
-	public ConversationController(Conversation conversation, Communication communication, String username) {
-		this.conversation = conversation;
+	public ConversationController(Stage primaryStage, Conversation conversation, Communication communication, String username) {
+        this.primaryStage = primaryStage;
+        this.conversation = conversation;
 		this.communication = communication;
 		this.username = username;
 	}
@@ -59,6 +65,11 @@ public class ConversationController {
 			}
 		});
 
+		scroller.setOnScrollFinished((value) -> {
+			this.isUserScrolling = scroller.getVvalue() != 1.0;
+		});
+
+
 		fillChat();
 	}
 
@@ -81,10 +92,19 @@ public class ConversationController {
 	}
 
 	public void addMessage(TextMessage message) {
+
 		HBox load = getBox(message.getMessageInfo().getSender().equals(username)
 				? "/com/fagi/view/conversation/MyMessage.fxml"
 				: "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
-		Platform.runLater(() -> chat.getChildren().add(load));
+		Platform.runLater(() -> {
+            chat.getChildren().add(load);
+
+            primaryStage.sizeToScene();
+
+            if (!isUserScrolling) {
+                scroller.setVvalue(1.0);
+            }
+        });
 	}
 
 	public void redrawMessages() {

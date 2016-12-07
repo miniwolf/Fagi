@@ -37,7 +37,7 @@
    <center>
       <BorderPane styleClass="message-holder">
          <bottom>
-            <ScrollPane hbarPolicy="NEVER" styleClass="message-holder, message-scroller" vvalue="1.0">
+            <ScrollPane fx:id="scroller" hbarPolicy="NEVER" styleClass="message-holder, message-scroller" vvalue="1.0">
                <VBox fx:id="chat" />
             </ScrollPane>
          </bottom>
