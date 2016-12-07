@@ -15,7 +15,7 @@
         <TextField fx:id="username" promptText="Enter username" styleClass="input"/>
         <Button fx:id="loginBtn" onMousePressed="#next" styleClass="input, rc-button, rc-button-submit" text="Next"/>
         <HBox prefHeight="22.0" prefWidth="254.0">
-            <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="147.0"/>
+            <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="240.0"/>
         </HBox>
     </VBox>
 
