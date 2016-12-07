@@ -113,9 +113,8 @@ public class ChatManager {
             System.out.println(username);
             labelMessage.setText("Username may not contain special symbols");
             return false;
-        } else {
-            password = deleteIllegalCharacters(password);
         }
+
         communication.sendObject(new CreateUser(username, password));
 
         Response response = communication.getNextResponse();
@@ -227,16 +226,6 @@ public class ChatManager {
         System.out.println(response.getClass());
 
         return response instanceof AllIsWell;
-    }
-
-    /**
-     * @param string which is escaped in all the illegal characters.
-     * @return String the escaped string.
-     */
-    private static String deleteIllegalCharacters(String string) {
-        string = string.replace("\"", "'");
-        string = string.replace(",", ";");
-        return string;
     }
 
     public static void setCommunication(Communication communication) {
