@@ -228,7 +228,7 @@ public class InputWorker extends Worker {
             return new NoSuchConversation();
         }
 
-        Set<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
+        List<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
 
         return new HistoryUpdates(res, request.getId());
     }

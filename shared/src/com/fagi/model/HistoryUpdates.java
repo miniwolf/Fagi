@@ -13,15 +13,15 @@ import java.util.Set;
  */
 public class HistoryUpdates implements Serializable, InGoingMessages, Access<HistoryUpdates> {
 
-    private final Set<TextMessage> updates;
+    private final List<TextMessage> updates;
     private final long id;
 
-    public HistoryUpdates(Set<TextMessage> updates, long id) {
+    public HistoryUpdates(List<TextMessage> updates, long id) {
         this.updates = updates;
         this.id = id;
     }
 
-    public Set<TextMessage> getUpdates() {
+    public List<TextMessage> getUpdates() {
         return updates;
     }
 

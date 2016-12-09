@@ -52,7 +52,7 @@ public class DefaultMessageInfo implements MessageInfo {
 
         if (conversationID != that.conversationID) return false;
         if (!sender.equals(that.sender)) return false;
-        return timestamp.equals(that.timestamp) && that.currentTime == currentTime;
+        return that.currentTime == currentTime;
 
     }
 
