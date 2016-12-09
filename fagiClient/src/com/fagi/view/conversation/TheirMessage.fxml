@@ -9,10 +9,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+
 <HBox styleClass="holder, their" stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
-    <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
-        <Image url="https://lh5.googleusercontent.com/-HuqNw2gS7KA/AAAAAAAAAAI/AAAAAAAAATk/06-Td0R7Gdk/s32-c-k-no/photo.jpg" />
-    </ImageView>
+   <Pane maxHeight="32.0" maxWidth="32.0">
+      <children>
+          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
+              <Image url="https://lh5.googleusercontent.com/-HuqNw2gS7KA/AAAAAAAAAAI/AAAAAAAAATk/06-Td0R7Gdk/s32-c-k-no/photo.jpg" />
+          </ImageView>
+         <Circle fill="#ffffff00" layoutX="14.0" layoutY="16.0" radius="13.0" stroke="#eceff1" strokeType="OUTSIDE" strokeWidth="10.0" />
+      </children>
+   </Pane>
     <Pane maxHeight="-Infinity" styleClass="tip" />
-    <Label fx:id="message" styleClass="text-message" wrapText="true"/>
+    <Label fx:id="message" styleClass="text-message" wrapText="true" />
 </HBox>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="dNoYdf" stylesheets="@../../style/invitationitem.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane>
+         <HBox.margin>
+            <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+         </HBox.margin>
+         <children>
+            <Pane layoutY="2.0" styleClass="u388ee">
+               <children>
+                  <Circle disable="true" fill="#ffffff00" layoutX="23.0" layoutY="23.0" radius="21.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="10.0" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <VBox alignment="CENTER_LEFT" styleClass="JSnFcc">
+         <children>
+            <Label text="Marcus Haagh" />
+            <Label layoutX="10.0" layoutY="10.0" text="Sent a message" />
+         </children></VBox>
+   </children>
+</HBox>

@@ -2,13 +2,18 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('Roboto-Regular.ttf');
+}
+
 .button {
   -fx-border-width: 0;
   -fx-border-style: solid;
   -fx-border-color: transparent;
   -fx-padding: 0;
   -fx-background-color: transparent;
-  -fx-font-family: 'Roboto','Arial',sans-serif;
+  -fx-font-family: 'Roboto';
 }
 
 .message {
@@ -25,10 +30,10 @@
   -fx-background-radius: 3px 3px 0px 0px;
   -fx-cursor: hand;
   -fx-background-color: #404040;
-  -fx-font-family: 'Roboto','Arial',sans-serif;
+  -fx-font-family: 'Roboto';
 }
 
-.message-title .icon {
+.message-title .FN {
   -fx-padding:0 5px 0 0;
   -fx-alignment:top-left;
 }
@@ -46,6 +51,7 @@
 .middle-holder .mu {
   -fx-text-fill: #fff;
   -fx-font-size: 13px;
+  -fx-margin: 0 12px 0 0;
 }
 
 .middle-holder .last-seen {
@@ -171,17 +177,27 @@
 }
 
 .toggle-message {
-  -fx-font-family: 'Roboto', 'Arial', sans-serif;
+  -fx-font-family: 'Roboto';
   -fx-font-size: 13px;
 }
 
 .button-wrapper .check-box {
+  -fx-cursor: hand;
+  -fx-pref-width: 16px;
+  -fx-pref-height: 16px;
+}
+
+.button-wrapper .toggled {
   -fx-background-repeat: no-repeat;
+
   -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -107px -505px;
   -fx-background-size: 617px, 557px;
-  -fx-pref-width: 16px;
-  -fx-pref-height: 16px;
+}
+
+.button-wrapper .untoggled {
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -107px -120px;
 }
 
 .message-scroller > * {
@@ -212,6 +228,10 @@
 }
 
 .message .field {
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 4, 0, 0, 0);
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: rgba(0,0,0,.1) transparent transparent transparent;
   -fx-background-color: #fff;
   -fx-min-height: 38px;
   -fx-pref-width: 400px;
@@ -220,7 +240,7 @@
 .message .text {
   -fx-wrap-text:true;
   -fx-pref-width:350px;
-  -fx-font-size:13px;
+  -fx-font-family: 'Roboto';
 }
 
 .holder {
@@ -330,15 +350,60 @@
   -fx-border-width: 0 0 1px 0;
 }
 
-.chatmenu .button {
-  -fx-background-color: #fff;
-  -fx-color: #404040;
-  -fx-font-size: 11px;
-  -fx-font-weight: bold;
-  -fx-border-radius: 2px;
+.zbga {
+  -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,.05), 0, 0, 1, 0);
+  -fx-background-color: #427fed;
+  -fx-text-fill: #fff;
+  -fx-text-alignment: center;
   -fx-border-width: 1px;
   -fx-border-style: solid;
-  -fx-border-color: #D9D9D9;
+  -fx-border-color: transparent;
+  -fx-border-radius: 2px;
+  -fx-min-width: 54px;
+  -fx-padding: 7px 12px 7px 12px;
+}
+
+.zbga:hover {
+  -fx-effect:dropshadow(three-pass-box, #2f69c2, 0, 0, 0, 2);
+  -fx-background-color: #4285f4;
+  -fx-border-color: transparent transparent #2f69c2 transparent;
+}
+
+.zbga .text {
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+}
+
+.zbg {
+  -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,.05), 0, 0, 1, 0);
+  -fx-background-color: #fff;
+  -fx-text-fill: #404040;
+  -fx-font-size: 11px;
+  -fx-font-weight: 900;
+  -fx-text-alignment: center;
+  -fx-border-radius: 2px;
+  -fx-min-width: 54px;
+  -fx-padding: 7px 12px 7px 12px;
+  -fx-border-width: 1px;
+  -fx-border-style:solid;
+  -fx-border-color:#d9d9d9;
+}
+.zbg {
+  -fx-background-size: 617px, 557px;
+}
+
+.zbg:hover {
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.1), 0, 0, 0, 2);
+  -fx-background-color: #fff;
+  -fx-border-color: #b8b8b8;
+  -fx-border-width:1px;
+  -fx-border-style:solid;
+}
+
+.zbg .text {
+  -fx-font-size: 11px;
+  -fx-font-weight: 900;
+  -fx-text-alignment: center;
 }
 
 .settings {
@@ -368,6 +433,7 @@
 }
 
 .addpeople-holder {
+  -fx-margin: 5px 0 0 0;
   -fx-opacity: .6;
   -fx-pref-height: 28px;
   -fx-pref-width: 28px;
@@ -391,11 +457,100 @@
   -fx-padding: 14px 5px 5px 4px;
 }
 
-.vr > .bu {
+.vr > .button {
+  -fx-min-width:0px;
   -fx-pref-width: 31px;
   -fx-pref-height: 31px;
   -fx-cursor: pointer;
   -fx-padding: 0;
   -fx-margin: 0 12px 0 0;
   -fx-alignment: center-left;
+}
+
+.archive {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -49px -17px;
+}
+
+.delete {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -98px -451px;
+}
+
+.block {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-position: -511px -136px;
+}
+
+.leave {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -457px -149px;
+  -fx-background-size: auto;
+}
+
+.RU {
+  -fx-border-style: solid;
+  -fx-border-width: 1px 0 0 0;
+  -fx-border-color: #c3c3c3;
+  -fx-background-color: #e5e5e5;
+  -fx-padding: 10px;
+}
+
+.ewgz9b {
+  -fx-pref-height: 32px;
+}
+
+.gh60ub {
+  -fx-padding: 0 0 0 5px;
+}
+
+.cmx6we {
+  -fx-border-radius: 2px;
+  -fx-padding: 7px 0;
+}
+
+.uP {
+  -fx-pref-height: 185px;
+}
+
+.zL {
+  -fx-background-color: #fff;
+  -fx-border-color: #c3c3c3;
+  -fx-border-width: 0 0 1px 0;
+  -fx-border-style: solid;
+}
+
+.vL {
+  -fx-pref-height: 85px;
+}
+
+.yL {
+  -fx-translate-x: 164;
+  -fx-translate-y: -32;
+  -fx-border-radius: 2px;
+  -fx-pref-width: 64px;
+  -fx-pref-height: 64px;
+}
+
+.KD {
+  -fx-padding: 17px 15px 10px 15px;
+  -fx-max-width: 142px;
+}
+
+.xL {
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+  -fx-text-fill: #404040;
+}
+
+.Wxsg2c {
+  -fx-text-fill: #489935;
+}
+
+.TTnd8c {
+  -fx-text-fill: #d73d32;
 }

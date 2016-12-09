@@ -6,16 +6,11 @@ import java.util.Map;
 /**
  * @author miniwolf
  */
-public class ActionableImpl<T> implements Actionable<T> {
-    private Map<T, Handler> handlers = new HashMap<>();
+public class ActionableImpl implements Actionable {
+    protected Action action;
 
     @Override
-    public void AddAction(T actionName, Handler action) {
-        handlers.put(actionName, action);
-    }
-
-    @Override
-    public void ExecuteAction(T actionName) {
-        handlers.get(actionName).execute();
+    public void assign(Action action) {
+        this.action = action;
     }
 }

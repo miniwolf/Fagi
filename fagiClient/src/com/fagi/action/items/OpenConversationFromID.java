@@ -2,9 +2,17 @@ package com.fagi.action.items;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationType;
+import com.fagi.conversation.GetAllConversationDataRequest;
+import com.fagi.network.Communication;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * @author miniwolf
@@ -20,12 +28,37 @@ public class OpenConversationFromID implements Action {
 
     @Override
     public void Execute() {
-        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(con -> con.getId() == id).findFirst();
-        if ( !optConversation.isPresent() ) {
+        Conversation conversation = mainScreen.getConversations().stream()
+                                              .filter(con -> con.getId() == id).findFirst()
+                                              .orElseGet(errorHandling());
+
+        if ( conversation.getParticipants().equals(mainScreen.getCurrentConversation().getParticipants()) ) {
             return;
         }
 
-        Conversation conversation = optConversation.get();
+        Communication communication = mainScreen.getCommunication();
+        String username = mainScreen.getUsername();
+        if ( conversation.getType() == ConversationType.Placeholder ) {
+            conversation.setType(ConversationType.Single);
+            communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
+        }
+
+        ConversationController controller = new ConversationController(mainScreen.getPrimaryStage(), conversation, communication, username);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
+        loader.setController(controller);
+        try {
+            BorderPane conversationBox = loader.load();
+            mainScreen.addElement(conversationBox);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         mainScreen.setConversation(conversation);
+        mainScreen.setConversationController(controller);
+    }
+
+    private Supplier<? extends Conversation> errorHandling() {
+        System.err.println("OpenConversationFromID: Couldn't find conversation on ID <" + id + ">");
+        throw new RuntimeException();
     }
 }

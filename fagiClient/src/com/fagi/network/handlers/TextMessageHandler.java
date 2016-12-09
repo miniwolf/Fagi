@@ -24,29 +24,30 @@ import java.util.Optional;
  * @author miniwolf
  */
 public class TextMessageHandler implements Handler {
-	private Container container = new DefaultContainer();
-	private Runnable runnable = new DefaultThreadHandler(container, this);
-	private final MainScreen mainScreen;
+    private Container container = new DefaultContainer();
+    private Runnable runnable = new DefaultThreadHandler(container, this);
+    private final MainScreen mainScreen;
 
-	public TextMessageHandler(MainScreen mainScreen) {
-		container.setThread(runnable);
-		InputHandler.register(TextMessage.class, container);
-		this.mainScreen = mainScreen;
-	}
+    public TextMessageHandler(MainScreen mainScreen) {
+        container.setThread(runnable);
+        InputHandler.register(TextMessage.class, container);
+        this.mainScreen = mainScreen;
+    }
 
-	@Override
-	public void handle(InGoingMessages inMessage) {
-		TextMessage message = (TextMessage) inMessage;
-		Optional<Conversation> first = mainScreen.getConversations().stream().filter(c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
-		if ( !first.isPresent() ) {
-			System.err.println("Server sent a message before it sent the conversation of ID '" + message.getMessageInfo().getConversationID() + "'to the profile.");
-			return;
-		}
-		Conversation conversation = first.get();
+    @Override
+    public void handle(InGoingMessages inMessage) {
+        TextMessage message = (TextMessage) inMessage;
+        Optional<Conversation> first = mainScreen.getConversations().stream().filter(c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
+        if ( !first.isPresent() ) {
+            System.err.println("Server sent a message before it sent the conversation of ID '" + message.getMessageInfo().getConversationID() + "'to the profile.");
+            return;
+        }
+        Conversation conversation = first.get();
         ConversationController controller = mainScreen.getConversationController();
 
-        if (conversation.getType() == ConversationType.Placeholder) {
-			ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
+        if ( conversation.getType() == ConversationType.Placeholder ) {
+            ConversationType type = conversation.getParticipants().size() > 2
+                                    ? ConversationType.Multi : ConversationType.Single;
 
             conversation.setType(type);
             mainScreen.getCommunication().sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
@@ -55,7 +56,7 @@ public class TextMessageHandler implements Handler {
         if ( mainScreen.getCurrentConversation().getId() == conversation.getId() && controller != null ) {
             controller.addMessage(message);
         }
-		conversation.getData().addMessage(message);
+        conversation.getData().addMessage(message);
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
 
         MessageItemController messageItemController = mainScreen.getMessageItemControllers().stream().filter(x -> x.getID() == conversation.getId()).findFirst().get();
@@ -63,10 +64,10 @@ public class TextMessageHandler implements Handler {
             messageItemController.setDate(conversation.getLastMessageDate());
             messageItemController.setLastMessage(message.getData(), message.getMessageInfo().getSender());
         });
-	}
+    }
 
-	@Override
-	public Runnable getRunnable() {
-		return runnable;
-	}
+    @Override
+    public Runnable getRunnable() {
+        return runnable;
+    }
 }

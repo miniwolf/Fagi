@@ -6,14 +6,14 @@
  */
 package com.fagi.controller;
 
+import com.fagi.action.items.OpenConversationFromID;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.contentList.MessageItemController;
 import com.fagi.controller.conversation.ConversationController;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
-import com.fagi.conversation.ConversationType;
-import com.fagi.conversation.GetAllConversationDataRequest;
+import com.fagi.handler.SearchHandler;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -36,7 +36,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -44,11 +43,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Map;
 
 /**
  * TODO: Write description.
@@ -58,9 +54,10 @@ public class MainScreen {
     @FXML private Pane messages;
     @FXML private Pane contacts;
     @FXML private ScrollPane listContent;
+    @FXML private Pane searchHeader;
     @FXML private TextField searchBox;
     private List<MessageItemController> messageItemControllers = new ArrayList<>();
-    private ContentController contactContentController, conversationContentController;
+    private ContentController conversationContentController;
 
     public enum PaneContent {
         contacts, messages
@@ -75,7 +72,6 @@ public class MainScreen {
     private List<com.fagi.conversation.Conversation> conversations;
     private Stage primaryStage;
 
-    private TextMessageHandler messageHandler;
     private Thread messageThread;
     private Thread voiceThread;
     private Draggable draggable;
@@ -83,7 +79,6 @@ public class MainScreen {
     private Thread generalHandlerThread;
     private Conversation conversation = new Conversation();
     private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
-    private boolean currentConversation;
     private ConversationController conversationController;
 
     /**
@@ -108,117 +103,118 @@ public class MainScreen {
         conversations = JsonFileOperations.loadAllClientConversations(username);
         setupConversationList();
         setupContactList();
-        messageHandler = new TextMessageHandler(this);
+        TextMessageHandler messageHandler = new TextMessageHandler(this);
         messageThread = new Thread(messageHandler.getRunnable());
         messageThread.start();
 
-		GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
-		generalHandler = factory.construct();
-		generalHandlerThread = new Thread(generalHandler.getRunnable());
-		generalHandlerThread.start();
+        GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
+        generalHandler = factory.construct();
+        generalHandlerThread = new Thread(generalHandler.getRunnable());
+        generalHandlerThread.start();
 
-		searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-			searchUser(newValue);
-		});
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> searchUser(newValue));
 
-		updateConversationListFromServer(conversations);
-	}
+        updateConversationListFromServer(conversations);
+    }
 
-	@FXML
-	public void initialize() {
-		currentPane = messages;
+    @FXML
+    void initialize() {
+        currentPane = messages;
         currentPaneContent = PaneContent.messages;
-		changeMenuStyle("messages");
-	}
+        changeMenuStyle("messages");
 
-	@FXML
-	void talkButtonClicked() {
+        addListenerToSearchField(new SearchHandler(searchBox, searchHeader));
+    }
 
-	}
+    private void addListenerToSearchField(SearchHandler searchHandler) {
+        searchBox.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) ->
+                searchHandler.toggleFocus(oldPropertyValue));
+    }
 
-	@FXML
-	void logoutRequest() {
-		interrupt(messageThread);
-		//interrupt(voiceThread);
-		generalHandler.stop();
-		interrupt(generalHandlerThread);
+    @FXML
+    void talkButtonClicked() {
 
-		ChatManager.handleLogout(new Logout());
-	}
+    }
 
-	private void interrupt(Thread thread) {
-		thread.interrupt();
-		while ( !thread.isInterrupted() ) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    @FXML
+    void logoutRequest() {
+        interrupt(messageThread);
+        //interrupt(voiceThread);
+        generalHandler.stop();
+        interrupt(generalHandlerThread);
 
-	/**
-	 * Opens a dialog to send a friend request to the server. When the user clicks
-	 * Send Request, the method will call ChatManager with the content of the request
-	 * TextField.
-	 */
-	@FXML
-	public void showFriendRequestPopup() {
-		try {
-			FXMLLoader loader = new FXMLLoader(
-					getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
-			GridPane page = loader.load();
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Friend Request");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
+        ChatManager.handleLogout(new Logout());
+    }
 
-			Scene scene = new Scene(page);
-			dialogStage.setScene(scene);
+    private void interrupt(Thread thread) {
+        thread.interrupt();
+        while ( !thread.isInterrupted() ) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-			RequestController controller = loader.getController();
-			controller.setStage(dialogStage);
+    /**
+     * Opens a dialog to send a friend request to the server. When the user clicks
+     * Send Request, the method will call ChatManager with the content of the request
+     * TextField.
+     */
+    @FXML
+    public void showFriendRequestPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
+            GridPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Friend Request");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
 
-			dialogStage.showAndWait();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
 
-	@FXML
-	public void searchUser(String searchString) {
-		if ( searchString.isEmpty() ) {
-			FriendListHandler handler = new FriendListHandler(this);
-			handler.handle(friendList);
-			return;
-		}
+            RequestController controller = loader.getController();
+            controller.setStage(dialogStage);
 
-		communication.sendObject(new SearchUsersRequest(username, searchString));
-	}
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setPrimaryStage(final Stage primaryStage) {
-		this.primaryStage = primaryStage;
-	}
+    @FXML
+    public void searchUser(String searchString) {
+        if ( searchString.isEmpty() ) {
+            FriendListHandler handler = new FriendListHandler(this);
+            handler.handle(friendList);
+            return;
+        }
 
-	public void mousePressed(MouseEvent mouseEvent) {
-		draggable.mousePressed(mouseEvent);
-	}
+        communication.sendObject(new SearchUsersRequest(username, searchString));
+    }
 
-	public void mouseDragged(MouseEvent mouseEvent) {
-		draggable.mouseDragged(mouseEvent);
-	}
+    public void mousePressed(MouseEvent mouseEvent) {
+        draggable.mousePressed(mouseEvent);
+    }
 
-	public void setScrollPaneContent(PaneContent content, Parent parent) {
+    public void mouseDragged(MouseEvent mouseEvent) {
+        draggable.mouseDragged(mouseEvent);
+    }
+
+    public void setScrollPaneContent(PaneContent content, Parent parent) {
         if ( currentPaneContent == content ) {
             listContent.setContent(parent);
         }
 
         listContentMap.put(content, parent);
-	}
+    }
 
-	public void setFriendList(FriendList friendList) {
-		this.friendList = friendList;
-	}
+    public void setFriendList(FriendList friendList) {
+        this.friendList = friendList;
+    }
 
     @FXML
     public void changeMenu(MouseEvent event) {
@@ -245,32 +241,12 @@ public class MainScreen {
         currentPane.getStyleClass().add("chosen");
     }
 
-	public void setConversation(Conversation conversation) {
-        if ( this.conversation == null || this.conversation.getParticipants().equals(conversation.getParticipants()) ) {
-            return;
-        }
-
-		if (conversation.getType() == ConversationType.Placeholder) {
-            ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
-			conversation.setType(type);
-			this.communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
-		}
-
-        ConversationController controller = new ConversationController(primaryStage, conversation, communication, username);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
-        loader.setController(controller);
-        try {
-            BorderPane conversationBox = loader.load();
-            body.getChildren().add(conversationBox);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.conversationController = controller;
+    public void setConversation(Conversation conversation) {
         this.conversation = conversation;
-	}
+    }
 
-	public void addConversation(Conversation conversation) {
-		conversations.add(conversation);
+    public void addConversation(Conversation conversation) {
+        conversations.add(conversation);
         Platform.runLater(() -> createMessageItem(conversation));
     }
 
@@ -279,38 +255,37 @@ public class MainScreen {
     }
 
     public Communication getCommunication() {
-		return communication;
-	}
+        return communication;
+    }
 
-	public List<Conversation> getConversations() {
-		return conversations;
-	}
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public Conversation getCurrentConversation() {
-		return conversation;
-	}
+    public Conversation getCurrentConversation() {
+        return conversation;
+    }
 
-	public ConversationController getConversationController() {
-		return conversationController;
-	}
+    public ConversationController getConversationController() {
+        return conversationController;
+    }
 
     public PaneContent getCurrentPaneContent() {
         return currentPaneContent;
     }
 
-	private void updateConversationListFromServer(List<Conversation> conversations) {
-		List<ConversationFilter> filters = conversations.stream().map(x -> new ConversationFilter(x.getId(), x.getLastMessageDate())).collect(Collectors.toList());
+    private void updateConversationListFromServer(List<Conversation> conversations) {
+        List<ConversationFilter> filters = conversations.stream().map(x -> new ConversationFilter(x.getId(), x.getLastMessageDate())).collect(Collectors.toList());
 
-		communication.sendObject(new GetConversationsRequest(username, filters));
-	}
-
+        communication.sendObject(new GetConversationsRequest(username, filters));
+    }
 
     private void setupContactList() {
-        contactContentController = new ContentController();
+        ContentController contactContentController = new ContentController();
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
         contentLoader.setController(contactContentController);
         try {
@@ -338,8 +313,9 @@ public class MainScreen {
     }
 
     private void createMessageItem(Conversation conversation) {
-        MessageItemController messageItemController = new MessageItemController(this, conversation.getId(), username);
+        MessageItemController messageItemController = new MessageItemController(username, conversation.getId());
         messageItemControllers.add(messageItemController);
+        messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
         loader.setController(messageItemController);
@@ -348,7 +324,7 @@ public class MainScreen {
 
             messageItemController.setUsers(conversation.getParticipants());
 
-            if (conversation.getLastMessage() != null) {
+            if ( conversation.getLastMessage() != null ) {
                 TextMessage lastMessage = conversation.getLastMessage();
                 messageItemController.setLastMessage(lastMessage.getData(), lastMessage.getMessageInfo().getSender());
                 messageItemController.setDate(conversation.getLastMessageDate());
@@ -357,5 +333,17 @@ public class MainScreen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addElement(Node node) {
+        body.getChildren().add(node);
+    }
+
+    public void setConversationController(ConversationController conversationController) {
+        this.conversationController = conversationController;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

@@ -63,7 +63,7 @@ public class FagiApp extends Application {
     public void showLoginScreen() {
         // TODO : Let the user browse for the file path
         String configLocation = "config/serverinfo.config";
-        MasterLogin controller = new MasterLogin(this, configLocation, primaryStage, scene);
+        new MasterLogin(this, configLocation, primaryStage, scene);
     }
 
     /**

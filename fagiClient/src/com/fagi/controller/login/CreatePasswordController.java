@@ -5,7 +5,6 @@
 package com.fagi.controller.login;
 
 import com.fagi.network.ChatManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,64 +12,58 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.input.MouseEvent;
 
 /**
- * @author miniwolf
+ * Created by miniwolf on 23-10-2016.
  */
 public class CreatePasswordController implements LoginController {
-	@FXML private PasswordField password;
-	@FXML private PasswordField passwordRepeat;
-	@FXML Button loginBtn;
-	@FXML private Label messageLabel;
+    @FXML PasswordField password;
+    @FXML PasswordField passwordRepeat;
+    @FXML Button loginBtn;
+    @FXML Label messageLabel;
+    private MasterLogin masterLogin;
 
-	private MasterLogin masterLogin;
+    public CreatePasswordController(MasterLogin masterLogin) {
+        this.masterLogin = masterLogin;
+    }
 
-	public CreatePasswordController(MasterLogin masterLogin) {
-		this.masterLogin = masterLogin;
-	}
+    @Override
+    public void next() {
+        if ( !password.getText().equals(passwordRepeat.getText()) ) {
+            messageLabel.setText("Passwords does not match");
+            return;
+        }
+        masterLogin.setPassword(password.getText());
+        if ( createUser() ) {
+            masterLogin.next();
+        }
+    }
 
-	@Override
-	public void next() {
-		if ( !password.getText().equals(passwordRepeat.getText()) ) {
-			messageLabel.setText("Passwords does not match");
-			return;
-		}
-		masterLogin.setPassword(password.getText());
-		if ( createUser() ) {
-			masterLogin.next();
-		}
-	}
+    private boolean createUser() {
+        return ChatManager.handleCreateUser(masterLogin.getUsername(), password.getText(),
+                                          passwordRepeat.getText(), messageLabel);
+    }
 
-	@FXML
-	public void initialize() {
-		Platform.runLater(() -> password.getParent().requestFocus());
-	}
+    @Override
+    public void handleQuit() {
+        masterLogin.handleQuit();
+    }
 
-	private boolean createUser() {
-		return ChatManager.handleCreateUser(masterLogin.getUsername(), password.getText(),
-				passwordRepeat.getText(), messageLabel);
-	}
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+        masterLogin.mousePressed(mouseEvent);
+    }
 
-	@Override
-	public void handleQuit() {
-		masterLogin.handleQuit();
-	}
+    @Override
+    public void mouseDragged(MouseEvent mouseEvent) {
+        masterLogin.mouseDragged(mouseEvent);
+    }
 
-	@Override
-	public void mousePressed(MouseEvent mouseEvent) {
-		masterLogin.mousePressed(mouseEvent);
-	}
+    @Override
+    public void setMessage(String message) {
+        messageLabel.setText(message);
+    }
 
-	@Override
-	public void mouseDragged(MouseEvent mouseEvent) {
-		masterLogin.mouseDragged(mouseEvent);
-	}
-
-	@Override
-	public void setMessage(String message) {
-		messageLabel.setText(message);
-	}
-
-	@Override
-	public String getMessageLabel() {
-		return messageLabel.getText();
-	}
+    @Override
+    public String getMessageLabel() {
+        return messageLabel.getText();
+    }
 }

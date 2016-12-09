@@ -13,12 +13,6 @@ import javafx.scene.control.Label;
 public enum ItemActions {
     OpenConversation;
 
-    public static Handler CreateOpenConversation(MainScreen mainScreen, Label username) {
-        Handler actionHandler = new ActionHandler();
-        actionHandler.addAction(new OpenConversation(mainScreen, username));
-        return actionHandler;
-    }
-
     public static Handler OpenConversationFromID(MainScreen mainScreen, long id) {
         Handler actionHandler = new ActionHandler();
         actionHandler.addAction(new OpenConversationFromID(mainScreen, id));

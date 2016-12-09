@@ -7,12 +7,11 @@ package com.fagi.controller.login;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -22,59 +21,55 @@ import javafx.scene.input.MouseEvent;
  * @author miniwolf
  */
 public class LoginScreenController implements LoginController {
-	@FXML private Label messageLabel;
-	@FXML private TextField username;
-	@FXML private PasswordField password;
+    @FXML private Label messageLabel;
+    @FXML private TextField username;
+    @FXML private PasswordField password;
+    @FXML private Button loginBtn;
+    private MasterLogin masterLogin;
 
-	private MasterLogin masterLogin;
+    public LoginScreenController(MasterLogin masterLogin) {
+        this.masterLogin = masterLogin;
+    }
 
-	public LoginScreenController(MasterLogin masterLogin) {
-		this.masterLogin = masterLogin;
-	}
+    @FXML
+    public void initialize() {
+        // TODO: Preinsert the values from username and password
+        masterLogin.initialize(username);
+        masterLogin.initialize(password);
+    }
 
-	@FXML
-	public void initialize() {
-		Platform.runLater(() -> username.getParent().requestFocus());
-		password.setOnKeyPressed(event -> {
-			if ( event.getCode() == KeyCode.ENTER ) {
-				handleLogin();
-			}
-		});
-		// TODO: Preinsert the values from username and password
-	}
+    @FXML
+    public void handleLogin() {
+        ChatManager.handleLogin(new Login(username.getText(), password.getText()), messageLabel);
+    }
 
-	@FXML
-	public void handleLogin() {
-		ChatManager.handleLogin(new Login(username.getText(), password.getText()), messageLabel);
-	}
+    @Override
+    public void setMessage(String message) {
+        messageLabel.setText(message);
+    }
 
-	@Override
-	public void setMessage(String message) {
-		messageLabel.setText(message);
-	}
+    @Override
+    public void next() {
+        handleLogin();
+    }
 
-	@Override
-	public void next() {
-		masterLogin.next();
-	}
+    @Override
+    public void handleQuit() {
+        masterLogin.handleQuit();
+    }
 
-	@Override
-	public void handleQuit() {
-		masterLogin.handleQuit();
-	}
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+        masterLogin.mousePressed(mouseEvent);
+    }
 
-	@Override
-	public void mousePressed(MouseEvent mouseEvent) {
-		masterLogin.mousePressed(mouseEvent);
-	}
+    @Override
+    public void mouseDragged(MouseEvent mouseEvent) {
+        masterLogin.mouseDragged(mouseEvent);
+    }
 
-	@Override
-	public void mouseDragged(MouseEvent mouseEvent) {
-		masterLogin.mouseDragged(mouseEvent);
-	}
-
-	@Override
-	public String getMessageLabel() {
-		return messageLabel.getText();
-	}
+    @Override
+    public String getMessageLabel() {
+        return messageLabel.getText();
+    }
 }

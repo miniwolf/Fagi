@@ -35,12 +35,15 @@ public class OpenConversation implements Action {
             mainScreen.getCommunication().sendObject(new CreateConversationRequest(participants));
             conversation = waitForConversation();
         }
-        mainScreen.setConversation(conversation);
+        new OpenConversationFromID(mainScreen, conversation.getId()).Execute();
     }
 
     private Conversation waitForConversation() {
         Optional<Conversation> optConversation;
-        while ( !(optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(username.getText())).findFirst()).isPresent() ) {
+        while ( !(optConversation = mainScreen.getConversations().stream()
+                                              .filter(con -> con.getParticipants().size() > 0
+                                                             && con.getParticipants().contains(username.getText()))
+                                              .findFirst()).isPresent() ) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

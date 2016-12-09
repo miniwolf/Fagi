@@ -1,7 +1,6 @@
 package com.fagi.controller.contentList;
 
 import com.fagi.action.ActionableImpl;
-import com.fagi.controller.MainScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -15,18 +14,17 @@ import java.util.TimerTask;
 /**
  * @author miniwolf
  */
-public class MessageItemController extends ActionableImpl<ItemActions> {
-    private final long ID;
+public class MessageItemController extends ActionableImpl {
     @FXML private Label usernameLabel;
     @FXML private Label date;
     @FXML private Label lastMessage;
     private Date dateInstance;
     private final String username;
+    private long ID;
 
-    public MessageItemController(MainScreen mainScreen, long ID, String username) {
+    public MessageItemController(String username, long id) {
         this.username = username;
-        this.ID = ID;
-        AddAction(ItemActions.OpenConversation, ItemActions.OpenConversationFromID(mainScreen, ID));
+        ID = id;
     }
 
     @FXML
@@ -46,10 +44,6 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
     public void setDate(Date date) {
         this.dateInstance = date;
-    }
-
-    public long getID() {
-        return ID;
     }
 
     private String convertDate(Date date) {
@@ -75,7 +69,7 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
         long diffMinutes = diff / (60 * 1000) % 60;
         if ( diffMinutes != 0 ) {
-            return Long.toString(diffMinutes);
+            return Long.toString(diffMinutes) + " min";
         }
         return "now";
     }
@@ -87,6 +81,9 @@ public class MessageItemController extends ActionableImpl<ItemActions> {
 
     @FXML
     public void openConversation() {
-        ExecuteAction(ItemActions.OpenConversation);
+    }
+
+    public long getID() {
+        return ID;
     }
 }

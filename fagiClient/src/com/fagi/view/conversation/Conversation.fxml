@@ -4,8 +4,6 @@
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -22,7 +20,7 @@
             <Pane>
                <Pane layoutY="12.0" styleClass="picture" />
             </Pane>
-            <VBox styleClass="middle-holder">
+            <VBox styleClass="middle-holder" HBox.hgrow="ALWAYS">
                <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS" />
                <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER" />
             </VBox>
@@ -45,9 +43,6 @@
             <HBox styleClass="chatmenu" BorderPane.alignment="CENTER">
                <HBox HBox.hgrow="ALWAYS">
                   <Pane styleClass="addpeople-holder">
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
                      <Button layoutX="-1.0" layoutY="-1.0" mnemonicParsing="false">
                         <graphic>
                            <Pane styleClass="addpeoplebutton" />
@@ -66,16 +61,11 @@
       </BorderPane>
    </center>
    <bottom>
-      <Group>
-         <children>
-            <Pane />
-            <Pane minWidth="-Infinity" prefWidth="400.0" styleClass="outline, field">
-               <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" />
-               <Pane layoutX="28.0" styleClass="area">
-                  <TextArea fx:id="message" layoutY="1.0" promptText="Send a message" styleClass="text" />
-               </Pane>
-            </Pane>
-         </children>
-      </Group>
+      <Pane minWidth="-Infinity" prefWidth="400.0" styleClass="outline, field">
+         <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" />
+         <Pane layoutX="28.0" styleClass="area">
+            <TextArea fx:id="message" layoutY="1.0" promptText="Send a message" styleClass="text" />
+         </Pane>
+      </Pane>
    </bottom>
 </BorderPane>
