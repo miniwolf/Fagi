@@ -4,6 +4,7 @@
 
 package com.fagi.controller.login;
 
+import com.fagi.network.ChatManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -49,8 +50,18 @@ public class CreateUserNameController implements LoginController {
             messageLabel.setText("Username cannot be empty");
             return;
         }
-        masterLogin.setUsername(username.getText());
-        masterLogin.next();
+
+        boolean available = ChatManager.checkIfUserNameIsAvailable(username.getText());
+        boolean valid = ChatManager.isValidUserName(username.getText());
+
+        if ( available && valid ) {
+            masterLogin.setUsername(username.getText());
+            masterLogin.next();
+        } else if ( !valid ) {
+            messageLabel.setText("Username may not contain special symbols");
+        } else {
+            messageLabel.setText("Username is not available");
+        }
     }
 
     @Override

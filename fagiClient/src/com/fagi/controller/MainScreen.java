@@ -29,6 +29,7 @@ import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -59,6 +60,8 @@ public class MainScreen {
     @FXML private Pane searchHeader;
     @FXML private TextField searchBox;
     private Map<Node, SearchHandler> handlers = new HashMap<>();
+    private List<MessageItemController> messageItemControllers = new ArrayList<>();
+    private ContentController contactContentController, conversationContentController;
 
     public enum PaneContent {
         contacts, messages
@@ -250,9 +253,13 @@ public class MainScreen {
         this.conversation = conversation;
     }
 
-    public void addConversation(Conversation conversation) {
-        // TODO : Update conversation list
-        conversations.add(conversation);
+	public void addConversation(Conversation conversation) {
+		conversations.add(conversation);
+        Platform.runLater(() -> createMessageItem(conversation));
+    }
+
+    public List<MessageItemController> getMessageItemControllers() {
+        return messageItemControllers;
     }
 
     public Communication getCommunication() {
@@ -287,9 +294,9 @@ public class MainScreen {
 
 
     private void setupContactList() {
-        ContentController contentController = new ContentController();
+        contactContentController = new ContentController();
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
-        contentLoader.setController(contentController);
+        contentLoader.setController(contactContentController);
         try {
             VBox contactContent = contentLoader.load();
             setScrollPaneContent(PaneContent.contacts, contactContent);
@@ -299,9 +306,9 @@ public class MainScreen {
     }
 
     private void setupConversationList() {
-        ContentController contentController = new ContentController();
+        conversationContentController = new ContentController();
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
-        contentLoader.setController(contentController);
+        contentLoader.setController(conversationContentController);
         try {
             VBox messagesContent = contentLoader.load();
             setScrollPaneContent(PaneContent.messages, messagesContent);
@@ -310,25 +317,30 @@ public class MainScreen {
         }
 
         for ( Conversation conversation : conversations ) {
-            MessageItemController messageItemController = new MessageItemController(username);
-            messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
+            createMessageItem(conversation);
+        }
+    }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
-            loader.setController(messageItemController);
-            try {
-                Pane pane = loader.load();
+    private void createMessageItem(Conversation conversation) {
+        MessageItemController messageItemController = new MessageItemController(this, conversation.getId(), username);
+        messageItemControllers.add(messageItemController);
+        messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
 
-                messageItemController.setUsers(conversation.getParticipants());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
+        loader.setController(messageItemController);
+        try {
+            Pane pane = loader.load();
 
-                if ( conversation.getLastMessage() != null ) {
-                    TextMessage lastMessage = conversation.getLastMessage();
-                    messageItemController.setLastMessage(lastMessage.getData(), lastMessage.getMessageInfo().getSender());
-                    messageItemController.setDate(conversation.getLastMessageDate());
-                }
-                contentController.addToContentList(pane);
-            } catch (IOException e) {
-                e.printStackTrace();
+            messageItemController.setUsers(conversation.getParticipants());
+
+            if ( conversation.getLastMessage() != null ) {
+                TextMessage lastMessage = conversation.getLastMessage();
+                messageItemController.setLastMessage(lastMessage.getData(), lastMessage.getMessageInfo().getSender());
+                messageItemController.setDate(conversation.getLastMessageDate());
             }
+            conversationContentController.addToContentList(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

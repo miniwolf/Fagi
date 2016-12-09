@@ -5,6 +5,7 @@
 package com.fagi.network.handlers;
 
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.contentList.MessageItemController;
 import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
@@ -15,6 +16,7 @@ import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
 import com.fagi.utility.JsonFileOperations;
+import javafx.application.Platform;
 
 import java.util.Optional;
 
@@ -44,7 +46,9 @@ public class TextMessageHandler implements Handler {
         ConversationController controller = mainScreen.getConversationController();
 
         if (conversation.getType() == ConversationType.Placeholder) {
-            conversation.setType(ConversationType.Real);
+			ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
+
+            conversation.setType(type);
             mainScreen.getCommunication().sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
         }
 
@@ -53,6 +57,12 @@ public class TextMessageHandler implements Handler {
         }
 		conversation.getData().addMessage(message);
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
+
+        MessageItemController messageItemController = mainScreen.getMessageItemControllers().stream().filter(x -> x.getID() == conversation.getId()).findFirst().get();
+        Platform.runLater(() -> {
+            messageItemController.setDate(conversation.getLastMessageDate());
+            messageItemController.setLastMessage(message.getData(), message.getMessageInfo().getSender());
+        });
 	}
 
 	@Override

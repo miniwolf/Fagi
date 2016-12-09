@@ -46,7 +46,15 @@ public class MessageItemController extends ActionableImpl {
         this.dateInstance = date;
     }
 
+    public long getID() {
+        return ID;
+    }
+
     private String convertDate(Date date) {
+        if (date == null) {
+            return "";
+        }
+
         long now = new Date().getTime();
         long then = date.getTime();
         long diff = now - then;

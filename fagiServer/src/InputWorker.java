@@ -4,7 +4,6 @@
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationDataUpdate;
-import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
@@ -142,17 +141,50 @@ public class InputWorker extends Worker {
             out.addResponse(result);
         } else if ( input instanceof SearchUsersRequest) {
             SearchUsersRequest request = (SearchUsersRequest)input;
-            out.addResponse(new AllIsWell());
-            SearchUsersResult result = new SearchUsersResult(Data.getUserNames().stream()
-                                                                                .parallel()
-                                                                                .filter(username -> username.startsWith(request.getSearchString()))
-                                                                                .filter(username -> !username.equals(request.getSender()))
-                                                                                .sorted()
-                                                                                .collect(Collectors.toList()));
-            out.addResponse(result);
+
+            out.addResponse(handleSearchUsersRequest(request));
+        } else if ( input instanceof UserNameAvailableRequest) {
+            UserNameAvailableRequest request = (UserNameAvailableRequest) input;
+            out.addResponse(handleUserNameAvailableRequest(request));
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
+    }
+
+    private Object handleUserNameAvailableRequest(UserNameAvailableRequest request) {
+        if (Data.getUser(request.getUsername()) == null) {
+            return new AllIsWell();
+        } else {
+            return new UserExists();
+        }
+    }
+
+    private Object handleSearchUsersRequest(SearchUsersRequest request) {
+        User user = Data.getUser(this.myUserName);
+        out.addResponse(new AllIsWell());
+
+        List<String> usernames = Data
+                .getUserNames()
+                .stream()
+                .filter(username -> username.startsWith(request.getSearchString()))
+                .filter(username -> !username.equals(request.getSender()))
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<String> friends = usernames
+                .stream()
+                .filter(username -> user.getFriends().contains(username))
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<String> nonFriends = usernames
+                .stream()
+                .filter(username -> !friends.contains(username))
+                .collect(Collectors.toList());
+
+        SearchUsersResult result = new SearchUsersResult(nonFriends, friends);
+
+        return result;
     }
 
     private Object handleGetAllConversationDataRequest(GetAllConversationDataRequest request) {
@@ -161,8 +193,9 @@ public class InputWorker extends Worker {
         if (!user.getConversationIDs().contains(request.getId())) {
             return new Unauthorized();
         }
-
-        return new ConversationDataUpdate(request.getId(), Data.getConversation(request.getId()).getMessages());
+        Conversation conversation = Data.getConversation(request.getId());
+        Timestamp lastMessageReceived = new Timestamp(conversation.getLastMessageDate().getTime());
+        return new ConversationDataUpdate(request.getId(), conversation.getMessages(), lastMessageReceived, conversation.getLastMessage());
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
@@ -173,8 +206,10 @@ public class InputWorker extends Worker {
         });
 
         request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {
-            // TODO : Send last message
-            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), Data.getConversation(x.getId()).getMessagesFromDate(new Timestamp(x.getLastMessageDate().getTime())));
+            Conversation conversation = Data.getConversation(x.getId());
+            Timestamp time = new Timestamp(x.getLastMessageDate().getTime());
+            Timestamp lastMessageReceived = new Timestamp(conversation.getLastMessageDate().getTime());
+            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), conversation.getMessagesFromDate(time), lastMessageReceived, conversation.getLastMessage());
 
             out.addResponse(res);
         });

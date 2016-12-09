@@ -20,26 +20,27 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     private Date lastMessageDate = null;
     private ConversationType type;
     private TextMessage lastMessage;
+    private String name;
 
     public Conversation(Conversation con) {
         this.participants = con.participants;
         this.messages = con.messages;
         this.id = con.getId();
         this.lastMessageDate = con.lastMessageDate;
+        this.lastMessage = con.getLastMessage();
         this.type = con.getType();
+        this.name = con.getName();
     }
 
-    public Conversation(long id, ConversationType type) {
+    public Conversation(long id, String name, ConversationType type) {
         this.id = id;
         this.type = type;
-    }
-
-    public Conversation(long id) {
-        this.id = id;
-        this.type = ConversationType.Real;
+        this.name = name;
+        lastMessageDate = new Date();
     }
 
     public Conversation() {
+        lastMessageDate = new Date();
     }
 
     public void addUser(String username) {
@@ -72,6 +73,14 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         return type;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public Conversation getData() {
         return this;
@@ -99,7 +108,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     }
 
     public Conversation getPlaceholder() {
-        Conversation placeholder = new Conversation(id, ConversationType.Placeholder);
+        Conversation placeholder = new Conversation(id, name, ConversationType.Placeholder);
         participants.forEach(placeholder::addUser);
         placeholder.lastMessageDate = lastMessageDate;
         placeholder.lastMessage = lastMessage;
