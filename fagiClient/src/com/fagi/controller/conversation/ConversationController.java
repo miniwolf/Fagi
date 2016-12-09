@@ -11,11 +11,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,15 +31,20 @@ public class ConversationController {
     @FXML private Label date;
     @FXML private TextArea message;
     @FXML private VBox chat;
+	@FXML private ScrollPane scroller;
 
     private Conversation conversation;
     private Communication communication;
     private String username;
+    private final Stage primaryStage;
+	private boolean isUserScrolling = false;
+	private boolean isInternalScroll = false;
 
-    public ConversationController(Conversation conversation, Communication communication, String username) {
+    public ConversationController(Stage primaryStage, Conversation conversation, Communication communication, String username) {
         this.conversation = conversation;
         this.communication = communication;
         this.username = username;
+        this.primaryStage = primaryStage;
     }
 
     @FXML
@@ -60,16 +67,26 @@ public class ConversationController {
         });
 
         fillChat();
-    }
+
+		scroller.vvalueProperty().addListener(observable -> {
+			this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll;
+			System.out.println(this.isUserScrolling);
+		});
+	}
 
     private void sendMessage() {
         TextMessage textMessage = new TextMessage(message.getText(), username, conversation.getId());
         communication.sendObject(textMessage);
     }
 
-    private void fillChat() {
-        conversation.getMessages().forEach(this::addMessage);
-    }
+	private void fillChat() {
+		Platform.runLater(() -> {
+			for(TextMessage message : conversation.getMessages()) {
+				chat.getChildren().add(createMessageBox(message));
+			}
+			primaryStage.sizeToScene();
+		});
+	}
 
     private String dateToString(Date s) {
         if ( s == null ) {
@@ -85,12 +102,23 @@ public class ConversationController {
      *
      * @param message TextMessage representation of the message received.
      */
-    public void addMessage(TextMessage message) {
-        HBox load = getBox(message.getMessageInfo().getSender().equals(username)
-                           ? "/com/fagi/view/conversation/MyMessage.fxml"
-                           : "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
-        Platform.runLater(() -> chat.getChildren().add(load));
-    }
+	public void addMessage(TextMessage message) {
+		Platform.runLater(() -> {
+			if (!isUserScrolling) {
+				isInternalScroll = true;
+			}
+
+            chat.getChildren().add(createMessageBox(message));
+
+            primaryStage.sizeToScene();
+
+            if (!isUserScrolling) {
+                scroller.setVvalue(1.0);
+            }
+
+            isInternalScroll = false;
+        });
+	}
 
     public void redrawMessages() {
         chat.getChildren().clear();
@@ -109,6 +137,12 @@ public class ConversationController {
         }
         return load;
     }
+
+	private HBox createMessageBox(TextMessage message) {
+		return getBox(message.getMessageInfo().getSender().equals(username)
+				? "/com/fagi/view/conversation/MyMessage.fxml"
+				: "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
+	}
 
     @FXML
     public void closeConversation() {

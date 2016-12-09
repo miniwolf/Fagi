@@ -98,6 +98,7 @@ public class MainScreen {
         this.communication = communication;
         this.draggable = new Draggable(primaryStage);
         listContentMap = new HashMap<>();
+        this.primaryStage = primaryStage;
     }
 
     /**
