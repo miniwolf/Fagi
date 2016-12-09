@@ -27,7 +27,7 @@
                 <Pane styleClass="FN">
                     <Pane layoutY="12.0" styleClass="picture" />
                 </Pane>
-                <VBox alignment="CENTER_LEFT" styleClass="middle-holder">
+                <VBox alignment="CENTER_LEFT" styleClass="middle-holder" HBox.hgrow="ALWAYS">
                     <Label fx:id="name1" styleClass="mu" text="New Fagi invite" VBox.vgrow="ALWAYS" />
                 </VBox>
                 <HBox styleClass="icon">
