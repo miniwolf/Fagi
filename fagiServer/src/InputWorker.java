@@ -63,6 +63,7 @@ public class InputWorker extends Worker {
                 running = false;
                 out.running = false;
                 System.out.println("Something went wrong in a input worker while loop " + e);
+                e.printStackTrace();
                 System.out.println("Logging out user " + myUserName);
                 Data.userLogout(myUserName);
             }

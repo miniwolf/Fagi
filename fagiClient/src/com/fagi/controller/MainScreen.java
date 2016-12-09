@@ -98,6 +98,7 @@ public class MainScreen {
         this.communication = communication;
         this.draggable = new Draggable(primaryStage);
         listContentMap = new HashMap<>();
+        this.primaryStage = primaryStage;
     }
 
     /**
@@ -255,7 +256,7 @@ public class MainScreen {
 			this.communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
 		}
 
-        ConversationController controller = new ConversationController(conversation, communication, username);
+        ConversationController controller = new ConversationController(primaryStage, conversation, communication, username);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
         loader.setController(controller);
         try {
