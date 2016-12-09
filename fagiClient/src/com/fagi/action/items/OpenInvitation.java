@@ -30,7 +30,7 @@ public class OpenInvitation implements Action {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
         Communication communication = mainScreen.getCommunication();
         String username = mainScreen.getUsername();
 

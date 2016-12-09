@@ -81,7 +81,7 @@ public class MessageItemController extends ActionableImpl {
 
     @FXML
     public void openConversation() {
-        action.Execute();
+        action.execute();
     }
 
     public long getID() {

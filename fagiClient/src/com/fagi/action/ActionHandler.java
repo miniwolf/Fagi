@@ -16,6 +16,6 @@ public class ActionHandler implements Handler {
 
     @Override
     public void execute() {
-        actions.forEach(Action::Execute);
+        actions.forEach(Action::execute);
     }
 }
