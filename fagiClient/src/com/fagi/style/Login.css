@@ -1,3 +1,7 @@
+.persistent-prompt:focused {
+  -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
+}
+
 html, body {
   font-family: Arial, sans-serif;
   background: #fff;
