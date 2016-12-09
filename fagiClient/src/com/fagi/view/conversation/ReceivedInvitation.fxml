@@ -5,6 +5,7 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -41,21 +42,27 @@
     <bottom>
         <HBox spacing="5.0" styleClass="RU">
             <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
-                <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" visible="false" />
+                <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button">
+               <styleClass>
+                  <String fx:value="zbg" />
+                  <String fx:value="cmx6we" />
+                  <String fx:value="TTnd8c" />
+               </styleClass></Button>
             </VBox>
             <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
-                <Button defaultButton="true" maxWidth="1.7976931348623157E308" styleClass="zbg, cmx6we" text="Accept" />
+                <Button defaultButton="true" maxWidth="1.7976931348623157E308" text="Accept">
+               <styleClass>
+                  <String fx:value="zbg" />
+                  <String fx:value="cmx6we" />
+                  <String fx:value="Wxsg2c" />
+               </styleClass></Button>
             </VBox>
         </HBox>
     </bottom>
     <center>
         <BorderPane BorderPane.alignment="CENTER">
             <top>
-                <VBox>
-                    <styleClass>
-                        <String fx:value="zL" />
-                        <String fx:value="uP" />
-                    </styleClass>
+                <VBox styleClass="zL, uP">
                     <ImageView fitHeight="85.0" fitWidth="400.0" pickOnBounds="true" styleClass="vL">
                         <Image url="https://ssl.gstatic.com/s2/oz/images/hovercard/default_cover_1_small_9b18d635b925063429fc1163971fd685.jpg" />
                     </ImageView>
@@ -84,6 +91,35 @@
                     </GridPane>
                 </VBox>
             </top>
+         <center>
+            <ScrollPane hbarPolicy="NEVER" styleClass="message-holder, message-scroller" vvalue="1.0">
+               <content>
+                  <VBox fx:id="chat">
+                     <children>
+                        <HBox styleClass="holder, their" stylesheets="@../../style/conversation.css">
+                           <children>
+                              <Pane maxHeight="32.0" maxWidth="32.0">
+                                 <children>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
+                                       <image>
+                                          <Image url="https://lh5.googleusercontent.com/-HuqNw2gS7KA/AAAAAAAAAAI/AAAAAAAAATk/06-Td0R7Gdk/s32-c-k-no/photo.jpg" />
+                                       </image>
+                                       <viewport>
+                                          <Rectangle2D height="32.0" width="32.0" />
+                                       </viewport>
+                                    </ImageView>
+                                    <Circle fill="#ffffff00" layoutX="16.0" layoutY="16.0" radius="16.0" stroke="#eceff1" strokeType="OUTSIDE" strokeWidth="10.0" />
+                                 </children>
+                              </Pane>
+                              <Pane maxHeight="-Infinity" styleClass="tip" />
+                              <Label fx:id="message" styleClass="text-message" wrapText="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </center>
         </BorderPane>
     </center>
 </BorderPane>

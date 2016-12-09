@@ -379,7 +379,7 @@
   -fx-background-color: #fff;
   -fx-text-fill: #404040;
   -fx-font-size: 11px;
-  -fx-font-weight: bold;
+  -fx-font-weight: 900;
   -fx-text-alignment: center;
   -fx-border-radius: 2px;
   -fx-min-width: 54px;
@@ -402,7 +402,7 @@
 
 .zbg .text {
   -fx-font-size: 11px;
-  -fx-font-weight: bolder;
+  -fx-font-weight: 900;
   -fx-text-alignment: center;
 }
 
@@ -545,4 +545,12 @@
   -fx-font-weight: bold;
   -fx-font-size: 16px;
   -fx-text-fill: #404040;
+}
+
+.Wxsg2c {
+  -fx-text-fill: #489935;
+}
+
+.TTnd8c {
+  -fx-text-fill: #d73d32;
 }
