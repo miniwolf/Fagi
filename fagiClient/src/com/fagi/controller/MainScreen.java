@@ -13,8 +13,6 @@ import com.fagi.controller.conversation.ConversationController;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
-import com.fagi.conversation.ConversationType;
-import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.handler.SearchHandler;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
@@ -38,7 +36,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -59,9 +56,8 @@ public class MainScreen {
     @FXML private ScrollPane listContent;
     @FXML private Pane searchHeader;
     @FXML private TextField searchBox;
-    private Map<Node, SearchHandler> handlers = new HashMap<>();
     private List<MessageItemController> messageItemControllers = new ArrayList<>();
-    private ContentController contactContentController, conversationContentController;
+    private ContentController conversationContentController;
 
     public enum PaneContent {
         contacts, messages
@@ -76,7 +72,6 @@ public class MainScreen {
     private List<com.fagi.conversation.Conversation> conversations;
     private Stage primaryStage;
 
-    private TextMessageHandler messageHandler;
     private Thread messageThread;
     private Thread voiceThread;
     private Draggable draggable;
@@ -108,7 +103,7 @@ public class MainScreen {
         conversations = JsonFileOperations.loadAllClientConversations(username);
         setupConversationList();
         setupContactList();
-        messageHandler = new TextMessageHandler(this);
+        TextMessageHandler messageHandler = new TextMessageHandler(this);
         messageThread = new Thread(messageHandler.getRunnable());
         messageThread.start();
 
@@ -201,10 +196,6 @@ public class MainScreen {
         communication.sendObject(new SearchUsersRequest(username, searchString));
     }
 
-    public void setPrimaryStage(final Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
-
     public void mousePressed(MouseEvent mouseEvent) {
         draggable.mousePressed(mouseEvent);
     }
@@ -254,8 +245,8 @@ public class MainScreen {
         this.conversation = conversation;
     }
 
-	public void addConversation(Conversation conversation) {
-		conversations.add(conversation);
+    public void addConversation(Conversation conversation) {
+        conversations.add(conversation);
         Platform.runLater(() -> createMessageItem(conversation));
     }
 
@@ -293,9 +284,8 @@ public class MainScreen {
         communication.sendObject(new GetConversationsRequest(username, filters));
     }
 
-
     private void setupContactList() {
-        contactContentController = new ContentController();
+        ContentController contactContentController = new ContentController();
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
         contentLoader.setController(contactContentController);
         try {
@@ -323,7 +313,7 @@ public class MainScreen {
     }
 
     private void createMessageItem(Conversation conversation) {
-        MessageItemController messageItemController = new MessageItemController(this, conversation.getId(), username);
+        MessageItemController messageItemController = new MessageItemController(username, conversation.getId());
         messageItemControllers.add(messageItemController);
         messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
 
@@ -351,5 +341,9 @@ public class MainScreen {
 
     public void setConversationController(ConversationController conversationController) {
         this.conversationController = conversationController;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

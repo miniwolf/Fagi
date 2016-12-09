@@ -1,8 +1,6 @@
 package com.fagi.controller.contentList;
 
 import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.OpenConversationFromID;
-import com.fagi.controller.MainScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -22,9 +20,11 @@ public class MessageItemController extends ActionableImpl {
     @FXML private Label lastMessage;
     private Date dateInstance;
     private final String username;
+    private long ID;
 
-    public MessageItemController(String username) {
+    public MessageItemController(String username, long id) {
         this.username = username;
+        ID = id;
     }
 
     @FXML
@@ -44,10 +44,6 @@ public class MessageItemController extends ActionableImpl {
 
     public void setDate(Date date) {
         this.dateInstance = date;
-    }
-
-    public long getID() {
-        return ID;
     }
 
     private String convertDate(Date date) {
@@ -85,5 +81,9 @@ public class MessageItemController extends ActionableImpl {
 
     @FXML
     public void openConversation() {
+    }
+
+    public long getID() {
+        return ID;
     }
 }

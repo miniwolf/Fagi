@@ -39,11 +39,11 @@ public class OpenConversationFromID implements Action {
         Communication communication = mainScreen.getCommunication();
         String username = mainScreen.getUsername();
         if ( conversation.getType() == ConversationType.Placeholder ) {
-            conversation.setType(ConversationType.Real);
+            conversation.setType(ConversationType.Single);
             communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
         }
 
-        ConversationController controller = new ConversationController(conversation, communication, username);
+        ConversationController controller = new ConversationController(mainScreen.getPrimaryStage(), conversation, communication, username);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
         loader.setController(controller);
         try {
