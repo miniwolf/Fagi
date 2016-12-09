@@ -38,6 +38,7 @@ public class ConversationController {
 	private Communication communication;
 	private String username;
 	private boolean isUserScrolling = false;
+	private boolean isInternalScroll = false;
 
 	public ConversationController(Stage primaryStage, Conversation conversation, Communication communication, String username) {
         this.primaryStage = primaryStage;
@@ -65,12 +66,12 @@ public class ConversationController {
 			}
 		});
 
-		scroller.setOnScrollFinished((value) -> {
-			this.isUserScrolling = scroller.getVvalue() != 1.0;
-		});
-
-
 		fillChat();
+
+		scroller.vvalueProperty().addListener(observable -> {
+			this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll;
+			System.out.println(this.isUserScrolling);
+		});
 	}
 
 	private void sendMessage() {
@@ -79,7 +80,12 @@ public class ConversationController {
 	}
 
 	private void fillChat() {
-		conversation.getMessages().forEach(this::addMessage);
+		Platform.runLater(() -> {
+			for(TextMessage message : conversation.getMessages()) {
+				chat.getChildren().add(createMessageBox(message));
+			}
+			primaryStage.sizeToScene();
+		});
 	}
 
 	private String dateToString(Date s) {
@@ -92,18 +98,20 @@ public class ConversationController {
 	}
 
 	public void addMessage(TextMessage message) {
-
-		HBox load = getBox(message.getMessageInfo().getSender().equals(username)
-				? "/com/fagi/view/conversation/MyMessage.fxml"
-				: "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
 		Platform.runLater(() -> {
-            chat.getChildren().add(load);
+			if (!isUserScrolling) {
+				isInternalScroll = true;
+			}
+
+            chat.getChildren().add(createMessageBox(message));
 
             primaryStage.sizeToScene();
 
             if (!isUserScrolling) {
                 scroller.setVvalue(1.0);
             }
+
+            isInternalScroll = false;
         });
 	}
 
@@ -123,6 +131,12 @@ public class ConversationController {
 			e.printStackTrace();
 		}
 		return load;
+	}
+
+	private HBox createMessageBox(TextMessage message) {
+		return getBox(message.getMessageInfo().getSender().equals(username)
+				? "/com/fagi/view/conversation/MyMessage.fxml"
+				: "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
 	}
 
     @FXML
