@@ -27,10 +27,17 @@ public class OpenConversationFromID implements Action {
     }
 
     @Override
-    public void Execute() {
-        Conversation conversation = mainScreen.getConversations().stream()
-                                              .filter(con -> con.getId() == id).findFirst()
-                                              .orElseGet(errorHandling());
+    public void execute() {
+        Optional<Conversation> optional = mainScreen
+                .getConversations().stream()
+                .filter(con -> con.getId() == id)
+                .findFirst();
+
+        if (!optional.isPresent()) {
+            errorHandling();
+        }
+
+        Conversation conversation = optional.get();
 
         if ( conversation.getParticipants().equals(mainScreen.getCurrentConversation().getParticipants()) ) {
             return;

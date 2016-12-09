@@ -257,7 +257,7 @@ public class InputWorker extends Worker {
     }
 
     private Object handleCreateConversation(CreateConversationRequest request) {
-        ArrayList<User> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         for (String username : request.getParticipants()) {
             User u = Data.getUser(username);
             if (u == null) {
@@ -272,7 +272,9 @@ public class InputWorker extends Worker {
         for (User user : users) {
             user.addConversationID(con.getId());
             Data.storeUser(user);
-            Data.getWorker(user.getUserName()).addResponse(con);
+            if (!user.getUserName().equals(this.myUserName)) {
+                Data.getWorker(user.getUserName()).addResponse(con);
+            }
         }
 
         Data.storeConversation(con);

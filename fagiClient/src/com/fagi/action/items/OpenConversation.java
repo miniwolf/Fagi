@@ -23,7 +23,7 @@ public class OpenConversation implements Action {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
         Conversation conversation;
         Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(username.getText())).findFirst();
         if ( optConversation.isPresent() ) {
@@ -35,7 +35,7 @@ public class OpenConversation implements Action {
             mainScreen.getCommunication().sendObject(new CreateConversationRequest(participants));
             conversation = waitForConversation();
         }
-        new OpenConversationFromID(mainScreen, conversation.getId()).Execute();
+        new OpenConversationFromID(mainScreen, conversation.getId()).execute();
     }
 
     private Conversation waitForConversation() {

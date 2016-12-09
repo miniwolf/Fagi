@@ -1,9 +1,6 @@
 package com.fagi.controller.contentList;
 
-import com.fagi.action.Action;
 import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.OpenConversation;
-import com.fagi.controller.MainScreen;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -25,6 +22,6 @@ public class ContactItemController extends ActionableImpl {
 
     @FXML
     public void openConversation() {
-        action.Execute();
+        action.execute();
     }
 }

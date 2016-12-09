@@ -70,7 +70,6 @@ public class ConversationController {
 
 		scroller.vvalueProperty().addListener(observable -> {
 			this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll;
-			System.out.println(this.isUserScrolling);
 		});
 	}
 

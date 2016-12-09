@@ -1,7 +1,6 @@
 package com.fagi.controller;
 
 import com.fagi.action.ActionableImpl;
-import com.fagi.handler.OpenConversationHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -17,7 +16,7 @@ public class SearchContactController extends ActionableImpl {
 
     @FXML
     public void openConversation() {
-        action.Execute();
+        action.execute();
     }
 
     public void setUserName(String userName) {
