@@ -46,7 +46,8 @@ public class OpenConversationFromID implements Action {
         Communication communication = mainScreen.getCommunication();
         String username = mainScreen.getUsername();
         if ( conversation.getType() == ConversationType.Placeholder ) {
-            conversation.setType(ConversationType.Single);
+            ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
+            conversation.setType(type);
             communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
         }
 

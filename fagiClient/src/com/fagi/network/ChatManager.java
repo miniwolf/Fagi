@@ -241,6 +241,6 @@ public class ChatManager {
     }
 
     private static boolean isEmpty(String string) {
-        return string.equals("");
+        return string == null || "".equals(string);
     }
 }

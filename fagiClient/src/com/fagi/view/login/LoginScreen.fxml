@@ -13,8 +13,8 @@
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <VBox alignment="CENTER" layoutX="1.0" spacing="10.0" styleClass="card, signin-card" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
         <Label styleClass="circle-mask" />
-        <TextField fx:id="username" promptText="Enter username" styleClass="input" />
-        <PasswordField fx:id="password" promptText="Enter password" styleClass="input" />
+        <TextField fx:id="username" promptText="Enter username" styleClass="input, persistent-prompt" />
+        <PasswordField fx:id="password" promptText="Enter password" styleClass="input, persistent-prompt" />
         <Button fx:id="loginBtn" mnemonicParsing="false" onMousePressed="#handleLogin"
                 styleClass="input, rc-button, rc-button-submit" text="Login" />
         <HBox prefHeight="22.0" prefWidth="254.0">
