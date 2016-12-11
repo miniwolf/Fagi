@@ -65,13 +65,14 @@ public class User {
 
         if (incFriendReq.stream().anyMatch(x -> x.getFriendUsername().equals(userName))) {
             Data.makeFriends(this, other);
+            other.removeFriendRequest(userName);
             return removeFriendRequest(otherUser);
         }
         return other.addFriendReq(arg);
     }
 
     public Response removeFriendRequest(String userName) {
-        Optional<FriendRequest> opt = incFriendReq.stream().filter(x -> x.getFriendUsername().equals(userName)).findFirst();
+        Optional<FriendRequest> opt = incFriendReq.stream().filter(x -> x.getMessage().getMessageInfo().getSender().equals(userName)).findFirst();
 
         if (!opt.isPresent()) {
             return new NoSuchUser();

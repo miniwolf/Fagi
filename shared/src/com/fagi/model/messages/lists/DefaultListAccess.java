@@ -24,6 +24,9 @@ public class DefaultListAccess<T> implements ListAccess<T> {
 
     @Override
     public void updateData(List<T> data) {
-        this.data = data;
+        this.data.clear();
+        for (T element : data) {
+            this.data.add(element);
+        }
     }
 }
