@@ -5,6 +5,7 @@
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
@@ -33,8 +34,8 @@ public class OutputWorker extends Worker {
     private EncryptionAlgorithm<AESKey> aes;
 
     private String myUserName = null;
-    private ListAccess currentFriends = new DefaultListAccess(new ArrayList<>());
-    private ListAccess currentRequests = new DefaultListAccess(new ArrayList<>());
+    private ListAccess<String> currentFriends = new DefaultListAccess<>(new ArrayList<>());
+    private ListAccess<FriendRequest> currentRequests = new DefaultListAccess<>(new ArrayList<>());
 
     public OutputWorker(Socket socket) throws IOException {
         objOut = new ObjectOutputStream(socket.getOutputStream());
@@ -42,14 +43,16 @@ public class OutputWorker extends Worker {
 
     @Override
     public void run() {
-        while ( running ) {
+        while (running) {
             System.out.println("Running");
             try {
                 sendIncMessages();
                 sendResponses();
                 objOut.reset();
-                while ( messages.isEmpty() && respondObjects.isEmpty() && running ) {
-                    checkForLists();
+                while (messages.isEmpty() && respondObjects.isEmpty() && running) {
+                    if (myUserName != null) {
+                        checkForLists();
+                    }
                     Thread.sleep(100);
                 }
             } catch (IOException | InterruptedException ioe) {
@@ -59,7 +62,7 @@ public class OutputWorker extends Worker {
                 Data.userLogout(myUserName);
             }
         }
-        if ( !respondObjects.isEmpty() ) {
+        if (!respondObjects.isEmpty()) {
             try {
                 sendResponses();
             } catch (IOException e) {
@@ -70,20 +73,16 @@ public class OutputWorker extends Worker {
     }
 
     private void checkForLists() throws IOException {
-        Object onlineFriends = getOnlineFriends();
-        if ( !(onlineFriends instanceof NoSuchUser) ) {
-            checkList(new FriendList((ListAccess) onlineFriends), currentFriends);
-        }
-        Object friendRequests = getFriendRequests();
-        if ( !(friendRequests instanceof NoSuchUser) ) {
-            checkList(new FriendRequestList((ListAccess) friendRequests), currentRequests);
-        }
+        DefaultListAccess<String> onlineFriends = getOnlineFriends();
+        checkList(new FriendList(onlineFriends), currentFriends);
+        DefaultListAccess<FriendRequest> friendRequests = getFriendRequests();
+        checkList(new FriendRequestList(friendRequests), currentRequests);
     }
 
-    private void checkList(InGoingMessages responseObj, ListAccess currentList) throws IOException {
-        ListAccess responseList = (ListAccess) responseObj.getAccess();
+    private <T extends Comparable> void checkList(InGoingMessages<List<T>> responseObj, ListAccess<T> currentList) throws IOException {
+        ListAccess<T> responseList = (ListAccess<T>) responseObj.getAccess();
 
-        if ( equalLists(responseList.getData(), currentList.getData()) ) {
+        if (equalLists(responseList.getData(), currentList.getData())) {
             return;
         }
 
@@ -92,13 +91,13 @@ public class OutputWorker extends Worker {
     }
 
     private void sendResponses() throws IOException {
-        while ( respondObjects.size() > 0 ) {
+        while (respondObjects.size() > 0) {
             send(respondObjects.remove());
         }
     }
 
     private void sendIncMessages() throws IOException {
-        while ( messages.size() > 0 ) {
+        while (messages.size() > 0) {
             send(messages.remove());
         }
     }
@@ -109,21 +108,15 @@ public class OutputWorker extends Worker {
         objOut.flush();
     }
 
-    private Object getOnlineFriends() {
+    private DefaultListAccess<String> getOnlineFriends() {
         User me = Data.getUser(myUserName);
-        if ( me == null ) {
-            return new NoSuchUser();
-        }
-        return new DefaultListAccess(me.getFriends().stream().filter(Data::isUserOnline)
-                                       .collect(Collectors.toList()));
+        return new DefaultListAccess<>(me.getFriends().stream().filter(Data::isUserOnline)
+                .collect(Collectors.toList()));
     }
 
-    private Object getFriendRequests() {
+    private DefaultListAccess<FriendRequest> getFriendRequests() {
         User me = Data.getUser(myUserName);
-        if ( me == null ) {
-            return new NoSuchUser();
-        }
-        return new DefaultListAccess(me.getFriendReq());
+        return new DefaultListAccess<>(me.getFriendReq());
     }
 
     public void setAes(EncryptionAlgorithm<AESKey> aes) {
@@ -142,21 +135,21 @@ public class OutputWorker extends Worker {
         this.myUserName = userName;
     }
 
-    private boolean equalLists(List<String> one, List<String> two){
-        if (one == null && two == null){
+    private <T extends Comparable> boolean equalLists(List<T> one, List<T> two) {
+        if (one == null && two == null) {
             return true;
         }
 
-        if((one == null && two != null)
+        if ((one == null && two != null)
                 || one != null && two == null
-                || one.size() != two.size()){
+                || one.size() != two.size()) {
             return false;
         }
 
         //to avoid messing the order of the lists we will use a copy
         //as noted in comments by A. R. S.
-        one = new ArrayList<String>(one);
-        two = new ArrayList<String>(two);
+        one = new ArrayList<>(one);
+        two = new ArrayList<>(two);
 
         Collections.sort(one);
         Collections.sort(two);

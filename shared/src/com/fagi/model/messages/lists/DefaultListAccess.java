@@ -10,20 +10,23 @@ import java.util.List;
 /**
  * @author miniwolf
  */
-public class DefaultListAccess implements ListAccess {
-    private List<String> data = new ArrayList<>();
+public class DefaultListAccess<T> implements ListAccess<T> {
+    private List<T> data = new ArrayList<>();
 
-    public DefaultListAccess(List<String> data) {
+    public DefaultListAccess(List<T> data) {
         this.data = data;
     }
 
     @Override
-    public List<String> getData() {
+    public List<T> getData() {
         return data;
     }
 
     @Override
-    public void updateData(List<String> data) {
-        this.data = data;
+    public void updateData(List<T> data) {
+        this.data.clear();
+        for (T element : data) {
+            this.data.add(element);
+        }
     }
 }

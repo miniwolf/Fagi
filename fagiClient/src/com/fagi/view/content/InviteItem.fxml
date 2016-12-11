@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="dNoYdf" stylesheets="@../../style/invitationitem.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#openConversation" styleClass="dNoYdf" stylesheets="@../../style/invitationitem.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane>
          <HBox.margin>
@@ -23,8 +23,9 @@
       </Pane>
       <VBox alignment="CENTER_LEFT" styleClass="JSnFcc">
          <children>
-            <Label text="Marcus Haagh" />
+            <Label fx:id="usernameLabel" text="Marcus Haagh" />
             <Label layoutX="10.0" layoutY="10.0" text="Sent a message" />
+            <Label fx:id="date" styleClass="date" text="2 Jul"/>
          </children></VBox>
    </children>
 </HBox>

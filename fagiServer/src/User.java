@@ -5,12 +5,14 @@
  * User data object.
  */
 
+import com.fagi.model.FriendRequest;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserExists;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * TODO: Add description, password protection OTR:
@@ -21,7 +23,7 @@ public class User {
     private final String userName;
     private List<String> friends;
     private List<Long> conversationIDs;
-    private volatile List<String> incFriendReq;
+    private volatile List<FriendRequest> incFriendReq;
 
     public User(String name, String pass) {
         this.pass = pass;
@@ -43,7 +45,7 @@ public class User {
         return friends;
     }
 
-    public List<String> getFriendReq() {
+    public List<FriendRequest> getFriendReq() {
         return incFriendReq;
     }
 
@@ -51,7 +53,8 @@ public class User {
         friends.add(friend.getUserName());
     }
 
-    public Response requestFriend(String otherUser) {
+    public Response requestFriend(FriendRequest arg) {
+        String otherUser = arg.getFriendUsername();
         if ( friends.contains(otherUser) ) {
             return new UserExists();
         }
@@ -60,26 +63,35 @@ public class User {
             return new NoSuchUser();
         }
 
-        if ( incFriendReq.contains(otherUser) ) {
+        if (incFriendReq.stream().anyMatch(x -> x.getFriendUsername().equals(userName))) {
             Data.makeFriends(this, other);
+            other.removeFriendRequest(userName);
             return removeFriendRequest(otherUser);
         }
-        return other.addFriendReq(userName);
+        return other.addFriendReq(arg);
     }
 
-    public Response removeFriendRequest(String otherUser) {
-        if ( !incFriendReq.contains(otherUser) ) {
+    public Response removeFriendRequest(String userName) {
+        Optional<FriendRequest> opt = incFriendReq.stream().filter(x -> x.getMessage().getMessageInfo().getSender().equals(userName)).findFirst();
+
+        if (!opt.isPresent()) {
+            return new NoSuchUser();
+        }
+
+        FriendRequest request = opt.get();
+
+        if ( !incFriendReq.contains(request) ) {
             return new UserExists();
         }
-        incFriendReq.remove(otherUser);
+        incFriendReq.remove(request);
         return Data.storeUser(this);
     }
 
-    private Response addFriendReq(String userName) {
+    private Response addFriendReq(FriendRequest request) {
         if ( incFriendReq.contains(userName) ) {
             return new UserExists();
         }
-        incFriendReq.add(userName);
+        incFriendReq.add(request);
         return Data.storeUser(this);
     }
 
