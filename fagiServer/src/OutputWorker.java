@@ -73,8 +73,6 @@ public class OutputWorker extends Worker {
     }
 
     private void checkForLists() throws IOException {
-        DefaultListAccess<String> onlineFriends = getOnlineFriends();
-        checkList(new FriendList(onlineFriends), currentFriends);
         DefaultListAccess<FriendRequest> friendRequests = getFriendRequests();
         checkList(new FriendRequestList(friendRequests), currentRequests);
     }
@@ -123,7 +121,7 @@ public class OutputWorker extends Worker {
         this.aes = aes;
     }
 
-    synchronized void addMessage(TextMessage message) {
+    synchronized void addMessage(InGoingMessages message) {
         messages.add(message);
     }
 
