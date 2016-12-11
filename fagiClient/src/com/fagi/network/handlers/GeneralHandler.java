@@ -53,6 +53,7 @@ public class GeneralHandler implements Handler {
             handlers.remove(clazz);
             InputHandler.unregister(clazz);
         }
+
     }
 
     @Override

@@ -42,7 +42,7 @@
     <bottom>
         <HBox spacing="5.0" styleClass="RU">
             <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
-                <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button">
+                <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ignore" text="Ignore">
                <styleClass>
                   <String fx:value="zbg" />
                   <String fx:value="cmx6we" />
@@ -50,7 +50,7 @@
                </styleClass></Button>
             </VBox>
             <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
-                <Button defaultButton="true" maxWidth="1.7976931348623157E308" text="Accept">
+                <Button defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#accept" text="Accept">
                <styleClass>
                   <String fx:value="zbg" />
                   <String fx:value="cmx6we" />
@@ -87,7 +87,7 @@
                         <VBox.margin>
                             <Insets bottom="2.0" />
                         </VBox.margin>
-                        <Label styleClass="xL" text="Marcus Haagh" />
+                        <Label fx:id="username" styleClass="xL" text="Marcus Haagh" />
                     </GridPane>
                 </VBox>
             </top>

@@ -19,6 +19,7 @@ import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.conversation.GetConversationsRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
+import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -58,6 +59,7 @@ public class MainScreen {
     @FXML private TextField searchBox;
     private List<MessageItemController> messageItemControllers = new ArrayList<>();
     private ContentController conversationContentController;
+    private FriendRequestList friendRequestList;
 
     public enum PaneContent {
         contacts, messages
@@ -188,6 +190,10 @@ public class MainScreen {
         this.friendList = friendList;
     }
 
+    public void setFriendRequestList(FriendRequestList friendRequestList) {
+        this.friendRequestList = friendRequestList;
+    }
+
     @FXML
     public void changeMenu(MouseEvent event) {
         Node node = (Node) event.getSource();
@@ -219,7 +225,8 @@ public class MainScreen {
 
     public void addConversation(Conversation conversation) {
         conversations.add(conversation);
-        Platform.runLater(() -> createMessageItem(conversation));
+        Pane pane = createMessageItem(conversation);
+        Platform.runLater(() -> conversationContentController.addToContentList(pane));
     }
 
     public List<MessageItemController> getMessageItemControllers() {
@@ -248,6 +255,10 @@ public class MainScreen {
 
     public PaneContent getCurrentPaneContent() {
         return currentPaneContent;
+    }
+
+    public Parent getListContent(PaneContent content) {
+        return listContentMap.get(content);
     }
 
     private void updateConversationListFromServer(List<Conversation> conversations) {
@@ -280,19 +291,20 @@ public class MainScreen {
         }
 
         for ( Conversation conversation : conversations ) {
-            createMessageItem(conversation);
+            conversationContentController.addToContentList(createMessageItem(conversation));
         }
     }
 
-    private void createMessageItem(Conversation conversation) {
+    public Pane createMessageItem(Conversation conversation) {
         MessageItemController messageItemController = new MessageItemController(username, conversation.getId());
         messageItemControllers.add(messageItemController);
         messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
         loader.setController(messageItemController);
+        Pane pane = null;
         try {
-            Pane pane = loader.load();
+            pane = loader.load();
 
             messageItemController.setUsers(conversation.getParticipants());
 
@@ -301,10 +313,14 @@ public class MainScreen {
                 messageItemController.setLastMessage(lastMessage.getData(), lastMessage.getMessageInfo().getSender());
                 messageItemController.setDate(conversation.getLastMessageDate());
             }
-            conversationContentController.addToContentList(pane);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return pane;
+    }
+
+    public ContentController getConversationContentController() {
+        return conversationContentController;
     }
 
     public void addElement(Node node) {
@@ -313,6 +329,10 @@ public class MainScreen {
 
     public void setConversationController(ConversationController conversationController) {
         this.conversationController = conversationController;
+    }
+
+    public void setConversationContentController(ContentController conversationContentController) {
+        this.conversationContentController = conversationContentController;
     }
 
     public Stage getPrimaryStage() {
