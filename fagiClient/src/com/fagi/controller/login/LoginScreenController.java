@@ -8,10 +8,12 @@ import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -32,10 +34,19 @@ public class LoginScreenController implements LoginController {
     }
 
     @FXML
-    public void initialize() {
-        // TODO: Preinsert the values from username and password
-        masterLogin.initialize(username);
-        masterLogin.initialize(password);
+    private void initialize() {
+        username.setText(masterLogin.getUsername());
+        password.setText(masterLogin.getPassword());
+        assignToLogin(username);
+        assignToLogin(password);
+    }
+
+    private void assignToLogin(Node node) {
+        node.setOnKeyPressed(event -> {
+            if ( event.getCode() == KeyCode.ENTER ) {
+                handleLogin();
+            }
+        });
     }
 
     @FXML
@@ -50,7 +61,7 @@ public class LoginScreenController implements LoginController {
 
     @Override
     public void next() {
-        handleLogin();
+        masterLogin.next();
     }
 
     @Override

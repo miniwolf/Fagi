@@ -4,6 +4,7 @@
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
+<?import java.lang.String?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +13,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
-
 
 <HBox styleClass="item-holder" stylesheets="@../../style/conversationlist.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -25,6 +25,12 @@
                </viewport>
                </ImageView>
             <Circle fill="#ffffff00" layoutX="20.0" layoutY="20.0" radius="20.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="8.0" styleClass="circleHack" />
+            <Pane layoutX="31.0" layoutY="31.0">
+               <styleClass>
+                  <String fx:value="flaeQ" />
+                  <String fx:value="pD" />
+               </styleClass>
+            </Pane>
            </Pane>
            <Label fx:id="userName" styleClass="mu" text="Zargess" />
        </HBox>
