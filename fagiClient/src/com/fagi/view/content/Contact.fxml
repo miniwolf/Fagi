@@ -3,19 +3,35 @@
 <!--
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
+
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<AnchorPane styleClass="item-holder" stylesheets="@../../style/conversationlist.css"
-            xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" onMouseClicked="#openConversation">
-    <HBox layoutX="24.0" layoutY="16.0" styleClass="conversation-item" AnchorPane.bottomAnchor="0.0"
-          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Pane styleClass="image">
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="https://lh3.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/8-c-HHIriAg/s46-c-k-no/photo.jpg"/>
-            </ImageView>
-        </Pane>
-        <Label fx:id="userName" styleClass="mu" text="Zargess"/>
-    </HBox>
-</AnchorPane>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+
+
+<HBox styleClass="item-holder" stylesheets="@../../style/conversationlist.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+       <HBox styleClass="conversation-item">
+           <Pane styleClass="image">
+               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="https://lh3.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/8-c-HHIriAg/s46-c-k-no/photo.jpg" />
+               <viewport>
+                  <Rectangle2D height="40.0" width="40.0" />
+               </viewport>
+               </ImageView>
+            <Circle fill="#ffffff00" layoutX="20.0" layoutY="20.0" radius="20.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="8.0" styleClass="circleHack" />
+           </Pane>
+           <Label fx:id="userName" styleClass="mu" text="Zargess" />
+       </HBox>
+      <Button minWidth="0.0" mnemonicParsing="false" prefWidth="0.0" styleClass="uOlSBc" text="Button">
+         <graphic>
+            <Pane styleClass="eHsso" />
+         </graphic>
+      </Button>
+   </children>
+</HBox>

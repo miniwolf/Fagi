@@ -2,34 +2,76 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 .item-holder {
-    -fx-font-family: 'Roboto', 'Arial', sans-serif;
-    -fx-cursor: default;
-    -fx-text-alignment: left;
-    -fx-background-color: #fff;
-    -fx-font-size: 14px;
-    -fx-padding: 16px 24px;
+  -fx-font-family:'Roboto', 'Arial', sans-serif;
+  -fx-cursor:default;
+  -fx-text-alignment:left;
+  -fx-background-color:#FFF;
+  -fx-font-size:14px;
+  -fx-padding:16px 24px;
+}
+
+.item-holder .button {
+  -fx-border-width:0px;
+}
+
+.item-holder:hover {
+  -fx-background-color:#F5F5F5;
+}
+
+.item-holder:hover .circleHack {
+  -fx-stroke:#F5F5F5;
 }
 
 .conversation-item {
-    -fx-pref-width:350px;
-    -fx-alignment: center-left;
+  -fx-pref-width:334px;
+  -fx-alignment:center-left;
 }
 
 .conversation-item:hover {
-    -fx-background-color: #f5f5f5;
+  -fx-background-color:#F5F5F5;
 }
 
 .conversation-item .image {
-    -fx-pref-height: 40px;
-    -fx-pref-width:40px;
+  -fx-pref-height:40px;
+  -fx-pref-width:40px;
 }
 
 .conversation-item .mu {
-    -fx-pref-height:24px;
-    -fx-text-fill:#404040;
-    -fx-padding: 0 0 0 16px;
+  -fx-pref-height:24px;
+  -fx-text-fill:#404040;
+  -fx-padding:0 0 0 16px;
 }
 
 .conversation-item .picture-holder {
-    -fx-pref-height:40px;
+  -fx-pref-height:40px;
+}
+
+.item-holder:hover .uOlSBc {
+  -fx-opacity: .5;
+  -fx-max-width: 23px;
+}
+
+.item-holder .button {
+  -fx-focus-color: none;
+}
+
+.uOlSBc {
+  -fx-cursor: hand;
+  -fx-pref-width: -fx-max-width;
+  -fx-min-width: -fx-max-width;
+  -fx-max-width: 0;
+  -fx-opacity: 0;
+  -fx-alignment: center;
+}
+
+.eHsso {
+  -fx-background-image:url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-repeat:no-repeat;
+  -fx-background-position:-1220px -108px;
+  -fx-pref-height: 24px;
+  -fx-pref-width: 24px;
+}
+
+.item-holder:hover .uOlSBc:hover {
+  -fx-opacity: 1;
 }
