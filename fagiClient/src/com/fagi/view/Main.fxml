@@ -4,29 +4,28 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.*?>
-<Pane fx:id="body" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
-      styleClass="maincontent" stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane fx:id="body" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" styleClass="maincontent"
+      stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane layoutX="32.0" layoutY="14.0" styleClass="menubar">
         <Pane layoutX="6.0" layoutY="57.0" styleClass="shape">
-            <Pane fx:id="messages" styleClass="message-button, button-shape"
-                  onMouseClicked="#changeMenu" userData="Messages"/>
+            <Pane fx:id="messages" onMouseClicked="#changeMenu" styleClass="message-button, button-shape" userData="Messages" />
         </Pane>
         <Pane layoutX="6.0" layoutY="14.0" styleClass="shape">
-            <Pane fx:id="contacts" styleClass="contact-button, button-shape"
-                  onMouseClicked="#changeMenu" userData="Contacts"/>
+            <Pane fx:id="contacts" onMouseClicked="#changeMenu" styleClass="contact-button, button-shape" userData="Contacts" />
         </Pane>
     </Pane>
-    <VBox layoutX="80.0" layoutY="80.0" styleClass="list">
-        <Pane styleClass="search" fx:id="searchHeader">
-            <Pane layoutX="24.0" layoutY="16.0" styleClass="search-icon"/>
-            <TextField fx:id="searchBox" layoutX="55.0" layoutY="1.0" prefHeight="42.0" promptText="New conversation"
-                       styleClass="search-area, persistent-prompt"/>
+    <VBox layoutX="80.0" layoutY="79.0" styleClass="list">
+        <Pane fx:id="searchHeader" styleClass="search">
+            <Pane layoutX="24.0" layoutY="16.0" styleClass="search-icon" />
+            <TextField fx:id="searchBox" layoutX="55.0" layoutY="1.0" prefHeight="42.0" promptText="New conversation" styleClass="search-area, persistent-prompt" />
         </Pane>
-        <ScrollPane fx:id="listContent" styleClass="list-content"/>
+        <ScrollPane fx:id="listContent" styleClass="list-content" />
     </VBox>
-    <Button layoutX="960.0" layoutY="-6.0" onMousePressed="#logoutRequest" styleClass="rc-button-red, rc-button">
-        <graphic><Label styleClass="text" text="X"/></graphic>
+    <Button layoutX="960.0" layoutY="-5.0" onMousePressed="#logoutRequest" styleClass="rc-button-red, rc-button">
+        <graphic><Label styleClass="text" text="X" /></graphic>
     </Button>
 </Pane>

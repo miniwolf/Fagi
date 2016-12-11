@@ -72,6 +72,7 @@
 
 .list .list-content {
   -fx-background-color: #FFF;
+  -fx-pref-width:398px;
 }
 
 .list-content > .viewport {
