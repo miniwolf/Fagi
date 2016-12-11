@@ -7,6 +7,7 @@ package com.fagi.action.items;
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.conversation.ConversationController;
+import com.fagi.controller.conversation.SendInvitationController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
@@ -32,8 +33,20 @@ public class OpenInvitation implements Action {
     @Override
     public void execute() {
         Communication communication = mainScreen.getCommunication();
-        String username = mainScreen.getUsername();
+        String username = this.username.getText();
 
         // TODO: Send invitation and open invitation
+
+        SendInvitationController controller = new SendInvitationController(mainScreen);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Invitation.fxml"));
+        loader.setController(controller);
+        try {
+            BorderPane conversationBox = loader.load();
+            controller.setUsername(username);
+            mainScreen.addElement(conversationBox);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

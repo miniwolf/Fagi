@@ -157,34 +157,6 @@ public class MainScreen {
         }
     }
 
-    /**
-     * Opens a dialog to send a friend request to the server. When the user clicks
-     * Send Request, the method will call ChatManager with the content of the request
-     * TextField.
-     */
-    @FXML
-    public void showFriendRequestPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/fagi/view/FriendRequest.fxml"));
-            GridPane page = loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Friend Request");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
-
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-
-            RequestController controller = loader.getController();
-            controller.setStage(dialogStage);
-
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     public void searchUser(String searchString) {
         if ( searchString.isEmpty() ) {

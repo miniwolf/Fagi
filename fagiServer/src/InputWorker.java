@@ -371,6 +371,6 @@ public class InputWorker extends Worker {
 
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
-        return Data.getUser(myUserName).requestFriend(arg.getFriendUsername());
+        return Data.getUser(myUserName).requestFriend(arg);
     }
 }

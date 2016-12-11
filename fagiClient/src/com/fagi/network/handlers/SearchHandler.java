@@ -34,7 +34,7 @@ public class SearchHandler implements Handler {
 
             // TODO : Do something similar with friends
             for (String username : result.getData().getUsernames()) {
-                SearchContactController controller = new SearchContactController();
+                SearchContactController controller = new SearchContactController(false, mainScreen);
                 FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/SearchContact.fxml"));
                 loader.setController(controller);
                 HBox searchContact = loader.load();

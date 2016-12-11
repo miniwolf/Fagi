@@ -16,9 +16,9 @@ import java.util.List;
  *
  * @author miniwolf
  */
-public interface ListAccess extends Access<List<String>> {
+public interface ListAccess<T> extends Access<List<T>> {
     @Override
-    List<String> getData();
+    List<T> getData();
 
-    void updateData(List<String> data);
+    void updateData(List<T> data);
 }
