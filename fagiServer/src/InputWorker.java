@@ -228,7 +228,7 @@ public class InputWorker extends Worker {
             return new NoSuchConversation();
         }
 
-        Set<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
+        List<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
 
         return new HistoryUpdates(res, request.getId());
     }
@@ -371,6 +371,6 @@ public class InputWorker extends Worker {
 
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
-        return Data.getUser(myUserName).requestFriend(arg.getFriendUsername());
+        return Data.getUser(myUserName).requestFriend(arg);
     }
 }

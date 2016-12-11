@@ -4,6 +4,7 @@ import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 
+import javax.xml.soap.Text;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class Conversation implements Serializable, InGoingMessages, Access<Conversation> {
     private List<String> participants = new ArrayList<>();
-    private Set<TextMessage> messages = new ConcurrentSkipListSet<>();
+    private List<TextMessage> messages = new ArrayList<>();
     private long id;
     private Date lastMessageDate = null;
     private ConversationType type;
@@ -53,17 +54,30 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
 
     public long getId() { return id; }
 
-    public void addMessage(TextMessage message) {
-        messages.add(message);
+    public synchronized void addMessage(TextMessage message) {
+        addMessageNoDate(message);
         lastMessageDate = new Date();
         lastMessage = message;
     }
 
-    public void addMessageNoDate(TextMessage message) {
+    public synchronized void addMessageNoDate(TextMessage message) {
+        if (this.messages.contains(message)) {
+            return;
+        }
         messages.add(message);
+        Collections.sort(messages);
     }
 
-    public Set<TextMessage> getMessages() { return messages; }
+    public synchronized void addMessagesNoDate(List<TextMessage> messages) {
+        for(TextMessage message : messages) {
+            if (!this.messages.contains(message)) {
+                this.messages.add(message);
+            }
+        }
+        Collections.sort(this.messages);
+    }
+
+    public synchronized List<TextMessage> getMessages() { return messages; }
 
     public List<String> getParticipants() {
         return participants;
@@ -95,12 +109,12 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
         return lastMessageDate;
     }
 
-    public Set<TextMessage> getMessagesFromDate(Timestamp time) {
+    public List<TextMessage> getMessagesFromDate(Timestamp time) {
             return messages
                     .stream()
                     .filter(x -> x.getMessageInfo().getTimestamp().compareTo(time) > 0)
                     .sorted(Comparator.comparing(e -> e.getMessageInfo().getTimestamp()))
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
     }
 
     public void setType(ConversationType type) {

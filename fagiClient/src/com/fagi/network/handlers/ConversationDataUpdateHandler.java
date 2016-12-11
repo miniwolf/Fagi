@@ -5,6 +5,7 @@ import com.fagi.controller.contentList.MessageItemController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationDataUpdate;
 import com.fagi.model.messages.InGoingMessages;
+import com.fagi.utility.JsonFileOperations;
 import javafx.application.Platform;
 
 import java.util.Optional;
@@ -30,8 +31,10 @@ public class ConversationDataUpdateHandler implements Handler {
         if (conversation.getMessages().isEmpty()) {
             response.getConversationData().forEach(conversation::addMessage);
         } else {
-            response.getConversationData().forEach(con.get()::addMessageNoDate);
+            conversation.addMessagesNoDate(response.getConversationData());
         }
+
+        JsonFileOperations.storeConversation(conversation);
 
         if (mainScreen.getConversationController() != null && mainScreen.getCurrentConversation().getId() == response.getId()) {
             Platform.runLater(() -> mainScreen.getConversationController().redrawMessages());
