@@ -1,17 +1,13 @@
 package com.fagi.network.handlers;
 
-import com.fagi.action.items.OpenConversation;
-import com.fagi.action.items.OpenConversationFromID;
-import com.fagi.action.items.OpenReceivedFriendRequestByNewPossipleFriendWhoIsNotNiceCuzHeAteTheLastOrioSadFace;
+import com.fagi.action.items.OpenReceivedFriendRequest;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.contentList.ContactItemController;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.contentList.MessageItemController;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.FriendRequestList;
-import com.fagi.model.messages.message.TextMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
@@ -44,7 +40,7 @@ public class FriendRequestHandler implements Handler {
 
             for (FriendRequest request : friendRequestList.getAccess().getData()) {
                 MessageItemController messageItemController = new MessageItemController(request.getFriendUsername(), request.getMessage().getMessageInfo().getConversationID());
-                messageItemController.assign(new OpenReceivedFriendRequestByNewPossipleFriendWhoIsNotNiceCuzHeAteTheLastOrioSadFace(mainScreen, request));
+                messageItemController.assign(new OpenReceivedFriendRequest(mainScreen, request));
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/InviteItem.fxml"));
                 loader.setController(messageItemController);

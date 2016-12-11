@@ -338,4 +338,8 @@ public class MainScreen {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
+
+    public Pane getBody() {
+        return body;
+    }
 }

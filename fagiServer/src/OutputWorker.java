@@ -79,8 +79,8 @@ public class OutputWorker extends Worker {
         checkList(new FriendRequestList(friendRequests), currentRequests);
     }
 
-    private void checkList(InGoingMessages responseObj, ListAccess currentList) throws IOException {
-        ListAccess responseList = (ListAccess) responseObj.getAccess();
+    private <T extends Comparable> void checkList(InGoingMessages<List<T>> responseObj, ListAccess<T> currentList) throws IOException {
+        ListAccess<T> responseList = (ListAccess<T>) responseObj.getAccess();
 
         if (equalLists(responseList.getData(), currentList.getData())) {
             return;
@@ -135,7 +135,7 @@ public class OutputWorker extends Worker {
         this.myUserName = userName;
     }
 
-    private boolean equalLists(List<String> one, List<String> two) {
+    private <T extends Comparable> boolean equalLists(List<T> one, List<T> two) {
         if (one == null && two == null) {
             return true;
         }
@@ -148,8 +148,8 @@ public class OutputWorker extends Worker {
 
         //to avoid messing the order of the lists we will use a copy
         //as noted in comments by A. R. S.
-        one = new ArrayList<String>(one);
-        two = new ArrayList<String>(two);
+        one = new ArrayList<>(one);
+        two = new ArrayList<>(two);
 
         Collections.sort(one);
         Collections.sort(two);

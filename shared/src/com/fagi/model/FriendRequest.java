@@ -1,4 +1,5 @@
-package com.fagi.model;/*
+package com.fagi.model;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * FriendRequest.java
  *
@@ -9,7 +10,7 @@ import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 
-public class FriendRequest implements Serializable {
+public class FriendRequest implements Serializable, Comparable<FriendRequest> {
     private final String friendUsername;
     private final TextMessage message;
 
@@ -24,5 +25,10 @@ public class FriendRequest implements Serializable {
 
     public TextMessage getMessage() {
         return message;
+    }
+
+    @Override
+    public int compareTo(FriendRequest o) {
+        return friendUsername.compareTo(o.friendUsername);
     }
 }

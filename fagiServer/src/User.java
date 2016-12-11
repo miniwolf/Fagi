@@ -63,7 +63,7 @@ public class User {
             return new NoSuchUser();
         }
 
-        if ( incFriendReq.contains(arg) ) {
+        if (incFriendReq.stream().anyMatch(x -> x.getFriendUsername().equals(userName))) {
             Data.makeFriends(this, other);
             return removeFriendRequest(otherUser);
         }

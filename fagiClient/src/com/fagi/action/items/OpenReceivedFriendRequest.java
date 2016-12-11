@@ -12,12 +12,12 @@ import java.io.IOException;
 /**
  * Created by costa on 11-12-2016.
  */
-public class OpenReceivedFriendRequestByNewPossipleFriendWhoIsNotNiceCuzHeAteTheLastOrioSadFace implements Action {
+public class OpenReceivedFriendRequest implements Action {
     private final MainScreen mainScreen;
     private final FriendRequest request;
 
 
-    public OpenReceivedFriendRequestByNewPossipleFriendWhoIsNotNiceCuzHeAteTheLastOrioSadFace(MainScreen mainScreen, FriendRequest request) {
+    public OpenReceivedFriendRequest(MainScreen mainScreen, FriendRequest request) {
         this.mainScreen = mainScreen;
         this.request = request;
     }
@@ -25,7 +25,7 @@ public class OpenReceivedFriendRequestByNewPossipleFriendWhoIsNotNiceCuzHeAteThe
     @Override
     public void execute() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/ReceivedInvitation.fxml"));
-        ReceivedInvitationController controller = new ReceivedInvitationController(request, mainScreen.getCommunication());
+        ReceivedInvitationController controller = new ReceivedInvitationController(request, mainScreen);
         loader.setController(controller);
         try {
             BorderPane conversationBox = loader.load();
