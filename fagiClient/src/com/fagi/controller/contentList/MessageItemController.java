@@ -21,6 +21,7 @@ public class MessageItemController extends ActionableImpl {
     private Date dateInstance;
     private final String username;
     private long ID;
+    private boolean running = true;
 
     public MessageItemController(String username, long id) {
         this.username = username;
@@ -33,6 +34,9 @@ public class MessageItemController extends ActionableImpl {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                if (!running) {
+                    this.cancel();
+                }
                 Platform.runLater(() -> date.setText(convertDate(dateInstance)));
             }
         }, 0, 1000);
@@ -86,5 +90,9 @@ public class MessageItemController extends ActionableImpl {
 
     public long getID() {
         return ID;
+    }
+
+    public void stopTimer() {
+        this.running = false;
     }
 }

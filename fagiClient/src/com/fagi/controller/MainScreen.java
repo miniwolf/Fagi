@@ -152,6 +152,10 @@ public class MainScreen {
         interrupt(generalHandlerThread);
 
         ChatManager.handleLogout(new Logout());
+
+        for (MessageItemController controller : this.messageItemControllers) {
+            controller.stopTimer();
+        }
     }
 
     private void interrupt(Thread thread) {

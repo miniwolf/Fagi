@@ -48,6 +48,7 @@ public class FriendListHandler implements Handler {
                 FXMLLoader loader = new FXMLLoader(mainScreen.getClass().getResource("/com/fagi/view/content/Contact.fxml"));
                 loader.setController(contactItemController);
                 Pane pane = loader.load();
+                contactItemController.toggleStatus(friend.isOnline());
 
                 contactItemController.assign(new OpenConversation(mainScreen, contactItemController.getUserName()));
                 contactItemController.setUserName(friend.getUsername());

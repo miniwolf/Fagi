@@ -289,7 +289,7 @@ public class InputWorker extends Worker {
         for (User user : users) {
             user.addConversationID(con.getId());
             Data.storeUser(user);
-            if (!user.getUserName().equals(this.myUserName)) {
+            if (!user.getUserName().equals(this.myUserName) && Data.isUserOnline(user.getUserName())) {
                 Data.getWorker(user.getUserName()).addResponse(con);
             }
         }
