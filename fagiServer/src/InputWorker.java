@@ -11,6 +11,8 @@ import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.model.*;
 import com.fagi.model.conversation.*;
+import com.fagi.model.messages.lists.DefaultListAccess;
+import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.*;
 
@@ -99,6 +101,9 @@ public class InputWorker extends Worker {
         } else if ( input instanceof FriendRequest ) {
             FriendRequest arg = (FriendRequest) input;
             out.addResponse(handleFriendRequest(arg));
+        } else if ( input instanceof GetFriendListRequest ) {
+            GetFriendListRequest arg = (GetFriendListRequest)input;
+            out.addResponse(handleGetFriendRequest(arg));
         } else if ( input instanceof DeleteFriendRequest ) {
             DeleteFriendRequest arg = (DeleteFriendRequest) input;
             out.addResponse(handleDeleteFriendRequest(arg));
@@ -150,6 +155,18 @@ public class InputWorker extends Worker {
         } else {
             System.out.println("Unknown handle: " + input.getClass().toString());
         }
+    }
+
+    private Object handleGetFriendRequest(GetFriendListRequest arg) {
+        User user = Data.getUser(myUserName);
+        List<String> friendUsernames = user.getFriends();
+        List<Friend> friends = new ArrayList<>();
+
+        for (String friendUsername : friendUsernames) {
+            friends.add(new Friend(friendUsername, Data.isUserOnline(friendUsername)));
+        }
+
+        return new FriendList(new DefaultListAccess<>(friends));
     }
 
     private Object handleUserNameAvailableRequest(UserNameAvailableRequest request) {
@@ -350,13 +367,31 @@ public class InputWorker extends Worker {
         System.out.println("Login");
         myUserName = arg.getUsername();
         out.setUserName(arg.getUsername());
-        return Data.userLogin(arg.getUsername(), arg.getPassword(), out);
+
+        Response response = Data.userLogin(arg.getUsername(), arg.getPassword(), out);
+
+        if (response instanceof AllIsWell) {
+            for (String user : Data.getUser(myUserName).getFriends()) {
+                if (Data.isUserOnline(user)) {
+                    Data.getWorker(user).addMessage(new UserLoggedIn(myUserName));
+                }
+            }
+        }
+
+        return response;
     }
 
     private Object handleLogout() {
         System.out.println("Logout");
         Data.userLogout(myUserName);
         running = false;
+
+        for (String user : Data.getUser(myUserName).getFriends()) {
+            if (Data.isUserOnline(user)) {
+                Data.getWorker(user).addMessage(new UserLoggedOut(myUserName));
+            }
+        }
+
         return new AllIsWell();
     }
 

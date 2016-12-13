@@ -1,0 +1,31 @@
+package com.fagi.model;
+
+import com.fagi.model.messages.Access;
+import com.fagi.model.messages.InGoingMessages;
+
+import java.io.Serializable;
+
+/**
+ * Created by costa on 11-12-2016.
+ */
+public class UserLoggedIn implements Serializable, InGoingMessages, Access<UserLoggedIn>, UserStatusUpdate {
+    private final String username;
+
+    public UserLoggedIn(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public Access getAccess() {
+        return this;
+    }
+
+    @Override
+    public UserLoggedIn getData() {
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+}

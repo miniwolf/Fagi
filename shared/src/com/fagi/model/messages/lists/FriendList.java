@@ -4,6 +4,7 @@
 
 package com.fagi.model.messages.lists;
 
+import com.fagi.model.Friend;
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 
@@ -14,14 +15,14 @@ import java.util.List;
  *
  * @author miniwolf
  */
-public class FriendList implements InGoingMessages<List<String>> {
-    private ListAccess<String> access;
+public class FriendList implements InGoingMessages<List<Friend>> {
+    private ListAccess<Friend> access;
 
-    public FriendList(ListAccess<String> access) {
+    public FriendList(ListAccess<Friend> access) {
         this.access = access;
     }
 
-    public Access<List<String>> getAccess() {
+    public Access<List<Friend>> getAccess() {
         return access;
     }
 }
