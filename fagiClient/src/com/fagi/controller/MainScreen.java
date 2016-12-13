@@ -14,6 +14,8 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.handler.SearchHandler;
+import com.fagi.model.FriendMapWrapper;
+import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.Logout;
 import com.fagi.model.SearchUsersRequest;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -60,6 +62,8 @@ public class MainScreen {
     private List<MessageItemController> messageItemControllers = new ArrayList<>();
     private ContentController conversationContentController;
     private FriendRequestList friendRequestList;
+    private FriendMapWrapper friendMapWrapper;
+    private ContentController contactContentController;
 
     public enum PaneContent {
         contacts, messages
@@ -96,6 +100,7 @@ public class MainScreen {
         this.draggable = new Draggable(primaryStage);
         listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;
+        this.friendMapWrapper = new FriendMapWrapper(this);
     }
 
     /**
@@ -104,6 +109,7 @@ public class MainScreen {
     public void initCommunication() {
         conversations = JsonFileOperations.loadAllClientConversations(username);
         setupConversationList();
+        setupFriendList();
         setupContactList();
         TextMessageHandler messageHandler = new TextMessageHandler(this);
         messageThread = new Thread(messageHandler.getRunnable());
@@ -267,6 +273,10 @@ public class MainScreen {
         communication.sendObject(new GetConversationsRequest(username, filters));
     }
 
+    private void setupFriendList() {
+        communication.sendObject(new GetFriendListRequest(username));
+    }
+
     private void setupContactList() {
         ContentController contactContentController = new ContentController();
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
@@ -341,5 +351,17 @@ public class MainScreen {
 
     public Pane getBody() {
         return body;
+    }
+
+    public FriendMapWrapper getFriendMapWrapper() {
+        return friendMapWrapper;
+    }
+
+    public ContentController getContactContentController() {
+        return contactContentController;
+    }
+
+    public void setContactContentController(ContentController contactContentController) {
+        this.contactContentController = contactContentController;
     }
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by costa on 11-12-2016.
  */
-public class UserLoggedIn implements Serializable, InGoingMessages, Access<UserLoggedIn> {
+public class UserLoggedIn implements Serializable, InGoingMessages, Access<UserLoggedIn>, UserStatusUpdate {
     private final String username;
 
     public UserLoggedIn(String username) {

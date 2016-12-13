@@ -25,10 +25,9 @@
                </viewport>
                </ImageView>
             <Circle fill="#ffffff00" layoutX="20.0" layoutY="20.0" radius="20.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="8.0" styleClass="circleHack" />
-            <Pane layoutX="31.0" layoutY="31.0">
+            <Pane fx:id="status" layoutX="31.0" layoutY="31.0">
                <styleClass>
                   <String fx:value="flaeQ" />
-                  <String fx:value="pD" />
                </styleClass>
             </Pane>
            </Pane>

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by costa on 11-12-2016.
  */
-public class UserLoggedOut implements Serializable, InGoingMessages, Access<UserLoggedOut> {
+public class UserLoggedOut implements Serializable, InGoingMessages, Access<UserLoggedOut>, UserStatusUpdate {
     private final String username;
 
     public UserLoggedOut(String username) {
