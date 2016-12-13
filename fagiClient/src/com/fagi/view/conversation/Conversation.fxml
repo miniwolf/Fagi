@@ -50,7 +50,7 @@
                      </Button>
                   </Pane>
                </HBox>
-               <HBox alignment="CENTER_RIGHT">
+               <HBox alignment="CENTER_RIGHT" visible="false">
                   <Pane styleClass="chatsettings-holder">
                      <Pane styleClass="settings-filler" />
                      <Pane prefHeight="200.0" prefWidth="200.0" styleClass="settingsbutton" />
