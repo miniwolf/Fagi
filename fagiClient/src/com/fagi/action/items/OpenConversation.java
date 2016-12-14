@@ -25,8 +25,11 @@ public class OpenConversation implements Action {
     @Override
     public void execute() {
         Conversation conversation;
-        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(con -> con.getParticipants().size() > 0 && con.getParticipants().contains(username.getText())).findFirst();
-        if ( optConversation.isPresent() ) {
+        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(
+            con -> con.getParticipants().size() > 0 && con.getParticipants()
+                                                          .contains(username.getText()))
+                                                           .findFirst();
+        if (optConversation.isPresent()) {
             conversation = optConversation.get();
         } else {
             List<String> participants = new ArrayList<>();
@@ -40,14 +43,15 @@ public class OpenConversation implements Action {
 
     private Conversation waitForConversation() {
         Optional<Conversation> optConversation;
-        while ( !(optConversation = mainScreen.getConversations().stream()
-                                              .filter(con -> con.getParticipants().size() > 0
-                                                             && con.getParticipants().contains(username.getText()))
-                                              .findFirst()).isPresent() ) {
+        while (!(optConversation = mainScreen.getConversations().stream()
+                                             .filter(con -> con.getParticipants().size() > 0
+                                                            && con.getParticipants()
+                                                                  .contains(username.getText()))
+                                             .findFirst()).isPresent()) {
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
             }
         }
         return optConversation.get();

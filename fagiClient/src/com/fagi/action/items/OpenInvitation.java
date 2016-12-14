@@ -32,18 +32,13 @@ public class OpenInvitation implements Action {
 
     @Override
     public void execute() {
-        Communication communication = mainScreen.getCommunication();
-        String username = this.username.getText();
-
-        // TODO: Send invitation and open invitation
-
         SendInvitationController controller = new SendInvitationController(mainScreen);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Invitation.fxml"));
         loader.setController(controller);
         try {
             BorderPane conversationBox = loader.load();
-            controller.setUsername(username);
+            controller.setUsername(username.getText());
             mainScreen.addElement(conversationBox);
         } catch (IOException e) {
             e.printStackTrace();

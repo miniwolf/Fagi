@@ -21,6 +21,12 @@
 .button {
   -fx-text-alignment:center;
   -fx-pref-width: 48px;
+  -fx-border-width: 0px;
+  -fx-border-style: solid;
+  -fx-border-color: transparent;
+  -fx-padding: 0;
+  -fx-background-color: transparent;
+  -fx-font-family: 'Roboto';
 }
 
 .shape {
@@ -84,7 +90,6 @@
 }
 
 .search {
-  -fx-pref-width:400px;
   -fx-min-height: 56px;
   -fx-border-color:#F5F5F5;
   -fx-border-style:solid;
@@ -117,6 +122,20 @@
   -fx-background-color:white;
   -fx-focus-color: transparent;
   -fx-faint-focus-color: transparent;
+}
+
+.DIyFQb {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -176px -148px;
+  -fx-pref-width: 24px;
+  -fx-pref-height: 24px;
+  -fx-opacity: 0;
+}
+
+.dlrqf .DIyFQb {
+  -fx-opacity: 1;
+  -fx-cursor: hand;
 }
 
 .splitter {

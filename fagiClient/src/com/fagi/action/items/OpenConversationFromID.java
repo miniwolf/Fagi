@@ -29,30 +29,38 @@ public class OpenConversationFromID implements Action {
     @Override
     public void execute() {
         Optional<Conversation> optional = mainScreen
-                .getConversations().stream()
-                .filter(con -> con.getId() == id)
-                .findFirst();
+            .getConversations().stream()
+            .filter(con -> con.getId() == id)
+            .findFirst();
 
         if (!optional.isPresent()) {
             errorHandling();
+            return; // NOTE: This is never reached
         }
 
         Conversation conversation = optional.get();
 
-        if ( conversation.getParticipants().equals(mainScreen.getCurrentConversation().getParticipants()) ) {
+        if (!optional.isPresent() || conversation.getParticipants()
+                                                 .equals(mainScreen.getCurrentConversation()
+                                                                   .getParticipants())) {
             return;
         }
 
         Communication communication = mainScreen.getCommunication();
         String username = mainScreen.getUsername();
-        if ( conversation.getType() == ConversationType.Placeholder ) {
-            ConversationType type = conversation.getParticipants().size() > 2 ? ConversationType.Multi : ConversationType.Single;
+        if (conversation.getType() == ConversationType.Placeholder) {
+            ConversationType type =
+                conversation.getParticipants().size() > 2 ? ConversationType.Multi
+                                                          : ConversationType.Single;
             conversation.setType(type);
-            communication.sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
+            communication
+                .sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
         }
 
-        ConversationController controller = new ConversationController(mainScreen.getPrimaryStage(), conversation, communication, username);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
+        ConversationController controller =
+            new ConversationController(mainScreen, conversation, username);
+        FXMLLoader loader =
+            new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
         loader.setController(controller);
         try {
             BorderPane conversationBox = loader.load();

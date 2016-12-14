@@ -10,10 +10,10 @@ import javafx.scene.control.Label;
  * @author miniwolf and zargess
  */
 public class SearchContactController extends ActionableImpl {
-    private final boolean isFriend;
-
-    private final MainScreen mainScreen;
     @FXML private Label userName;
+
+    private final boolean isFriend;
+    private final MainScreen mainScreen;
 
     public SearchContactController(boolean isFriend, MainScreen mainScreen) {
         this.isFriend = isFriend;
@@ -22,15 +22,8 @@ public class SearchContactController extends ActionableImpl {
 
     @FXML
     public void initialize() {
-        if (isFriend) {
-            this.assign(new OpenConversation(mainScreen, userName));
-        } else {
-            this.assign(new OpenInvitation(mainScreen, userName));
-        }
-    }
-
-    public Label getUserName() {
-        return userName;
+        this.assign(isFriend ? new OpenConversation(mainScreen, userName)
+                             : new OpenInvitation(mainScreen, userName));
     }
 
     @FXML

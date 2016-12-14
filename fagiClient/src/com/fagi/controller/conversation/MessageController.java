@@ -7,16 +7,16 @@ import javafx.scene.control.Label;
  * @author miniwolf
  */
 public class MessageController {
-	@FXML private Label message;
+    @FXML private Label message;
 
-	private final String s;
+    private final String stringMessage;
 
-	public MessageController(String s) {
-		this.s = s;
-	}
+    public MessageController(String stringMessage) {
+        this.stringMessage = stringMessage;
+    }
 
-	@FXML
-	public void initialize() {
-		message.setText(s);
-	}
+    @FXML
+    public void initialize() {
+        message.setText(stringMessage);
+    }
 }

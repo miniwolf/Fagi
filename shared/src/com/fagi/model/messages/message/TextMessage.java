@@ -8,6 +8,9 @@ import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 
 /**
+ * Sending messages in a conversation are stored using these elements.
+ * Information about sending time and sender is stored in a DefaultMessageInfo.
+ *
  * @author miniwolf
  */
 public class TextMessage implements InGoingMessages, TextAccess, Comparable<TextMessage> {
@@ -39,14 +42,17 @@ public class TextMessage implements InGoingMessages, TextAccess, Comparable<Text
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TextMessage)) return false;
+    public boolean equals(Object other) {
+        if ( this == other ) {
+            return true;
+        }
+        if ( !(other instanceof TextMessage) ) {
+            return false;
+        }
 
-        TextMessage message1 = (TextMessage) o;
+        TextMessage message1 = (TextMessage) other;
 
-        if (!message.equals(message1.message)) return false;
-        return data.equals(message1.data);
+        return message.equals(message1.message) && data.equals(message1.data);
     }
 
     @Override

@@ -4,6 +4,7 @@
 
 package com.fagi.controller.conversation;
 
+import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
@@ -14,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -31,35 +33,40 @@ public class ConversationController {
     @FXML private Label date;
     @FXML private TextArea message;
     @FXML private VBox chat;
-	@FXML private ScrollPane scroller;
+    @FXML private ScrollPane scroller;
+    @FXML private BorderPane body;
 
     private Conversation conversation;
+    private MainScreen mainScreen;
     private Communication communication;
     private String username;
     private final Stage primaryStage;
-	private boolean isUserScrolling = false;
-	private boolean isInternalScroll = false;
+    private boolean isUserScrolling = false;
+    private boolean isInternalScroll = false;
 
-    public ConversationController(Stage primaryStage, Conversation conversation, Communication communication, String username) {
+    public ConversationController(MainScreen mainScreen, Conversation conversation,
+                                  String username) {
         this.conversation = conversation;
-        this.communication = communication;
+        this.mainScreen = mainScreen;
         this.username = username;
-        this.primaryStage = primaryStage;
+        this.communication = mainScreen.getCommunication();
+        this.primaryStage = mainScreen.getPrimaryStage();
     }
 
     @FXML
     void initialize() {
-        String titleNames = conversation.getParticipants().stream().collect(Collectors.joining(", "));
+        String titleNames = conversation.getParticipants().stream()
+                                        .collect(Collectors.joining(", "));
         name.setText(titleNames);
 
         String dateString = dateToString(conversation.getLastMessageDate());
-        if ( "".equals(dateString) ) {
+        if ("".equals(dateString)) {
             date.setMinHeight(Region.USE_PREF_SIZE);
         }
         date.setText(dateString);
 
         message.setOnKeyPressed(event -> {
-            if ( !event.isShiftDown() && event.getCode() == KeyCode.ENTER ) {
+            if (!event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
                 sendMessage();
                 message.setText("");
                 event.consume();
@@ -68,27 +75,27 @@ public class ConversationController {
 
         fillChat();
 
-		scroller.vvalueProperty().addListener(observable -> {
-			this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll;
-		});
-	}
+        scroller.vvalueProperty().addListener(
+            observable -> this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll);
+    }
 
     private void sendMessage() {
-        TextMessage textMessage = new TextMessage(message.getText(), username, conversation.getId());
+        TextMessage textMessage = new TextMessage(message.getText(), username,
+                                                  conversation.getId());
         communication.sendObject(textMessage);
     }
 
-	private void fillChat() {
-		Platform.runLater(() -> {
-			for(TextMessage message : conversation.getMessages()) {
-				chat.getChildren().add(createMessageBox(message));
-			}
-			primaryStage.sizeToScene();
-		});
-	}
+    private void fillChat() {
+        Platform.runLater(() -> {
+            for (TextMessage message : conversation.getMessages()) {
+                chat.getChildren().add(createMessageBox(message));
+            }
+            primaryStage.sizeToScene();
+        });
+    }
 
-    private String dateToString(Date s) {
-        if ( s == null ) {
+    private String dateToString(Date date) {
+        if (date == null) {
             return "";
         } else {
             // Convert into something like "active 3 mo ago" "active 1 w ago"
@@ -101,14 +108,13 @@ public class ConversationController {
      *
      * @param message TextMessage representation of the message received.
      */
-	public void addMessage(TextMessage message) {
-		Platform.runLater(() -> {
-			if (!isUserScrolling) {
-				isInternalScroll = true;
-			}
+    public void addMessage(TextMessage message) {
+        Platform.runLater(() -> {
+            if (!isUserScrolling) {
+                isInternalScroll = true;
+            }
 
             chat.getChildren().add(createMessageBox(message));
-
             primaryStage.sizeToScene();
 
             if (!isUserScrolling) {
@@ -117,7 +123,7 @@ public class ConversationController {
 
             isInternalScroll = false;
         });
-	}
+    }
 
     public void redrawMessages() {
         chat.getChildren().clear();
@@ -125,26 +131,26 @@ public class ConversationController {
     }
 
     private HBox getBox(String resource, String message) {
-        HBox load = null;
+        MessageController messageController = new MessageController(message);
+        FXMLLoader loader =
+            new FXMLLoader(ConversationController.class.getClass().getResource(resource));
+        loader.setController(messageController);
         try {
-            MessageController messageController = new MessageController(message);
-            FXMLLoader loader = new FXMLLoader(ConversationController.class.getClass().getResource(resource));
-            loader.setController(messageController);
-            load = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
-        return load;
+        return null;
     }
 
-	private HBox createMessageBox(TextMessage message) {
-		return getBox(message.getMessageInfo().getSender().equals(username)
-				? "/com/fagi/view/conversation/MyMessage.fxml"
-				: "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
-	}
+    private HBox createMessageBox(TextMessage message) {
+        return getBox(message.getMessageInfo().getSender().equals(username)
+                      ? "/com/fagi/view/conversation/MyMessage.fxml"
+                      : "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
+    }
 
     @FXML
     public void closeConversation() {
-
+        mainScreen.removeElement(body);
     }
 }

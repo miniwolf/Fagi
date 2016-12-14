@@ -23,6 +23,10 @@ public class ContentController {
         contentList.getChildren().add(parent);
     }
 
+    public void addAllToContentList(List<Parent> parents) {
+        contentList.getChildren().addAll(parents);
+    }
+
     public void updateAndRedraw(List<FriendListItem> sortedFriendItems) {
         Platform.runLater(() -> {
             contentList.getChildren().clear();

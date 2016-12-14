@@ -5,6 +5,7 @@ import com.fagi.action.ActionableImpl;
 import com.fagi.action.items.SendInvitation;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.messages.message.TextMessage;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +26,12 @@ public class SendInvitationController extends ActionableImpl {
         this.mainScreen = mainScreen;
     }
 
+    /**
+     * Assign the username to the controller and item.
+     * The username is inserted in a default string where the template string is replaced by the
+     * username.
+     * @param username username of the username you want to invite.
+     */
     public void setUsername(String username) {
         this.username = username;
         header.setText(header.getText().replace("$", username));
