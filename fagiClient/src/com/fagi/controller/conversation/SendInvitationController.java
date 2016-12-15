@@ -10,14 +10,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+
+import javax.swing.border.Border;
 
 /**
- * Created by costa on 11-12-2016.
+ * @author miniwolf
  */
 public class SendInvitationController extends ActionableImpl {
     @FXML private Label header, description;
     @FXML private TextField message;
     @FXML private Button send;
+    @FXML private BorderPane body;
 
     private MainScreen mainScreen;
     private String username;
@@ -42,5 +46,10 @@ public class SendInvitationController extends ActionableImpl {
     public void sendMessage() {
         Action action = new SendInvitation(mainScreen.getCommunication(), username, new TextMessage(message.getText(), mainScreen.getUsername(), -1));
         action.execute();
+    }
+
+    @FXML
+    public void close() {
+        mainScreen.removeElement(body);
     }
 }

@@ -37,32 +37,39 @@ public class TextMessageHandler implements Handler {
     @Override
     public void handle(InGoingMessages inMessage) {
         TextMessage message = (TextMessage) inMessage;
-        Optional<Conversation> first = mainScreen.getConversations().stream().filter(c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
-        if ( !first.isPresent() ) {
-            System.err.println("Server sent a message before it sent the conversation of ID '" + message.getMessageInfo().getConversationID() + "'to the profile.");
+        Optional<Conversation> first = mainScreen.getConversations().stream().filter(
+            c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
+        if (!first.isPresent()) {
+            System.err.println(
+                "Server sent a message before it sent the conversation of ID '" + message
+                    .getMessageInfo().getConversationID() + "'to the profile.");
             return;
         }
         Conversation conversation = first.get();
         ConversationController controller = mainScreen.getConversationController();
 
-        if ( conversation.getType() == ConversationType.Placeholder ) {
+        if (conversation.getType() == ConversationType.Placeholder) {
             ConversationType type = conversation.getParticipants().size() > 2
                                     ? ConversationType.Multi : ConversationType.Single;
 
             conversation.setType(type);
-            mainScreen.getCommunication().sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
+            mainScreen.getCommunication().sendObject(
+                new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
         }
 
-        if ( mainScreen.getCurrentConversation().getId() == conversation.getId() && controller != null ) {
+        if (mainScreen.getCurrentConversation().getId() == conversation.getId()
+            && controller != null) {
             controller.addMessage(message);
         }
         conversation.getData().addMessage(message);
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
 
-        MessageItemController messageItemController = mainScreen.getMessageItemControllers().stream().filter(x -> x.getID() == conversation.getId()).findFirst().get();
+        MessageItemController messageItemController =
+            mainScreen.getMessageItemControllers().stream()
+                      .filter(x -> x.getID() == conversation.getId()).findFirst().get();
         Platform.runLater(() -> {
             messageItemController.setDate(conversation.getLastMessageDate());
-            messageItemController.setLastMessage(message.getData(), message.getMessageInfo().getSender());
+            messageItemController.setLastMessage(message);
         });
     }
 

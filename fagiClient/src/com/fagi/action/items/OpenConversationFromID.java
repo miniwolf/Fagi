@@ -39,10 +39,10 @@ public class OpenConversationFromID implements Action {
         }
 
         Conversation conversation = optional.get();
-
-        if (!optional.isPresent() || conversation.getParticipants()
-                                                 .equals(mainScreen.getCurrentConversation()
-                                                                   .getParticipants())) {
+        if (!optional.isPresent() || (mainScreen.getCurrentConversation() != null
+                                      && conversation.getParticipants()
+                                                     .equals(mainScreen.getCurrentConversation()
+                                                                       .getParticipants()))) {
             return;
         }
 
@@ -65,8 +65,8 @@ public class OpenConversationFromID implements Action {
         try {
             BorderPane conversationBox = loader.load();
             mainScreen.addElement(conversationBox);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
 
         mainScreen.setConversation(conversation);

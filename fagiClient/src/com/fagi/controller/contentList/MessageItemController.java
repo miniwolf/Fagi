@@ -1,6 +1,7 @@
 package com.fagi.controller.contentList;
 
 import com.fagi.action.ActionableImpl;
+import com.fagi.model.messages.message.TextMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -78,9 +79,10 @@ public class MessageItemController extends ActionableImpl {
         return "now";
     }
 
-    public void setLastMessage(String lastMessage, String sender) {
+    public void setLastMessage(TextMessage lastMessage) {
+        String sender = lastMessage.getMessageInfo().getSender();
         String senderString = (sender.equals(username) ? "You" : sender);
-        this.lastMessage.setText(senderString + ": " + lastMessage);
+        this.lastMessage.setText(senderString + ": " + lastMessage.getData());
     }
 
     @FXML

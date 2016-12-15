@@ -152,5 +152,6 @@ public class ConversationController {
     @FXML
     public void closeConversation() {
         mainScreen.removeElement(body);
+        mainScreen.setConversation(null);
     }
 }

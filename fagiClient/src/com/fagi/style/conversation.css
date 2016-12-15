@@ -444,7 +444,7 @@
   -fx-background-image: url(https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png);
   -fx-background-position: -560px -17px;
   -fx-background-size: 617px, 557px;
-  -fx-pref-width: 29px;
+  -fx-pref-width: 29px !important;
   -fx-pref-height: 29px;
 }
 .XX {

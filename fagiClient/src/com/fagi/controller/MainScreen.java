@@ -194,7 +194,7 @@ public class MainScreen {
     }
 
     @FXML
-    public void changeMenu(MouseEvent event) {
+    void changeMenu(MouseEvent event) {
         Node node = (Node) event.getSource();
         changeMenuStyle((String) node.getUserData());
         search.stopSearching();
@@ -322,11 +322,8 @@ public class MainScreen {
             pane = loader.load();
 
             messageItemController.setUsers(conversation.getParticipants());
-
             if (conversation.getLastMessage() != null) {
-                TextMessage lastMessage = conversation.getLastMessage();
-                messageItemController.setLastMessage(lastMessage.getData(),
-                                                     lastMessage.getMessageInfo().getSender());
+                messageItemController.setLastMessage(conversation.getLastMessage());
                 messageItemController.setDate(conversation.getLastMessageDate());
             }
         } catch (IOException ioe) {

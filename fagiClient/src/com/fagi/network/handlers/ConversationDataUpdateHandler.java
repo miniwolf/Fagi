@@ -43,7 +43,7 @@ public class ConversationDataUpdateHandler implements Handler {
         MessageItemController messageItemController = mainScreen.getMessageItemControllers().stream().filter(x -> x.getID() == conversation.getId()).findFirst().get();
         Platform.runLater(() -> {
             if (conversation.getLastMessage() != null) {
-                messageItemController.setLastMessage(response.getLastMessage().getData(), response.getLastMessage().getMessageInfo().getSender());
+                messageItemController.setLastMessage(response.getLastMessage());
             }
 
             if (conversation.getLastMessageDate() != null) {
