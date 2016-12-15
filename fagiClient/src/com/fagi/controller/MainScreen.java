@@ -78,7 +78,7 @@ public class MainScreen {
 
     private final String username;
     private final Communication communication;
-    private List<com.fagi.conversation.Conversation> conversations;
+    private List<Conversation> conversations;
     private Stage primaryStage;
 
     private Thread messageThread;
@@ -373,5 +373,13 @@ public class MainScreen {
 
     public FriendList getFriendList() {
         return friendList;
+    }
+
+    public void setCurrentPane(Pane currentPane) {
+        this.currentPane = currentPane;
+    }
+
+    public void setListContent(VBox listContent) {
+        this.listContent.setContent(listContent);
     }
 }

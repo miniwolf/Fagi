@@ -1,12 +1,9 @@
 /*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
-package com.fagi.action.items.contentList;
 
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+package com.fagi.action.items.contentlist;
+
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.SearchContactController;
@@ -15,8 +12,15 @@ import com.fagi.controller.contentList.ContentController;
 import java.io.IOException;
 import java.util.List;
 
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 /**
- * Created by miniwolf on 14-12-2016.
+ * Creates the element and stores it in the mainscreen's current PaneContent element.
+ *
+ * @author miniwolf
  */
 public class CreateSearchList implements Action {
     private MainScreen mainScreen;
@@ -41,7 +45,7 @@ public class CreateSearchList implements Action {
             return;
         }
 
-        for (String username : usernames) {
+        usernames.forEach(username -> {
             SearchContactController controller = new SearchContactController(false, mainScreen);
             FXMLLoader loader = new FXMLLoader(
                 mainScreen.getClass().getResource("/com/fagi/view/content/SearchContact.fxml"));
@@ -53,11 +57,9 @@ public class CreateSearchList implements Action {
                 contentController.addToContentList(searchContact);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                return;
             }
-        }
+        });
 
-        Platform.runLater(() -> mainScreen
-            .setScrollPaneContent(mainScreen.getCurrentPaneContent(), searchContent));
+        Platform.runLater(() -> mainScreen.setListContent(searchContent));
     }
 }

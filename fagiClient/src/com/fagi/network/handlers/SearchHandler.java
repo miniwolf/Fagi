@@ -1,6 +1,6 @@
 package com.fagi.network.handlers;
 
-import com.fagi.action.items.contentList.CreateSearchList;
+import com.fagi.action.items.contentlist.CreateSearchList;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.SearchUsersResult;
 import com.fagi.model.messages.InGoingMessages;
