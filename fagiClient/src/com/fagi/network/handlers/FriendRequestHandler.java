@@ -64,7 +64,7 @@ public class FriendRequestHandler implements Handler {
 
             mainScreen.setConversationContentController(contentController);
 
-            Platform.runLater(() -> mainScreen.setScrollPaneContent(MainScreen.PaneContent.messages, contactContent));
+            Platform.runLater(() -> mainScreen.setScrollPaneContent(MainScreen.PaneContent.Messages, contactContent));
         } catch (IOException e) {
             e.printStackTrace();
         }

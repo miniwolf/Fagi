@@ -29,12 +29,10 @@ public class OpenConversationHandler implements Action {
 
     @Override
     public void execute() {
-        if ( friendList.contains(username.getText()) ) {
+        if (friendList.contains(username.getText())) {
             new OpenConversation(mainScreen, username).execute();
-            // user is a friend find and open conversation or create empty
         } else {
             new OpenInvitation(mainScreen, username).execute();
-            // create invitation
         }
     }
 }

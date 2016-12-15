@@ -8,6 +8,7 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 
 /**
  * Created by costa on 11-12-2016.
@@ -15,6 +16,7 @@ import javafx.scene.control.Label;
 public class ReceivedInvitationController extends ActionableImpl {
     @FXML private Label message;
     @FXML private Label username;
+    @FXML private BorderPane body;
 
     private final FriendRequest request;
     private final MainScreen mainScreen;
@@ -40,11 +42,13 @@ public class ReceivedInvitationController extends ActionableImpl {
 
     @FXML
     public void accept() {
-        communication.sendObject(new FriendRequest(request.getMessage().getMessageInfo().getSender(), new TextMessage("Yosh plz!", mainScreen.getUsername(), -1)));
+        communication.sendObject(
+            new FriendRequest(request.getMessage().getMessageInfo().getSender(),
+                              new TextMessage("Yosh plz!", mainScreen.getUsername(), -1)));
         close();
     }
 
     private void close() {
-        mainScreen.getBody().getChildren().remove(mainScreen.getBody().getChildren().size() - 1);
+        mainScreen.removeElement(body);
     }
 }

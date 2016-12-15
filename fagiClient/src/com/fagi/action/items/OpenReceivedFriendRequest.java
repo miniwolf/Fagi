@@ -24,8 +24,10 @@ public class OpenReceivedFriendRequest implements Action {
 
     @Override
     public void execute() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/ReceivedInvitation.fxml"));
-        ReceivedInvitationController controller = new ReceivedInvitationController(request, mainScreen);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/com/fagi/view/conversation/ReceivedInvitation.fxml"));
+        ReceivedInvitationController controller =
+                new ReceivedInvitationController(request, mainScreen);
         loader.setController(controller);
         try {
             BorderPane conversationBox = loader.load();

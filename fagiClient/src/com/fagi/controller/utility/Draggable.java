@@ -8,7 +8,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 /**
- * Created by miniwolf on 05-07-2016.
+ * To be able to drag a window element around, we need to access the primary stage.
+ * Here we use the event from the mouse to offset the element.
+ *
+ * @author miniwolf
  */
 public class Draggable {
     private double xOffset;
@@ -16,7 +19,6 @@ public class Draggable {
     private Stage primaryStage;
 
     public Draggable(Stage primaryStage) {
-
         this.primaryStage = primaryStage;
     }
 

@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 
 /**
  * Chatmanager is used to handle all communication about the chat.
- * Sending messages, handling friend requests and so on.
+ * Sending Messages, handling friend requests and so on.
  * Handles login requests and responds to and from server.
  */
 public class ChatManager {
@@ -95,7 +95,7 @@ public class ChatManager {
      * @param username     username from the LoginScreen.
      * @param password     password from the LoginScreen.
      * @param passRepeat   for checking repeated password is equal.
-     * @param labelMessage JLabel for writing status messages to the user.
+     * @param labelMessage JLabel for writing status Messages to the user.
      */
     public static boolean handleCreateUser(String username, String password, String passRepeat,
                                         Label labelMessage) {
