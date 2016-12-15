@@ -40,24 +40,22 @@ public class MasterLogin {
     private final FagiApp fagiApp;
     private final String configFileLocation;
     private final Draggable draggable;
-    private Stage primaryStage;
     private Scene scene;
     private String password;
 
     /**
      * Constructor will create and show the first screen.
      *
-     * @param fagiApp FagiApp used to login
+     * @param fagiApp            FagiApp used to login
      * @param configFileLocation Location for the config file
-     * @param primaryStage Stage to show the scene
-     * @param scene scene to add content
+     * @param primaryStage       Stage to show the scene
+     * @param scene              scene to add content
      */
     public MasterLogin(FagiApp fagiApp, String configFileLocation,
                        Stage primaryStage, Scene scene) {
         this.fagiApp = fagiApp;
         this.configFileLocation = configFileLocation;
         draggable = new Draggable(primaryStage);
-        this.primaryStage = primaryStage;
         this.scene = scene;
 
         loader = new FXMLLoader(getClass().getResource("/com/fagi/view/Master.fxml"));
@@ -81,7 +79,7 @@ public class MasterLogin {
             messageLabel = "Connected to server: " + config.getName();
         } catch (IOException ioe) {
             messageLabel = "Connection refused";
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException cnfe) {
             messageLabel = "Not a valid config file.";
         }
     }
@@ -93,18 +91,19 @@ public class MasterLogin {
         try {
             ChatManager.closeCommunication();
             fagiApp.stop();
-        } catch (Exception e) {
-            System.err.println(e.toString());
+        } catch (Exception ex) {
+            System.err.println(ex.toString());
         }
     }
 
     /**
-     * Assigns the Enter button as a shortcut for the next method in the controller
+     * Assigns the Enter button as a shortcut for the next method in the controller.
+     *
      * @param node Node works as a placeholder for the eventlistener
      */
     public void initialize(Node node) {
         node.setOnKeyPressed(event -> {
-            if ( event.getCode() == KeyCode.ENTER ) {
+            if (event.getCode() == KeyCode.ENTER) {
                 controller.next();
             }
         });
@@ -131,9 +130,29 @@ public class MasterLogin {
         showScreen(state);
     }
 
+    /**
+     * Undoes the the next action unless you are at the login screen where it is not possible
+     * to go further back.
+     */
+    public void back() {
+        switch (state) {
+            case LOGIN:
+                break;
+            case USERNAME:
+                state = LoginState.LOGIN;
+                break;
+            case PASSWORD:
+                state = LoginState.USERNAME;
+                break;
+            default:
+                System.out.println(state + " is not known");
+                throw new NotImplementedException();
+        }
+    }
+
     private void showScreen(LoginState screen) {
         StringBuilder resourcePath = new StringBuilder();
-        if ( !setupController(screen, resourcePath) ) {
+        if (!setupController(screen, resourcePath)) {
             return;
         }
         loader = new FXMLLoader(getClass().getResource(resourcePath.toString()));
@@ -141,8 +160,8 @@ public class MasterLogin {
 
         try {
             scene.setRoot(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
         controller.setMessage(messageLabel);
     }

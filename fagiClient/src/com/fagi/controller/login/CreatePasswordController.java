@@ -27,19 +27,24 @@ public class CreatePasswordController implements LoginController {
 
     @Override
     public void next() {
-        if ( !password.getText().equals(passwordRepeat.getText()) ) {
+        if (!password.getText().equals(passwordRepeat.getText())) {
             messageLabel.setText("Passwords does not match");
             return;
         }
         masterLogin.setPassword(password.getText());
-        if ( createUser() ) {
+        if (createUser()) {
             masterLogin.next();
         }
     }
 
+    @Override
+    public void back() {
+        masterLogin.back();
+    }
+
     private boolean createUser() {
         return ChatManager.handleCreateUser(masterLogin.getUsername(), password.getText(),
-                                          passwordRepeat.getText(), messageLabel);
+                                            passwordRepeat.getText(), messageLabel);
     }
 
     @Override

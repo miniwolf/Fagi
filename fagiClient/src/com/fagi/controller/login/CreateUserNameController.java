@@ -46,7 +46,7 @@ public class CreateUserNameController implements LoginController {
 
     @Override
     public void next() {
-        if ( "".equals(username.getText()) ) {
+        if ("".equals(username.getText())) {
             messageLabel.setText("Username cannot be empty");
             return;
         }
@@ -54,14 +54,19 @@ public class CreateUserNameController implements LoginController {
         boolean available = ChatManager.checkIfUserNameIsAvailable(username.getText());
         boolean valid = ChatManager.isValidUserName(username.getText());
 
-        if ( available && valid ) {
+        if (available && valid) {
             masterLogin.setUsername(username.getText());
             masterLogin.next();
-        } else if ( !valid ) {
+        } else if (!valid) {
             messageLabel.setText("Username may not contain special symbols");
         } else {
             messageLabel.setText("Username is not available");
         }
+    }
+
+    @Override
+    public void back() {
+        masterLogin.back();
     }
 
     @Override

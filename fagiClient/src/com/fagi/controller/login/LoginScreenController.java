@@ -43,7 +43,7 @@ public class LoginScreenController implements LoginController {
 
     private void assignToLogin(Node node) {
         node.setOnKeyPressed(event -> {
-            if ( event.getCode() == KeyCode.ENTER ) {
+            if (event.getCode() == KeyCode.ENTER) {
                 handleLogin();
             }
         });
@@ -62,6 +62,11 @@ public class LoginScreenController implements LoginController {
     @Override
     public void next() {
         masterLogin.next();
+    }
+
+    @Override
+    public void back() {
+        masterLogin.back();
     }
 
     @Override

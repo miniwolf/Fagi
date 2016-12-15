@@ -50,7 +50,7 @@ public class OpenDefault extends Application {
     }
 
     public void showMainScreen() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/ReceivedInvitation.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/login/createPassword.fxml"));
         try {
             scene.setRoot(loader.load());
         } catch (IOException e) {
