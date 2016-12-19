@@ -13,23 +13,23 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane layoutX="573" layoutY="89" styleClass="message" fx:id="body"
-            stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.60"
-            xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="body" layoutX="573.0" layoutY="89.0" styleClass="message"
+            stylesheets="@../../style/conversation.css"
+            xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <VBox>
             <HBox alignment="CENTER_LEFT" styleClass="message-title">
                 <Pane>
-                    <Pane layoutY="12.0" styleClass="picture" />
+                    <Pane layoutY="12.0" styleClass="picture"/>
                 </Pane>
                 <VBox styleClass="middle-holder" HBox.hgrow="ALWAYS">
-                    <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS" />
-                    <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER" />
+                    <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS"/>
+                    <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER"/>
                 </VBox>
                 <HBox styleClass="icon">
-                    <Button styleClass="minimize" />
-                    <Button styleClass="popout" />
-                    <Button styleClass="close" onAction="#closeConversation" />
+                    <Button styleClass="minimize"/>
+                    <Button styleClass="popout"/>
+                    <Button styleClass="close" onAction="#closeConversation"/>
                 </HBox>
             </HBox>
         </VBox>
@@ -37,21 +37,23 @@
     <center>
         <BorderPane styleClass="message-holder">
             <bottom>
-                <ScrollPane fx:id="scroller" hbarPolicy="NEVER" styleClass="message-holder, message-scroller" vvalue="1.0">
-                    <VBox fx:id="chat" />
+                <ScrollPane fx:id="scroller" hbarPolicy="NEVER"
+                            styleClass="message-holder, message-scroller" vvalue="1.0">
+                    <VBox fx:id="chat"/>
                 </ScrollPane>
             </bottom>
             <top>
                 <HBox styleClass="chatmenu" BorderPane.alignment="CENTER">
                     <HBox HBox.hgrow="ALWAYS">
                         <Pane styleClass="addpeople-holder">
-                            <Button layoutX="-1.0" layoutY="-1.0" mnemonicParsing="false" styleClass="addpeoplebutton" />
+                            <Button layoutX="4.0" layoutY="-1.0" mnemonicParsing="false"
+                                    styleClass="addpeoplebutton"/>
                         </Pane>
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" visible="false">
                         <Pane styleClass="chatsettings-holder">
-                            <Pane styleClass="settings-filler" />
-                            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="settingsbutton" />
+                            <Pane styleClass="settings-filler"/>
+                            <Pane styleClass="settingsbutton"/>
                         </Pane>
                     </HBox>
                 </HBox>
@@ -60,9 +62,10 @@
     </center>
     <bottom>
         <Pane minWidth="-Infinity" prefWidth="400.0" styleClass="outline, field">
-            <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" />
+            <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley"/>
             <Pane layoutX="28.0" styleClass="area">
-                <TextArea fx:id="message" layoutY="1.0" promptText="Send a message" styleClass="text, persistent-prompt" />
+                <TextArea fx:id="message" layoutY="1.0" promptText="Send a message"
+                          styleClass="text, persistent-prompt"/>
             </Pane>
         </Pane>
     </bottom>

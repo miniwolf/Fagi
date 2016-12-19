@@ -19,9 +19,9 @@ import javafx.scene.input.MouseEvent;
  * @author miniwolf
  */
 public class CreateUserNameController implements LoginController {
-    @FXML Label messageLabel;
-    @FXML TextField username;
-    @FXML Button loginBtn;
+    @FXML private Label messageLabel;
+    @FXML private TextField username;
+    @FXML private Button loginBtn;
     private MasterLogin masterLogin;
 
     public CreateUserNameController(MasterLogin masterLogin) {
@@ -29,7 +29,8 @@ public class CreateUserNameController implements LoginController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
+        username.setText(masterLogin.getUsername());
         masterLogin.initialize(username);
         Platform.runLater(() -> username.getParent().requestFocus());
     }

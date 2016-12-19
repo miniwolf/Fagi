@@ -6,8 +6,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<Pane fx:id="body" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
-      styleClass="maincontent"
+
+<Pane fx:id="body" onMouseDragged="#mouseDragged"
+      onMousePressed="#mousePressed" styleClass="maincontent"
       stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane layoutX="32.0" layoutY="14.0" styleClass="menubar">
@@ -34,6 +35,6 @@
             styleClass="rc-button-red, rc-button">
         <graphic>
             <Label styleClass="text" text="X"/>
-        </graphic>
+      </graphic>
     </Button>
 </Pane>

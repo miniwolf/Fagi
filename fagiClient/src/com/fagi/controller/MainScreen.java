@@ -130,7 +130,7 @@ public class MainScreen {
     void initialize() {
         currentPane = messages;
         currentPaneContent = PaneContent.Messages;
-        changeMenuStyle(PaneContent.Contacts.toString());
+        changeMenuStyle(PaneContent.Messages.toString());
         search = new Search(searchBox, searchHeader, this);
     }
 

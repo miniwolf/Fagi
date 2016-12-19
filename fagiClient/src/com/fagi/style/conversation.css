@@ -3,7 +3,7 @@
  */
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'rb';
   src: url('Roboto-Regular.ttf');
 }
 
@@ -13,7 +13,7 @@
   -fx-border-color: transparent;
   -fx-padding: 0;
   -fx-background-color: transparent;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .message {
@@ -30,7 +30,7 @@
   -fx-background-radius: 3px 3px 0px 0px;
   -fx-cursor: hand;
   -fx-background-color: #404040;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .message-title .FN {
@@ -109,7 +109,7 @@
   -fx-padding: 2px 0 2px 6px;
   -fx-wrap-text:true;
   -fx-background-color:#FFF;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .field .text .content {
@@ -177,7 +177,7 @@
 }
 
 .toggle-message {
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
   -fx-font-size: 13px;
 }
 
@@ -240,7 +240,7 @@
 .message .text {
   -fx-wrap-text:true;
   -fx-pref-width:350px;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .holder {

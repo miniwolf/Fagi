@@ -2,7 +2,7 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'rb';
   src: url('Roboto-Regular.ttf');
 }
 
@@ -75,7 +75,7 @@
 
 .tHugsd .text {
   -fx-wrap-text:true;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
   -fx-font-size:13px;
   -fx-text-fill: #445a64;
 }

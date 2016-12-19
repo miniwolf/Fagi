@@ -1,8 +1,13 @@
 /*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
+@font-face {
+  font-family: 'rb';
+  src: url('Roboto-Regular.ttf');
+}
+
 .item-holder {
-  -fx-font-family:'Roboto', 'Arial', sans-serif;
+  -fx-font-family:'rb';
   -fx-cursor:default;
   -fx-text-alignment:left;
   -fx-background-color:#FFF;

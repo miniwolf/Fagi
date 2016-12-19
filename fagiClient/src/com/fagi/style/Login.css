@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'rb';
+  src: url('Roboto-Regular.ttf');
+}
+
 .persistent-prompt:focused {
   -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
 }
@@ -26,7 +31,6 @@ input[type=submit] {
 .a:visited {
   -fx-pref-height:21px;
   -fx-text-fill: #427fed;
-  -fx-cursor:null;
 
 }
 .a:hover {

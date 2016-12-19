@@ -1,6 +1,10 @@
 /*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
+@font-face {
+  font-family: 'rb';
+  src: url('Roboto-Regular.ttf');
+}
 
 .title {
   -fx-background-color: #fff;
@@ -13,7 +17,7 @@
 }
 
 .title .text {
-  -fx-font-family:'Roboto, Arial, sans-serif';
+  -fx-font-family:'rb';
   -fx-fill:#737373;
   -fx-font-size:14px;
   -fx-font-weight:normal;
@@ -49,7 +53,7 @@
 }
 
 .name-holder .text {
-  -fx-font-family:'Roboto';
+  -fx-font-family:'rb';
   -fx-text-fill:#404040;
   -fx-font-size: 14px;
   -fx-text-overrun: ellipsis;

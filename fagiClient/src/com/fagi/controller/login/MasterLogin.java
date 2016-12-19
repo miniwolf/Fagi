@@ -148,6 +148,7 @@ public class MasterLogin {
                 System.out.println(state + " is not known");
                 throw new NotImplementedException();
         }
+        showScreen(state);
     }
 
     private void showScreen(LoginState screen) {
