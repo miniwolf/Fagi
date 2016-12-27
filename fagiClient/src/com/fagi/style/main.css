@@ -43,7 +43,7 @@
 }
 
 .chosen {
-  -fx-background-color:#0f9d58;
+  -fx-background-color:#0f9d58 !important;
 }
 
 

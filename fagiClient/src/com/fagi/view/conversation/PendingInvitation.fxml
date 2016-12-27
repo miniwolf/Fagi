@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="body" layoutX="573.0" layoutY="89.0" styleClass="message" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <VBox>
+         <children>
+            <HBox alignment="CENTER_LEFT" styleClass="message-title">
+               <children>
+                  <Pane styleClass="FN">
+                     <children>
+                        <Pane layoutY="12.0" styleClass="picture" />
+                     </children>
+                  </Pane>
+                  <VBox alignment="CENTER_LEFT" styleClass="middle-holder">
+                     <children>
+                        <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <HBox styleClass="icon">
+                     <children>
+                        <Button styleClass="minimize" />
+                        <Button styleClass="popout" />
+                        <Button onAction="#close" styleClass="close" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <BorderPane styleClass="message-holder">
+         <top>
+            <HBox styleClass="chatmenu" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER_RIGHT">
+                     <children>
+                        <Pane styleClass="chatsettings-holder" visible="false">
+                           <children>
+                              <Pane styleClass="settings-filler" />
+                              <Pane styleClass="settingsbutton" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <VBox alignment="TOP_CENTER" fillWidth="false" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="8.0" left="14.0" right="14.0" top="8.0" />
+               </BorderPane.margin>
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" styleClass="ebeE0d">
+                     <children>
+                        <Pane layoutX="18.0" layoutY="18.0" prefHeight="200.0" prefWidth="200.0" styleClass="wWim8b" />
+                     </children>
+                  </Pane>
+                  <Label fx:id="header" styleClass="mopgBe" text="Invitation pending" />
+                  <Label fx:id="description" prefHeight="40.0" styleClass="tHugsd" text="You'll be able to chat with $ once your invitation has been accepted." wrapText="true" />
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </center>
+   <stylesheets>
+      <URL value="@../../style/main.css" />
+      <URL value="@../../style/conversation.css" />
+      <URL value="@../../style/invitation.css" />
+   </stylesheets>
+</BorderPane>
