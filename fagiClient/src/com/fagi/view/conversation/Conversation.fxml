@@ -19,7 +19,7 @@
     <top>
         <VBox>
             <HBox alignment="CENTER_LEFT" styleClass="message-title">
-                <Pane>
+                <Pane styleClass="FN">
                     <Pane layoutY="12.0" styleClass="picture"/>
                 </Pane>
                 <VBox styleClass="middle-holder" HBox.hgrow="ALWAYS">

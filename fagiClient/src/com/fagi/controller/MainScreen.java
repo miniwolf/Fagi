@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -47,6 +48,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -60,6 +62,11 @@ public class MainScreen {
     @FXML private ScrollPane listContent;
     @FXML private Pane searchHeader;
     @FXML private TextField searchBox;
+    @FXML private Pane dropdown;
+    @FXML private Polygon dropdownExtra;
+
+    private Parent emptyFocusElement;
+    private boolean signOut;
 
     public enum PaneContent {
         Contacts, Messages
@@ -104,6 +111,9 @@ public class MainScreen {
         listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;
         this.friendMapWrapper = new FriendMapWrapper(this);
+        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                                     event -> System.out.println("mouse click detected: "
+                                                                 + event.getTarget()));
     }
 
     /**
@@ -132,6 +142,11 @@ public class MainScreen {
         currentPaneContent = PaneContent.Messages;
         changeMenuStyle(PaneContent.Messages.toString());
         search = new Search(searchBox, searchHeader, this);
+        emptyFocusElement = messages;
+        Platform.runLater(() -> {
+            search.stopSearching();
+            changeMenuStyle(PaneContent.Messages.toString());
+        });
     }
 
     @FXML
@@ -142,6 +157,13 @@ public class MainScreen {
     @FXML
     void talkButtonClicked() {
 
+    }
+
+    @FXML
+    private void toggleSignOut() {
+        signOut = !signOut;
+        dropdown.setVisible(signOut);
+        dropdownExtra.setVisible(signOut);
     }
 
     @FXML
@@ -209,17 +231,17 @@ public class MainScreen {
             case "Contacts":
                 currentPaneContent = PaneContent.Contacts;
                 currentPane = contacts;
-                listContent.setContent(listContentMap.get(PaneContent.Contacts));
                 break;
             case "Messages":
                 currentPaneContent = PaneContent.Messages;
                 currentPane = messages;
-                listContent.setContent(listContentMap.get(PaneContent.Messages));
                 break;
             default:
                 System.err.println("Mainscreen, changeMenuStyle: " + menu);
                 throw new NotImplementedException();
         }
+
+        listContent.setContent(listContentMap.get(currentPaneContent));
         currentPane.getStyleClass().removeAll("button-shape");
         currentPane.getStyleClass().add("chosen");
     }
@@ -342,6 +364,7 @@ public class MainScreen {
 
     public void removeElement(Node node) {
         body.getChildren().remove(node);
+        emptyFocusElement.requestFocus();
     }
 
     public void setConversationController(ConversationController conversationController) {

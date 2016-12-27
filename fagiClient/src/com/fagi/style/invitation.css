@@ -26,6 +26,14 @@
   -fx-pref-width: 24px;
 }
 
+.wWim8b {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -217px -156px;
+  -fx-pref-height: 32px;
+  -fx-pref-width: 32px;
+}
+
 .mopgBe {
   -fx-padding: 10px 0;
 }

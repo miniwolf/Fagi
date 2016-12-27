@@ -3,12 +3,12 @@
  */
 /* latin */
 @font-face {
-  font-family: 'rb';
+  font-family: 'Roboto';
   src: url('Roboto-Regular.ttf');
 }
 
 .contact {
-  -fx-font-family: 'rb';
+  -fx-font-family: 'Roboto';
   -fx-pref-height: 72px;
   -fx-text-alignment:left;
   -fx-background-color:#fff;

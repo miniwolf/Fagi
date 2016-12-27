@@ -25,10 +25,12 @@ import javafx.scene.layout.VBox;
 public class CreateSearchList implements Action {
     private MainScreen mainScreen;
     private List<String> usernames;
+    private boolean isFriends;
 
-    public CreateSearchList(MainScreen mainScreen, List<String> usernames) {
+    public CreateSearchList(MainScreen mainScreen, List<String> usernames, boolean isFriends) {
         this.mainScreen = mainScreen;
         this.usernames = usernames;
+        this.isFriends = isFriends;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class CreateSearchList implements Action {
         }
 
         usernames.forEach(username -> {
-            SearchContactController controller = new SearchContactController(false, mainScreen);
+            SearchContactController controller = new SearchContactController(isFriends, mainScreen);
             FXMLLoader loader = new FXMLLoader(
                 mainScreen.getClass().getResource("/com/fagi/view/content/SearchContact.fxml"));
             loader.setController(controller);

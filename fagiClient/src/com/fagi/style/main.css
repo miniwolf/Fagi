@@ -29,7 +29,6 @@
 
 .button {
   -fx-text-alignment:center;
-  -fx-pref-width: 48px;
   -fx-border-width: 0px;
   -fx-border-style: solid;
   -fx-border-color: transparent;
@@ -47,22 +46,6 @@
   -fx-background-color:#0f9d58;
 }
 
-.button-shape {
-  -fx-background-color:#FFF;
-  -fx-cursor: hand;
-}
-
-.message-button {
-  -fx-pref-height:20px;
-  -fx-pref-width:20px;
-  -fx-shape: 'M 20 2 H 4 c -1.1 0 -1.99 0.9 -1.99 2 L 2 22 l 4 -4 h 14 c 1.1 0 2 -0.9 2 -2 V 4 c 0 -1.1 -0.9 -2 -2 -2 Z M 6 9 h 12 v 2 H 6 V 9 Z m 8 5 H 6 v -2 h 8 v 2 Z m 4 -6 H 6 V 6 h 12 v 2 Z';
-}
-
-.contact-button {
-  -fx-pref-width:22px;
-  -fx-pref-height:14px;
-  -fx-shape:'M 16 11 c 1.66 0 2.99 -1.34 2.99 -3 S 17.66 5 16 5 c -1.66 0 -3 1.34 -3 3 s 1.34 3 3 3 Z m -8 0 c 1.66 0 2.99 -1.34 2.99 -3 S 9.66 5 8 5 C 6.34 5 5 6.34 5 8 s 1.34 3 3 3 Z m 0 2 c -2.33 0 -7 1.17 -7 3.5 V 19 h 14 v -2.5 c 0 -2.33 -4.67 -3.5 -7 -3.5 Z m 8 0 c -0.29 0 -0.62 0.02 -0.97 0.05 c 1.16 0.84 1.97 1.97 1.97 3.45 V 19 h 6 v -2.5 c 0 -2.33 -4.67 -3.5 -7 -3.5 Z';
-}
 
 .list {
   -fx-border-width:4px;
@@ -227,7 +210,6 @@
   -fx-border-style: solid;
   -fx-border-color: #dcdcdc;
   -fx-background-color: #f5f5f5 linear-gradient(top,#f5f5f5,#f1f1f1);
-  -fx-cursor: default;
 }
 
 .rc-button:hover {
@@ -297,4 +279,133 @@
   -fx-pref-height: 46px;
   -fx-pref-width: 46px;
   -fx-border-radius: 50%;
+}
+
+.gbii {
+  -fx-background-image: url("material-icons/png/N.png");
+}
+
+.gb_8a {
+  -fx-background-size: 42px 42px;
+  -fx-pref-height: 42px;
+  -fx-pref-width: 42px;
+}
+
+.gb_b {
+  -fx-alignment: center;
+  -fx-border-radius: 2px;
+  -fx-pref-height: 40px;
+  -fx-pref-width: 40px;
+  -fx-cursor: hand;
+}
+
+.gb_Jc {
+  -fx-padding: 0 0 0 15px;
+}
+
+.gb_ib {
+  -fx-pref-height: 60px;
+  -fx-min-width: 135px;
+  -fx-padding: 0 30px;
+}
+
+.gb_Tb {
+  -fx-font-family: 'Roboto';
+  -fx-font-size: 24px;
+  -fx-font-weight: bolder;
+  -fx-alignment: center;
+  -fx-padding: 0 30px;
+  -fx-pref-height: 60px;
+  -fx-max-width: 135px;
+  -fx-min-width: 135px;
+  -fx-text-fill: rgba(255,255,255,0.87);
+}
+
+.pTh3n {
+  -fx-background-color:rgba(255,255,255,0.87);
+  -fx-cursor: hand;
+}
+
+.pTh3n:hover {
+  -fx-cursor: hand;
+}
+
+.menuicon {
+  -fx-max-height:12px;
+  -fx-max-width:18px;
+  -fx-shape: "M3 18h 18v-2H 3v 2z m0-5h 18v-2H 3v 2z m0-7v 2h 18V 6H 3z";
+}
+
+.message-button {
+  -fx-max-height:20px;
+  -fx-max-width:20px;
+  -fx-shape: 'M 20 2 H 4 c -1.1 0 -1.99 0.9 -1.99 2 L 2 22 l 4 -4 h 14 c 1.1 0 2 -0.9 2 -2 V 4 c 0 -1.1 -0.9 -2 -2 -2 Z M 6 9 h 12 v 2 H 6 V 9 Z m 8 5 H 6 v -2 h 8 v 2 Z m 4 -6 H 6 V 6 h 12 v 2 Z';
+}
+
+.contact-button {
+  -fx-max-width:22px;
+  -fx-max-height:14px;
+  -fx-shape:'M 16 11 c 1.66 0 2.99 -1.34 2.99 -3 S 17.66 5 16 5 c -1.66 0 -3 1.34 -3 3 s 1.34 3 3 3 Z m -8 0 c 1.66 0 2.99 -1.34 2.99 -3 S 9.66 5 8 5 C 6.34 5 5 6.34 5 8 s 1.34 3 3 3 Z m 0 2 c -2.33 0 -7 1.17 -7 3.5 V 19 h 14 v -2.5 c 0 -2.33 -4.67 -3.5 -7 -3.5 Z m 8 0 c -0.29 0 -0.62 0.02 -0.97 0.05 c 1.16 0.84 1.97 1.97 1.97 3.45 V 19 h 6 v -2.5 c 0 -2.33 -4.67 -3.5 -7 -3.5 Z';
+}
+
+.mUbCce {
+  -fx-pref-height: 48px;
+  -fx-pref-width: 48px;
+  -fx-alignment: center;
+}
+
+.gb_Fa {
+  -fx-text-fill: #666;
+  -fx-background-color: #f8f8f8;
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #C6C6C6;
+  -fx-padding: 0 12px;
+  -fx-border-radius: 2px;
+  -fx-pref-height: 28px;
+  -fx-cursor: hand;
+}
+
+.gb_ga {
+  -fx-background-color: #fff;
+  -fx-border-width: 1px;
+  -fx-border-style: solid;
+  -fx-border-color: #ccc;
+  -fx-text-fill: #000;
+  -fx-border-radius: 2px;
+}
+
+.gb_sb {
+  -fx-border: none;
+  -fx-alignment:top-center;
+  -fx-pref-height: 96px;
+  -fx-pref-width: 96px;
+}
+
+.gbip {
+  -fx-background-image: url("material-icons/png/N.png");
+  -fx-background-size: 96px 96px;
+}
+
+.gb_ch {
+  -fx-border-color: #fff;
+  -fx-border-radius:25px;
+}
+
+.gb_tb {
+  -fx-background-color: rgba(0,0,0,.54);
+  -fx-text-fill: #fff;
+  -fx-font-size: 9px;
+  -fx-font-weight: bold;
+  -fx-padding: 7px 0;
+  -fx-text-alignment: center;
+  -fx-pref-width: 96px;
+}
+
+.gb_tb:hover {
+  -fx-cursor: hand;
+}
+
+.gb_ub {
+  -fx-font-weight: bold;
 }

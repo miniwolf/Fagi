@@ -23,10 +23,10 @@ import javafx.scene.input.MouseEvent;
  * @author miniwolf
  */
 public class LoginScreenController implements LoginController {
-    @FXML private Label messageLabel;
-    @FXML private TextField username;
-    @FXML private PasswordField password;
-    @FXML private Button loginBtn;
+    @FXML Label messageLabel;
+    @FXML TextField username;
+    @FXML PasswordField password;
+    @FXML Button loginBtn;
     private MasterLogin masterLogin;
 
     public LoginScreenController(MasterLogin masterLogin) {

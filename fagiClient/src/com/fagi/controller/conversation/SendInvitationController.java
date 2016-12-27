@@ -22,6 +22,7 @@ public class SendInvitationController extends ActionableImpl {
     @FXML private TextField message;
     @FXML private Button send;
     @FXML private BorderPane body;
+    @FXML private Label name;
 
     private MainScreen mainScreen;
     private String username;
@@ -39,7 +40,7 @@ public class SendInvitationController extends ActionableImpl {
     public void setUsername(String username) {
         this.username = username;
         header.setText(header.getText().replace("$", username));
-        description.setText(description.getText().replace("$", username));
+        name.setText(username);
     }
 
     @FXML

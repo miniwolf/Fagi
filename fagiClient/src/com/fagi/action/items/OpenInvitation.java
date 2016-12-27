@@ -40,8 +40,8 @@ public class OpenInvitation implements Action {
             BorderPane conversationBox = loader.load();
             controller.setUsername(username.getText());
             mainScreen.addElement(conversationBox);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 }

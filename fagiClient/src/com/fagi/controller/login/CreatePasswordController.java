@@ -25,6 +25,11 @@ public class CreatePasswordController implements LoginController {
         this.masterLogin = masterLogin;
     }
 
+    @FXML
+    private void initialize() {
+        masterLogin.initialize(passwordRepeat);
+    }
+
     @Override
     public void next() {
         if (!password.getText().equals(passwordRepeat.getText())) {

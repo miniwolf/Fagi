@@ -18,7 +18,7 @@ public class SearchHandler implements Handler {
     @Override
     public void handle(InGoingMessages object) {
         SearchUsersResult result = (SearchUsersResult) object;
-        new CreateSearchList(mainScreen, result.getData().getUsernames()).execute();
+        new CreateSearchList(mainScreen, result.getData().getUsernames(), false).execute();
     }
 
     @Override

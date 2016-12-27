@@ -2,15 +2,18 @@ package com.fagi.controller.contentList;
 
 import com.fagi.action.ActionableImpl;
 import com.fagi.model.messages.message.TextMessage;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
+
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+
 
 /**
  * @author miniwolf
@@ -30,9 +33,8 @@ public class MessageItemController extends ActionableImpl {
     }
 
     @FXML
-    public void initialize() {
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+    private void initialize() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (!running) {
@@ -43,8 +45,11 @@ public class MessageItemController extends ActionableImpl {
         }, 0, 1000);
     }
 
-    public void setUsers(List<String> username) {
-        this.usernameLabel.setText(String.join(", ", username));
+    public void setUsers(List<String> usernames) {
+        List<String> meExcludedList = usernames.stream()
+                                               .filter(name -> !name.equals(username))
+                                               .collect(Collectors.toList());
+        this.usernameLabel.setText(String.join(", ", meExcludedList));
     }
 
     public void setDate(Date date) {
@@ -61,19 +66,20 @@ public class MessageItemController extends ActionableImpl {
         long diff = now - then;
 
         long diffDays = diff / (24 * 60 * 60 * 1000);
-        if ( diffDays != 0 ) {
-            SimpleDateFormat format = new SimpleDateFormat(diffDays > 365 ? "MM/dd/yyyy" : diffDays < 7 ? "EEEE" : "MMM d");
+        if (diffDays != 0) {
+            SimpleDateFormat format = new SimpleDateFormat(
+                diffDays > 365 ? "MM/dd/yyyy" : diffDays < 7 ? "EEE" : "MMM d");
             return format.format(date);
         }
 
         long diffHours = diff / (60 * 60 * 1000) % 24;
-        if ( diffHours != 0 ) {
+        if (diffHours != 0) {
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
             return format.format(date);
         }
 
         long diffMinutes = diff / (60 * 1000) % 60;
-        if ( diffMinutes != 0 ) {
+        if (diffMinutes != 0) {
             return Long.toString(diffMinutes) + " min";
         }
         return "now";
