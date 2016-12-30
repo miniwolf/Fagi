@@ -9,13 +9,9 @@ import com.fagi.controller.MainScreen;
 import com.fagi.controller.SearchContactController;
 import com.fagi.controller.contentList.ContentController;
 
-import java.io.IOException;
 import java.util.List;
 
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 /**
  * Creates the element and stores it in the mainscreen's current PaneContent element.
@@ -25,41 +21,25 @@ import javafx.scene.layout.VBox;
 public class CreateSearchList implements Action {
     private MainScreen mainScreen;
     private List<String> usernames;
+    private boolean isFriends;
 
-    public CreateSearchList(MainScreen mainScreen, List<String> usernames) {
+    public CreateSearchList(MainScreen mainScreen, List<String> usernames, boolean isFriends) {
         this.mainScreen = mainScreen;
         this.usernames = usernames;
+        this.isFriends = isFriends;
     }
 
     @Override
     public void execute() {
-        ContentController contentController = new ContentController();
-        FXMLLoader contentLoader = new FXMLLoader(
-            mainScreen.getClass().getResource("/com/fagi/view/content/SearchContent.fxml"));
-        contentLoader.setController(contentController);
-        VBox searchContent;
-        try {
-            searchContent = contentLoader.load();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return;
-        }
+        ContentController contentController =
+            new ContentController("/com/fagi/view/content/SearchContent.fxml");
 
         usernames.forEach(username -> {
-            SearchContactController controller = new SearchContactController(false, mainScreen);
-            FXMLLoader loader = new FXMLLoader(
-                mainScreen.getClass().getResource("/com/fagi/view/content/SearchContact.fxml"));
-            loader.setController(controller);
-            HBox searchContact;
-            try {
-                searchContact = loader.load();
-                controller.setUserName(username);
-                contentController.addToContentList(searchContact);
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
+            SearchContactController controller = new SearchContactController(isFriends, mainScreen);
+            controller.setUserName(username);
+            contentController.addToContentList(controller);
         });
 
-        Platform.runLater(() -> mainScreen.setListContent(searchContent));
+        Platform.runLater(() -> mainScreen.setListContent(contentController));
     }
 }

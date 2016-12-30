@@ -12,15 +12,15 @@ import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 
-import javafx.fxml.FXMLLoader;
+import java.io.IOException;
+
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.IOException;
 
 
 /**
@@ -30,7 +30,6 @@ import java.io.IOException;
  */
 public class MasterLogin {
     private String username;
-    private FXMLLoader loader;
     private LoginController controller;
 
     private String messageLabel;
@@ -40,27 +39,24 @@ public class MasterLogin {
     private final FagiApp fagiApp;
     private final String configFileLocation;
     private final Draggable draggable;
-    private Stage primaryStage;
-    private Scene scene;
+    private final Scene scene;
     private String password;
 
     /**
      * Constructor will create and show the first screen.
      *
-     * @param fagiApp FagiApp used to login
+     * @param fagiApp            FagiApp used to login
      * @param configFileLocation Location for the config file
-     * @param primaryStage Stage to show the scene
-     * @param scene scene to add content
+     * @param primaryStage       Stage to show the scene
+     * @param scene              scene to add content
      */
     public MasterLogin(FagiApp fagiApp, String configFileLocation,
                        Stage primaryStage, Scene scene) {
         this.fagiApp = fagiApp;
         this.configFileLocation = configFileLocation;
         draggable = new Draggable(primaryStage);
-        this.primaryStage = primaryStage;
         this.scene = scene;
 
-        loader = new FXMLLoader(getClass().getResource("/com/fagi/view/Master.fxml"));
         showScreen(state);
         initCommunication();
         primaryStage.sizeToScene();
@@ -81,7 +77,7 @@ public class MasterLogin {
             messageLabel = "Connected to server: " + config.getName();
         } catch (IOException ioe) {
             messageLabel = "Connection refused";
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException cnfe) {
             messageLabel = "Not a valid config file.";
         }
     }
@@ -93,18 +89,19 @@ public class MasterLogin {
         try {
             ChatManager.closeCommunication();
             fagiApp.stop();
-        } catch (Exception e) {
-            System.err.println(e.toString());
+        } catch (Exception ex) {
+            System.err.println(ex.toString());
         }
     }
 
     /**
-     * Assigns the Enter button as a shortcut for the next method in the controller
+     * Assigns the Enter button as a shortcut for the next method in the controller.
+     *
      * @param node Node works as a placeholder for the eventlistener
      */
     public void initialize(Node node) {
         node.setOnKeyPressed(event -> {
-            if ( event.getCode() == KeyCode.ENTER ) {
+            if (event.getCode() == KeyCode.ENTER) {
                 controller.next();
             }
         });
@@ -131,40 +128,57 @@ public class MasterLogin {
         showScreen(state);
     }
 
-    private void showScreen(LoginState screen) {
-        StringBuilder resourcePath = new StringBuilder();
-        if ( !setupController(screen, resourcePath) ) {
-            return;
+    /**
+     * Undoes the the next action unless you are at the login screen where it is not possible
+     * to go further back.
+     */
+    public void back() {
+        switch (state) {
+            case LOGIN:
+                break;
+            case USERNAME:
+                state = LoginState.LOGIN;
+                break;
+            case PASSWORD:
+                state = LoginState.USERNAME;
+                break;
+            default:
+                System.out.println(state + " is not known");
+                throw new NotImplementedException();
         }
-        loader = new FXMLLoader(getClass().getResource(resourcePath.toString()));
-        loader.setController(controller);
+        showScreen(state);
+    }
 
-        try {
-            scene.setRoot(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void showScreen(LoginState screen) {
+        if (!setupController(screen)) {
+            return;
         }
         controller.setMessage(messageLabel);
     }
 
-    private boolean setupController(LoginState screen, StringBuilder resourcePath) {
+    private boolean setupController(LoginState screen) {
+        // TODO: Rewrite this into proper interface usage
+        LoginController controller;
         switch (screen) {
             case LOGIN:
-                resourcePath.append("/com/fagi/view/login/LoginScreen.fxml");
                 controller = new LoginScreenController(this);
                 break;
             case USERNAME:
-                resourcePath.append("/com/fagi/view/login/CreateUserName.fxml");
                 controller = new CreateUserNameController(this);
                 break;
             case PASSWORD:
-                resourcePath.append("/com/fagi/view/login/CreatePassword.fxml");
                 controller = new CreatePasswordController(this);
                 break;
             default:
                 return false;
         }
+        setController((Parent) controller, controller);
         return true;
+    }
+
+    private void setController(Parent pane, LoginController controller) {
+        scene.setRoot(pane);
+        this.controller = controller;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {

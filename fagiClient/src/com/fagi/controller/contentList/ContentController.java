@@ -4,6 +4,7 @@
 
 package com.fagi.controller.contentList;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.model.FriendListItem;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,21 +17,25 @@ import java.util.stream.Collectors;
 /**
  * @author miniwolf
  */
-public class ContentController {
-    @FXML private VBox contentList;
+public class ContentController extends VBox {
+    public ContentController(String resource) {
+        new LoadFXML(this, resource).execute();
+    }
 
     public void addToContentList(Parent parent) {
-        contentList.getChildren().add(parent);
+        getChildren().add(parent);
     }
 
     public void addAllToContentList(List<Parent> parents) {
-        contentList.getChildren().addAll(parents);
+        getChildren().addAll(parents);
     }
 
     public void updateAndRedraw(List<FriendListItem> sortedFriendItems) {
         Platform.runLater(() -> {
-            contentList.getChildren().clear();
-            contentList.getChildren().addAll(sortedFriendItems.stream().map(FriendListItem::getPane).collect(Collectors.toList()));
+            getChildren().clear();
+            getChildren().addAll(sortedFriendItems.stream()
+                                                  .map(FriendListItem::getPane)
+                                                  .collect(Collectors.toList()));
         });
     }
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'rb';
   src: url('Roboto-Regular.ttf');
 }
 
@@ -24,6 +24,14 @@
   -fx-background-position:-128px -95px;
   -fx-pref-height: 24px;
   -fx-pref-width: 24px;
+}
+
+.wWim8b {
+  -fx-background-repeat: no-repeat;
+  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-position: -217px -156px;
+  -fx-pref-height: 32px;
+  -fx-pref-width: 32px;
 }
 
 .mopgBe {
@@ -75,7 +83,7 @@
 
 .tHugsd .text {
   -fx-wrap-text:true;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
   -fx-font-size:13px;
   -fx-text-fill: #445a64;
 }

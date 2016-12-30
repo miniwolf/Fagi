@@ -27,7 +27,6 @@ public class Search {
         this.searchBox = searchBox;
         this.searchHeader = searchHeader;
         this.mainScreen = mainScreen;
-
         initialize();
     }
 
@@ -42,7 +41,6 @@ public class Search {
         if (searchString.isEmpty()) {
             if (searching) {
                 defaultFriendList();
-
             } else {
                 new FriendListHandler(mainScreen).handle(mainScreen.getFriendList());
             }
@@ -56,7 +54,8 @@ public class Search {
     private void defaultFriendList() {
         List<Friend> data = mainScreen.getFriendList().getAccess().getData();
         new CreateSearchList(mainScreen,
-                             data.stream().map(Friend::getUsername).collect(Collectors.toList()))
+                             data.stream().map(Friend::getUsername).collect(Collectors.toList()),
+                             true)
             .execute();
     }
 
@@ -79,9 +78,9 @@ public class Search {
     /**
      * When we are done searching, by clicking the x button or by calling this externally
      * will turn off the styling of the x button and change the menu style to current pane.
-     * TODO: Disable the x button here and enable it when searching is true
      */
     public void stopSearching() {
+        searchBox.setText("");
         searchHeader.getStyleClass().remove("dlrqf");
         mainScreen.changeMenuStyle(mainScreen.getCurrentPaneContent().toString());
     }

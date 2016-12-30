@@ -4,19 +4,21 @@
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<HBox layoutX="10.0" layoutY="10.0" styleClass="holder, me" stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="HBox" layoutX="10.0" layoutY="10.0" styleClass="holder, me"
+      stylesheets="@../../style/conversation.css" xmlns="http://javafx.com/javafx/8.0.111"
+      xmlns:fx="http://javafx.com/fxml/1">
     <Pane HBox.hgrow="ALWAYS" />
-    <Label fx:id="message" styleClass="text-message" wrapText="true" />
+    <TextField fx:id="message" editable="false" styleClass="text-message" />
     <Pane maxHeight="-Infinity" styleClass="tip">
         <Circle centerX="7.0" centerY="8.0" fill="TRANSPARENT" radius="8.0" stroke="#cfd8dc" strokeType="OUTSIDE" strokeWidth="8.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eceff1" height="8.0" layoutX="-8.0" layoutY="-8.0" stroke="TRANSPARENT" strokeType="OUTSIDE" strokeWidth="8.0" width="30.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eceff1" height="19.0" layoutY="6.0" stroke="TRANSPARENT" strokeType="OUTSIDE" strokeWidth="8.0" width="20.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eceff1" height="30.0" layoutX="8.0" layoutY="-5.0" stroke="TRANSPARENT" strokeType="OUTSIDE" strokeWidth="8.0" width="12.0" />
     </Pane>
-</HBox>
+</fx:root>

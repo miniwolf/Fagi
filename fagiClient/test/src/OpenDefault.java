@@ -3,6 +3,9 @@
  */
 
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.contentList.MessageItemController;
+import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationType;
 import com.fagi.network.Communication;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sun.plugin2.message.Message;
 
 import java.io.IOException;
 
@@ -50,13 +54,8 @@ public class OpenDefault extends Application {
     }
 
     public void showMainScreen() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/ReceivedInvitation.fxml"));
-        try {
-            scene.setRoot(loader.load());
-        } catch (IOException e) {
-            System.err.println(e.toString());
-            return;
-        }
+        MessageItemController controller = new MessageItemController("", "/com/fagi/view/content/Conversation.fxml", new Conversation(0, "", ConversationType.Single));
+        scene.setRoot(controller);
         primaryStage.sizeToScene();
     }
 }

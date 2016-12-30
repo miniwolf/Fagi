@@ -3,7 +3,7 @@
  */
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'rb';
   src: url('Roboto-Regular.ttf');
 }
 
@@ -13,7 +13,7 @@
   -fx-border-color: transparent;
   -fx-padding: 0;
   -fx-background-color: transparent;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .message {
@@ -30,7 +30,7 @@
   -fx-background-radius: 3px 3px 0px 0px;
   -fx-cursor: hand;
   -fx-background-color: #404040;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .message-title .FN {
@@ -109,7 +109,7 @@
   -fx-padding: 2px 0 2px 6px;
   -fx-wrap-text:true;
   -fx-background-color:#FFF;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .field .text .content {
@@ -177,7 +177,7 @@
 }
 
 .toggle-message {
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
   -fx-font-size: 13px;
 }
 
@@ -240,7 +240,7 @@
 .message .text {
   -fx-wrap-text:true;
   -fx-pref-width:350px;
-  -fx-font-family: 'Roboto';
+  -fx-font-family: 'rb';
 }
 
 .holder {
@@ -317,13 +317,27 @@
 }
 
 .their .text-message {
-  -fx-background-color:#FFF;
   -fx-background-radius:0 5px 5px 5px;
 }
 
 .me .text-message {
-  -fx-background-color: #cfd8dc;
   -fx-background-radius:5px 0 5px 5px;
+}
+
+.their .text-message,
+.their .text-message .scroll-pane .viewport .content {
+  -fx-background-color: #FFF;
+}
+
+.text-message .scroll-pane .scroll-bar * {
+  -fx-background-color: #cfd8dc;
+  -fx-opacity: 0;
+  -fx-max-width: 0;
+}
+
+.me .text-message,
+.me .text-message .scroll-pane .viewport .content {
+  -fx-background-color: #cfd8dc;
 }
 
 .uiguide {

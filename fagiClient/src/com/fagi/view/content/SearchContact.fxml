@@ -12,28 +12,30 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<HBox styleClass="search-item" stylesheets="@../../style/searchlist.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="HBox" styleClass="search-item" stylesheets="@../../style/searchlist.css"
+         xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane styleClass="clicker-holder">
         <HBox.margin>
-            <Insets bottom="8.0" right="16.0" top="8.0" />
+            <Insets bottom="8.0" right="16.0" top="8.0"/>
         </HBox.margin>
-        <Pane layoutX="16.0" layoutY="12.0" styleClass="clicker" />
+        <Pane layoutX="16.0" layoutY="12.0" styleClass="clicker"/>
     </Pane>
     <Pane styleClass="picture-holder" onMouseClicked="#openConversation">
         <HBox.margin>
-            <Insets bottom="8.0" right="16.0" top="8.0" />
+            <Insets bottom="8.0" right="16.0" top="8.0"/>
         </HBox.margin>
         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
             <viewport>
-                <Rectangle2D />
+                <Rectangle2D/>
             </viewport>
-            <Image url="https://lh3.googleusercontent.com/-vulNIfi6UUM/AAAAAAAAAAI/AAAAAAAAAHY/kMOt0UOZyn8/s36-c-k-no/photo.jpg" />
+            <Image url="https://lh3.googleusercontent.com/-vulNIfi6UUM/AAAAAAAAAAI/AAAAAAAAAHY/kMOt0UOZyn8/s36-c-k-no/photo.jpg"/>
         </ImageView>
     </Pane>
-    <Pane layoutY="18.0" maxHeight="-Infinity" styleClass="name-holder" onMouseClicked="#openConversation">
+    <Pane layoutY="18.0" maxHeight="-Infinity" styleClass="name-holder"
+          onMouseClicked="#openConversation">
         <HBox.margin>
-            <Insets top="18.0" />
+            <Insets top="18.0"/>
         </HBox.margin>
-        <Label fx:id="userName" styleClass="text" text="Marcus Haagh" />
+        <Label fx:id="userName" styleClass="text" text="Marcus Haagh"/>
     </Pane>
-</HBox>
+</fx:root>

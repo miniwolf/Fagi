@@ -7,6 +7,7 @@
 
 package com.fagi.controller;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.action.items.OpenConversationFromID;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.contentList.MessageItemController;
@@ -22,7 +23,6 @@ import com.fagi.model.conversation.GetConversationsRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.lists.FriendRequestList;
-import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.handlers.GeneralHandler;
@@ -30,7 +30,6 @@ import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,33 +38,39 @@ import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * TODO: Write description.
  */
-public class MainScreen {
-    @FXML private Pane body;
+public class MainScreen extends Pane {
     @FXML private Pane messages;
     @FXML private Pane contacts;
     @FXML private ScrollPane listContent;
     @FXML private Pane searchHeader;
     @FXML private TextField searchBox;
+    @FXML private Pane dropdown;
+    @FXML private Polygon dropdownExtra;
+    @FXML private Label username;
+
+    private Parent emptyFocusElement;
+    private boolean signOut;
 
     public enum PaneContent {
         Contacts, Messages
     }
 
-    private List<MessageItemController> messageItemControllers = new ArrayList<>();
+    private List<MessageItemController> messageItems = new ArrayList<>();
     private ContentController conversationContentController;
     private FriendRequestList friendRequestList;
     private FriendMapWrapper friendMapWrapper;
@@ -76,7 +81,7 @@ public class MainScreen {
     private Map<PaneContent, Parent> listContentMap;
     private PaneContent currentPaneContent;
 
-    private final String username;
+    private final String usernameString;
     private final Communication communication;
     private List<Conversation> conversations;
     private Stage primaryStage;
@@ -93,24 +98,28 @@ public class MainScreen {
     /**
      * Creates new form ContactScreen.
      *
-     * @param username      which is used all around the class for knowing who the user is
-     * @param communication granted by the LoginScreen class
-     * @param primaryStage  primary stage used to create a draggable.
+     * @param usernameString which is used all around the class for knowing who the user is
+     * @param communication  granted by the LoginScreen class
+     * @param primaryStage   primary stage used to create a draggable.
      */
-    public MainScreen(String username, Communication communication, Stage primaryStage) {
-        this.username = username;
+    public MainScreen(String usernameString, Communication communication, Stage primaryStage) {
+        this.usernameString = usernameString;
         this.communication = communication;
         this.draggable = new Draggable(primaryStage);
         listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;
         this.friendMapWrapper = new FriendMapWrapper(this);
+        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                                     event -> System.out.println("mouse click detected: "
+                                                                 + event.getTarget()));
+        new LoadFXML(this, "/com/fagi/view/Main.fxml").execute();
     }
 
     /**
      * Initiate all communication and handlers needed to contact the server.
      */
     public void initCommunication() {
-        conversations = JsonFileOperations.loadAllClientConversations(username);
+        conversations = JsonFileOperations.loadAllClientConversations(usernameString);
         setupConversationList();
         setupFriendList();
         setupContactList();
@@ -127,25 +136,34 @@ public class MainScreen {
     }
 
     @FXML
-    void initialize() {
+    private void initialize() {
         currentPane = messages;
         currentPaneContent = PaneContent.Messages;
-        changeMenuStyle(PaneContent.Contacts.toString());
+        changeMenuStyle(PaneContent.Messages.toString());
         search = new Search(searchBox, searchHeader, this);
+        emptyFocusElement = messages;
+        username.setText(usernameString);
     }
 
     @FXML
-    void stopSearching() {
+    private void stopSearching() {
         search.stopSearching();
     }
 
     @FXML
-    void talkButtonClicked() {
+    private void talkButtonClicked() {
 
     }
 
     @FXML
-    void logoutRequest() {
+    private void toggleSignOut() {
+        signOut = !signOut;
+        dropdown.setVisible(signOut);
+        dropdownExtra.setVisible(signOut);
+    }
+
+    @FXML
+    private void logoutRequest() {
         interrupt(messageThread);
         //interrupt(voiceThread);
         generalHandler.stop();
@@ -153,7 +171,7 @@ public class MainScreen {
 
         ChatManager.handleLogout(new Logout());
 
-        for (MessageItemController controller : this.messageItemControllers) {
+        for (MessageItemController controller : this.messageItems) {
             controller.stopTimer();
         }
     }
@@ -194,11 +212,11 @@ public class MainScreen {
     }
 
     @FXML
-    void changeMenu(MouseEvent event) {
+    private void changeMenu(MouseEvent event) {
         Node node = (Node) event.getSource();
         changeMenuStyle((String) node.getUserData());
         search.stopSearching();
-        body.requestFocus();
+        requestFocus();
     }
 
     public void changeMenuStyle(String menu) {
@@ -209,17 +227,17 @@ public class MainScreen {
             case "Contacts":
                 currentPaneContent = PaneContent.Contacts;
                 currentPane = contacts;
-                listContent.setContent(listContentMap.get(PaneContent.Contacts));
                 break;
             case "Messages":
                 currentPaneContent = PaneContent.Messages;
                 currentPane = messages;
-                listContent.setContent(listContentMap.get(PaneContent.Messages));
                 break;
             default:
                 System.err.println("Mainscreen, changeMenuStyle: " + menu);
                 throw new NotImplementedException();
         }
+
+        listContent.setContent(listContentMap.get(currentPaneContent));
         currentPane.getStyleClass().removeAll("button-shape");
         currentPane.getStyleClass().add("chosen");
     }
@@ -234,8 +252,8 @@ public class MainScreen {
         Platform.runLater(() -> conversationContentController.addToContentList(pane));
     }
 
-    public List<MessageItemController> getMessageItemControllers() {
-        return messageItemControllers;
+    public List<MessageItemController> getMessageItems() {
+        return messageItems;
     }
 
     public Communication getCommunication() {
@@ -247,7 +265,7 @@ public class MainScreen {
     }
 
     public String getUsername() {
-        return username;
+        return usernameString;
     }
 
     public Conversation getCurrentConversation() {
@@ -271,37 +289,23 @@ public class MainScreen {
             x -> new ConversationFilter(x.getId(), x.getLastMessageDate()))
                                                         .collect(Collectors.toList());
 
-        communication.sendObject(new GetConversationsRequest(username, filters));
+        communication.sendObject(new GetConversationsRequest(usernameString, filters));
     }
 
     private void setupFriendList() {
-        communication.sendObject(new GetFriendListRequest(username));
+        communication.sendObject(new GetFriendListRequest(usernameString));
     }
 
     private void setupContactList() {
-        ContentController contactContentController = new ContentController();
-        FXMLLoader contentLoader =
-            new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
-        contentLoader.setController(contactContentController);
-        try {
-            VBox contactContent = contentLoader.load();
-            setScrollPaneContent(PaneContent.Contacts, contactContent);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        ContentController contactContentController =
+            new ContentController("/com/fagi/view/content/ContentList.fxml");
+        setScrollPaneContent(PaneContent.Contacts, contactContentController);
     }
 
     private void setupConversationList() {
-        conversationContentController = new ContentController();
-        FXMLLoader contentLoader =
-            new FXMLLoader(getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
-        contentLoader.setController(conversationContentController);
-        try {
-            VBox messagesContent = contentLoader.load();
-            setScrollPaneContent(PaneContent.Messages, messagesContent);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        conversationContentController =
+            new ContentController("/com/fagi/view/content/ContentList.fxml");
+        setScrollPaneContent(PaneContent.Messages, conversationContentController);
 
         for (Conversation conversation : conversations) {
             conversationContentController.addToContentList(createMessageItem(conversation));
@@ -310,26 +314,12 @@ public class MainScreen {
 
     public Pane createMessageItem(Conversation conversation) {
         MessageItemController messageItemController =
-            new MessageItemController(username, conversation.getId());
-        messageItemControllers.add(messageItemController);
-        messageItemController.assign(new OpenConversationFromID(this, conversation.getId()));
-
-        FXMLLoader loader =
-            new FXMLLoader(getClass().getResource("/com/fagi/view/content/Conversation.fxml"));
-        loader.setController(messageItemController);
-        Pane pane = null;
-        try {
-            pane = loader.load();
-
-            messageItemController.setUsers(conversation.getParticipants());
-            if (conversation.getLastMessage() != null) {
-                messageItemController.setLastMessage(conversation.getLastMessage());
-                messageItemController.setDate(conversation.getLastMessageDate());
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        return pane;
+            new MessageItemController(usernameString, "/com/fagi/view/content/Conversation.fxml",
+                                      conversation);
+        messageItemController.getActionable()
+                             .assign(new OpenConversationFromID(this, conversation.getId()));
+        messageItems.add(messageItemController);
+        return messageItemController;
     }
 
     public ContentController getConversationContentController() {
@@ -337,11 +327,12 @@ public class MainScreen {
     }
 
     public void addElement(Node node) {
-        body.getChildren().add(node);
+        getChildren().add(node);
     }
 
     public void removeElement(Node node) {
-        body.getChildren().remove(node);
+        getChildren().remove(node);
+        emptyFocusElement.requestFocus();
     }
 
     public void setConversationController(ConversationController conversationController) {

@@ -1,9 +1,14 @@
 /*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
+/* latin */
+@font-face {
+  font-family: 'Roboto';
+  src: url('Roboto-Regular.ttf');
+}
 
 .contact {
-  -fx-font-family: 'Roboto','Arial',sans-serif;
+  -fx-font-family: 'Roboto';
   -fx-pref-height: 72px;
   -fx-text-alignment:left;
   -fx-background-color:#fff;
@@ -15,14 +20,21 @@
   -fx-background-color: #f5f5f5;
 }
 
+.contact:hover .circleHack {
+  -fx-stroke:#f5f5f5;
+}
+
 .contact .image {
-  -fx-pref-height: 40px;
-  -fx-pref-width:40px;
+  -fx-pref-height:46px;
+  -fx-pref-width:46px;
 }
 
 .contact .mu {
   -fx-pref-height:24px;
-  -fx-text-fill:#737373;
+}
+
+.ng {
+  -fx-text-fill: #737373;
 }
 
 .contact .picture-holder {
@@ -36,4 +48,5 @@
 .contact .content-text {
   -fx-pref-height:25px;
   -fx-pref-width:305px;
+  -fx-text-fill: #404040;
 }

@@ -4,17 +4,19 @@
 
 package com.fagi.controller.login;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.network.ChatManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 
 /**
  * Created by miniwolf on 23-10-2016.
  */
-public class CreatePasswordController implements LoginController {
+public class CreatePasswordController extends Pane implements LoginController {
     @FXML PasswordField password;
     @FXML PasswordField passwordRepeat;
     @FXML Button loginBtn;
@@ -23,23 +25,34 @@ public class CreatePasswordController implements LoginController {
 
     public CreatePasswordController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
+        new LoadFXML(this, "/com/fagi/view/login/CreatePassword.fxml").execute();
+    }
+
+    @FXML
+    private void initialize() {
+        masterLogin.initialize(passwordRepeat);
     }
 
     @Override
     public void next() {
-        if ( !password.getText().equals(passwordRepeat.getText()) ) {
+        if (!password.getText().equals(passwordRepeat.getText())) {
             messageLabel.setText("Passwords does not match");
             return;
         }
         masterLogin.setPassword(password.getText());
-        if ( createUser() ) {
+        if (createUser()) {
             masterLogin.next();
         }
     }
 
+    @Override
+    public void back() {
+        masterLogin.back();
+    }
+
     private boolean createUser() {
         return ChatManager.handleCreateUser(masterLogin.getUsername(), password.getText(),
-                                          passwordRepeat.getText(), messageLabel);
+                                            passwordRepeat.getText(), messageLabel);
     }
 
     @Override
