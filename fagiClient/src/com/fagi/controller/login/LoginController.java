@@ -17,6 +17,7 @@ public interface LoginController {
     @FXML
     void next();
 
+    @FXML
     void back();
 
     @FXML

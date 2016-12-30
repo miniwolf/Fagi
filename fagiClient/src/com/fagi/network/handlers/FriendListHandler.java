@@ -8,15 +8,12 @@ import com.fagi.model.Friend;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.FriendList;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 /**
  * Created by Marcus on 09-07-2016.
@@ -33,46 +30,34 @@ public class FriendListHandler implements Handler {
         FriendList friendList = (FriendList) object;
         mainScreen.setFriendList(friendList);
 
-        try {
-            ContentController contentController = new ContentController();
-            FXMLLoader contentLoader = new FXMLLoader(
-                mainScreen.getClass().getResource("/com/fagi/view/content/ContentList.fxml"));
-            contentLoader.setController(contentController);
+        // Required here to get the load inside the constructor
+        ContentController contentController =
+            new ContentController("/com/fagi/view/content/ContentList.fxml");
 
-            //List<Friend> friends = friendList.getAccess().getData();
-            //Collections.sort(friends); // TODO: Sorting here without using the sorted friends
-            // TODO: This will be the same functionality as above
-            Collections.sort(friendList.getAccess().getData());
+        List<Friend> friends = friendList.getAccess().getData();
+        Collections.sort(friends);
 
-            List<Parent> parents = new ArrayList<>();
-            VBox contactContent = contentLoader.load();
-            for (Friend friend : friendList.getAccess().getData()) {
-                ContactItemController contactItemController = new ContactItemController();
-                FXMLLoader loader = new FXMLLoader(
-                    mainScreen.getClass().getResource("/com/fagi/view/content/Contact.fxml"));
-                loader.setController(contactItemController);
-                Pane pane = loader.load();
+        List<Parent> parents = new ArrayList<>();
+        for (Friend friend : friends) {
+            ContactItemController contactItem = new ContactItemController();
 
-                setupItemController(friend, contactItemController);
-
-                parents.add(pane);
-                mainScreen.getFriendMapWrapper().register(friend, contactItemController, pane);
-            }
-
-            contentController.addAllToContentList(parents);
-            mainScreen.setContactContentController(contentController);
-
-            Platform.runLater(() -> mainScreen
-                .setScrollPaneContent(MainScreen.PaneContent.Contacts, contactContent));
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            setupItemController(friend, contactItem);
+            parents.add(contactItem);
+            mainScreen.getFriendMapWrapper().register(friend, contactItem, contactItem);
         }
+
+        contentController.addAllToContentList(parents);
+        mainScreen.setContactContentController(contentController);
+
+        Platform.runLater(() -> mainScreen
+            .setScrollPaneContent(MainScreen.PaneContent.Contacts, contentController));
     }
 
     private void setupItemController(Friend friend, ContactItemController controller) {
         controller.toggleStatus(friend.isOnline());
         controller.setUserName(friend.getUsername());
-        controller.assign(new OpenConversation(mainScreen, controller.getUserName()));
+        controller.getActionable()
+                  .assign(new OpenConversation(mainScreen, controller.getUserName()));
     }
 
     @Override

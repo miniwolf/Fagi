@@ -1,6 +1,6 @@
 package com.fagi.controller.conversation;
 
-import com.fagi.action.ActionableImpl;
+import com.fagi.action.items.LoadFXML;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.DeleteFriendRequest;
 import com.fagi.model.FriendRequest;
@@ -13,10 +13,9 @@ import javafx.scene.layout.BorderPane;
 /**
  * Created by costa on 11-12-2016.
  */
-public class ReceivedInvitationController extends ActionableImpl {
+public class ReceivedInvitationController extends BorderPane {
     @FXML private Label message;
     @FXML private Label username;
-    @FXML private BorderPane body;
 
     private final FriendRequest request;
     private final MainScreen mainScreen;
@@ -26,22 +25,24 @@ public class ReceivedInvitationController extends ActionableImpl {
         this.request = request;
         this.communication = mainScreen.getCommunication();
         this.mainScreen = mainScreen;
+
+        new LoadFXML(this, "/com/fagi/view/conversation/ReceivedInvitation.fxml").execute();
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         message.setText(request.getMessage().getData());
         username.setText(request.getFriendUsername());
     }
 
     @FXML
-    public void ignore() {
+    private void ignore() {
         communication.sendObject(new DeleteFriendRequest(request.getFriendUsername()));
         close();
     }
 
     @FXML
-    public void accept() {
+    private void accept() {
         communication.sendObject(
             new FriendRequest(request.getMessage().getMessageInfo().getSender(),
                               new TextMessage("Yosh plz!", mainScreen.getUsername(), -1)));
@@ -49,6 +50,6 @@ public class ReceivedInvitationController extends ActionableImpl {
     }
 
     private void close() {
-        mainScreen.removeElement(body);
+        mainScreen.removeElement(this);
     }
 }

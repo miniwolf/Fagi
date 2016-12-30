@@ -317,13 +317,27 @@
 }
 
 .their .text-message {
-  -fx-background-color:#FFF;
   -fx-background-radius:0 5px 5px 5px;
 }
 
 .me .text-message {
-  -fx-background-color: #cfd8dc;
   -fx-background-radius:5px 0 5px 5px;
+}
+
+.their .text-message,
+.their .text-message .scroll-pane .viewport .content {
+  -fx-background-color: #FFF;
+}
+
+.text-message .scroll-pane .scroll-bar * {
+  -fx-background-color: #cfd8dc;
+  -fx-opacity: 0;
+  -fx-max-width: 0;
+}
+
+.me .text-message,
+.me .text-message .scroll-pane .viewport .content {
+  -fx-background-color: #cfd8dc;
 }
 
 .uiguide {

@@ -12,15 +12,15 @@ import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 
-import javafx.fxml.FXMLLoader;
+import java.io.IOException;
+
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.IOException;
 
 
 /**
@@ -30,7 +30,6 @@ import java.io.IOException;
  */
 public class MasterLogin {
     private String username;
-    private FXMLLoader loader;
     private LoginController controller;
 
     private String messageLabel;
@@ -40,7 +39,7 @@ public class MasterLogin {
     private final FagiApp fagiApp;
     private final String configFileLocation;
     private final Draggable draggable;
-    private Scene scene;
+    private final Scene scene;
     private String password;
 
     /**
@@ -58,7 +57,6 @@ public class MasterLogin {
         draggable = new Draggable(primaryStage);
         this.scene = scene;
 
-        loader = new FXMLLoader(getClass().getResource("/com/fagi/view/Master.fxml"));
         showScreen(state);
         initCommunication();
         primaryStage.sizeToScene();
@@ -152,39 +150,35 @@ public class MasterLogin {
     }
 
     private void showScreen(LoginState screen) {
-        StringBuilder resourcePath = new StringBuilder();
-        if (!setupController(screen, resourcePath)) {
+        if (!setupController(screen)) {
             return;
-        }
-        loader = new FXMLLoader(getClass().getResource(resourcePath.toString()));
-        loader.setController(controller);
-
-        try {
-            scene.setRoot(loader.load());
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
         }
         controller.setMessage(messageLabel);
     }
 
-    private boolean setupController(LoginState screen, StringBuilder resourcePath) {
+    private boolean setupController(LoginState screen) {
+        // TODO: Rewrite this into proper interface usage
+        LoginController controller;
         switch (screen) {
             case LOGIN:
-                resourcePath.append("/com/fagi/view/login/LoginScreen.fxml");
                 controller = new LoginScreenController(this);
                 break;
             case USERNAME:
-                resourcePath.append("/com/fagi/view/login/CreateUserName.fxml");
                 controller = new CreateUserNameController(this);
                 break;
             case PASSWORD:
-                resourcePath.append("/com/fagi/view/login/CreatePassword.fxml");
                 controller = new CreatePasswordController(this);
                 break;
             default:
                 return false;
         }
+        setController((Parent) controller, controller);
         return true;
+    }
+
+    private void setController(Parent pane, LoginController controller) {
+        scene.setRoot(pane);
+        this.controller = controller;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {

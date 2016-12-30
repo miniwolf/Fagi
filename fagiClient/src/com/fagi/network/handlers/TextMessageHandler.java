@@ -65,7 +65,7 @@ public class TextMessageHandler implements Handler {
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
 
         MessageItemController messageItemController =
-            mainScreen.getMessageItemControllers().stream()
+            mainScreen.getMessageItems().stream()
                       .filter(x -> x.getID() == conversation.getId()).findFirst().get();
         Platform.runLater(() -> {
             messageItemController.setDate(conversation.getLastMessageDate());

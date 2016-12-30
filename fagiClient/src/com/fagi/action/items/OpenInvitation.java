@@ -6,17 +6,8 @@ package com.fagi.action.items;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.conversation.ConversationController;
 import com.fagi.controller.conversation.SendInvitationController;
-import com.fagi.conversation.Conversation;
-import com.fagi.conversation.ConversationType;
-import com.fagi.conversation.GetAllConversationDataRequest;
-import com.fagi.network.Communication;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-
-import java.io.IOException;
 
 /**
  * @author miniwolf
@@ -32,16 +23,7 @@ public class OpenInvitation implements Action {
 
     @Override
     public void execute() {
-        SendInvitationController controller = new SendInvitationController(mainScreen);
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Invitation.fxml"));
-        loader.setController(controller);
-        try {
-            BorderPane conversationBox = loader.load();
-            controller.setUsername(username.getText());
-            mainScreen.addElement(conversationBox);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        SendInvitationController controller = new SendInvitationController(mainScreen, username);
+        mainScreen.addElement(controller);
     }
 }

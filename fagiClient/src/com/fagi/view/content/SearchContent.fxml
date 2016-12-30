@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<VBox fx:id="contentList" styleClass="contact-list"
-      stylesheets="@../../style/searchlist.css"
+<fx:root type="VBox" styleClass="contact-list" stylesheets="@../../style/searchlist.css"
       xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <Pane styleClass="title">
         <VBox.margin>
@@ -15,4 +14,4 @@
         </VBox.margin>
         <Label styleClass="text" text="Fag clients"/>
     </Pane>
-</VBox>
+</fx:root>

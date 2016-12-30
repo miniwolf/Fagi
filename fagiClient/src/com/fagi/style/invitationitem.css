@@ -8,6 +8,7 @@
 
 .dNoYdf {
   -fx-font-family: 'rb';
+  -fx-pref-width: 398px;
   -fx-pref-height: 72px;
   -fx-border-color:rgba(0,0,0,.12);
   -fx-border-style:solid;

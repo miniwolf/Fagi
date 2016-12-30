@@ -4,17 +4,19 @@
 
 package com.fagi.controller.login;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.network.ChatManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 
 /**
  * Created by miniwolf on 23-10-2016.
  */
-public class CreatePasswordController implements LoginController {
+public class CreatePasswordController extends Pane implements LoginController {
     @FXML PasswordField password;
     @FXML PasswordField passwordRepeat;
     @FXML Button loginBtn;
@@ -23,6 +25,7 @@ public class CreatePasswordController implements LoginController {
 
     public CreatePasswordController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
+        new LoadFXML(this, "/com/fagi/view/login/CreatePassword.fxml").execute();
     }
 
     @FXML

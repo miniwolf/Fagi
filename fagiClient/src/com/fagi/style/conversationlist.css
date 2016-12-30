@@ -12,7 +12,8 @@
   -fx-text-alignment:left;
   -fx-background-color:#FFF;
   -fx-font-size:14px;
-  -fx-padding:16px 24px;
+  -fx-padding:10px 20px;
+  -fx-pref-height: 72px;
 }
 
 .item-holder .button {
@@ -37,14 +38,14 @@
 }
 
 .conversation-item .image {
-  -fx-pref-height:40px;
-  -fx-pref-width:40px;
+  -fx-pref-height:46px;
+  -fx-pref-width:46px;
 }
 
 .conversation-item .mu {
   -fx-pref-height:24px;
   -fx-text-fill:#404040;
-  -fx-padding:0 0 0 16px;
+  -fx-padding:0 0 0 19px;
 }
 
 .conversation-item .picture-holder {

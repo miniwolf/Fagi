@@ -1,9 +1,14 @@
 package com.fagi.controller.contentList;
 
+import com.fagi.action.Actionable;
 import com.fagi.action.ActionableImpl;
+import com.fagi.action.items.LoadFXML;
+import com.fagi.conversation.Conversation;
+import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -11,25 +16,48 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-
+import javafx.scene.layout.HBox;
 
 /**
  * @author miniwolf
  */
-public class MessageItemController extends ActionableImpl {
+public class MessageItemController extends HBox {
     @FXML private Label usernameLabel;
     @FXML private Label date;
     @FXML private Label lastMessage;
+
     private Date dateInstance;
     private final String username;
     private long ID;
     private boolean running = true;
+    private Actionable actionable = new ActionableImpl();
 
-    public MessageItemController(String username, long id) {
+    private MessageItemController(String username, String resource, long ID) {
         this.username = username;
-        ID = id;
+        this.ID = ID;
+
+        new LoadFXML(this, resource).execute();
+        getStyleClass().add("contact");
+    }
+
+    public MessageItemController(String username, String resource, Conversation conversation) {
+        this(username, resource, conversation.getId());
+        setUsers(conversation.getParticipants());
+        if (conversation.getLastMessage() != null) {
+            setLastMessage(conversation.getLastMessage());
+            setDate(conversation.getLastMessageDate());
+        }
+    }
+
+    public MessageItemController(String username, String resource, FriendRequest request) {
+        this(username, resource, request.getMessage().getMessageInfo().getConversationID());
+        List<String> list = new ArrayList<>();
+        list.add(request.getFriendUsername());
+        setUsers(list);
+        setDate(request.getMessage().getMessageInfo().getTimestamp());
     }
 
     @FXML
@@ -43,17 +71,6 @@ public class MessageItemController extends ActionableImpl {
                 Platform.runLater(() -> date.setText(convertDate(dateInstance)));
             }
         }, 0, 1000);
-    }
-
-    public void setUsers(List<String> usernames) {
-        List<String> meExcludedList = usernames.stream()
-                                               .filter(name -> !name.equals(username))
-                                               .collect(Collectors.toList());
-        this.usernameLabel.setText(String.join(", ", meExcludedList));
-    }
-
-    public void setDate(Date date) {
-        this.dateInstance = date;
     }
 
     private String convertDate(Date date) {
@@ -85,15 +102,26 @@ public class MessageItemController extends ActionableImpl {
         return "now";
     }
 
+    @FXML
+    private void openConversation() {
+        actionable.execute();
+    }
+
+    public void setUsers(List<String> usernames) {
+        List<String> meExcludedList = usernames.stream()
+                                               .filter(name -> !name.equals(username))
+                                               .collect(Collectors.toList());
+        this.usernameLabel.setText(String.join(", ", meExcludedList));
+    }
+
     public void setLastMessage(TextMessage lastMessage) {
         String sender = lastMessage.getMessageInfo().getSender();
         String senderString = (sender.equals(username) ? "You" : sender);
         this.lastMessage.setText(senderString + ": " + lastMessage.getData());
     }
 
-    @FXML
-    public void openConversation() {
-        action.execute();
+    public void setDate(Date date) {
+        this.dateInstance = date;
     }
 
     public long getID() {
@@ -102,5 +130,9 @@ public class MessageItemController extends ActionableImpl {
 
     public void stopTimer() {
         this.running = false;
+    }
+
+    public Actionable getActionable() {
+        return actionable;
     }
 }

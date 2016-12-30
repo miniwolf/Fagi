@@ -4,13 +4,17 @@
 
 package com.fagi.controller.conversation;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
+
+import java.util.Date;
+import java.util.stream.Collectors;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -21,20 +25,15 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.stream.Collectors;
-
 /**
  * @author miniwolf
  */
-public class ConversationController {
+public class ConversationController extends BorderPane {
     @FXML private Label name;
     @FXML private Label date;
     @FXML private TextArea message;
     @FXML private VBox chat;
     @FXML private ScrollPane scroller;
-    @FXML private BorderPane body;
 
     private Conversation conversation;
     private MainScreen mainScreen;
@@ -51,11 +50,13 @@ public class ConversationController {
         this.username = username;
         this.communication = mainScreen.getCommunication();
         this.primaryStage = mainScreen.getPrimaryStage();
+        new LoadFXML(this, "/com/fagi/view/conversation/Conversation.fxml").execute();
     }
 
     @FXML
-    void initialize() {
+    private void initialize() {
         String titleNames = conversation.getParticipants().stream()
+                                        .filter(s -> !s.equals(username))
                                         .collect(Collectors.joining(", "));
         name.setText(titleNames);
 
@@ -88,9 +89,8 @@ public class ConversationController {
     private void fillChat() {
         Platform.runLater(() -> {
             for (TextMessage message : conversation.getMessages()) {
-                chat.getChildren().add(createMessageBox(message));
+                addMessage(message);
             }
-            primaryStage.sizeToScene();
         });
     }
 
@@ -114,7 +114,7 @@ public class ConversationController {
                 isInternalScroll = true;
             }
 
-            chat.getChildren().add(createMessageBox(message));
+            chat.getChildren().add(getBox(createMessageBox(message), message.getData()));
             primaryStage.sizeToScene();
 
             if (!isUserScrolling) {
@@ -131,27 +131,18 @@ public class ConversationController {
     }
 
     private HBox getBox(String resource, String message) {
-        MessageController messageController = new MessageController(message);
-        FXMLLoader loader =
-            new FXMLLoader(ConversationController.class.getClass().getResource(resource));
-        loader.setController(messageController);
-        try {
-            return loader.load();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        return null;
+        return new MessageController(message, resource);
     }
 
-    private HBox createMessageBox(TextMessage message) {
-        return getBox(message.getMessageInfo().getSender().equals(username)
-                      ? "/com/fagi/view/conversation/MyMessage.fxml"
-                      : "/com/fagi/view/conversation/TheirMessage.fxml", message.getData());
+    private String createMessageBox(TextMessage message) {
+        return message.getMessageInfo().getSender().equals(username)
+               ? "/com/fagi/view/conversation/MyMessage.fxml"
+               : "/com/fagi/view/conversation/TheirMessage.fxml";
     }
 
     @FXML
-    public void closeConversation() {
-        mainScreen.removeElement(body);
+    private void closeConversation() {
+        mainScreen.removeElement(this);
         mainScreen.setConversation(null);
     }
 }

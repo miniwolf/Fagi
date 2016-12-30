@@ -2,11 +2,11 @@
 
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -14,10 +14,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
-<Pane fx:id="body" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
-      styleClass="maincontent"
-      stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
-      xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+
+<fx:root onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" styleClass="maincontent"
+         stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
+         type="Pane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <VBox layoutX="12.0" layoutY="4.0">
         <StackPane disable="true" styleClass="mUbCce" visible="false">
             <VBox.margin>
@@ -50,7 +50,9 @@
     <BorderPane>
         <center>
             <HBox>
-                <BorderPane.margin><Insets left="48.0"/></BorderPane.margin>
+                <BorderPane.margin>
+                    <Insets left="48.0"/>
+                </BorderPane.margin>
                 <Label alignment="CENTER" styleClass="gb_Tb" text="Fagi"/>
                 <StackPane styleClass="gb_ib" HBox.hgrow="ALWAYS">
                     <StackPane alignment="CENTER_RIGHT" styleClass="gb_Jc"
@@ -70,20 +72,24 @@
                     <StackPane prefHeight="96.0">
                         <HBox>
                             <Pane minWidth="96.0" prefHeight="96.0" prefWidth="96.0">
-                                <HBox.margin><Insets right="20.0"/></HBox.margin>
+                                <HBox.margin>
+                                    <Insets right="20.0"/>
+                                </HBox.margin>
                                 <Pane styleClass="gb_sb, gbip"/>
                                 <Label alignment="CENTER" layoutY="69.0" styleClass="gb_tb"
                                        text="Change"/>
-                                <Pane>
+                                <Pane disable="true">
                                     <Circle fill="#0000" layoutX="48.0" layoutY="48.0" radius="44.0"
                                             stroke="WHITE" strokeType="OUTSIDE" strokeWidth="24.0"/>
                                 </Pane>
                             </Pane>
                             <VBox>
-                                <Label styleClass="gb_ub" text="Nicklas Pingel"/>
-                                <Button mnemonicParsing="false" styleClass="gb_Fa" text="Sign out"
-                                        onAction="#logoutRequest">
-                                    <VBox.margin><Insets top="10.0"/></VBox.margin>
+                                <Label fx:id="username" styleClass="gb_ub" text="Nicklas Pingel"/>
+                                <Button mnemonicParsing="false" onAction="#logoutRequest"
+                                        styleClass="gb_Fa" text="Sign out">
+                                    <VBox.margin>
+                                        <Insets top="10.0"/>
+                                    </VBox.margin>
                                 </Button>
                             </VBox>
                         </HBox>
@@ -91,7 +97,7 @@
                 </StackPane>
             </StackPane>
         </Pane>
-        <Button mnemonicParsing="false" styleClass="gb_b" text="Button" onAction="#toggleSignOut">
+        <Button mnemonicParsing="false" onAction="#toggleSignOut" styleClass="gb_b" text="Button">
             <graphic>
                 <Pane styleClass="gbii, gb_8a">
                     <Circle centerX="21.0" centerY="21.0" fill="#1f93ff00" radius="21.0"
@@ -112,4 +118,4 @@
             </graphic>
         </Button>
     </StackPane>
-</Pane>
+</fx:root>

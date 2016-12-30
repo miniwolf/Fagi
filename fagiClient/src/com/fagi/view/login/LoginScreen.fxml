@@ -13,9 +13,9 @@
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<Pane onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" prefHeight="301.0"
-      prefWidth="305.0" styleClass="card" stylesheets="@../../style/Login.css"
-      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="Pane" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
+         prefHeight="301.0" prefWidth="305.0" styleClass="card" stylesheets="@../../style/Login.css"
+         xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <VBox alignment="CENTER" layoutX="1.0" spacing="10.0" styleClass="card, signin-card"
           xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
         <Pane>
@@ -42,4 +42,4 @@
             <Label styleClass="text" text="X"/>
         </graphic>
     </Button>
-</Pane>
+</fx:root>

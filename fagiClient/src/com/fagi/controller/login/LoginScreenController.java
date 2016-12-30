@@ -4,6 +4,7 @@
 
 package com.fagi.controller.login;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 
@@ -15,6 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 
 /**
  * Handles the login screen. Here it is possible to start creation process
@@ -22,7 +24,7 @@ import javafx.scene.input.MouseEvent;
  *
  * @author miniwolf
  */
-public class LoginScreenController implements LoginController {
+public class LoginScreenController extends Pane implements LoginController {
     @FXML Label messageLabel;
     @FXML TextField username;
     @FXML PasswordField password;
@@ -31,6 +33,7 @@ public class LoginScreenController implements LoginController {
 
     public LoginScreenController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
+        new LoadFXML(this, "/com/fagi/view/login/LoginScreen.fxml").execute();
     }
 
     @FXML
@@ -50,7 +53,7 @@ public class LoginScreenController implements LoginController {
     }
 
     @FXML
-    public void handleLogin() {
+    private void handleLogin() {
         ChatManager.handleLogin(new Login(username.getText(), password.getText()), messageLabel);
     }
 

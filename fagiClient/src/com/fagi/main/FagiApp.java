@@ -7,16 +7,12 @@ import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.IOException;
 
 /**
  * JavaFX application class for handling GUI.
@@ -31,7 +27,7 @@ public class FagiApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        if ( args.length != 0 ) {
+        if (args.length != 0) {
             System.out.println("Usage: java LoginScreen");
         }
         launch(args);
@@ -75,15 +71,7 @@ public class FagiApp extends Application {
      */
     public void showMainScreen(String username, Communication communication) {
         MainScreen controller = new MainScreen(username, communication, primaryStage);
-        FXMLLoader loader = new FXMLLoader(
-                controller.getClass().getResource("/com/fagi/view/Main.fxml"));
-        loader.setController(controller);
-        try {
-            scene.setRoot(loader.load());
-        } catch (IOException e) {
-            System.err.println(e.toString());
-            return;
-        }
+        scene.setRoot(controller);
         controller.initCommunication();
         primaryStage.sizeToScene();
     }

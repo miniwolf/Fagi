@@ -7,12 +7,8 @@ import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.network.Communication;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
 
-import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * @author miniwolf
@@ -59,21 +55,12 @@ public class OpenConversationFromID implements Action {
 
         ConversationController controller =
             new ConversationController(mainScreen, conversation, username);
-        FXMLLoader loader =
-            new FXMLLoader(getClass().getResource("/com/fagi/view/conversation/Conversation.fxml"));
-        loader.setController(controller);
-        try {
-            BorderPane conversationBox = loader.load();
-            mainScreen.addElement(conversationBox);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
+        mainScreen.addElement(controller);
         mainScreen.setConversation(conversation);
         mainScreen.setConversationController(controller);
     }
 
-    private Supplier<? extends Conversation> errorHandling() {
+    private void errorHandling() {
         System.err.println("OpenConversationFromID: Couldn't find conversation on ID <" + id + ">");
         throw new RuntimeException();
     }
