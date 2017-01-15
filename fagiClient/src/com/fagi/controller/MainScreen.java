@@ -112,6 +112,11 @@ public class MainScreen extends Pane {
         primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
                                      event -> System.out.println("mouse click detected: "
                                                                  + event.getTarget()));
+
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            primaryStage.setIconified(true);
+        });
         new LoadFXML(this, "/com/fagi/view/Main.fxml").execute();
     }
 
@@ -170,6 +175,8 @@ public class MainScreen extends Pane {
         interrupt(generalHandlerThread);
 
         ChatManager.handleLogout(new Logout());
+
+        this.primaryStage.setOnCloseRequest(event -> {});
 
         for (MessageItemController controller : this.messageItems) {
             controller.stopTimer();

@@ -83,5 +83,7 @@ public class FagiApp extends Application {
     @Override
     public void stop() {
         Platform.exit();
+        // TODO : Find better solution plz. There is at least two threads that is not interrupted when we either logout or close the login screen.
+        System.exit(0);
     }
 }
