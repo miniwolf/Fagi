@@ -281,10 +281,6 @@
   -fx-border-radius: 50%;
 }
 
-.gbii {
-  -fx-background-image: url("material-icons/N.png");
-}
-
 .gb_8a {
   -fx-background-size: 42px 42px;
   -fx-pref-height: 42px;
@@ -380,11 +376,6 @@
   -fx-alignment:top-center;
   -fx-pref-height: 96px;
   -fx-pref-width: 96px;
-}
-
-.gbip {
-  -fx-background-image: url("material-icons/N.png");
-  -fx-background-size: 96px 96px;
 }
 
 .gb_ch {

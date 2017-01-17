@@ -43,6 +43,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -63,6 +65,8 @@ public class MainScreen extends Pane {
     @FXML private Polygon dropdownExtra;
     @FXML private Label username;
     @FXML private Pane conversationHolder;
+    @FXML private ImageView largeIcon;
+    @FXML private ImageView tinyIcon;
 
     private Parent emptyFocusElement;
     private boolean signOut;
@@ -144,6 +148,10 @@ public class MainScreen extends Pane {
         search = new Search(searchBox, searchHeader, this);
         emptyFocusElement = messages;
         username.setText(usernameString);
+        Image tiny = new Image("/com/fagi/style/material-icons/" + usernameString.toCharArray()[0] + ".png", 40, 40, true, true);
+        this.tinyIcon.setImage(tiny);
+        Image large = new Image("/com/fagi/style/material-icons/" + usernameString.toCharArray()[0] + ".png", 96, 96, true, true);
+        this.largeIcon.setImage(large);
     }
 
     @FXML

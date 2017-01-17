@@ -2,11 +2,13 @@
 
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -61,7 +63,7 @@
             </HBox>
         </center>
     </BorderPane>
-    <Pane layoutX="573.0" layoutY="89.0" fx:id="conversationHolder"/>
+    <Pane fx:id="conversationHolder" layoutX="573.0" layoutY="89.0"/>
     <StackPane alignment="CENTER_RIGHT" layoutX="930.0" layoutY="10.0" maxHeight="40.0"
                maxWidth="40.0" prefHeight="60.0" prefWidth="87.0">
         <Pane fx:id="dropdown" layoutY="44.0" visible="false">
@@ -76,7 +78,12 @@
                                 <HBox.margin>
                                     <Insets right="20.0"/>
                                 </HBox.margin>
-                                <Pane styleClass="gb_sb, gbip"/>
+                                <ImageView fx:id="largeIcon" fitHeight="96.0" fitWidth="96.0"
+                                           pickOnBounds="true" preserveRatio="true">
+                                    <viewport>
+                                        <Rectangle2D height="96.0" width="96.0"/>
+                                    </viewport>
+                                </ImageView>
                                 <Label alignment="CENTER" layoutY="69.0" styleClass="gb_tb"
                                        text="Change"/>
                                 <Pane disable="true">
@@ -98,24 +105,30 @@
                 </StackPane>
             </StackPane>
         </Pane>
-        <Button mnemonicParsing="false" onAction="#toggleSignOut" styleClass="gb_b" text="Button">
+        <Pane styleClass="gb_8a">
+            <Circle centerX="21.0" centerY="21.0" fill="#1f93ff00" radius="21.0" stroke="#ababab3f"
+                    strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="3.0"/>
+            <Polygon fx:id="dropdownExtra" fill="#fff" layoutX="13.0" layoutY="47.0"
+                     stroke="TRANSPARENT" strokeType="INSIDE" visible="false">
+                <points>
+                    <Double fx:value="8.5"/>
+                    <Double fx:value="0.0"/>
+                    <Double fx:value="16"/>
+                    <Double fx:value="8.5"/>
+                    <Double fx:value="0.0"/>
+                    <Double fx:value="8.5"/>
+                </points>
+            </Polygon>
+        </Pane>
+        <Button maxWidth="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#toggleSignOut"
+                styleClass="gb_b" text="Button">
             <graphic>
-                <Pane styleClass="gbii, gb_8a">
-                    <Circle centerX="21.0" centerY="21.0" fill="#1f93ff00" radius="21.0"
-                            stroke="#ababab3f" strokeLineCap="ROUND" strokeType="INSIDE"
-                            strokeWidth="3.0"/>
-                    <Polygon fx:id="dropdownExtra" fill="#fff" layoutX="13.0" layoutY="47.0"
-                             stroke="TRANSPARENT" strokeType="INSIDE" visible="false">
-                        <points>
-                            <Double fx:value="8.5"/>
-                            <Double fx:value="0.0"/>
-                            <Double fx:value="16"/>
-                            <Double fx:value="8.5"/>
-                            <Double fx:value="0.0"/>
-                            <Double fx:value="8.5"/>
-                        </points>
-                    </Polygon>
-                </Pane>
+                <ImageView fx:id="tinyIcon" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <viewport>
+                        <Rectangle2D height="40.0" width="40.0"/>
+                    </viewport>
+                </ImageView>
             </graphic>
         </Button>
     </StackPane>
