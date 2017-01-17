@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
@@ -27,6 +29,7 @@ public class MessageItemController extends HBox {
     @FXML private Label usernameLabel;
     @FXML private Label date;
     @FXML private Label lastMessage;
+    @FXML private ImageView image;
 
     private Date dateInstance;
     private final String username;
@@ -111,6 +114,10 @@ public class MessageItemController extends HBox {
                                                .filter(name -> !name.equals(username))
                                                .collect(Collectors.toList());
         this.usernameLabel.setText(String.join(", ", meExcludedList));
+        Image image = new Image(
+                "/com/fagi/style/material-icons/" + meExcludedList.get(0).toCharArray()[0] + ".png", 46,
+                46, true, true);
+        this.image.setImage(image);
     }
 
     public void setLastMessage(TextMessage lastMessage) {

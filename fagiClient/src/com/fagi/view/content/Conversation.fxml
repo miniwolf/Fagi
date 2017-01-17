@@ -18,9 +18,8 @@
          onMouseClicked="#openConversation"
          type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <Pane styleClass="image">
-        <ImageView fitHeight="46.0" fitWidth="46.0" layoutY="3.0" pickOnBounds="true"
+        <ImageView fx:id="image" fitHeight="46.0" fitWidth="46.0" layoutY="3.0" pickOnBounds="true"
                    preserveRatio="true">
-            <Image url="https://lh3.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/8-c-HHIriAg/s46-c-k-no/photo.jpg"/>
             <viewport>
                 <Rectangle2D height="46.0" width="46.0"/>
             </viewport>

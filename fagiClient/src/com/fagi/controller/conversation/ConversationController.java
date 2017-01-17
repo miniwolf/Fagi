@@ -24,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.Contract;
 
 /**
  * @author miniwolf
@@ -77,7 +78,8 @@ public class ConversationController extends BorderPane {
         fillChat();
 
         scroller.vvalueProperty().addListener(
-            observable -> this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll);
+                observable -> this.isUserScrolling = scroller.getVvalue() != 1.0
+                                                     && !isInternalScroll);
     }
 
     private void sendMessage() {
@@ -114,7 +116,7 @@ public class ConversationController extends BorderPane {
                 isInternalScroll = true;
             }
 
-            chat.getChildren().add(getBox(createMessageBox(message), message.getData()));
+            chat.getChildren().add(createMessageBox(message));
             primaryStage.sizeToScene();
 
             if (!isUserScrolling) {
@@ -130,14 +132,21 @@ public class ConversationController extends BorderPane {
         fillChat();
     }
 
-    private HBox getBox(String resource, String message) {
-        return new MessageController(message, resource);
+    @Contract("_ -> !null")
+    private HBox getBox(String message) {
+        return new MessageController(message, "/com/fagi/view/conversation/MyMessage.fxml");
     }
 
-    private String createMessageBox(TextMessage message) {
+    @Contract("_, _ -> !null")
+    private HBox getBox(String message, String username) {
+        return new MessageController(message, "/com/fagi/view/conversation/TheirMessage.fxml",
+                                     username);
+    }
+
+    private HBox createMessageBox(TextMessage message) {
         return message.getMessageInfo().getSender().equals(username)
-               ? "/com/fagi/view/conversation/MyMessage.fxml"
-               : "/com/fagi/view/conversation/TheirMessage.fxml";
+               ? getBox(message.getData())
+               : getBox(message.getData(), message.getMessageInfo().getSender());
     }
 
     @FXML

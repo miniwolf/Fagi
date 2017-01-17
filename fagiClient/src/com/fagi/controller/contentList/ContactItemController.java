@@ -5,6 +5,8 @@ import com.fagi.action.ActionableImpl;
 import com.fagi.action.items.LoadFXML;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -16,6 +18,7 @@ public class ContactItemController extends HBox {
     @FXML private Label date;
     @FXML private Label lastMessage;
     @FXML private Pane status;
+    @FXML private ImageView image;
 
     private final Actionable actionable = new ActionableImpl();
 
@@ -38,6 +41,10 @@ public class ContactItemController extends HBox {
 
     public void setUserName(String userName) {
         this.userName.setText(userName);
+        Image image = new Image(
+                "/com/fagi/style/material-icons/" + userName.toCharArray()[0] + ".png", 46, 46,
+                true, true);
+        this.image.setImage(image);
     }
 
     public Label getUserName() {
