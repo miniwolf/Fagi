@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root type="BorderPane" layoutX="573.0" layoutY="89.0" styleClass="message"
-         stylesheets="@../../style/conversation.css"
+<fx:root type="BorderPane" styleClass="message" stylesheets="@../../style/conversation.css"
          xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <VBox>

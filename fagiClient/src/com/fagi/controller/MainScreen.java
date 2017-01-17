@@ -62,6 +62,7 @@ public class MainScreen extends Pane {
     @FXML private Pane dropdown;
     @FXML private Polygon dropdownExtra;
     @FXML private Label username;
+    @FXML private Pane conversationHolder;
 
     private Parent emptyFocusElement;
     private boolean signOut;
@@ -327,11 +328,11 @@ public class MainScreen extends Pane {
     }
 
     public void addElement(Node node) {
-        getChildren().add(node);
+        conversationHolder.getChildren().add(node);
     }
 
     public void removeElement(Node node) {
-        getChildren().remove(node);
+        conversationHolder.getChildren().remove(node);
         emptyFocusElement.requestFocus();
     }
 

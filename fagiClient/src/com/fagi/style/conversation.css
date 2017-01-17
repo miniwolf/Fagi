@@ -313,6 +313,8 @@
 }
 
 .text-message {
+  -fx-font-family: 'rb';
+  -fx-font-size: 13px;
   -fx-padding: 7px 9px 7px 9px;
 }
 

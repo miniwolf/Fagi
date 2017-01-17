@@ -1,10 +1,11 @@
 package com.fagi.controller.conversation;
 
 import com.fagi.action.items.LoadFXML;
+import com.fagi.util.Utils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 /**
  * @author miniwolf
@@ -27,27 +28,8 @@ public class MessageController extends HBox {
     }
 
     private void setupMessageSize() {
-        int columnLength = stringMessage.length() / 2 + 2; // Magic computation
-        message.setPrefColumnCount(
-                columnLength > MAX_COLUMN_LENGTH ? MAX_COLUMN_LENGTH : columnLength);
-        int rowCount = 1;
-        int count = 0;
-        char[] chars = stringMessage.toCharArray();
-        for (char c : chars) {
-            if ((count %= MAX_COLUMN_LENGTH) == 0) {
-                rowCount++;
-            }
-            if (c == '\n') {
-                rowCount++;
-                count = 0;
-                continue;
-            }
-            count++;
-        }
-        while (columnLength > MAX_COLUMN_LENGTH) {
-            rowCount++;
-            columnLength -= MAX_COLUMN_LENGTH;
-        }
-        message.setPrefRowCount(rowCount);
+        Font roboto = new Font("Roboto-Regular", 13);
+        message.setPrefHeight(Utils.computeTextHeight(roboto, stringMessage, 250) + 14.0);
+        message.setPrefWidth(Utils.computeTextWidth(roboto, stringMessage, 250) + 18.0);
     }
 }
