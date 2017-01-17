@@ -329,13 +329,31 @@
   -fx-background-color: #FFF;
 }
 
+.text-message .scroll-pane {
+  -fx-background-insets: 0;
+  -fx-hbar-policy: never;
+  -fx-vbar-policy: never;
+  -fx-padding: 0;
+}
+
+.text-message .scroll-pane .viewport .content {
+  -fx-padding: 0;
+}
+
+.text-message .scroll-pane .corner,
+.text-message .scroll-pane .scroll-bar,
 .text-message .scroll-pane .scroll-bar * {
   -fx-background-color: #cfd8dc;
+  -fx-padding: 0;
   -fx-opacity: 0;
   -fx-max-width: 0;
+  -fx-scale-x: 0;
+  -fx-scale-y: 0;
+  -fx-scale-z: 0;
 }
 
 .me .text-message,
+.me .text-message .scroll-pane .viewport,
 .me .text-message .scroll-pane .viewport .content {
   -fx-background-color: #cfd8dc;
 }

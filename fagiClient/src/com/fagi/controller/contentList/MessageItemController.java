@@ -16,7 +16,6 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -35,16 +34,16 @@ public class MessageItemController extends HBox {
     private boolean running = true;
     private Actionable actionable = new ActionableImpl();
 
-    private MessageItemController(String username, String resource, long ID) {
+    private MessageItemController(String username, long ID) {
         this.username = username;
         this.ID = ID;
 
-        new LoadFXML(this, resource).execute();
+        new LoadFXML(this, "/com/fagi/view/content/Conversation.fxml").execute();
         getStyleClass().add("contact");
     }
 
-    public MessageItemController(String username, String resource, Conversation conversation) {
-        this(username, resource, conversation.getId());
+    public MessageItemController(String username, Conversation conversation) {
+        this(username, conversation.getId());
         setUsers(conversation.getParticipants());
         if (conversation.getLastMessage() != null) {
             setLastMessage(conversation.getLastMessage());
@@ -52,8 +51,8 @@ public class MessageItemController extends HBox {
         }
     }
 
-    public MessageItemController(String username, String resource, FriendRequest request) {
-        this(username, resource, request.getMessage().getMessageInfo().getConversationID());
+    public MessageItemController(String username, FriendRequest request) {
+        this(username, request.getMessage().getMessageInfo().getConversationID());
         List<String> list = new ArrayList<>();
         list.add(request.getFriendUsername());
         setUsers(list);

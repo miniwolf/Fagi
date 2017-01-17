@@ -15,80 +15,70 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 
-<fx:root onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" styleClass="maincontent"
-         stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
-         type="Pane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" styleClass="maincontent" stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css" type="Pane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <VBox layoutX="12.0" layoutY="4.0">
         <StackPane disable="true" styleClass="mUbCce" visible="false">
             <VBox.margin>
-                <Insets bottom="12.0"/>
+                <Insets bottom="12.0" />
             </VBox.margin>
-            <Pane styleClass="pTh3n, menuicon"/>
+            <Pane styleClass="pTh3n, menuicon" />
         </StackPane>
         <StackPane layoutX="10.0" layoutY="10.0" styleClass="mUbCce">
-            <Pane fx:id="contacts" onMouseClicked="#changeMenu" styleClass="contact-button, pTh3n"
-                  userData="Contacts"/>
+            <Pane fx:id="contacts" onMouseClicked="#changeMenu" styleClass="contact-button, pTh3n" userData="Contacts" />
         </StackPane>
         <StackPane layoutX="10.0" layoutY="106.0" styleClass="mUbCce">
-            <Pane fx:id="messages" onMouseClicked="#changeMenu" styleClass="message-button, pTh3n"
-                  userData="Messages"/>
+            <Pane fx:id="messages" onMouseClicked="#changeMenu" styleClass="message-button, pTh3n" userData="Messages" />
         </StackPane>
         <cursor>
-            <Cursor fx:constant="DEFAULT"/>
+            <Cursor fx:constant="DEFAULT" />
         </cursor>
     </VBox>
     <VBox layoutX="80.0" layoutY="79.0" styleClass="list">
         <Pane fx:id="searchHeader" styleClass="search">
-            <Pane layoutX="24.0" layoutY="16.0" styleClass="search-icon"/>
-            <TextField fx:id="searchBox" layoutX="55.0" layoutY="1.0" promptText="New conversation"
-                       styleClass="search-area, persistent-prompt"/>
-            <Button layoutX="353.0" layoutY="16.0" mnemonicParsing="false" onAction="#stopSearching"
-                    styleClass="DIyFQb"/>
+            <Pane layoutX="24.0" layoutY="16.0" styleClass="search-icon" />
+            <TextField fx:id="searchBox" layoutX="55.0" layoutY="1.0" promptText="New conversation" styleClass="search-area, persistent-prompt" />
+            <Button layoutX="353.0" layoutY="16.0" mnemonicParsing="false" onAction="#stopSearching" styleClass="DIyFQb" />
         </Pane>
-        <ScrollPane fx:id="listContent" styleClass="list-content"/>
+        <ScrollPane fx:id="listContent" styleClass="list-content" />
     </VBox>
     <BorderPane>
         <center>
             <HBox>
                 <BorderPane.margin>
-                    <Insets left="48.0"/>
+                    <Insets left="48.0" />
                 </BorderPane.margin>
-                <Label alignment="CENTER" styleClass="gb_Tb" text="Fagi"/>
+                <Label alignment="CENTER" styleClass="gb_Tb" text="Fagi" />
                 <StackPane styleClass="gb_ib" HBox.hgrow="ALWAYS">
-                    <StackPane alignment="CENTER_RIGHT" styleClass="gb_Jc"
-                               StackPane.alignment="CENTER"/>
+                    <StackPane alignment="CENTER_RIGHT" styleClass="gb_Jc" StackPane.alignment="CENTER" />
                 </StackPane>
             </HBox>
         </center>
     </BorderPane>
-    <StackPane alignment="CENTER_RIGHT" layoutX="930.0" layoutY="10.0" maxHeight="40.0"
-               maxWidth="40.0" prefHeight="60.0" prefWidth="87.0">
+   <Pane layoutX="800.0" layoutY="300.0" prefHeight="200.0" prefWidth="200.0" />
+    <StackPane alignment="CENTER_RIGHT" layoutX="930.0" layoutY="10.0" maxHeight="40.0" maxWidth="40.0" prefHeight="60.0" prefWidth="87.0">
         <Pane fx:id="dropdown" layoutY="44.0" visible="false">
             <StackPane layoutX="-180.0" layoutY="52.0" styleClass="gb_ga">
                 <StackPane>
                     <StackPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </StackPane.margin>
                     <StackPane prefHeight="96.0">
                         <HBox>
                             <Pane minWidth="96.0" prefHeight="96.0" prefWidth="96.0">
                                 <HBox.margin>
-                                    <Insets right="20.0"/>
+                                    <Insets right="20.0" />
                                 </HBox.margin>
-                                <Pane styleClass="gb_sb, gbip"/>
-                                <Label alignment="CENTER" layoutY="69.0" styleClass="gb_tb"
-                                       text="Change"/>
+                                <Pane styleClass="gb_sb, gbip" />
+                                <Label alignment="CENTER" layoutY="69.0" styleClass="gb_tb" text="Change" />
                                 <Pane disable="true">
-                                    <Circle fill="#0000" layoutX="48.0" layoutY="48.0" radius="44.0"
-                                            stroke="WHITE" strokeType="OUTSIDE" strokeWidth="24.0"/>
+                                    <Circle fill="#0000" layoutX="48.0" layoutY="48.0" radius="44.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="24.0" />
                                 </Pane>
                             </Pane>
                             <VBox>
-                                <Label fx:id="username" styleClass="gb_ub" text="Nicklas Pingel"/>
-                                <Button mnemonicParsing="false" onAction="#logoutRequest"
-                                        styleClass="gb_Fa" text="Sign out">
+                                <Label fx:id="username" styleClass="gb_ub" text="Nicklas Pingel" />
+                                <Button mnemonicParsing="false" onAction="#logoutRequest" styleClass="gb_Fa" text="Sign out">
                                     <VBox.margin>
-                                        <Insets top="10.0"/>
+                                        <Insets top="10.0" />
                                     </VBox.margin>
                                 </Button>
                             </VBox>
@@ -100,18 +90,15 @@
         <Button mnemonicParsing="false" onAction="#toggleSignOut" styleClass="gb_b" text="Button">
             <graphic>
                 <Pane styleClass="gbii, gb_8a">
-                    <Circle centerX="21.0" centerY="21.0" fill="#1f93ff00" radius="21.0"
-                            stroke="#ababab3f" strokeLineCap="ROUND" strokeType="INSIDE"
-                            strokeWidth="3.0"/>
-                    <Polygon fx:id="dropdownExtra" fill="#fff" layoutX="13.0" layoutY="47.0"
-                             stroke="TRANSPARENT" strokeType="INSIDE" visible="false">
+                    <Circle centerX="21.0" centerY="21.0" fill="#1f93ff00" radius="21.0" stroke="#ababab3f" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="3.0" />
+                    <Polygon fx:id="dropdownExtra" fill="#fff" layoutX="13.0" layoutY="47.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false">
                         <points>
-                            <Double fx:value="8.5"/>
-                            <Double fx:value="0.0"/>
-                            <Double fx:value="16"/>
-                            <Double fx:value="8.5"/>
-                            <Double fx:value="0.0"/>
-                            <Double fx:value="8.5"/>
+                            <Double fx:value="8.5" />
+                            <Double fx:value="0.0" />
+                            <Double fx:value="16" />
+                            <Double fx:value="8.5" />
+                            <Double fx:value="0.0" />
+                            <Double fx:value="8.5" />
                         </points>
                     </Polygon>
                 </Pane>

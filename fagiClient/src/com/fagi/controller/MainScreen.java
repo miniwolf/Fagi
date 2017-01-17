@@ -314,7 +314,7 @@ public class MainScreen extends Pane {
 
     public Pane createMessageItem(Conversation conversation) {
         MessageItemController messageItemController =
-            new MessageItemController(usernameString, "/com/fagi/view/content/Conversation.fxml",
+            new MessageItemController(usernameString,
                                       conversation);
         messageItemController.getActionable()
                              .assign(new OpenConversationFromID(this, conversation.getId()));

@@ -31,7 +31,7 @@ public class FriendRequestHandler implements Handler {
         for (FriendRequest request : friendRequestList.getAccess().getData()) {
             MessageItemController messageItemController =
                 new MessageItemController(request.getFriendUsername(),
-                                          "/com/fagi/view/content/InviteItem.fxml", request);
+                                          request);
             messageItemController.getActionable().assign(
                 new OpenReceivedFriendRequest(mainScreen, request));
             contentController.addToContentList(messageItemController);
