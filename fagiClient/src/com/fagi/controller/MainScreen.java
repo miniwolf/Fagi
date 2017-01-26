@@ -37,9 +37,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -48,6 +52,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -112,6 +117,14 @@ public class MainScreen extends Pane {
         primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
                                      event -> System.out.println("mouse click detected: "
                                                                  + event.getTarget()));
+
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            primaryStage.setIconified(true);
+        });
+
+        primaryStage.setOnShowing(event -> System.out.println("Test"));
+
         new LoadFXML(this, "/com/fagi/view/Main.fxml").execute();
     }
 
@@ -140,14 +153,52 @@ public class MainScreen extends Pane {
         currentPane = messages;
         currentPaneContent = PaneContent.Messages;
         changeMenuStyle(PaneContent.Messages.toString());
-        search = new Search(searchBox, searchHeader, this);
         emptyFocusElement = messages;
         username.setText(usernameString);
+        this.requestFocus();
+
+        Scene scene = primaryStage.getScene();
+        final MainScreen mainScreen = this;
+        scene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+                Runnable run = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } finally {
+                            Platform.runLater(() -> {
+                                System.out.println("Width: " + newSceneWidth);
+                                search = new Search(searchBox, searchHeader, mainScreen);
+                            });
+                        }
+                    }
+                };
+
+                Thread t = new Thread(run);
+                t.start();
+
+                scene.widthProperty().removeListener(this);
+            }
+        });
+        /*
+        searchBox.onMouseClickedProperty().addListener(event -> {
+            System.out.println("Humus");
+            if (search == null) {
+                search = new Search(searchBox, searchHeader, this);
+            }
+        });
+        */
+        //instantiateSearchFunction();
     }
 
     @FXML
     private void stopSearching() {
-        search.stopSearching();
+        if (search != null) {
+            search.stopSearching();
+        }
     }
 
     @FXML
@@ -170,6 +221,8 @@ public class MainScreen extends Pane {
         interrupt(generalHandlerThread);
 
         ChatManager.handleLogout(new Logout());
+
+        this.primaryStage.setOnCloseRequest(event -> {});
 
         for (MessageItemController controller : this.messageItems) {
             controller.stopTimer();
@@ -369,5 +422,19 @@ public class MainScreen extends Pane {
 
     public void setListContent(VBox listContent) {
         this.listContent.setContent(listContent);
+    }
+
+    private void instantiateSearchFunction() {
+        Runnable task = () -> {
+            while (getScene() == null) {
+                System.out.println(getScene());
+            }
+            windowLoaded();
+        };
+        new Thread(task).start();
+    }
+
+    public void windowLoaded() {
+        search = new Search(searchBox, searchHeader, this);
     }
 }
