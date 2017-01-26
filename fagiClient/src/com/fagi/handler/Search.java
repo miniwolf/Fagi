@@ -60,7 +60,7 @@ public class Search {
             searchBox.setPromptText("New conversation");
         } else {
             searchHeader.getStyleClass().add("focused");
-            if (!searchHeader.getStyleClass().contains("dlrqf")) {
+            if (searchBox.getScene() != null && !searchHeader.getStyleClass().contains("dlrqf")) {
                 // This should only be removed when clicking the x button
                 defaultFriendList();
                 searchHeader.getStyleClass().add("dlrqf");
