@@ -1,6 +1,7 @@
 package com.fagi.utility;
 
 import com.fagi.conversation.Conversation;
+import com.fagi.model.InviteCode;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -11,8 +12,11 @@ import java.util.List;
  * Created by costa on 09-11-2016.
  */
 public class JsonFileOperations {
-    public static final String CONVERSATION_FOLDER_PATH = "conversations/";
     public static final String FAGI_EXTENSION = ".fagi";
+    public static final String CONFIG_FOLDER_PATH = "config/";
+    public static final String CONVERSATION_FOLDER_PATH = "conversations/";
+    public static final String INVITE_CODES_FILE = "codes";
+    public static final String INVITE_CODES_FILE_PATH = CONFIG_FOLDER_PATH + INVITE_CODES_FILE + FAGI_EXTENSION;
 
     public static <T extends Serializable> void storeObjectToFile(T object, String folderPath, String fileName) {
         try {

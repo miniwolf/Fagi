@@ -8,6 +8,7 @@
 import com.fagi.config.ServerConfig;
 import com.fagi.encryption.KeyStorage;
 import com.fagi.encryption.RSAKey;
+import com.fagi.utility.JsonFileOperations;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -15,6 +16,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 
 class Server {
     private final String configFile = "config/serverinfo.config";
@@ -31,6 +33,10 @@ class Server {
             PublicKey pk = ((RSAKey) Encryption.getInstance().getRSA().getKey()).getKey().getPublic();
             ServerConfig config = new ServerConfig(name, ip, port, pk);
             config.saveToPath(configFile);
+            File inviteCodesFile = new File(JsonFileOperations.INVITE_CODES_FILE_PATH);
+            if (!inviteCodesFile.exists()) {
+                Data.storeInviteCodes(new InviteCodeContainer(new ArrayList<>()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
