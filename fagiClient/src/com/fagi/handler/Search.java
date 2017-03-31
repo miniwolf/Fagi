@@ -21,7 +21,6 @@ public class Search {
     private TextField searchBox;
     private Pane searchHeader;
     private MainScreen mainScreen;
-    private boolean searching;
 
     public Search(TextField searchBox, Pane searchHeader, MainScreen mainScreen) {
         this.searchBox = searchBox;
@@ -39,11 +38,7 @@ public class Search {
 
     private void searchUser(String searchString) {
         if (searchString.isEmpty()) {
-            if (searching) {
-                defaultFriendList();
-            } else {
-                new FriendListHandler(mainScreen).handle(mainScreen.getFriendList());
-            }
+            defaultFriendList();
             return;
         }
 
@@ -65,9 +60,8 @@ public class Search {
             searchBox.setPromptText("New conversation");
         } else {
             searchHeader.getStyleClass().add("focused");
-            if (!searchHeader.getStyleClass().contains("dlrqf")) {
+            if (searchBox.getScene() != null && !searchHeader.getStyleClass().contains("dlrqf")) {
                 // This should only be removed when clicking the x button
-                searching = true;
                 defaultFriendList();
                 searchHeader.getStyleClass().add("dlrqf");
             }

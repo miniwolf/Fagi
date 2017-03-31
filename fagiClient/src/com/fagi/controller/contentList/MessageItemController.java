@@ -69,6 +69,7 @@ public class MessageItemController extends HBox {
             public void run() {
                 if (!running) {
                     this.cancel();
+                    return;
                 }
                 Platform.runLater(() -> date.setText(convertDate(dateInstance)));
             }

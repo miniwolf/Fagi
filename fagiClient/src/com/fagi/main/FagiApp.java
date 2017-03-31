@@ -9,10 +9,14 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 /**
  * JavaFX application class for handling GUI.
@@ -83,5 +87,7 @@ public class FagiApp extends Application {
     @Override
     public void stop() {
         Platform.exit();
+        // TODO : Find better solution plz. There is at least two threads that is not interrupted when we either logout or close the login screen.
+        System.exit(0);
     }
 }
