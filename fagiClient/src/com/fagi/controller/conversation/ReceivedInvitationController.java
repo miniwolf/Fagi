@@ -32,7 +32,7 @@ public class ReceivedInvitationController extends BorderPane {
     @FXML
     private void initialize() {
         message.setText(request.getMessage().getData());
-        username.setText(request.getFriendUsername());
+        username.setText(request.getMessage().getMessageInfo().getSender());
     }
 
     @FXML

@@ -57,7 +57,7 @@ public class MessageItemController extends HBox {
     public MessageItemController(String username, FriendRequest request) {
         this(username, request.getMessage().getMessageInfo().getConversationID());
         List<String> list = new ArrayList<>();
-        list.add(request.getFriendUsername());
+        list.add(request.getMessage().getMessageInfo().getSender());
         setUsers(list);
         setDate(request.getMessage().getMessageInfo().getTimestamp());
     }

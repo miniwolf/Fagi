@@ -30,8 +30,7 @@ public class FriendRequestHandler implements Handler {
 
         for (FriendRequest request : friendRequestList.getAccess().getData()) {
             MessageItemController messageItemController =
-                new MessageItemController(request.getFriendUsername(),
-                                          request);
+                new MessageItemController(request.getFriendUsername(), request);
             messageItemController.getActionable().assign(
                 new OpenReceivedFriendRequest(mainScreen, request));
             contentController.addToContentList(messageItemController);
