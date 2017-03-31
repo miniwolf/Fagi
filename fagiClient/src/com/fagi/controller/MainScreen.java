@@ -29,17 +29,9 @@ import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -54,8 +46,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * TODO: Write description.
@@ -296,7 +292,7 @@ public class MainScreen extends Pane {
                 break;
             default:
                 System.err.println("Mainscreen, changeMenuStyle: " + menu);
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
         }
 
         listContent.setContent(listContentMap.get(currentPaneContent));

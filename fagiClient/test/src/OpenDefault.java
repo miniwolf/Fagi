@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Created by miniwolf on 07-12-2016.
+ * @author miniwolf
  */
 public class OpenDefault extends Application {
     private Stage primaryStage;
