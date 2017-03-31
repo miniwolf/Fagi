@@ -399,10 +399,11 @@ public class InputWorker extends Worker {
         System.out.println("CreateUser");
 
         InviteCodeContainer inviteCodes = Data.loadInviteCodes();
-        if (!inviteCodes.getCodes().contains(arg.getInviteCode())) {
+        InviteCode inviteCode = arg.getInviteCode();
+        if (!inviteCodes.contains(inviteCode)) {
             return new IllegalInviteCode();
         }
-
+        inviteCodes.remove(inviteCode);
         Data.storeInviteCodes(inviteCodes);
 
         try {

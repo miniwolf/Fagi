@@ -16,4 +16,12 @@ public class InviteCodeContainer implements Serializable {
     public List<InviteCode> getCodes() {
         return codes;
     }
+
+    public boolean contains(InviteCode inviteCode) {
+        return codes.contains(inviteCode);
+    }
+
+    public void remove(InviteCode inviteCode) {
+        codes.remove(inviteCode);
+    }
 }

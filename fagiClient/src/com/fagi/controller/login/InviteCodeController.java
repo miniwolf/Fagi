@@ -4,6 +4,7 @@
 
 package com.fagi.controller.login;
 
+import com.fagi.action.items.LoadFXML;
 import com.fagi.network.ChatManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,13 +20,12 @@ public class InviteCodeController extends DefaultLoginController {
 
     public InviteCodeController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
+        new LoadFXML(this, "/com/fagi/view/login/InviteCode.fxml").execute();
     }
 
     @FXML
     private void initialize() {
-        inviteCode.setText(masterLogin.getInviteCode());
         masterLogin.initialize(inviteCode);
-        Platform.runLater(() -> inviteCode.getParent().requestFocus());
     }
     @Override
     public void next() {
