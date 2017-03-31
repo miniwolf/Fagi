@@ -25,7 +25,7 @@
         </Pane>
         <Label fx:id="userName" styleClass="mu" />
     </HBox>
-    <Button minWidth="0.0" mnemonicParsing="false" prefWidth="0.0" styleClass="uOlSBc" text="Button">
+    <Button visible="false" minWidth="0.0" mnemonicParsing="false" prefWidth="0.0" styleClass="uOlSBc" text="Button">
         <graphic>
             <Pane styleClass="eHsso" />
         </graphic>
