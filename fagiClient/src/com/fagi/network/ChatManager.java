@@ -7,6 +7,7 @@ package com.fagi.network;
 import com.fagi.main.FagiApp;
 import com.fagi.model.*;
 import com.fagi.responses.AllIsWell;
+import com.fagi.responses.IllegalInviteCode;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
 import com.fagi.responses.Response;
@@ -76,6 +77,10 @@ public class ChatManager {
         application.showLoginScreen();
     }
 
+    /**
+     * Will close the communication with the server.
+     * This function is called from the quite action from @code{MasterLogin}
+     */
     public static void closeCommunication() {
         if (communication == null) {
             return;
@@ -86,18 +91,13 @@ public class ChatManager {
     /**
      * @param username     username from the LoginScreen.
      * @param password     password from the LoginScreen.
-     * @param passRepeat   for checking repeated password is equal.
      * @param labelMessage Label for writing status Messages to the user.
+     * @param inviteCode   Invite code to verify that the user is admitted to the server
      */
-    public static boolean handleCreateUser(String username, String password, String passRepeat,
-                                           Label labelMessage) {
-        if (isEmpty(username) || isEmpty(password) || isEmpty(passRepeat)) {
+    public static boolean handleCreateUser(String username, String password,
+                                           Label labelMessage, String inviteCode) {
+        if (isEmpty(username) || isEmpty(password) || isEmpty(inviteCode)) {
             labelMessage.setText("Fields can't be empty");
-            return false;
-        }
-
-        if (!password.equals(passRepeat)) {
-            labelMessage.setText("Password's must match");
             return false;
         }
 
@@ -107,7 +107,9 @@ public class ChatManager {
             return false;
         }
 
-        communication.sendObject(new CreateUser(username, password));
+        CreateUser createUser = new CreateUser(username, password);
+        createUser.setInviteCode(new InviteCode(toInteger(inviteCode)));
+        communication.sendObject(createUser);
 
         Response response = communication.getNextResponse();
         if (response instanceof AllIsWell) {
@@ -115,8 +117,14 @@ public class ChatManager {
         } else if (response instanceof UserExists) {
             labelMessage.setText("Error: User already exists");
             return false;
+        } else if (response instanceof IllegalInviteCode) {
+            labelMessage.setText("Error: Illegal invite code. Contact server administrator");
         }
         return true;
+    }
+
+    private static int toInteger(String inviteCode) {
+        return Integer.valueOf(inviteCode);
     }
 
     /**

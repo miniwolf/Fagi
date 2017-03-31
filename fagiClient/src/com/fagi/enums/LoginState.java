@@ -8,5 +8,5 @@ package com.fagi.enums;
  * @author miniwolf
  */
 public enum LoginState {
-    LOGIN, USERNAME, PASSWORD
+    LOGIN, USERNAME, PASSWORD, INVITE_CODE
 }

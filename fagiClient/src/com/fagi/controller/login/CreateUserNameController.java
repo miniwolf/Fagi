@@ -8,11 +8,7 @@ import com.fagi.action.items.LoadFXML;
 import com.fagi.network.ChatManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 
 /**
  * This controller handles setup of username. Check whether the username
@@ -20,12 +16,8 @@ import javafx.scene.layout.Pane;
  *
  * @author miniwolf
  */
-public class CreateUserNameController extends Pane implements LoginController {
-    @FXML private Label messageLabel;
+public class CreateUserNameController extends DefaultLoginController {
     @FXML private TextField username;
-    @FXML private Button loginBtn;
-
-    private MasterLogin masterLogin;
 
     public CreateUserNameController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
@@ -37,16 +29,6 @@ public class CreateUserNameController extends Pane implements LoginController {
         username.setText(masterLogin.getUsername());
         masterLogin.initialize(username);
         Platform.runLater(() -> username.getParent().requestFocus());
-    }
-
-    @Override
-    public void setMessage(String message) {
-        messageLabel.setText(message);
-    }
-
-    @Override
-    public String getMessageLabel() {
-        return messageLabel.getText();
     }
 
     @Override
@@ -67,25 +49,5 @@ public class CreateUserNameController extends Pane implements LoginController {
         } else {
             messageLabel.setText("Username is not available");
         }
-    }
-
-    @Override
-    public void back() {
-        masterLogin.back();
-    }
-
-    @Override
-    public void handleQuit() {
-        masterLogin.handleQuit();
-    }
-
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-        masterLogin.mousePressed(mouseEvent);
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-        masterLogin.mouseDragged(mouseEvent);
     }
 }

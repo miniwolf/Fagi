@@ -20,8 +20,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 
 /**
  * Controller class for the login screen, used by the JavaFX thread.
@@ -41,6 +39,7 @@ public class MasterLogin {
     private final Draggable draggable;
     private final Scene scene;
     private String password;
+    private String inviteCode;
 
     /**
      * Constructor will create and show the first screen.
@@ -119,11 +118,14 @@ public class MasterLogin {
                 state = LoginState.PASSWORD;
                 break;
             case PASSWORD:
+                state = LoginState.INVITE_CODE;
+                break;
+            case INVITE_CODE:
                 state = LoginState.LOGIN;
                 break;
             default:
                 System.out.println(state + " is not known");
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
         }
         showScreen(state);
     }
@@ -142,9 +144,12 @@ public class MasterLogin {
             case PASSWORD:
                 state = LoginState.USERNAME;
                 break;
+            case INVITE_CODE:
+                state = LoginState.PASSWORD;
+                break;
             default:
                 System.out.println(state + " is not known");
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
         }
         showScreen(state);
     }
@@ -168,6 +173,9 @@ public class MasterLogin {
                 break;
             case PASSWORD:
                 controller = new CreatePasswordController(this);
+                break;
+            case INVITE_CODE:
+                controller = new InviteCodeController(this);
                 break;
             default:
                 return false;
@@ -207,5 +215,9 @@ public class MasterLogin {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
     }
 }
