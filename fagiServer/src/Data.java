@@ -142,6 +142,14 @@ class Data {
         }
     }
 
+    public static synchronized InviteCodeContainer loadInviteCodes() {
+        return JsonFileOperations.loadObjectFromFile(JsonFileOperations.INVITE_CODES_FILE_PATH, InviteCodeContainer.class);
+    }
+
+    public static synchronized void storeInviteCodes(InviteCodeContainer codes) {
+        JsonFileOperations.storeObjectToFile(codes, JsonFileOperations.CONFIG_FOLDER_PATH, JsonFileOperations.INVITE_CODES_FILE);
+    }
+
     public static Response userLogin(String userName, String pass, OutputWorker worker) {
         if ( onlineUsers.containsKey(userName) ) {
             return new UserOnline();

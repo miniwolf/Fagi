@@ -15,4 +15,19 @@ public class InviteCode implements Serializable {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof InviteCode)) return false;
+
+        InviteCode other = (InviteCode)obj;
+
+        return other.getValue() == this.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + 31 * value;
+    }
 }

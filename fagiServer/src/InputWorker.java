@@ -397,6 +397,14 @@ public class InputWorker extends Worker {
 
     private Object handleCreateUser(CreateUser arg) {
         System.out.println("CreateUser");
+
+        InviteCodeContainer inviteCodes = Data.loadInviteCodes();
+        if (!inviteCodes.getCodes().contains(arg.getInviteCode())) {
+            return new IllegalInviteCode();
+        }
+
+        Data.storeInviteCodes(inviteCodes);
+
         try {
             return Data.createUser(arg.getUsername(), arg.getPassword());
         } catch (Exception e) {
