@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class CreateUser implements Serializable {
     private final String username;
     private final String password;
+    private InviteCode inviteCode;
 
     public CreateUser(String username, String password) {
         this.username = username;
@@ -22,5 +23,13 @@ public class CreateUser implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public InviteCode getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(InviteCode inviteCode) {
+        this.inviteCode = inviteCode;
     }
 }
