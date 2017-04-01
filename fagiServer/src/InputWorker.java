@@ -365,16 +365,18 @@ public class InputWorker extends Worker {
 
     private Object handleLogin(Login arg) {
         System.out.println("Login");
-        myUserName = arg.getUsername();
-        out.setUserName(arg.getUsername());
 
         Response response = Data.userLogin(arg.getUsername(), arg.getPassword(), out);
 
-        if (response instanceof AllIsWell) {
-            for (String user : Data.getUser(myUserName).getFriends()) {
-                if (Data.isUserOnline(user)) {
-                    Data.getWorker(user).addMessage(new UserLoggedIn(myUserName));
-                }
+        if (!(response instanceof AllIsWell)) {
+            return response;
+        }
+
+        out.setUserName(arg.getUsername());
+        myUserName = arg.getUsername();
+        for (String user : Data.getUser(myUserName).getFriends()) {
+            if (Data.isUserOnline(user)) {
+                Data.getWorker(user).addMessage(new UserLoggedIn(myUserName));
             }
         }
 
