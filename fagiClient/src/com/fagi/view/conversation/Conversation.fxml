@@ -26,8 +26,8 @@
                     <Label fx:id="date" styleClass="last-seen" VBox.vgrow="NEVER"/>
                 </VBox>
                 <HBox styleClass="icon">
-                    <Button styleClass="minimize"/>
-                    <Button styleClass="popout"/>
+                    <Button visible="false" styleClass="minimize"/>
+                    <Button visible="false" styleClass="popout"/>
                     <Button onAction="#closeConversation" styleClass="close"/>
                 </HBox>
             </HBox>

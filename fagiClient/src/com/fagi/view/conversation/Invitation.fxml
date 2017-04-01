@@ -22,8 +22,8 @@
                     <Label fx:id="name" styleClass="mu" VBox.vgrow="ALWAYS"/>
                 </VBox>
                 <HBox styleClass="icon">
-                    <Button styleClass="minimize"/>
-                    <Button styleClass="popout"/>
+                    <Button visible="false" styleClass="minimize"/>
+                    <Button visible="false" styleClass="popout"/>
                     <Button onAction="#close" styleClass="close"/>
                 </HBox>
             </HBox>

@@ -11,19 +11,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 
-<fx:root styleClass="holder, their" stylesheets="@../../style/conversation.css" type="HBox"
-         xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="holder, their" stylesheets="@../../style/conversation.css" type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <Pane maxHeight="32.0" maxWidth="32.0">
-        <ImageView fx:id="image" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                   preserveRatio="true" styleClass="picture">
+        <ImageView fx:id="image" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
             <viewport>
-                <Rectangle2D height="32.0" width="32.0"/>
+                <Rectangle2D height="32.0" width="32.0" />
             </viewport>
         </ImageView>
-        <Circle fill="#ffffff00" layoutX="14.0" layoutY="16.0" radius="13.0" stroke="#eceff1"
-                strokeType="OUTSIDE" strokeWidth="10.0"/>
+        <Circle fill="#ffffff00" layoutX="16.0" layoutY="16.0" radius="13.0" stroke="#eceff1" strokeType="OUTSIDE" strokeWidth="10.0" />
     </Pane>
-    <Pane maxHeight="-Infinity" styleClass="tip"/>
-    <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0"
-              styleClass="text-message"/>
+    <Pane maxHeight="-Infinity" styleClass="tip" />
+    <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0" styleClass="text-message" />
 </fx:root>
