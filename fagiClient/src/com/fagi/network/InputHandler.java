@@ -12,6 +12,7 @@ import com.fagi.model.HistoryUpdates;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.responses.Response;
+import com.fagi.utility.Logger;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,11 +57,13 @@ public class InputHandler implements Runnable {
                     if ( running ) {
                         System.err.println("inputhandler ioe: " + ioe.toString());
                         ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
+                        Logger.logStackTrace(ioe);
                     }
                     running = false;
                 } catch (ClassNotFoundException cnfe) {
                     // Shared files are not the same on both side of the server
                     System.err.println(cnfe.getMessage());
+                    Logger.logStackTrace(cnfe);
                     // TODO: This will be a bitch when having to update the server
                     // Fix: could be to implement JSON
                 }

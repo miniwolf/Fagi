@@ -37,6 +37,7 @@ public class JsonFileOperations {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
     }
 
@@ -57,6 +58,7 @@ public class JsonFileOperations {
             res = gson.fromJson(json, clazz);
         } catch (IOException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
         return res;
     }

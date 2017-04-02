@@ -1,5 +1,7 @@
 package com.fagi.encryption;
 
+import com.fagi.utility.Logger;
+
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.InvalidAlgorithmParameterException;
@@ -38,6 +40,7 @@ public class AES implements EncryptionAlgorithm<AESKey> {
             return cipher.doFinal(msg);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
         return null;
     }
@@ -50,6 +53,7 @@ public class AES implements EncryptionAlgorithm<AESKey> {
             return cipher.doFinal(cipherText);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
         return null;
     }
@@ -62,6 +66,7 @@ public class AES implements EncryptionAlgorithm<AESKey> {
             this.key = new AESKey(keygen.generateKey());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
     }
 

@@ -29,6 +29,7 @@ import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
+import com.fagi.utility.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -173,6 +174,7 @@ public class MainScreen extends Pane {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                            Logger.logStackTrace(e);
                         } finally {
                             Platform.runLater(() -> {
                                 System.out.println("Width: " + newSceneWidth);
@@ -241,6 +243,7 @@ public class MainScreen extends Pane {
                 Thread.sleep(10);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
+                Logger.logStackTrace(ie);
             }
         }
     }
