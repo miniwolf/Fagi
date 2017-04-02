@@ -24,7 +24,6 @@ import java.net.SocketException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +38,8 @@ public class InputWorker extends Worker {
     private EncryptionAlgorithm<AESKey> aes;
     private boolean sessionCreated = false;
 
-    public InputWorker(Socket socket, OutputWorker out, ConversationHandler handler) throws IOException {
+    public InputWorker(Socket socket, OutputWorker out, ConversationHandler handler)
+            throws IOException {
         this.handler = handler;
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
@@ -48,11 +48,11 @@ public class InputWorker extends Worker {
 
     @Override
     public void run() {
-        while ( running ) {
+        while (running) {
             System.out.println("Running");
             try {
                 Object input = objIn.readObject();
-                if ( input instanceof byte[] ) {
+                if (input instanceof byte[]) {
                     input = decryptAndConvertToObject((byte[]) input);
                 }
                 handleInput(input);
@@ -85,53 +85,53 @@ public class InputWorker extends Worker {
     }
 
     private void handleInput(Object input) {
-        if ( input instanceof TextMessage ) {
+        if (input instanceof TextMessage) {
             TextMessage arg = (TextMessage) input;
             arg.getMessageInfo().setTimestamp(new Timestamp(System.currentTimeMillis()));
             out.addResponse(handleTextMessage(arg));
-        } else if ( input instanceof Login ) {
+        } else if (input instanceof Login) {
             Login arg = (Login) input;
             out.addResponse(handleLogin(arg));
-        } else if ( input instanceof Logout ) {
+        } else if (input instanceof Logout) {
             out.addResponse(handleLogout());
             out.running = false;
-        } else if ( input instanceof CreateUser ) {
+        } else if (input instanceof CreateUser) {
             CreateUser arg = (CreateUser) input;
             out.addResponse(handleCreateUser(arg));
-        } else if ( input instanceof FriendRequest ) {
+        } else if (input instanceof FriendRequest) {
             FriendRequest arg = (FriendRequest) input;
             out.addResponse(handleFriendRequest(arg));
-        } else if ( input instanceof GetFriendListRequest ) {
-            GetFriendListRequest arg = (GetFriendListRequest)input;
+        } else if (input instanceof GetFriendListRequest) {
+            GetFriendListRequest arg = (GetFriendListRequest) input;
             out.addResponse(handleGetFriendRequest(arg));
-        } else if ( input instanceof DeleteFriendRequest ) {
+        } else if (input instanceof DeleteFriendRequest) {
             DeleteFriendRequest arg = (DeleteFriendRequest) input;
             out.addResponse(handleDeleteFriendRequest(arg));
-        } else if ( input instanceof DeleteFriend ) {
+        } else if (input instanceof DeleteFriend) {
             DeleteFriend arg = (DeleteFriend) input;
             out.addResponse(handleDeleteFriend(arg));
-        } else if ( input instanceof Session ) {
+        } else if (input instanceof Session) {
             Session arg = (Session) input;
             out.addResponse(handleSession(arg));
-        } else if ( input instanceof AddParticipantRequest) {
-            AddParticipantRequest request = (AddParticipantRequest)input;
+        } else if (input instanceof AddParticipantRequest) {
+            AddParticipantRequest request = (AddParticipantRequest) input;
             out.addResponse(handleAddParticipant(request));
-        } else if ( input instanceof CreateConversationRequest) {
-            CreateConversationRequest request = (CreateConversationRequest)input;
+        } else if (input instanceof CreateConversationRequest) {
+            CreateConversationRequest request = (CreateConversationRequest) input;
             Object response = handleCreateConversation(request);
             if (!(response instanceof NoSuchUser)) {
                 out.addResponse(new AllIsWell());
             }
             out.addResponse(response);
-        } else if ( input instanceof RemoveParticipantRequest) {
-            RemoveParticipantRequest request = (RemoveParticipantRequest)input;
+        } else if (input instanceof RemoveParticipantRequest) {
+            RemoveParticipantRequest request = (RemoveParticipantRequest) input;
             out.addResponse(handleRemoveParticipant(request));
-        } else if ( input instanceof UpdateHistoryRequest) {
-            UpdateHistoryRequest request = (UpdateHistoryRequest)input;
+        } else if (input instanceof UpdateHistoryRequest) {
+            UpdateHistoryRequest request = (UpdateHistoryRequest) input;
 
             Object response = handleUpdateHistory(request);
 
-            if ( (response instanceof HistoryUpdates) ) {
+            if ((response instanceof HistoryUpdates)) {
                 out.addResponse(new AllIsWell());
             }
             out.addResponse(response);
@@ -145,11 +145,11 @@ public class InputWorker extends Worker {
             Object result = handleGetAllConversationDataRequest(request);
 
             out.addResponse(result);
-        } else if ( input instanceof SearchUsersRequest) {
-            SearchUsersRequest request = (SearchUsersRequest)input;
+        } else if (input instanceof SearchUsersRequest) {
+            SearchUsersRequest request = (SearchUsersRequest) input;
 
             out.addResponse(handleSearchUsersRequest(request));
-        } else if ( input instanceof UserNameAvailableRequest) {
+        } else if (input instanceof UserNameAvailableRequest) {
             UserNameAvailableRequest request = (UserNameAvailableRequest) input;
             out.addResponse(handleUserNameAvailableRequest(request));
         } else {
@@ -158,6 +158,10 @@ public class InputWorker extends Worker {
     }
 
     private Object handleGetFriendRequest(GetFriendListRequest arg) {
+        return getFriendList();
+    }
+
+    private FriendList getFriendList() {
         User user = Data.getUser(myUserName);
         List<String> friendUsernames = user.getFriends();
         List<Friend> friends = new ArrayList<>();
@@ -213,24 +217,31 @@ public class InputWorker extends Worker {
         }
         Conversation conversation = Data.getConversation(request.getId());
         Timestamp lastMessageReceived = new Timestamp(conversation.getLastMessageDate().getTime());
-        return new ConversationDataUpdate(request.getId(), conversation.getMessages(), lastMessageReceived, conversation.getLastMessage());
+        return new ConversationDataUpdate(request.getId(), conversation.getMessages(),
+                                          lastMessageReceived, conversation.getLastMessage());
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
         User user = Data.getUser(request.getUserName());
 
-        user.getConversationIDs().stream().filter(x -> request.getFilters().stream().filter(y -> y.getId() == x).count() == 0).forEach(x -> {
-            out.addResponse(Data.getConversation(x).getPlaceholder());
-        });
+        user.getConversationIDs().stream()
+            .filter(x -> request.getFilters().stream().filter(y -> y.getId() == x).count() == 0)
+            .forEach(x -> {
+                out.addResponse(Data.getConversation(x).getPlaceholder());
+            });
 
-        request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId())).forEach(x -> {
-            Conversation conversation = Data.getConversation(x.getId());
-            Timestamp time = new Timestamp(x.getLastMessageDate().getTime());
-            Timestamp lastMessageReceived = new Timestamp(conversation.getLastMessageDate().getTime());
-            ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), conversation.getMessagesFromDate(time), lastMessageReceived, conversation.getLastMessage());
+        request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId()))
+               .forEach(x -> {
+                   Conversation conversation = Data.getConversation(x.getId());
+                   Timestamp time = new Timestamp(x.getLastMessageDate().getTime());
+                   Timestamp lastMessageReceived = new Timestamp(
+                           conversation.getLastMessageDate().getTime());
+                   ConversationDataUpdate res = new ConversationDataUpdate(x.getId(), conversation
+                           .getMessagesFromDate(time), lastMessageReceived, conversation
+                                                                                   .getLastMessage());
 
-            out.addResponse(res);
-        });
+                   out.addResponse(res);
+               });
     }
 
     private Object handleUpdateHistory(UpdateHistoryRequest request) {
@@ -245,7 +256,8 @@ public class InputWorker extends Worker {
             return new NoSuchConversation();
         }
 
-        List<TextMessage> res = con.getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
+        List<TextMessage> res = con
+                .getMessagesFromDate(new Timestamp(request.getDateLastMessageReceived().getTime()));
 
         return new HistoryUpdates(res, request.getId());
     }
@@ -289,8 +301,9 @@ public class InputWorker extends Worker {
         for (User user : users) {
             user.addConversationID(con.getId());
             Data.storeUser(user);
-            if (!user.getUserName().equals(this.myUserName) && Data.isUserOnline(user.getUserName())) {
-                Data.getWorker(user.getUserName()).addResponse(con);
+            if (!user.getUserName().equals(this.myUserName) && Data
+                    .isUserOnline(user.getUserName())) {
+                Data.getOutputWorker(user.getUserName()).addResponse(con);
             }
         }
 
@@ -321,7 +334,7 @@ public class InputWorker extends Worker {
         con.addUser(user.getUserName());
         user.addConversationID(con.getId());
 
-        Data.getWorker(user.getUserName()).addResponse(con);
+        Data.getOutputWorker(user.getUserName()).addResponse(con);
 
         Data.storeConversation(con);
         Data.storeUser(user);
@@ -366,7 +379,7 @@ public class InputWorker extends Worker {
     private Object handleLogin(Login arg) {
         System.out.println("Login");
 
-        Response response = Data.userLogin(arg.getUsername(), arg.getPassword(), out);
+        Response response = Data.userLogin(arg.getUsername(), arg.getPassword(), out, this);
 
         if (!(response instanceof AllIsWell)) {
             return response;
@@ -376,7 +389,7 @@ public class InputWorker extends Worker {
         myUserName = arg.getUsername();
         for (String user : Data.getUser(myUserName).getFriends()) {
             if (Data.isUserOnline(user)) {
-                Data.getWorker(user).addMessage(new UserLoggedIn(myUserName));
+                Data.getOutputWorker(user).addMessage(new UserLoggedIn(myUserName));
             }
         }
 
@@ -390,7 +403,7 @@ public class InputWorker extends Worker {
 
         for (String user : Data.getUser(myUserName).getFriends()) {
             if (Data.isUserOnline(user)) {
-                Data.getWorker(user).addMessage(new UserLoggedOut(myUserName));
+                Data.getOutputWorker(user).addMessage(new UserLoggedOut(myUserName));
             }
         }
 
@@ -417,6 +430,12 @@ public class InputWorker extends Worker {
 
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
-        return Data.getUser(myUserName).requestFriend(arg);
+        Response response = Data.getUser(myUserName).requestFriend(arg);
+        if (!(response instanceof AllIsWell)) {
+            return response;
+        }
+        Data.getInputWorker(arg.getFriendUsername())
+            .handleInput(new GetFriendListRequest(arg.getFriendUsername()));
+        return getFriendList();
     }
 }

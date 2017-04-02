@@ -65,8 +65,7 @@ public class OutputWorker extends Worker {
         if (!respondObjects.isEmpty()) {
             try {
                 sendResponses();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) { // User logged off we didn't manage to send response
             }
         }
         System.out.println("Closing output");
