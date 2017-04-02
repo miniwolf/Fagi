@@ -21,22 +21,20 @@
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<fx:root type="BorderPane" styleClass="message" stylesheets="@../../style/conversation.css"
-         xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="message" stylesheets="@../../style/conversation.css" type="BorderPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <VBox>
             <HBox alignment="CENTER_LEFT" styleClass="message-title">
                 <Pane styleClass="FN">
-                    <Pane layoutY="12.0" styleClass="picture"/>
+                    <Pane layoutY="12.0" styleClass="picture" />
                 </Pane>
                 <VBox alignment="CENTER_LEFT" styleClass="middle-holder" HBox.hgrow="ALWAYS">
-                    <Label fx:id="name1" styleClass="mu" text="New Fagi invite"
-                           VBox.vgrow="ALWAYS"/>
+                    <Label fx:id="name1" styleClass="mu" text="New Fagi invite" VBox.vgrow="ALWAYS" />
                 </VBox>
                 <HBox styleClass="icon">
-                    <Button visible="false" styleClass="minimize"/>
-                    <Button visible="false" styleClass="popout"/>
-                    <Button styleClass="close"/>
+                    <Button styleClass="minimize" visible="false" />
+                    <Button styleClass="popout" visible="false" />
+                    <Button styleClass="close" />
                 </HBox>
             </HBox>
         </VBox>
@@ -44,22 +42,20 @@
     <bottom>
         <HBox spacing="5.0" styleClass="RU">
             <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
-                <Button cancelButton="true" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" onAction="#ignore" text="Ignore">
+                <Button cancelButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ignore" text="Ignore">
                     <styleClass>
-                        <String fx:value="zbg"/>
-                        <String fx:value="cmx6we"/>
-                        <String fx:value="TTnd8c"/>
+                        <String fx:value="zbg" />
+                        <String fx:value="cmx6we" />
+                        <String fx:value="TTnd8c" />
                     </styleClass>
                 </Button>
             </VBox>
             <VBox styleClass="ewgz9b" HBox.hgrow="ALWAYS">
-                <Button defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#accept"
-                        text="Accept">
+                <Button defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#accept" text="Accept">
                     <styleClass>
-                        <String fx:value="zbg"/>
-                        <String fx:value="cmx6we"/>
-                        <String fx:value="Wxsg2c"/>
+                        <String fx:value="zbg" />
+                        <String fx:value="cmx6we" />
+                        <String fx:value="Wxsg2c" />
                     </styleClass>
                 </Button>
             </VBox>
@@ -69,60 +65,44 @@
         <BorderPane BorderPane.alignment="CENTER">
             <top>
                 <VBox styleClass="zL, uP">
-                    <ImageView fitHeight="85.0" fitWidth="400.0" pickOnBounds="true"
-                               styleClass="vL">
-                        <Image url="https://ssl.gstatic.com/s2/oz/images/hovercard/default_cover_1_small_9b18d635b925063429fc1163971fd685.jpg"/>
-                    </ImageView>
                     <Pane maxHeight="0.0">
-                        <Pane styleClass="yL">
-                            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true"
-                                       preserveRatio="true">
+                        <Pane layoutY="60.0" styleClass="yL">
+                            <ImageView fx:id="topPicture" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                 <viewport>
-                                    <Rectangle2D height="64.0" width="64.0"/>
+                                    <Rectangle2D height="64.0" width="64.0" />
                                 </viewport>
-                                <Image url="https://lh4.googleusercontent.com/-sF84_QxCOec/AAAAAAAAAAI/AAAAAAAAAAA/AEMOYSC3IqFsid5CI0uxuwI2rNkO030Ajw/s64-c-k-no-mo/photo.jpg"/>
                             </ImageView>
-                            <Circle fill="#ffffff00" layoutX="32.0" layoutY="32.0" radius="32.0"
-                                    stroke="#ffffffa6" strokeType="INSIDE"/>
+                            <Circle fill="#ffffff00" layoutX="32.0" layoutY="32.0" radius="32.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="16.0" />
                         </Pane>
                     </Pane>
                     <GridPane styleClass="KD">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <VBox.margin>
-                            <Insets bottom="2.0"/>
+                            <Insets bottom="2.0" />
                         </VBox.margin>
-                        <Label fx:id="username" styleClass="xL" text="Marcus Haagh"/>
+                        <Label fx:id="username" styleClass="xL" text="Marcus Haagh" />
                     </GridPane>
                 </VBox>
             </top>
             <center>
-                <ScrollPane hbarPolicy="NEVER" styleClass="message-holder, message-scroller"
-                            vvalue="1.0">
+                <ScrollPane hbarPolicy="NEVER" styleClass="message-holder, message-scroller" vvalue="1.0">
                     <VBox fx:id="chat">
-                        <HBox styleClass="holder, their"
-                              stylesheets="@../../style/conversation.css">
+                        <HBox styleClass="holder, their" stylesheets="@../../style/conversation.css">
                             <Pane maxHeight="32.0" maxWidth="32.0">
-                                <ImageView fitHeight="32.0" fitWidth="32.0"
-                                           pickOnBounds="true" preserveRatio="true"
-                                           styleClass="picture">
+                                <ImageView fx:id="messagePicture" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="picture">
                                     <viewport>
-                                        <Rectangle2D height="32.0" width="32.0"/>
+                                        <Rectangle2D height="32.0" width="32.0" />
                                     </viewport>
-                                    <Image url="https://lh5.googleusercontent.com/-HuqNw2gS7KA/AAAAAAAAAAI/AAAAAAAAATk/06-Td0R7Gdk/s32-c-k-no/photo.jpg"/>
                                 </ImageView>
-                                <Circle fill="#ffffff00" layoutX="16.0"
-                                        layoutY="16.0" radius="16.0"
-                                        stroke="#eceff1" strokeType="OUTSIDE"
-                                        strokeWidth="10.0"/>
+                                <Circle fill="#ffffff00" layoutX="16.0" layoutY="16.0" radius="16.0" stroke="#eceff1" strokeType="OUTSIDE" strokeWidth="10.0" />
                             </Pane>
-                            <Pane maxHeight="-Infinity" styleClass="tip"/>
-                            <Label fx:id="message" styleClass="text-message"
-                                   wrapText="true"/>
+                            <Pane maxHeight="-Infinity" styleClass="tip" />
+                            <Label fx:id="message" styleClass="text-message" wrapText="true" />
                         </HBox>
                     </VBox>
                 </ScrollPane>

@@ -8,6 +8,8 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -16,6 +18,8 @@ import javafx.scene.layout.BorderPane;
 public class ReceivedInvitationController extends BorderPane {
     @FXML private Label message;
     @FXML private Label username;
+    @FXML private ImageView topPicture;
+    @FXML private ImageView messagePicture;
 
     private final FriendRequest request;
     private final MainScreen mainScreen;
@@ -27,6 +31,16 @@ public class ReceivedInvitationController extends BorderPane {
         this.mainScreen = mainScreen;
 
         new LoadFXML(this, "/com/fagi/view/conversation/ReceivedInvitation.fxml").execute();
+
+        String username = request.getFriendUsername();
+        Image smallImage = new Image(
+                "/com/fagi/style/material-icons/" + username.toCharArray()[0] + ".png", 32, 32,
+                true, true);
+        Image bigImage = new Image(
+                "/com/fagi/style/material-icons/" + username.toCharArray()[0] + ".png", 64, 64,
+                true, true);
+        this.topPicture.setImage(bigImage);
+        this.messagePicture.setImage(smallImage);
     }
 
     @FXML

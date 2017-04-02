@@ -19,7 +19,7 @@
 
 <fx:root onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" styleClass="maincontent"
          stylesheets="@../style/main.css, @../style/searchlist.css, @../style/contact.css"
-         type="Pane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+         type="Pane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <VBox layoutX="12.0" layoutY="4.0">
         <StackPane disable="true" styleClass="mUbCce" visible="false">
             <VBox.margin>
@@ -84,8 +84,8 @@
                                         <Rectangle2D height="96.0" width="96.0"/>
                                     </viewport>
                                 </ImageView>
-                                <Label alignment="CENTER" layoutY="69.0" styleClass="gb_tb"
-                                       text="Change"/>
+                                <Label visible="false" alignment="CENTER" layoutY="69.0"
+                                       styleClass="gb_tb" text="Change"/>
                                 <Pane disable="true">
                                     <Circle fill="#0000" layoutX="48.0" layoutY="48.0" radius="44.0"
                                             stroke="WHITE" strokeType="OUTSIDE" strokeWidth="24.0"/>
