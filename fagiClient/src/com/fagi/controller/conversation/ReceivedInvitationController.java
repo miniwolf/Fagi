@@ -32,7 +32,7 @@ public class ReceivedInvitationController extends BorderPane {
 
         new LoadFXML(this, "/com/fagi/view/conversation/ReceivedInvitation.fxml").execute();
 
-        String username = request.getFriendUsername();
+        String username = request.getMessage().getMessageInfo().getSender();
         Image smallImage = new Image(
                 "/com/fagi/style/material-icons/" + username.toCharArray()[0] + ".png", 32, 32,
                 true, true);

@@ -306,8 +306,7 @@ public class MainScreen extends Pane {
 
     public void addConversation(Conversation conversation) {
         conversations.add(conversation);
-        Pane pane = createMessageItem(conversation);
-        Platform.runLater(() -> conversationContentController.addToContentList(pane));
+        setupConversationList();
     }
 
     public List<MessageItemController> getMessageItems() {
@@ -372,8 +371,7 @@ public class MainScreen extends Pane {
 
     public Pane createMessageItem(Conversation conversation) {
         MessageItemController messageItemController =
-            new MessageItemController(usernameString,
-                                      conversation);
+            new MessageItemController(usernameString, conversation);
         messageItemController.getActionable()
                              .assign(new OpenConversationFromID(this, conversation.getId()));
         messageItems.add(messageItemController);
