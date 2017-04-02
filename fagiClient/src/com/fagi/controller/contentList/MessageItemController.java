@@ -115,9 +115,9 @@ public class MessageItemController extends HBox {
                                                .filter(name -> !name.equals(username))
                                                .collect(Collectors.toList());
         this.usernameLabel.setText(String.join(", ", meExcludedList));
-        Image image = new Image(
-                "/com/fagi/style/material-icons/" + meExcludedList.get(0).toCharArray()[0] + ".png", 46,
-                46, true, true);
+        Image image = new Image("/com/fagi/style/material-icons/"
+                                + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0])
+                                + ".png", 46, 46, true, true);
         this.image.setImage(image);
     }
 

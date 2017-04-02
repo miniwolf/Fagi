@@ -42,8 +42,8 @@ public class ContactItemController extends HBox {
     public void setUserName(String userName) {
         this.userName.setText(userName);
         Image image = new Image(
-                "/com/fagi/style/material-icons/" + userName.toCharArray()[0] + ".png", 46, 46,
-                true, true);
+                "/com/fagi/style/material-icons/" + Character.toUpperCase(userName.toCharArray()[0])
+                + ".png", 46, 46, true, true);
         this.image.setImage(image);
     }
 
