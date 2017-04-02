@@ -36,11 +36,15 @@ public class ConversationDataUpdateHandler implements Handler {
 
         JsonFileOperations.storeConversation(conversation);
 
-        if (mainScreen.getConversationController() != null && mainScreen.getCurrentConversation().getId() == response.getId()) {
-            Platform.runLater(() -> mainScreen.getConversationController().redrawMessages());
+        if (mainScreen.hasCurrentOpenConversation(conversation)) {
+            Platform.runLater(() ->
+                    mainScreen.getControllerFromConversation(conversation)
+                              .redrawMessages());
         }
 
-        MessageItemController messageItemController = mainScreen.getMessageItems().stream().filter(x -> x.getID() == conversation.getId()).findFirst().get();
+        MessageItemController messageItemController =
+                mainScreen.getMessageItems().stream()
+                          .filter(x -> x.getID() == conversation.getId()).findFirst().get();
         Platform.runLater(() -> {
             if (conversation.getLastMessage() != null) {
                 messageItemController.setLastMessage(response.getLastMessage());

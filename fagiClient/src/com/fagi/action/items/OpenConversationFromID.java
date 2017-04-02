@@ -24,10 +24,8 @@ public class OpenConversationFromID implements Action {
 
     @Override
     public void execute() {
-        Optional<Conversation> optional = mainScreen
-            .getConversations().stream()
-            .filter(con -> con.getId() == id)
-            .findFirst();
+        Optional<Conversation> optional = mainScreen.getConversations().stream()
+                                                    .filter(con -> con.getId() == id).findFirst();
 
         if (!optional.isPresent()) {
             errorHandling();
@@ -35,29 +33,35 @@ public class OpenConversationFromID implements Action {
         }
 
         Conversation conversation = optional.get();
-        if (!optional.isPresent() || (mainScreen.getCurrentConversation() != null
-                                      && conversation.getParticipants()
-                                                     .equals(mainScreen.getCurrentConversation()
-                                                                       .getParticipants()))) {
+        if (mainScreen.hasCurrentOpenConversation(conversation)) {
+            ConversationController controller = mainScreen
+                    .getControllerFromConversation(conversation);
+            controller.closeConversation();
+            addConversationToMain(conversation, controller);
             return;
         }
 
         Communication communication = mainScreen.getCommunication();
         String username = mainScreen.getUsername();
         if (conversation.getType() == ConversationType.Placeholder) {
-            ConversationType type =
-                conversation.getParticipants().size() > 2 ? ConversationType.Multi
-                                                          : ConversationType.Single;
+            ConversationType type = conversation.getParticipants().size() > 2
+                                    ? ConversationType.Multi
+                                    : ConversationType.Single;
             conversation.setType(type);
             communication
-                .sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
+                    .sendObject(new GetAllConversationDataRequest(username, conversation.getId()));
         }
 
         ConversationController controller =
-            new ConversationController(mainScreen, conversation, username);
+                new ConversationController(mainScreen, conversation, username);
+        addConversationToMain(conversation, controller);
+    }
+
+    private void addConversationToMain(Conversation conversation,
+                                       ConversationController controller) {
         mainScreen.addElement(controller);
-        mainScreen.setConversation(conversation);
-        mainScreen.setConversationController(controller);
+        mainScreen.addCurrentConversation(conversation);
+        mainScreen.addController(controller);
     }
 
     private void errorHandling() {

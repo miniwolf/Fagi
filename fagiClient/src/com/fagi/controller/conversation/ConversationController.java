@@ -150,8 +150,13 @@ public class ConversationController extends BorderPane {
     }
 
     @FXML
-    private void closeConversation() {
+    public void closeConversation() {
         mainScreen.removeElement(this);
-        mainScreen.setConversation(null);
+        mainScreen.removeConversation(conversation);
+        mainScreen.removeConversationController(this);
+    }
+
+    public Conversation getConversation() {
+        return conversation;
     }
 }

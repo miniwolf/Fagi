@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by costa on 09-11-2016.
@@ -64,7 +66,7 @@ public class JsonFileOperations {
     }
 
     public static <T extends Serializable> List<T> loadAllObjectsInFolder(String folderName, Class<T> clazz) {
-        List<T> res = new ArrayList<>();
+        List<T> res = new CopyOnWriteArrayList<>();
 
         File folder = new File(folderName);
         if (!folder.exists()) return res;

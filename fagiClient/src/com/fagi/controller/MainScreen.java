@@ -73,6 +73,10 @@ public class MainScreen extends Pane {
     private Parent emptyFocusElement;
     private boolean signOut;
 
+    public void addCurrentConversation(Conversation conversation) {
+        currentConversations.add(conversation);
+    }
+
     public enum PaneContent {
         Contacts, Messages
     }
@@ -98,9 +102,9 @@ public class MainScreen extends Pane {
     private Draggable draggable;
     private GeneralHandler generalHandler;
     private Thread generalHandlerThread;
-    private Conversation conversation = new Conversation();
     private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
-    private ConversationController conversationController;
+    private List<Conversation> currentConversations = new ArrayList<>();
+    private List<ConversationController> conversationControllers = new ArrayList<>();
 
     /**
      * Creates new form ContactScreen.
@@ -242,6 +246,31 @@ public class MainScreen extends Pane {
         }
     }
 
+    public void removeConversation(Conversation conversation) {
+        currentConversations.remove(conversation);
+    }
+
+    public void removeConversationController(ConversationController controller) {
+        conversationControllers.remove(controller);
+    }
+
+    public boolean hasCurrentOpenConversation(Conversation conversation) {
+        return currentConversations.parallelStream().anyMatch(con -> con.equals(conversation));
+    }
+
+    public ConversationController getControllerFromConversation(Conversation conversation) {
+        for (ConversationController conversationController : conversationControllers) {
+            if (conversationController.getConversation().equals(conversation)) {
+                return conversationController;
+            }
+        }
+        return null;
+    }
+
+    public void addController(ConversationController controller) {
+        conversationControllers.add(controller);
+    }
+
     public void mousePressed(MouseEvent mouseEvent) {
         draggable.mousePressed(mouseEvent);
     }
@@ -297,10 +326,6 @@ public class MainScreen extends Pane {
         currentPane.getStyleClass().add("chosen");
     }
 
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
-    }
-
     public void addConversation(Conversation conversation) {
         conversations.add(conversation);
         setupConversationList();
@@ -320,14 +345,6 @@ public class MainScreen extends Pane {
 
     public String getUsername() {
         return usernameString;
-    }
-
-    public Conversation getCurrentConversation() {
-        return conversation;
-    }
-
-    public ConversationController getConversationController() {
-        return conversationController;
     }
 
     public PaneContent getCurrentPaneContent() {
@@ -387,10 +404,6 @@ public class MainScreen extends Pane {
     public void removeElement(Node node) {
         conversationHolder.getChildren().remove(node);
         emptyFocusElement.requestFocus();
-    }
-
-    public void setConversationController(ConversationController conversationController) {
-        this.conversationController = conversationController;
     }
 
     public void setConversationContentController(ContentController conversationContentController) {

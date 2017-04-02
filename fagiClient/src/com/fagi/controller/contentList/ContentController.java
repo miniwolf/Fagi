@@ -22,7 +22,7 @@ public class ContentController extends VBox {
         new LoadFXML(this, resource).execute();
     }
 
-    public void addToContentList(Parent parent) {
+    public synchronized void addToContentList(Parent parent) {
         Platform.runLater(() -> getChildren().add(parent));
     }
 
