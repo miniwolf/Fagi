@@ -124,7 +124,14 @@ public class MessageItemController extends HBox {
     public void setLastMessage(TextMessage lastMessage) {
         String sender = lastMessage.getMessageInfo().getSender();
         String senderString = (sender.equals(username) ? "You" : sender);
-        this.lastMessage.setText(senderString + ": " + lastMessage.getData());
+        this.lastMessage.setText(senderString + ": " + cropMessage(lastMessage.getData()));
+    }
+
+    private String cropMessage(String data) {
+        if (data.length() < 40) {
+            return data;
+        }
+        return data.substring(0, 40) + "...";
     }
 
     public void setDate(Date date) {

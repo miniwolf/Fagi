@@ -23,7 +23,7 @@ public class ContentController extends VBox {
     }
 
     public void addToContentList(Parent parent) {
-        getChildren().add(parent);
+        Platform.runLater(() -> getChildren().add(parent));
     }
 
     public void addAllToContentList(List<Parent> parents) {

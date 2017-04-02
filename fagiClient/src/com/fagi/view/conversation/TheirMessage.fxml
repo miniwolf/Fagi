@@ -21,5 +21,5 @@
         <Circle fill="#ffffff00" layoutX="16.0" layoutY="16.0" radius="13.0" stroke="#eceff1" strokeType="OUTSIDE" strokeWidth="10.0" />
     </Pane>
     <Pane maxHeight="-Infinity" styleClass="tip" />
-    <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0" styleClass="text-message" />
+    <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0" styleClass="text-message" wrapText="true" />
 </fx:root>

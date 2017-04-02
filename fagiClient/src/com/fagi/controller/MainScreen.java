@@ -252,7 +252,7 @@ public class MainScreen extends Pane {
 
     public void setScrollPaneContent(PaneContent content, Parent parent) {
         if (currentPaneContent == content) {
-            listContent.setContent(parent);
+            Platform.runLater(() -> listContent.setContent(parent));
         }
 
         listContentMap.put(content, parent);
