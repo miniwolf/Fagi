@@ -5,6 +5,7 @@
 package com.fagi.action.items;
 
 import com.fagi.action.Action;
+import com.fagi.utility.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -34,6 +35,7 @@ public class LoadFXML implements Action {
             loader.load();
         } catch (IOException ioe) {
             ioe.printStackTrace();
+            Logger.logStackTrace(ioe);
         }
     }
 }

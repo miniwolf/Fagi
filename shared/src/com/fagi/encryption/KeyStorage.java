@@ -1,5 +1,7 @@
 package com.fagi.encryption;
 
+import com.fagi.utility.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -70,6 +72,7 @@ public class KeyStorage {
             fis.read(encodedPrivateKey);
         } catch (IOException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
         fis.close();
 

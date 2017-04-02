@@ -1,5 +1,7 @@
 package com.fagi.encryption;
 
+import com.fagi.utility.Logger;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -21,12 +23,9 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
         if (f.exists()) {
             try {
                 key = new RSAKey(KeyStorage.LoadKeyPair("RSA"));
-            } catch (IOException e) {
+            } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
                 e.printStackTrace();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (InvalidKeySpecException e) {
-                e.printStackTrace();
+                Logger.logStackTrace(e);
             }
         } else {
             generateKey(4096);
@@ -49,16 +48,9 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
             return cipher.doFinal(msg);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+            Logger.logStackTrace(e);
         }
         return null;
     }
@@ -69,16 +61,9 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, key.getKey().getPrivate());
             return cipher.doFinal(cipherText);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
             e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+            Logger.logStackTrace(e);
         }
         return null;
     }
@@ -91,6 +76,7 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             key = new RSAKey(keygen.generateKeyPair());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            Logger.logStackTrace(e);
         }
     }
 
