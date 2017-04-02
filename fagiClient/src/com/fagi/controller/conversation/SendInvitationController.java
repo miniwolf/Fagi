@@ -49,6 +49,7 @@ public class SendInvitationController extends BorderPane implements ActionContai
                                            new TextMessage(message.getText(),
                                                            mainScreen.getUsername(), -1));
         action.execute();
+        close();
     }
 
     @FXML

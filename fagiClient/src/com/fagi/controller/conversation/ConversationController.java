@@ -101,7 +101,7 @@ public class ConversationController extends BorderPane {
             return "";
         } else {
             // Convert into something like "active 3 mo ago" "active 1 w ago"
-            return "active 3 mo ago";
+            return "";
         }
     }
 
