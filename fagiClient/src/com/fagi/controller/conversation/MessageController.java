@@ -40,7 +40,7 @@ public class MessageController extends HBox {
     }
 
     private void setupMessageSize() {
-        message.setPrefHeight(Utils.computeTextHeight(ROBOTO, stringMessage, 250) + 14.0);
+        message.setPrefHeight(Utils.computeTextHeight(ROBOTO, stringMessage, 250) + 16.0);
         message.setPrefWidth(Utils.computeTextWidth(ROBOTO, stringMessage, 250) + 18.0);
     }
 }

@@ -26,7 +26,6 @@ public class GeneralHandler implements Handler {
         GeneralHandler.container.setThread(runnable);
     }
 
-
     @Override
     public void handle(InGoingMessages object) {
         Handler handler = GeneralHandler.handlers.get(object.getClass());

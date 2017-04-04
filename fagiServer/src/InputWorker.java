@@ -226,9 +226,7 @@ public class InputWorker extends Worker {
 
         user.getConversationIDs().stream()
             .filter(x -> request.getFilters().stream().filter(y -> y.getId() == x).count() == 0)
-            .forEach(x -> {
-                out.addResponse(Data.getConversation(x).getPlaceholder());
-            });
+            .forEach(x -> out.addResponse(Data.getConversation(x).getPlaceholder()));
 
         request.getFilters().stream().filter(x -> user.getConversationIDs().contains(x.getId()))
                .forEach(x -> {
