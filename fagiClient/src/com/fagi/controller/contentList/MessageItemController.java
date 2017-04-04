@@ -72,6 +72,8 @@ public class MessageItemController extends HBox {
                     return;
                 }
                 Platform.runLater(() -> date.setText(convertDate(dateInstance)));
+                lastMessage.applyCss();
+                lastMessage.layout();
             }
         }, 0, 1000);
     }
@@ -121,12 +123,11 @@ public class MessageItemController extends HBox {
         this.image.setImage(image);
     }
 
-    public void setLastMessage(TextMessage lastMessage) {
-        String sender = lastMessage.getMessageInfo().getSender();
+    public void setLastMessage(TextMessage message) {
+        String sender = message.getMessageInfo().getSender();
         boolean isMyMessage = sender.equals(username);
         String senderString = (isMyMessage ? "You" : sender);
-        this.lastMessage.setText(senderString + ": "
-                                 + cropMessage(lastMessage.getData(), isMyMessage));
+        lastMessage.setText(senderString + ": " + cropMessage(message.getData(), isMyMessage));
     }
 
     private String cropMessage(String data, boolean isMyMessage) {

@@ -71,6 +71,8 @@ public class TextMessageHandler implements Handler {
             messageItemController.setDate(conversation.getLastMessageDate());
             messageItemController.setLastMessage(message);
         });
+        mainScreen.applyCss();
+        mainScreen.layout();
     }
 
     @Override

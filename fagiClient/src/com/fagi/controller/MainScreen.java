@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -81,7 +82,7 @@ public class MainScreen extends Pane {
         Contacts, Messages
     }
 
-    private List<MessageItemController> messageItems = new ArrayList<>();
+    private List<MessageItemController> messageItems = new CopyOnWriteArrayList<>();
     private ContentController conversationContentController;
     private FriendRequestList friendRequestList;
     private FriendMapWrapper friendMapWrapper;
@@ -229,9 +230,7 @@ public class MainScreen extends Pane {
         this.primaryStage.setOnCloseRequest(event -> {
         });
 
-        for (MessageItemController controller : this.messageItems) {
-            controller.stopTimer();
-        }
+        this.messageItems.forEach(MessageItemController::stopTimer);
     }
 
     private void interrupt(Thread thread) {
@@ -374,11 +373,13 @@ public class MainScreen extends Pane {
         setScrollPaneContent(PaneContent.Contacts, contactContentController);
     }
 
-    private void setupConversationList() {
+    private synchronized void setupConversationList() {
         conversationContentController =
                 new ContentController("/com/fagi/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Messages, conversationContentController);
 
+        messageItems.forEach(MessageItemController::stopTimer);
+        messageItems.clear();
         for (Conversation conversation : conversations) {
             conversationContentController.addToContentList(createMessageItem(conversation));
         }
