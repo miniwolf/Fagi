@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_fagiserver" default="compile.module.fagiserver">
+  <dirname property="module.fagiserver.basedir" file="${ant.file.module_fagiserver}"/>
+  
+  
+  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="fagiserver.output.dir" value="${module.fagiserver.basedir}/../out/production/fagiServer"/>
+  <property name="fagiserver.testoutput.dir" value="${module.fagiserver.basedir}/../out/test/fagiServer"/>
+  
+  <path id="fagiserver.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="fagiserver.module.production.classpath">
+    <path refid="library.gson-2.7.classpath"/>
+    <pathelement location="${shared.output.dir}"/>
+  </path>
+  
+  <path id="fagiserver.runtime.production.module.classpath">
+    <pathelement location="${fagiserver.output.dir}"/>
+    <path refid="library.gson-2.7.classpath"/>
+    <path refid="shared.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="fagiserver.module.classpath">
+    <pathelement location="${fagiserver.output.dir}"/>
+    <path refid="library.gson-2.7.classpath"/>
+    <pathelement location="${shared.testoutput.dir}"/>
+    <pathelement location="${shared.output.dir}"/>
+  </path>
+  
+  <path id="fagiserver.runtime.module.classpath">
+    <pathelement location="${fagiserver.testoutput.dir}"/>
+    <pathelement location="${fagiserver.output.dir}"/>
+    <path refid="library.gson-2.7.classpath"/>
+    <path refid="shared.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.fagiserver">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.fagiserver">
+    <patternset refid="excluded.from.module.fagiserver"/>
+  </patternset>
+  
+  <path id="fagiserver.module.sourcepath">
+    <dirset dir="${module.fagiserver.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.fagiserver" depends="compile.module.fagiserver.production,compile.module.fagiserver.tests" description="Compile module fagiServer"/>
+  
+  <target name="compile.module.fagiserver.production" depends="compile.module.shared" description="Compile module fagiServer; production classes">
+    <mkdir dir="${fagiserver.output.dir}"/>
+    <javac destdir="${fagiserver.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.fagiserver}"/>
+      <bootclasspath refid="fagiserver.module.bootclasspath"/>
+      <classpath refid="fagiserver.module.production.classpath"/>
+      <src refid="fagiserver.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.fagiserver"/>
+    </javac>
+    
+    <copy todir="${fagiserver.output.dir}">
+      <fileset dir="${module.fagiserver.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.fagiserver.tests" depends="compile.module.fagiserver.production" description="compile module fagiServer; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.fagiserver" description="cleanup module">
+    <delete dir="${fagiserver.output.dir}"/>
+    <delete dir="${fagiserver.testoutput.dir}"/>
+  </target>
+</project>
