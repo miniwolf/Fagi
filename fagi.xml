@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fagi" default="all">
+  
+  
+  <property file="fagi.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.ane"/>
+    <include name="*.zip"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.gson-2.7.classpath">
+    <pathelement location="${basedir}/fagiServer/lib/gson-2.7.jar"/>
+  </path>
+  
+  <path id="library.mock-dependencies.classpath">
+    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.6.12.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.6.12.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/objenesis-2.5.1.jar"/>
+  </path>
+  
+  <path id="library.mockito.classpath">
+    <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.7.19.jar"/>
+  </path>
+  
+  
+  <!-- Global Libraries -->
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  <import file="${basedir}/shared/module_shared.xml"/>
+  
+  <import file="${basedir}/fagiClient/module_fagiclient.xml"/>
+  
+  <import file="${basedir}/fagiServer/module_fagiserver.xml"/>
+  
+  <import file="${basedir}/fagiClient/test/module_test.xml"/>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.shared, clean.module.fagiclient, clean.module.fagiserver, clean.module.test" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.shared, compile.module.fagiclient, compile.module.fagiserver, compile.module.test" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.fagiclient:jar" value="${basedir}/out/artifacts/fagiClient_jar"/>
+    <property name="artifact.output.fagiserver:jar" value="${basedir}/out/artifacts/fagiServer_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.fagiClient.jar" value="${artifacts.temp.dir}/fagiClient.jar"/>
+    <property name="temp.jar.path.fagiServer.jar" value="${artifacts.temp.dir}/fagiServer.jar"/>
+  </target>
+  
+  <target name="artifact.fagiclient:jar" depends="init.artifacts, compile.module.fagiclient, compile.module.shared" description="Build &#39;fagiClient:jar&#39; artifact">
+    <property name="artifact.temp.output.fagiclient:jar" value="${artifacts.temp.dir}/fagiClient_jar"/>
+    <mkdir dir="${artifact.temp.output.fagiclient:jar}"/>
+    <jar destfile="${temp.jar.path.fagiClient.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${fagiclient.output.dir}"/>
+      <zipfileset dir="${shared.output.dir}"/>
+      <zipfileset src="${basedir}/fagiClient/lib/annotations-java8.jar"/>
+      <zipfileset src="${basedir}/fagiServer/lib/gson-2.7.jar"/>
+    </jar>
+    <copy file="${temp.jar.path.fagiClient.jar}" tofile="${artifact.temp.output.fagiclient:jar}/fagiClient.jar"/>
+  </target>
+  
+  <target name="artifact.fagiserver:jar" depends="init.artifacts, compile.module.fagiserver, compile.module.shared" description="Build &#39;fagiServer:jar&#39; artifact">
+    <property name="artifact.temp.output.fagiserver:jar" value="${artifacts.temp.dir}/fagiServer_jar"/>
+    <mkdir dir="${artifact.temp.output.fagiserver:jar}"/>
+    <jar destfile="${temp.jar.path.fagiServer.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${fagiserver.output.dir}"/>
+      <zipfileset dir="${shared.output.dir}"/>
+      <zipfileset src="${basedir}/fagiServer/lib/gson-2.7.jar"/>
+    </jar>
+    <copy file="${temp.jar.path.fagiServer.jar}" tofile="${artifact.temp.output.fagiserver:jar}/fagiServer.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.fagiclient:jar, artifact.fagiserver:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.fagiclient:jar}"/>
+    <copy todir="${artifact.output.fagiclient:jar}">
+      <fileset dir="${artifact.temp.output.fagiclient:jar}"/>
+    </copy>
+    <mkdir dir="${artifact.output.fagiserver:jar}"/>
+    <copy todir="${artifact.output.fagiserver:jar}">
+      <fileset dir="${artifact.temp.output.fagiserver:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>

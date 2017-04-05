@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_fagiclient" default="compile.module.fagiclient">
+  <dirname property="module.fagiclient.basedir" file="${ant.file.module_fagiclient}"/>
+  
+  <property name="module.jdk.home.fagiclient" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.fagiclient" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.fagiclient" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="fagiclient.output.dir" value="${module.fagiclient.basedir}/../out/production/fagiClient"/>
+  <property name="fagiclient.testoutput.dir" value="${module.fagiclient.basedir}/../out/test/fagiClient"/>
+  
+  <path id="fagiclient.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="fagiclient.module.production.classpath">
+    <path refid="${module.jdk.classpath.fagiclient}"/>
+    <pathelement location="${shared.output.dir}"/>
+    <pathelement location="${basedir}/fagiClient/lib/annotations-java8.jar"/>
+  </path>
+  
+  <path id="fagiclient.runtime.production.module.classpath">
+    <pathelement location="${fagiclient.output.dir}"/>
+    <path refid="shared.runtime.production.module.classpath"/>
+    <pathelement location="${basedir}/fagiClient/lib/annotations-java8.jar"/>
+  </path>
+  
+  <path id="fagiclient.module.classpath">
+    <path refid="${module.jdk.classpath.fagiclient}"/>
+    <pathelement location="${fagiclient.output.dir}"/>
+    <pathelement location="${shared.testoutput.dir}"/>
+    <pathelement location="${shared.output.dir}"/>
+    <pathelement location="${basedir}/fagiClient/lib/annotations-java8.jar"/>
+  </path>
+  
+  <path id="fagiclient.runtime.module.classpath">
+    <pathelement location="${fagiclient.testoutput.dir}"/>
+    <pathelement location="${fagiclient.output.dir}"/>
+    <path refid="shared.runtime.module.classpath"/>
+    <pathelement location="${basedir}/fagiClient/lib/annotations-java8.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.fagiclient">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.fagiclient">
+    <patternset refid="excluded.from.module.fagiclient"/>
+  </patternset>
+  
+  <path id="fagiclient.module.sourcepath">
+    <dirset dir="${module.fagiclient.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.fagiclient" depends="compile.module.fagiclient.production,compile.module.fagiclient.tests" description="Compile module fagiClient"/>
+  
+  <target name="compile.module.fagiclient.production" depends="register.custom.compilers,compile.module.shared" description="Compile module fagiClient; production classes">
+    <mkdir dir="${fagiclient.output.dir}"/>
+    <javac2 destdir="${fagiclient.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.fagiclient}/javac">
+      <compilerarg line="${compiler.args.fagiclient}"/>
+      <bootclasspath refid="fagiclient.module.bootclasspath"/>
+      <classpath refid="fagiclient.module.production.classpath"/>
+      <src refid="fagiclient.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.fagiclient"/>
+    </javac2>
+    
+    <copy todir="${fagiclient.output.dir}">
+      <fileset dir="${module.fagiclient.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.fagiclient.tests" depends="register.custom.compilers,compile.module.fagiclient.production" description="compile module fagiClient; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.fagiclient" description="cleanup module">
+    <delete dir="${fagiclient.output.dir}"/>
+    <delete dir="${fagiclient.testoutput.dir}"/>
+  </target>
+</project>
