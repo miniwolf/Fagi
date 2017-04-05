@@ -4,3 +4,11 @@ jdk:
 
 script:
   - ant build.modules
+
+notifications:
+  email:
+    recipients:
+      - miniwolf1508@gmail.com
+      - costa@hotmail.dk
+    on_success: never # default: change
+    on_failure: always # default: always
