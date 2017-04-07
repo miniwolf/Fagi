@@ -27,9 +27,9 @@ public class MessageController extends HBox {
     public MessageController(String stringMessage, String resource, String username) {
         this.stringMessage = stringMessage;
         new LoadFXML(this, resource).execute();
-        Image image = new Image(
-                "/com/fagi/style/material-icons/" + username.toCharArray()[0] + ".png", 32, 32,
-                true, true);
+        Image image = new Image("/com/fagi/style/material-icons/"
+                                + Character.toUpperCase(username.toCharArray()[0])
+                                + ".png", 32, 32, true, true);
         this.image.setImage(image);
     }
 
@@ -40,7 +40,8 @@ public class MessageController extends HBox {
     }
 
     private void setupMessageSize() {
-        message.setPrefHeight(Utils.computeTextHeight(ROBOTO, stringMessage, 250) + 14.0);
-        message.setPrefWidth(Utils.computeTextWidth(ROBOTO, stringMessage, 250) + 18.0);
+        double assumedHeight = Utils.computeTextHeight(ROBOTO, stringMessage, 232);
+        message.setPrefHeight(assumedHeight + 14.0);
+        message.setPrefWidth(Utils.computeTextWidth(ROBOTO, stringMessage, 232) + 18.0);
     }
 }
