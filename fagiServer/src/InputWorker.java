@@ -432,8 +432,11 @@ public class InputWorker extends Worker {
         if (!(response instanceof AllIsWell)) {
             return response;
         }
-        Data.getInputWorker(arg.getFriendUsername())
-            .handleInput(new GetFriendListRequest(arg.getFriendUsername()));
+
+        if (Data.isUserOnline(arg.getFriendUsername())) {
+            Data.getInputWorker(arg.getFriendUsername())
+                .handleInput(new GetFriendListRequest(arg.getFriendUsername()));
+        }
         return getFriendList();
     }
 }
