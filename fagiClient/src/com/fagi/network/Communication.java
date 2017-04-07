@@ -13,6 +13,7 @@ import com.fagi.model.HistoryUpdates;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.Response;
+import com.fagi.utility.Logger;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -46,7 +47,9 @@ public class Communication {
             createSession(encryption, serverKey);
         } catch (UnknownHostException Uhe) {
             System.err.println("c Uhe: " + Uhe);
+            Logger.logStackTrace(Uhe);
         } catch (IOException ioe) {
+            Logger.logStackTrace(ioe);
             throw new IOException("c ioe: " + ioe.toString());
         }
     }
@@ -71,6 +74,7 @@ public class Communication {
         } catch (IOException e) {
             System.err.println("cso ioe: " + e.toString());
             e.printStackTrace();
+            Logger.logStackTrace(e);
             System.exit(1);
         }
     }

@@ -14,6 +14,7 @@ import com.fagi.network.Communication;
 
 import java.io.IOException;
 
+import com.fagi.utility.Logger;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -76,8 +77,10 @@ public class MasterLogin {
             messageLabel = "Connected to server: " + config.getName();
         } catch (IOException ioe) {
             messageLabel = "Connection refused";
+            Logger.logStackTrace(ioe);
         } catch (ClassNotFoundException cnfe) {
             messageLabel = "Not a valid config file.";
+            Logger.logStackTrace(cnfe);
         }
     }
 

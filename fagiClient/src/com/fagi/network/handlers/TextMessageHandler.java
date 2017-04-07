@@ -46,7 +46,6 @@ public class TextMessageHandler implements Handler {
             return;
         }
         Conversation conversation = first.get();
-        ConversationController controller = mainScreen.getConversationController();
 
         if (conversation.getType() == ConversationType.Placeholder) {
             ConversationType type = conversation.getParticipants().size() > 2
@@ -57,9 +56,10 @@ public class TextMessageHandler implements Handler {
                 new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
         }
 
-        if (mainScreen.getCurrentConversation().getId() == conversation.getId()
-            && controller != null) {
+        if (mainScreen.hasCurrentOpenConversation(conversation)) {
+            ConversationController controller = mainScreen.getControllerFromConversation(conversation);
             controller.addMessage(message);
+
         }
         conversation.getData().addMessage(message);
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
@@ -71,6 +71,8 @@ public class TextMessageHandler implements Handler {
             messageItemController.setDate(conversation.getLastMessageDate());
             messageItemController.setLastMessage(message);
         });
+        mainScreen.applyCss();
+        mainScreen.layout();
     }
 
     @Override

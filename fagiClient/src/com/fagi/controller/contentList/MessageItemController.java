@@ -72,6 +72,8 @@ public class MessageItemController extends HBox {
                     return;
                 }
                 Platform.runLater(() -> date.setText(convertDate(dateInstance)));
+                lastMessage.applyCss();
+                lastMessage.layout();
             }
         }, 0, 1000);
     }
@@ -115,16 +117,25 @@ public class MessageItemController extends HBox {
                                                .filter(name -> !name.equals(username))
                                                .collect(Collectors.toList());
         this.usernameLabel.setText(String.join(", ", meExcludedList));
-        Image image = new Image(
-                "/com/fagi/style/material-icons/" + meExcludedList.get(0).toCharArray()[0] + ".png", 46,
-                46, true, true);
+        Image image = new Image("/com/fagi/style/material-icons/"
+                                + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0])
+                                + ".png", 46, 46, true, true);
         this.image.setImage(image);
     }
 
-    public void setLastMessage(TextMessage lastMessage) {
-        String sender = lastMessage.getMessageInfo().getSender();
-        String senderString = (sender.equals(username) ? "You" : sender);
-        this.lastMessage.setText(senderString + ": " + lastMessage.getData());
+    public void setLastMessage(TextMessage message) {
+        String sender = message.getMessageInfo().getSender();
+        boolean isMyMessage = sender.equals(username);
+        String senderString = (isMyMessage ? "You" : sender);
+        lastMessage.setText(senderString + ": " + cropMessage(message.getData(), isMyMessage));
+    }
+
+    private String cropMessage(String data, boolean isMyMessage) {
+        int max = isMyMessage ? 35 : 35 - username.length();
+        if (data.length() < max) {
+            return data;
+        }
+        return data.substring(0, max) + "...";
     }
 
     public void setDate(Date date) {

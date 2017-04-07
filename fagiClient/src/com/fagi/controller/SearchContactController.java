@@ -29,8 +29,8 @@ public class SearchContactController extends HBox {
 
         new LoadFXML(this, "/com/fagi/view/content/SearchContact.fxml").execute();
         Image image = new Image(
-                "/com/fagi/style/material-icons/" + username.toCharArray()[0] + ".png", 32, 32,
-                true, true);
+                "/com/fagi/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0])
+                + ".png", 32, 32, true, true);
         this.image.setImage(image);
         userName.setText(username);
     }

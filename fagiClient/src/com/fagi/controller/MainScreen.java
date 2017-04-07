@@ -29,6 +29,7 @@ import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.utility.JsonFileOperations;
+import com.fagi.utility.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -72,11 +74,15 @@ public class MainScreen extends Pane {
     private Parent emptyFocusElement;
     private boolean signOut;
 
+    public void addCurrentConversation(Conversation conversation) {
+        currentConversations.add(conversation);
+    }
+
     public enum PaneContent {
         Contacts, Messages
     }
 
-    private List<MessageItemController> messageItems = new ArrayList<>();
+    private List<MessageItemController> messageItems = new CopyOnWriteArrayList<>();
     private ContentController conversationContentController;
     private FriendRequestList friendRequestList;
     private FriendMapWrapper friendMapWrapper;
@@ -97,9 +103,9 @@ public class MainScreen extends Pane {
     private Draggable draggable;
     private GeneralHandler generalHandler;
     private Thread generalHandlerThread;
-    private Conversation conversation = new Conversation();
     private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
-    private ConversationController conversationController;
+    private List<Conversation> currentConversations = new ArrayList<>();
+    private List<ConversationController> conversationControllers = new ArrayList<>();
 
     /**
      * Creates new form ContactScreen.
@@ -156,29 +162,32 @@ public class MainScreen extends Pane {
         changeMenuStyle(PaneContent.Messages.toString());
         emptyFocusElement = messages;
         username.setText(usernameString);
-        Image tiny = new Image("/com/fagi/style/material-icons/" + usernameString.toCharArray()[0] + ".png", 40, 40, true, true);
+        char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
+        Image tiny = new Image("/com/fagi/style/material-icons/" + cUpper + ".png", 40, 40, true,
+                               true);
         this.tinyIcon.setImage(tiny);
-        Image large = new Image("/com/fagi/style/material-icons/" + usernameString.toCharArray()[0] + ".png", 96, 96, true, true);
+        Image large = new Image("/com/fagi/style/material-icons/" + cUpper + ".png", 96, 96, true,
+                                true);
         this.largeIcon.setImage(large);
         this.requestFocus();
 
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
         scene.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                Runnable run = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } finally {
-                            Platform.runLater(() -> {
-                                System.out.println("Width: " + newSceneWidth);
-                                search = new Search(searchBox, searchHeader, mainScreen);
-                            });
-                        }
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue,
+                                Number oldSceneWidth, Number newSceneWidth) {
+                Runnable run = () -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        Logger.logStackTrace(e);
+                    } finally {
+                        Platform.runLater(() -> {
+                            System.out.println("Width: " + newSceneWidth);
+                            search = new Search(searchBox, searchHeader, mainScreen);
+                        });
                     }
                 };
 
@@ -188,15 +197,6 @@ public class MainScreen extends Pane {
                 scene.widthProperty().removeListener(this);
             }
         });
-        /*
-        searchBox.onMouseClickedProperty().addListener(event -> {
-            System.out.println("Humus");
-            if (search == null) {
-                search = new Search(searchBox, searchHeader, this);
-            }
-        });
-        */
-        //instantiateSearchFunction();
     }
 
     @FXML
@@ -227,11 +227,10 @@ public class MainScreen extends Pane {
 
         ChatManager.handleLogout(new Logout());
 
-        this.primaryStage.setOnCloseRequest(event -> {});
+        this.primaryStage.setOnCloseRequest(event -> {
+        });
 
-        for (MessageItemController controller : this.messageItems) {
-            controller.stopTimer();
-        }
+        this.messageItems.forEach(MessageItemController::stopTimer);
     }
 
     private void interrupt(Thread thread) {
@@ -241,8 +240,34 @@ public class MainScreen extends Pane {
                 Thread.sleep(10);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
+                Logger.logStackTrace(ie);
             }
         }
+    }
+
+    public void removeConversation(Conversation conversation) {
+        currentConversations.remove(conversation);
+    }
+
+    public void removeConversationController(ConversationController controller) {
+        conversationControllers.remove(controller);
+    }
+
+    public boolean hasCurrentOpenConversation(Conversation conversation) {
+        return currentConversations.parallelStream().anyMatch(con -> con.equals(conversation));
+    }
+
+    public ConversationController getControllerFromConversation(Conversation conversation) {
+        for (ConversationController conversationController : conversationControllers) {
+            if (conversationController.getConversation().equals(conversation)) {
+                return conversationController;
+            }
+        }
+        return null;
+    }
+
+    public void addController(ConversationController controller) {
+        conversationControllers.add(controller);
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
@@ -255,7 +280,7 @@ public class MainScreen extends Pane {
 
     public void setScrollPaneContent(PaneContent content, Parent parent) {
         if (currentPaneContent == content) {
-            listContent.setContent(parent);
+            Platform.runLater(() -> listContent.setContent(parent));
         }
 
         listContentMap.put(content, parent);
@@ -300,14 +325,9 @@ public class MainScreen extends Pane {
         currentPane.getStyleClass().add("chosen");
     }
 
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
-    }
-
     public void addConversation(Conversation conversation) {
         conversations.add(conversation);
-        Pane pane = createMessageItem(conversation);
-        Platform.runLater(() -> conversationContentController.addToContentList(pane));
+        setupConversationList();
     }
 
     public List<MessageItemController> getMessageItems() {
@@ -326,14 +346,6 @@ public class MainScreen extends Pane {
         return usernameString;
     }
 
-    public Conversation getCurrentConversation() {
-        return conversation;
-    }
-
-    public ConversationController getConversationController() {
-        return conversationController;
-    }
-
     public PaneContent getCurrentPaneContent() {
         return currentPaneContent;
     }
@@ -343,9 +355,10 @@ public class MainScreen extends Pane {
     }
 
     private void updateConversationListFromServer(List<Conversation> conversations) {
-        List<ConversationFilter> filters = conversations.stream().map(
-            x -> new ConversationFilter(x.getId(), x.getLastMessageDate()))
-                                                        .collect(Collectors.toList());
+        List<ConversationFilter> filters =
+                conversations.stream()
+                             .map(x -> new ConversationFilter(x.getId(), x.getLastMessageDate()))
+                             .collect(Collectors.toList());
 
         communication.sendObject(new GetConversationsRequest(usernameString, filters));
     }
@@ -356,15 +369,17 @@ public class MainScreen extends Pane {
 
     private void setupContactList() {
         ContentController contactContentController =
-            new ContentController("/com/fagi/view/content/ContentList.fxml");
+                new ContentController("/com/fagi/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Contacts, contactContentController);
     }
 
-    private void setupConversationList() {
+    private synchronized void setupConversationList() {
         conversationContentController =
-            new ContentController("/com/fagi/view/content/ContentList.fxml");
+                new ContentController("/com/fagi/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Messages, conversationContentController);
 
+        messageItems.forEach(MessageItemController::stopTimer);
+        messageItems.clear();
         for (Conversation conversation : conversations) {
             conversationContentController.addToContentList(createMessageItem(conversation));
         }
@@ -372,8 +387,7 @@ public class MainScreen extends Pane {
 
     public Pane createMessageItem(Conversation conversation) {
         MessageItemController messageItemController =
-            new MessageItemController(usernameString,
-                                      conversation);
+                new MessageItemController(usernameString, conversation);
         messageItemController.getActionable()
                              .assign(new OpenConversationFromID(this, conversation.getId()));
         messageItems.add(messageItemController);
@@ -391,10 +405,6 @@ public class MainScreen extends Pane {
     public void removeElement(Node node) {
         conversationHolder.getChildren().remove(node);
         emptyFocusElement.requestFocus();
-    }
-
-    public void setConversationController(ConversationController conversationController) {
-        this.conversationController = conversationController;
     }
 
     public void setConversationContentController(ContentController conversationContentController) {

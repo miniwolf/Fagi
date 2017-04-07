@@ -12,7 +12,7 @@
 
 <fx:root layoutX="10.0" layoutY="10.0" styleClass="holder, me" stylesheets="@../../style/conversation.css" type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <Pane HBox.hgrow="ALWAYS" />
-   <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0" styleClass="text-message" />
+   <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0" styleClass="text-message" wrapText="true" />
     <Pane maxHeight="-Infinity" styleClass="tip">
         <Circle centerX="7.0" centerY="8.0" fill="TRANSPARENT" radius="8.0" stroke="#cfd8dc" strokeType="OUTSIDE" strokeWidth="8.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eceff1" height="8.0" layoutX="-8.0" layoutY="-8.0" stroke="TRANSPARENT" strokeType="OUTSIDE" strokeWidth="8.0" width="30.0" />

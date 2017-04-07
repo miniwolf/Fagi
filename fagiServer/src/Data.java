@@ -30,7 +30,8 @@ import com.fagi.responses.UserOnline;
  * Contains and update information on users.
  */
 class Data {
-    private static final Map<String, OutputWorker> onlineUsers = new ConcurrentHashMap<>();
+    private static final Map<String, OutputWorker> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, InputWorker> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
     private static final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
     private static final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
     private static long nextConversationId = 0;
@@ -150,8 +151,9 @@ class Data {
         JsonFileOperations.storeObjectToFile(codes, JsonFileOperations.CONFIG_FOLDER_PATH, JsonFileOperations.INVITE_CODES_FILE);
     }
 
-    public static Response userLogin(String userName, String pass, OutputWorker worker) {
-        if ( onlineUsers.containsKey(userName) ) {
+    public static Response userLogin(String userName, String pass, OutputWorker worker,
+                                     InputWorker inputWorker) {
+        if ( OUTPUT_WORKER_MAP.containsKey(userName) ) {
             return new UserOnline();
         }
         User user = registeredUsers.get(userName);
@@ -161,7 +163,8 @@ class Data {
         if ( !user.getPass().equals(pass) ) {
             return new PasswordError();
         }
-        onlineUsers.put(userName, worker);
+        OUTPUT_WORKER_MAP.put(userName, worker);
+        INPUT_WORKER_MAP.put(userName, inputWorker);
         return new AllIsWell();
     }
 
@@ -169,15 +172,16 @@ class Data {
         if ( userName == null ) {
             return;
         }
-        if ( onlineUsers.containsKey(userName) ) {
-            onlineUsers.remove(userName);
+        if ( OUTPUT_WORKER_MAP.containsKey(userName) ) {
+            OUTPUT_WORKER_MAP.remove(userName);
+            INPUT_WORKER_MAP.remove(userName);
         } else {
             System.out.println("Couldn't log " + userName + " out");
         }
     }
 
     public static boolean isUserOnline(String userName) {
-        return onlineUsers.containsKey(userName);
+        return OUTPUT_WORKER_MAP.containsKey(userName);
     }
 
     public static void makeFriends(User first, User second) {
@@ -195,8 +199,12 @@ class Data {
         return registeredUsers.get(name);
     }
 
-    public static OutputWorker getWorker(String userName) {
-        return onlineUsers.get(userName);
+    public static InputWorker getInputWorker(String username) {
+        return INPUT_WORKER_MAP.get(username);
+    }
+
+    public static OutputWorker getOutputWorker(String userName) {
+        return OUTPUT_WORKER_MAP.get(userName);
     }
 
     public static List<String> getUserNames() {

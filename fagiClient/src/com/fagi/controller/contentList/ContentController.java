@@ -22,8 +22,8 @@ public class ContentController extends VBox {
         new LoadFXML(this, resource).execute();
     }
 
-    public void addToContentList(Parent parent) {
-        getChildren().add(parent);
+    public synchronized void addToContentList(Parent parent) {
+        Platform.runLater(() -> getChildren().add(parent));
     }
 
     public void addAllToContentList(List<Parent> parents) {

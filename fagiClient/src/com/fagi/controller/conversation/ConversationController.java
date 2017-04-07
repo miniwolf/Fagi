@@ -101,7 +101,7 @@ public class ConversationController extends BorderPane {
             return "";
         } else {
             // Convert into something like "active 3 mo ago" "active 1 w ago"
-            return "active 3 mo ago";
+            return "";
         }
     }
 
@@ -150,8 +150,13 @@ public class ConversationController extends BorderPane {
     }
 
     @FXML
-    private void closeConversation() {
+    public void closeConversation() {
         mainScreen.removeElement(this);
-        mainScreen.setConversation(null);
+        mainScreen.removeConversation(conversation);
+        mainScreen.removeConversationController(this);
+    }
+
+    public Conversation getConversation() {
+        return conversation;
     }
 }

@@ -18,7 +18,7 @@ public class ConversationHandler implements Runnable {
                     Data.getConversation(message.getMessageInfo().getConversationID());
                 conversation.getParticipants().stream().filter(Data::isUserOnline)
                             .forEach(
-                                participant -> Data.getWorker(participant).addMessage(message));
+                                participant -> Data.getOutputWorker(participant).addMessage(message));
 
                 conversation.addMessage(message);
                 Data.storeConversation(conversation);

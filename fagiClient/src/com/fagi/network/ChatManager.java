@@ -118,7 +118,8 @@ public class ChatManager {
             labelMessage.setText("Error: User already exists");
             return false;
         } else if (response instanceof IllegalInviteCode) {
-            labelMessage.setText("Error: Illegal invite code. Contact server administrator");
+            labelMessage.setText("Error: Illegal invite code. Contact host");
+            return false;
         }
         return true;
     }
