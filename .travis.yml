@@ -1,9 +1,7 @@
 language: java
+install: ant build.modules
 jdk:
   - oraclejdk8
-
-script:
-  - ant build.modules
 
 notifications:
   email:
