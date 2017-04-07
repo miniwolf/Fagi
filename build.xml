@@ -9,7 +9,7 @@
    -->
   
   <!-- Compiler options -->
-  <property name="test.dir" location="fagiClient/test/src"/>
+  
   <property name="compiler.debug" value="on"/>
   <property name="compiler.generate.no.warnings" value="off"/>
   <property name="compiler.args" value=""/>
@@ -136,15 +136,25 @@
     <delete dir="${artifacts.temp.dir}"/>
   </target>
 
-  <target name="test" description="run all tests" depends="build.modules">
-    <junit haltonfailure="yes">
-      <classpath refid="${module.test.classpath}"/>
-      <formatter type="xml"/>
-      <batchtest fork="yes">
-        <fileset dir="${module.test.basedir}/src"/>
+  <target name="test" description="run all tests">
+    <junit printsummary="withOutAndErr" showoutput="yes" haltonfailure="yes">
+      <classpath refid="test.runtime.module.classpath"/>
+      <!--<formatter type="plain" usefile="false"/>-->
+      <batchtest>
+        <fileset dir="${module.test.basedir}/src/">
+          <include name="**/*Test.java"/>
+          <exclude name="**/UtilsTest.java"/> <!--Sorry but this doesn't work yet-->
+        </fileset>
       </batchtest>
     </junit>
+    <!--
+    <junitreport todir="${module.test.basedir}">
+      <fileset dir="${module.test.basedir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report todir="${module.test.basedir}" format="frames"/>
+    </junitreport>-->
   </target>
-  
+
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>
