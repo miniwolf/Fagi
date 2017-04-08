@@ -137,7 +137,7 @@
   </target>
 
   <target name="test" description="run all tests">
-    <junit printsummary="withOutAndErr" showoutput="yes" haltonfailure="yes">
+    <junit showoutput="yes" haltonfailure="yes"> <!--printsummary="withOutAndErr"-->
       <classpath refid="test.runtime.module.classpath"/>
       <!--<formatter type="plain" usefile="false"/>-->
       <batchtest>
