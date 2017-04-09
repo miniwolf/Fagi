@@ -24,6 +24,6 @@ public class Utils {
         helper.setText(text);
         helper.setFont(font);
         helper.setWrappingWidth((int)wrappingWidth);
-        return helper.getLayoutBounds().getHeight();
+        return Math.ceil(helper.getLayoutBounds().getHeight());
     }
 }

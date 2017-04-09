@@ -33,6 +33,9 @@ public class Communication {
     private Thread inputThread;
     private EncryptionAlgorithm encryption;
 
+    public Communication() {
+    }
+
     public Communication(String host, int port, EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
         this.encryption = encryption;
         try {
@@ -102,5 +105,17 @@ public class Communication {
 
     public HistoryUpdates getHistoryUpdates() {
         return inputHandler.containsHistoryUpdates();
+    }
+
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public void setOut(ObjectOutputStream out) {
+        this.out = out;
+    }
+
+    public void setEncryption(EncryptionAlgorithm encryption) {
+        this.encryption = encryption;
     }
 }
