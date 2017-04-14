@@ -76,7 +76,7 @@ public class MasterLogin {
                 ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
                 AES aes = new AES();
                 aes.generateKey(128);
-                while(!successfulConnection) {
+                while (!successfulConnection) {
                     Platform.runLater(() -> {
                         try {
                             Communication communication = new Communication(config.getIp(), config.getPort(), aes,
