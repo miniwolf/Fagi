@@ -15,6 +15,7 @@ import com.fagi.network.Communication;
 import java.io.IOException;
 
 import com.fagi.utility.Logger;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -41,6 +42,7 @@ public class MasterLogin {
     private final Scene scene;
     private String password;
     private String inviteCode;
+    private boolean successfulConnection = false;
 
     /**
      * Constructor will create and show the first screen.
@@ -68,20 +70,51 @@ public class MasterLogin {
      * Function calls in this method depends on the initComponents.
      */
     private void initCommunication() {
-        try {
-            ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
-            AES aes = new AES();
-            aes.generateKey(128);
-            ChatManager.setCommunication(new Communication(config.getIp(), config.getPort(), aes,
-                                                           config.getServerKey()));
-            messageLabel = "Connected to server: " + config.getName();
-        } catch (IOException ioe) {
-            messageLabel = "Connection refused";
-            Logger.logStackTrace(ioe);
-        } catch (ClassNotFoundException cnfe) {
-            messageLabel = "Not a valid config file.";
-            Logger.logStackTrace(cnfe);
-        }
+        Thread thread = new Thread(() -> {
+            successfulConnection = false;
+            try {
+                ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
+                AES aes = new AES();
+                aes.generateKey(128);
+                while(!successfulConnection) {
+                    Platform.runLater(() -> {
+                        try {
+                            Communication communication = new Communication(config.getIp(), config.getPort(), aes,
+                                                                            config.getServerKey());
+                            ChatManager.setCommunication(communication);
+                            messageLabel = "Connected to server: " + config.getName();
+                            successfulConnection = true;
+                        } catch (IOException e) {
+                            Platform.runLater(() -> {
+                                messageLabel = "Connection refused";
+                            });
+                            e.printStackTrace();
+                            Logger.logStackTrace(e);
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                Platform.runLater(() -> {
+                    messageLabel = "Could not load config file.";
+                });
+                e.printStackTrace();
+                Logger.logStackTrace(e);
+            } catch (ClassNotFoundException e) {
+                Platform.runLater(() -> {
+                    messageLabel = "Not a valid config file.";
+                });
+                e.printStackTrace();
+                Logger.logStackTrace(e);
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
