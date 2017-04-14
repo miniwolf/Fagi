@@ -13,6 +13,7 @@ import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.responses.Response;
 import com.fagi.utility.Logger;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -60,6 +61,8 @@ public class InputHandler implements Runnable {
                         Logger.logStackTrace(ioe);
                     }
                     running = false;
+                    ChatManager.closeCommunication();
+                    Platform.runLater(() -> ChatManager.getApplication().showLoginScreen());
                 } catch (ClassNotFoundException cnfe) {
                     // Shared files are not the same on both side of the server
                     System.err.println(cnfe.getMessage());
