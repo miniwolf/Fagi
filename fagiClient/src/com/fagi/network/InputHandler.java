@@ -60,6 +60,8 @@ public class InputHandler implements Runnable {
                         Logger.logStackTrace(ioe);
                     }
                     running = false;
+                    ChatManager.closeCommunication();
+                    ChatManager.getApplication().showLoginScreen();
                 } catch (ClassNotFoundException cnfe) {
                     // Shared files are not the same on both side of the server
                     System.err.println(cnfe.getMessage());
