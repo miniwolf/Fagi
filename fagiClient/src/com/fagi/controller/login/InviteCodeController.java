@@ -6,7 +6,6 @@ package com.fagi.controller.login;
 
 import com.fagi.action.items.LoadFXML;
 import com.fagi.network.ChatManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 

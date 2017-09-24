@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 /**
  * Testing the communication send from the client side

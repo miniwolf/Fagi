@@ -7,7 +7,6 @@ import com.fagi.model.messages.message.TextMessage;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Marcus on 13-11-2016.

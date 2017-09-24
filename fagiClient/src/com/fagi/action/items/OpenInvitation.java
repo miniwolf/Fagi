@@ -14,9 +14,9 @@ import javafx.scene.control.Label;
  */
 public class OpenInvitation implements Action {
     private final MainScreen mainScreen;
-    private final Label username;
+    private final String username;
 
-    public OpenInvitation(MainScreen mainScreen, Label username) {
+    public OpenInvitation(MainScreen mainScreen, String username) {
         this.mainScreen = mainScreen;
         this.username = username;
     }

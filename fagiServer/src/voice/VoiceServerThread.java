@@ -4,13 +4,6 @@
 
 package voice;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.DatagramSocket;
-import java.net.Socket;
-import java.net.SocketException;
-
 /**
  * Created by miniwolf on 05-10-2014.
  */

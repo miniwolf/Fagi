@@ -4,11 +4,13 @@ import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 
-import javax.xml.soap.Text;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**

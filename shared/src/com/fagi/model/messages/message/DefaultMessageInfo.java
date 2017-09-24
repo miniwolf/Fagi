@@ -45,14 +45,17 @@ public class DefaultMessageInfo implements MessageInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DefaultMessageInfo)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DefaultMessageInfo)) {
+            return false;
+        }
 
         DefaultMessageInfo that = (DefaultMessageInfo) o;
 
-        if (conversationID != that.conversationID) return false;
-        if (!sender.equals(that.sender)) return false;
-        return that.currentTime == currentTime;
+        return conversationID == that.conversationID && sender.equals(that.sender)
+               && that.currentTime == currentTime;
 
     }
 

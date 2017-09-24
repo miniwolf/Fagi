@@ -2,11 +2,6 @@ package voice;/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.MulticastSocket;
-import java.util.Arrays;
 /*
 public class VoiceServer extends VoiceServerThread {
     private static final int PORT = 4243;

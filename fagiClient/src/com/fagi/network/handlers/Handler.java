@@ -6,8 +6,6 @@ package com.fagi.network.handlers;
 
 import com.fagi.model.messages.InGoingMessages;
 
-import java.util.Queue;
-
 /**
  * @author miniwolf
  */

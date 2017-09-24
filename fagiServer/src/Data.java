@@ -78,7 +78,7 @@ class Data {
         nextConversationId = id;
     }
 
-    public static Object createUser(String userName, String pass) throws IOException {
+    public static Object createUser(String userName, String pass) {
         if ( registeredUsers.containsKey(userName) ) {
             return new UserExists();
         }
@@ -126,15 +126,15 @@ class Data {
             if (files == null) return;
 
             for (File file : files) {
-                String json = "";
+                StringBuilder json = new StringBuilder();
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 while (reader.ready()) {
-                    json += reader.readLine();
+                    json.append(reader.readLine());
                 }
 
                 Gson gson = new Gson();
 
-                User user = gson.fromJson(json, User.class);
+                User user = gson.fromJson(json.toString(), User.class);
                 //TODO Display exception to user concerning invalid userIndex file.
                 registeredUsers.put(user.getUserName(), user);
             }

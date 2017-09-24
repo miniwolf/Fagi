@@ -16,7 +16,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.handler.Search;
-import com.fagi.model.FriendMapWrapper;
+import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.Logout;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -121,16 +121,6 @@ public class MainScreen extends Pane {
         listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;
         this.friendMapWrapper = new FriendMapWrapper(this);
-        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
-                                     event -> System.out.println("mouse click detected: "
-                                                                 + event.getTarget()));
-
-        primaryStage.setOnCloseRequest(event -> {
-            event.consume();
-            primaryStage.setIconified(true);
-        });
-
-        primaryStage.setOnShowing(event -> System.out.println("Test"));
 
         new LoadFXML(this, "/com/fagi/view/Main.fxml").execute();
     }
@@ -157,6 +147,17 @@ public class MainScreen extends Pane {
 
     @FXML
     private void initialize() {
+        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                                     event -> System.out.println("mouse click detected: "
+                                                                 + event.getTarget()));
+
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            primaryStage.setIconified(true);
+        });
+
+        primaryStage.setOnShowing(event -> System.out.println("Test"));
+
         currentPane = messages;
         currentPaneContent = PaneContent.Messages;
         changeMenuStyle(PaneContent.Messages.toString());
@@ -234,6 +235,9 @@ public class MainScreen extends Pane {
     }
 
     private void interrupt(Thread thread) {
+        if (thread == null) {
+            return;
+        }
         thread.interrupt();
         while (!thread.isInterrupted()) {
             try {

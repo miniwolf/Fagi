@@ -5,7 +5,11 @@ package com.fagi.network;
  */
 
 import com.fagi.main.FagiApp;
-import com.fagi.model.*;
+import com.fagi.model.CreateUser;
+import com.fagi.model.InviteCode;
+import com.fagi.model.Login;
+import com.fagi.model.Logout;
+import com.fagi.model.UserNameAvailableRequest;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
 import com.fagi.responses.NoSuchUser;
