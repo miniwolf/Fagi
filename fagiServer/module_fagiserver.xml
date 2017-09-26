@@ -2,8 +2,11 @@
 <project name="module_fagiserver" default="compile.module.fagiserver">
   <dirname property="module.fagiserver.basedir" file="${ant.file.module_fagiserver}"/>
   
+  <property name="module.jdk.home.fagiserver" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.fagiserver" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.fagiserver" value="${project.jdk.classpath}"/>
   
-  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
   
   <property name="fagiserver.output.dir" value="${module.fagiserver.basedir}/../out/production/fagiServer"/>
   <property name="fagiserver.testoutput.dir" value="${module.fagiserver.basedir}/../out/test/fagiServer"/>
@@ -13,6 +16,7 @@
   </path>
   
   <path id="fagiserver.module.production.classpath">
+    <path refid="${module.jdk.classpath.fagiserver}"/>
     <path refid="library.gson-2.7.classpath"/>
     <pathelement location="${shared.output.dir}"/>
   </path>
@@ -24,6 +28,7 @@
   </path>
   
   <path id="fagiserver.module.classpath">
+    <path refid="${module.jdk.classpath.fagiserver}"/>
     <pathelement location="${fagiserver.output.dir}"/>
     <path refid="library.gson-2.7.classpath"/>
     <pathelement location="${shared.testoutput.dir}"/>
@@ -55,15 +60,15 @@
   
   <target name="compile.module.fagiserver" depends="compile.module.fagiserver.production,compile.module.fagiserver.tests" description="Compile module fagiServer"/>
   
-  <target name="compile.module.fagiserver.production" depends="compile.module.shared" description="Compile module fagiServer; production classes">
+  <target name="compile.module.fagiserver.production" depends="register.custom.compilers,compile.module.shared" description="Compile module fagiServer; production classes">
     <mkdir dir="${fagiserver.output.dir}"/>
-    <javac destdir="${fagiserver.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+    <javac2 destdir="${fagiserver.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.fagiserver}/javac">
       <compilerarg line="${compiler.args.fagiserver}"/>
       <bootclasspath refid="fagiserver.module.bootclasspath"/>
       <classpath refid="fagiserver.module.production.classpath"/>
       <src refid="fagiserver.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.fagiserver"/>
-    </javac>
+    </javac2>
     
     <copy todir="${fagiserver.output.dir}">
       <fileset dir="${module.fagiserver.basedir}/src">
@@ -73,7 +78,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.fagiserver.tests" depends="compile.module.fagiserver.production" description="compile module fagiServer; test classes" unless="skip.tests"/>
+  <target name="compile.module.fagiserver.tests" depends="register.custom.compilers,compile.module.fagiserver.production" description="compile module fagiServer; test classes" unless="skip.tests"/>
   
   <target name="clean.module.fagiserver" description="cleanup module">
     <delete dir="${fagiserver.output.dir}"/>

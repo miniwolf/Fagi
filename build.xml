@@ -37,8 +37,8 @@
     <include name="*.ear"/>
     <include name="*.swc"/>
     <include name="*.war"/>
-    <include name="*.ane"/>
     <include name="*.zip"/>
+    <include name="*.ane"/>
   </patternset>
   <patternset id="compiler.resources">
     <exclude name="**/?*.java"/>
@@ -51,6 +51,41 @@
     <exclude name="**/?*.clj"/>
     <exclude name="**/?*.aj"/>
   </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
   
   
   <!-- Project Libraries -->
@@ -69,8 +104,24 @@
     <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.7.19.jar"/>
   </path>
   
+  <path id="library.testfx.classpath">
+    <pathelement location="${basedir}/fagiClient/test/lib/TestFX-master.jar"/>
+  </path>
+  
   
   <!-- Global Libraries -->
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
   
   <!-- Modules -->
   
@@ -135,26 +186,6 @@
     <!-- Delete temporary files -->
     <delete dir="${artifacts.temp.dir}"/>
   </target>
-
-  <target name="test" description="run all tests">
-    <junit showoutput="yes" haltonfailure="yes"> <!--printsummary="withOutAndErr"-->
-      <classpath refid="test.runtime.module.classpath"/>
-      <!--<formatter type="plain" usefile="false"/>-->
-      <batchtest>
-        <fileset dir="${module.test.basedir}/src/">
-          <include name="**/*Test.java"/>
-          <exclude name="**/UtilsTest.java"/> <!--Sorry but this doesn't work yet-->
-        </fileset>
-      </batchtest>
-    </junit>
-    <!--
-    <junitreport todir="${module.test.basedir}">
-      <fileset dir="${module.test.basedir}">
-        <include name="TEST-*.xml"/>
-      </fileset>
-      <report todir="${module.test.basedir}" format="frames"/>
-    </junitreport>-->
-  </target>
-
+  
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>
