@@ -3,7 +3,7 @@
   <dirname property="module.shared.basedir" file="${ant.file.module_shared}"/>
   
   
-  <property name="compiler.args.shared" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  <property name="compiler.args.shared" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
   
   <property name="shared.output.dir" value="${module.shared.basedir}/../out/production/shared"/>
   <property name="shared.testoutput.dir" value="${module.shared.basedir}/../out/test/shared"/>

@@ -3,7 +3,7 @@
   <dirname property="module.fagiclient.basedir" file="${ant.file.module_fagiclient}"/>
   
   
-  <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
   
   <property name="fagiclient.output.dir" value="${module.fagiclient.basedir}/../out/production/fagiClient"/>
   <property name="fagiclient.testoutput.dir" value="${module.fagiclient.basedir}/../out/test/fagiClient"/>

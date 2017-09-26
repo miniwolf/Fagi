@@ -42,6 +42,7 @@ public class SignOutTests extends GuiTest {
 
     @Override
     protected Parent getRootNode() {
+        System.out.println("Starting SignOut tests");
         Communication communication = Mockito.mock(Communication.class);
         Stage stage = (Stage) targetWindow();
         stage.setScene(new Scene(new AnchorPane()));

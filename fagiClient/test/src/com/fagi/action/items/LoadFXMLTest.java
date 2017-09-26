@@ -21,6 +21,7 @@ public class LoadFXMLTest {
 
     @Before
     public void init() {
+        System.out.println("Starting LoadFXMLtests");
         MainScreen mainScreen = Mockito.mock(MainScreen.class);
         this.mock = new ConversationController(mainScreen, new Conversation(), "");
         loadFXML = new LoadFXML(this.mock, "/com/fagi/view/conversation/Conversation.fxml");

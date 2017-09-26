@@ -2,6 +2,7 @@ package com.fagi.util;
 
 import javafx.scene.text.Font;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import rules.JavaFXThreadingRule;
@@ -16,6 +17,11 @@ import rules.JavaFXThreadingRule;
 public class UtilsTest {
     @Rule public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private static final Font ROBOTO = new Font("Roboto-Regular", 13);
+
+    @Before
+    public void setup() {
+        System.out.println("Starting UtilsTest");
+    }
 
     @Test
     public void thirtyFourCharactersReturnsOneLine() {

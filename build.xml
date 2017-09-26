@@ -37,8 +37,8 @@
     <include name="*.ear"/>
     <include name="*.swc"/>
     <include name="*.war"/>
-    <include name="*.ane"/>
     <include name="*.zip"/>
+    <include name="*.ane"/>
   </patternset>
   <patternset id="compiler.resources">
     <exclude name="**/?*.java"/>
@@ -67,6 +67,10 @@
   
   <path id="library.mockito.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.7.19.jar"/>
+  </path>
+  
+  <path id="library.testfx.classpath">
+    <pathelement location="${basedir}/fagiClient/test/lib/TestFX-master.jar"/>
   </path>
   
   
@@ -143,6 +147,7 @@
       <batchtest>
         <fileset dir="${module.test.basedir}/src/">
           <include name="**/*Test.java"/>
+          <include name="**/*Tests.java"/>
           <exclude name="**/UtilsTest.java"/> <!--Sorry but this doesn't work yet-->
         </fileset>
       </batchtest>
@@ -155,6 +160,6 @@
       <report todir="${module.test.basedir}" format="frames"/>
     </junitreport>-->
   </target>
-
+  
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>

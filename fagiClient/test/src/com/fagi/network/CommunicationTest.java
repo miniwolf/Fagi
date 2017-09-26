@@ -17,6 +17,7 @@ public class CommunicationTest {
     private Communication communication;
     @Before
     public void init() {
+        System.out.println("Starting communicationTests");
         communication = new Communication();
     }
 
