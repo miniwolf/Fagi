@@ -34,10 +34,8 @@ public class SignOutTests extends GuiTest {
         Node logoutButton = lookup(".gb_Fa").query();
         clickOn(logoutButton);
         // This is supposed to check that we are on the loginscreen
-        Node usernameField = lookup("#username").query();
-        Assert.assertNotNull(usernameField);
-        Node passwordField = lookup("#password").query();
-        Assert.assertNotNull(passwordField);
+        Node query = lookup("#UniqueLoginScreen").query();
+        Assert.assertNotNull(query);
     }
 
     @Override
