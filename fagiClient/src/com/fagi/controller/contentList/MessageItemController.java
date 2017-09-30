@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 
+import com.fagi.uimodel.FagiImage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -117,9 +118,9 @@ public class MessageItemController extends HBox {
                                                .filter(name -> !name.equals(username))
                                                .collect(Collectors.toList());
         this.usernameLabel.setText(String.join(", ", meExcludedList));
-        Image image = new Image("/com/fagi/style/material-icons/"
-                                + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0])
-                                + ".png", 46, 46, true, true);
+        Image image = new FagiImage("/com/fagi/style/material-icons/"
+                                    + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0])
+                                    + ".png", 46, 46, true, true);
         this.image.setImage(image);
     }
 

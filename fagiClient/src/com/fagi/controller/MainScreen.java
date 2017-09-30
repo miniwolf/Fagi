@@ -16,6 +16,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.handler.Search;
+import com.fagi.uimodel.FagiImage;
 import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.Logout;
@@ -164,11 +165,11 @@ public class MainScreen extends Pane {
         emptyFocusElement = messages;
         username.setText(usernameString);
         char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
-        Image tiny = new Image("/com/fagi/style/material-icons/" + cUpper + ".png", 40, 40, true,
-                               true);
+        Image tiny = new FagiImage("/com/fagi/style/material-icons/" + cUpper + ".png", 40, 40,
+                                   true, true);
         this.tinyIcon.setImage(tiny);
-        Image large = new Image("/com/fagi/style/material-icons/" + cUpper + ".png", 96, 96, true,
-                                true);
+        Image large = new FagiImage("/com/fagi/style/material-icons/" + cUpper + ".png", 96, 96,
+                                    true, true);
         this.largeIcon.setImage(large);
         this.requestFocus();
 

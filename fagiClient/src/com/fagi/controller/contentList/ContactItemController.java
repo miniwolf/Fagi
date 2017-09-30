@@ -3,6 +3,7 @@ package com.fagi.controller.contentList;
 import com.fagi.action.Actionable;
 import com.fagi.action.ActionableImpl;
 import com.fagi.action.items.LoadFXML;
+import com.fagi.uimodel.FagiImage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -41,7 +42,7 @@ public class ContactItemController extends HBox {
 
     public void setUserName(String userName) {
         this.userName.setText(userName);
-        Image image = new Image(
+        Image image = new FagiImage(
                 "/com/fagi/style/material-icons/" + Character.toUpperCase(userName.toCharArray()[0])
                 + ".png", 46, 46, true, true);
         this.image.setImage(image);

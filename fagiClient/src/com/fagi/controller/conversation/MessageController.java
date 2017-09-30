@@ -1,6 +1,7 @@
 package com.fagi.controller.conversation;
 
 import com.fagi.action.items.LoadFXML;
+import com.fagi.uimodel.FagiImage;
 import com.fagi.util.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -27,9 +28,9 @@ public class MessageController extends HBox {
     public MessageController(String stringMessage, String resource, String username) {
         this.stringMessage = stringMessage;
         new LoadFXML(this, resource).execute();
-        Image image = new Image("/com/fagi/style/material-icons/"
-                                + Character.toUpperCase(username.toCharArray()[0])
-                                + ".png", 32, 32, true, true);
+        FagiImage image = new FagiImage("/com/fagi/style/material-icons/"
+                                        + Character.toUpperCase(username.toCharArray()[0])
+                                        + ".png", 32, 32, true, true);
         this.image.setImage(image);
     }
 
