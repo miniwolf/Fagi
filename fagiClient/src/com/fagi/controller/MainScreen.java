@@ -302,7 +302,7 @@ public class MainScreen extends Pane {
     private void changeMenu(MouseEvent event) {
         Node node = (Node) event.getSource();
         changeMenuStyle((String) node.getUserData());
-        search.stopSearching();
+        stopSearching();
         requestFocus();
     }
 
