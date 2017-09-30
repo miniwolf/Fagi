@@ -157,6 +157,10 @@ public class ChatManager {
         return Pattern.matches("\\w*", string);
     }
 
+    public static FagiApp getApplication() {
+        return application;
+    }
+
     private static boolean isEmpty(String string) {
         return string == null || "".equals(string);
     }
