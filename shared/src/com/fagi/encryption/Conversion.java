@@ -1,11 +1,6 @@
 package com.fagi.encryption;
 
 import java.io.*;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 
 /**
  * Created by Marcus on 31-05-2016.

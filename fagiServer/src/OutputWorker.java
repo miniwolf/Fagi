@@ -8,11 +8,8 @@ import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.DefaultListAccess;
-import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.lists.ListAccess;
-import com.fagi.model.messages.message.TextMessage;
-import com.fagi.responses.NoSuchUser;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -137,9 +134,8 @@ public class OutputWorker extends Worker {
             return true;
         }
 
-        if ((one == null && two != null)
-                || one != null && two == null
-                || one.size() != two.size()) {
+        if ((one == null && two != null) || one != null && two == null
+            || one.size() != two.size()) {
             return false;
         }
 

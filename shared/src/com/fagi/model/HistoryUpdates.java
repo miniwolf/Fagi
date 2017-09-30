@@ -1,12 +1,11 @@
 package com.fagi.model;
 
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
-import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Marcus on 05-07-2016.

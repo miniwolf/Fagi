@@ -3,15 +3,11 @@
  * Main.java
  */
 
-import com.fagi.encryption.RSA;
-
-import java.io.File;
-
 /**
  * Handling server start.
  */
 class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Data.loadUsers();
 
         int port = args.length > 0 ? Integer.parseInt(args[0]) : 4242;

@@ -9,8 +9,27 @@ import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.model.*;
-import com.fagi.model.conversation.*;
+import com.fagi.model.CreateUser;
+import com.fagi.model.DeleteFriend;
+import com.fagi.model.DeleteFriendRequest;
+import com.fagi.model.Friend;
+import com.fagi.model.FriendRequest;
+import com.fagi.model.GetFriendListRequest;
+import com.fagi.model.HistoryUpdates;
+import com.fagi.model.InviteCode;
+import com.fagi.model.Login;
+import com.fagi.model.Logout;
+import com.fagi.model.SearchUsersRequest;
+import com.fagi.model.SearchUsersResult;
+import com.fagi.model.Session;
+import com.fagi.model.UserLoggedIn;
+import com.fagi.model.UserLoggedOut;
+import com.fagi.model.UserNameAvailableRequest;
+import com.fagi.model.conversation.AddParticipantRequest;
+import com.fagi.model.conversation.CreateConversationRequest;
+import com.fagi.model.conversation.GetConversationsRequest;
+import com.fagi.model.conversation.RemoveParticipantRequest;
+import com.fagi.model.conversation.UpdateHistoryRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.message.TextMessage;
@@ -204,9 +223,7 @@ public class InputWorker extends Worker {
                 .filter(username -> !friends.contains(username))
                 .collect(Collectors.toList());
 
-        SearchUsersResult result = new SearchUsersResult(nonFriends, friends);
-
-        return result;
+        return new SearchUsersResult(nonFriends, friends);
     }
 
     private Object handleGetAllConversationDataRequest(GetAllConversationDataRequest request) {

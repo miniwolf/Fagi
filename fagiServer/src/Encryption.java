@@ -4,7 +4,6 @@ import com.fagi.encryption.RSA;
 import java.io.File;
 import java.io.IOException;
 import java.security.*;
-import java.security.KeyPair;
 import java.security.spec.InvalidKeySpecException;
 
 /**
@@ -29,11 +28,7 @@ public class Encryption {
             try {
                 KeyPair key = KeyStorage.LoadKeyPair("RSA");
                 this.rsa = new RSA(key);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (InvalidKeySpecException e) {
+            } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
                 e.printStackTrace();
             }
         }

@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 
 /**
  * Created by costa on 02-04-2017.

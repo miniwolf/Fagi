@@ -38,7 +38,7 @@ public class SearchContactController extends HBox {
     @FXML
     private void initialize() {
         actionable.assign(isFriend ? new OpenConversation(mainScreen, userName)
-                                   : new OpenInvitation(mainScreen, userName));
+                                   : new OpenInvitation(mainScreen, userName.getText()));
     }
 
     @FXML

@@ -27,7 +27,7 @@
             <MenuItem mnemonicParsing="false" text="About MyHelloApp"/>
         </Menu>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane VBox.vgrow="ALWAYS">
         <ScrollPane layoutX="14.0" layoutY="47.0" prefHeight="317.0" prefWidth="163.0">
             <ListView maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity"
                       minWidth="-Infinity" prefHeight="315.0" prefWidth="161.0"/>

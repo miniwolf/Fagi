@@ -1,13 +1,10 @@
 package com.fagi.utility;
 
 import com.fagi.conversation.Conversation;
-import com.fagi.model.InviteCode;
 import com.google.gson.Gson;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -49,15 +46,15 @@ public class JsonFileOperations {
             File file = new File(fileName);
             if (!file.exists()) return null;
 
-            String json = "";
+            StringBuilder json = new StringBuilder();
             BufferedReader reader = new BufferedReader(new FileReader(file));
             while ( reader.ready() ) {
-                json += reader.readLine();
+                json.append(reader.readLine());
             }
 
             Gson gson = new Gson();
 
-            res = gson.fromJson(json, clazz);
+            res = gson.fromJson(json.toString(), clazz);
         } catch (IOException e) {
             e.printStackTrace();
             Logger.logStackTrace(e);

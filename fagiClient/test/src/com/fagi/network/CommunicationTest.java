@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 /**
  * Testing the communication send from the client side
@@ -18,6 +17,7 @@ public class CommunicationTest {
     private Communication communication;
     @Before
     public void init() {
+        System.out.println("Starting communicationTests");
         communication = new Communication();
     }
 

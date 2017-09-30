@@ -4,7 +4,6 @@ import com.fagi.action.items.contentlist.CreateSearchList;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.Friend;
 import com.fagi.model.SearchUsersRequest;
-import com.fagi.network.handlers.FriendListHandler;
 
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;

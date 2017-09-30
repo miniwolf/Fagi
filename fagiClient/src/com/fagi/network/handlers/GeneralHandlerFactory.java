@@ -6,7 +6,6 @@ import com.fagi.conversation.ConversationDataUpdate;
 import com.fagi.model.SearchUsersResult;
 import com.fagi.model.UserLoggedIn;
 import com.fagi.model.UserLoggedOut;
-import com.fagi.model.UserStatusUpdate;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.lists.FriendRequestList;
 

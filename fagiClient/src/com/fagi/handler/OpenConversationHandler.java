@@ -32,7 +32,7 @@ public class OpenConversationHandler implements Action {
         if (friendList.contains(username.getText())) {
             new OpenConversation(mainScreen, username).execute();
         } else {
-            new OpenInvitation(mainScreen, username).execute();
+            new OpenInvitation(mainScreen, username.getText()).execute();
         }
     }
 }
