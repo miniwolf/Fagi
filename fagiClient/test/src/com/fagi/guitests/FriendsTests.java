@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -59,6 +60,25 @@ public class FriendsTests extends GuiTest {
 
         FagiImage o = (FagiImage) ((ImageView) imageView.toArray()[0]).getImage();
         Assert.assertTrue(o.getUrl().contains("F.png"));
+
+        Node query = lookup("#status").query();
+        Assert.assertThat(query.getStyleClass(), containsInAnyOrder("pD", "flaeQ"));
+    }
+
+    @Test
+    public void receivingFriendListFromServer_OfflineFriendGuiSetup() {
+        List<Friend> friends = new ArrayList<>();
+        friends.add(new Friend("Friend", false));
+        FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
+        inputHandler.addIngoingMessage(friendList);
+
+        clickOn((Node) lookup(".contact-button").query());
+
+        Label nameLabel = lookup("#userName").query();
+        Assert.assertEquals("Friend", nameLabel.getText());
+
+        Node query = lookup("#status").query();
+        Assert.assertThat(query.getStyleClass(), not(contains("pD")));
     }
 
     @Test
@@ -103,6 +123,21 @@ public class FriendsTests extends GuiTest {
 
         // Contains will check the order, containsInAnyOrder for other test
         Assert.assertThat(collect, contains("AFriend", "BFriend", "CFriend"));
+    }
+
+    @Test
+    public void receivingFriendListFromServer_OfflineFriendsAreInList() {
+        List<Friend> friends = new ArrayList<>();
+        friends.add(new Friend("Friend", true));
+        friends.add(new Friend("Friend2", false));
+        FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
+        inputHandler.addIngoingMessage(friendList);
+
+        // Make sure that we are on the contact list.
+        // This might be default, be we cannot verify this as a feature
+        clickOn((Node) lookup(".contact-button").query());
+        Set<Node> contactNodes = lookup("#UniqueContact").queryAll();
+        Assert.assertThat(contactNodes, hasSize(2));
     }
 
     @Override
