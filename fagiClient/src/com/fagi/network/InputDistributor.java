@@ -10,20 +10,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by Marcus on 09-07-2016.
  */
 public class InputDistributor implements Runnable {
-    private final Map<Class, Container> containers;
     private LinkedBlockingQueue<InGoingMessages> messages = new LinkedBlockingQueue<>();
     private boolean running = true;
-
-    public InputDistributor(Map<Class, Container> containers) {
-        this.containers = containers;
-    }
 
     @Override
     public void run() {
         try {
             while (running) {
                 InGoingMessages input = messages.take();
-                Container container = containers.get(input.getClass());
+                Container container = InputHandler.getContainers().get(input.getClass());
                 if ( container == null ) {
                     messages.put(input);
                     continue;

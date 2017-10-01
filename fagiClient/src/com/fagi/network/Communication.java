@@ -32,6 +32,7 @@ public class Communication {
     private Socket socket;
     private Thread inputThread;
     private EncryptionAlgorithm encryption;
+    private ObjectInputStream inputStream;
 
     public Communication() {
     }
@@ -41,12 +42,8 @@ public class Communication {
         try {
             socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
-
-            inputHandler = new InputHandler(new ObjectInputStream(socket.getInputStream()), encryption);
-            inputThread = new Thread(inputHandler);
-            inputThread.setDaemon(true);
-            inputThread.start();
-
+            inputStream = new ObjectInputStream(socket.getInputStream());
+            setupInputHandler(encryption, inputStream);
             createSession(encryption, serverKey);
         } catch (UnknownHostException Uhe) {
             System.err.println("c Uhe: " + Uhe);
@@ -55,6 +52,14 @@ public class Communication {
             Logger.logStackTrace(ioe);
             throw new IOException("c ioe: " + ioe.toString());
         }
+    }
+
+    public void setupInputHandler(EncryptionAlgorithm encryption, ObjectInputStream in) {
+        inputHandler = new InputHandler(in, encryption);
+        inputHandler.setupDistributor();
+        inputThread = new Thread(inputHandler);
+        inputThread.setDaemon(true);
+        inputThread.start();
     }
 
     private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
@@ -117,5 +122,9 @@ public class Communication {
 
     public void setEncryption(EncryptionAlgorithm encryption) {
         this.encryption = encryption;
+    }
+
+    public void setInputHandler(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }

@@ -5,6 +5,7 @@ import com.fagi.action.ActionableImpl;
 import com.fagi.action.items.LoadFXML;
 import com.fagi.action.items.OpenConversation;
 import com.fagi.action.items.OpenInvitation;
+import com.fagi.uimodel.FagiImage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -28,7 +29,7 @@ public class SearchContactController extends HBox {
         this.mainScreen = mainScreen;
 
         new LoadFXML(this, "/com/fagi/view/content/SearchContact.fxml").execute();
-        Image image = new Image(
+        Image image = new FagiImage(
                 "/com/fagi/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0])
                 + ".png", 32, 32, true, true);
         this.image.setImage(image);

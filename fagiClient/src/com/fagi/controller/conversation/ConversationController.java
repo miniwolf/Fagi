@@ -24,7 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.Contract;
 
 /**
  * @author miniwolf
@@ -132,12 +131,10 @@ public class ConversationController extends BorderPane {
         fillChat();
     }
 
-    @Contract("_ -> !null")
     private HBox getBox(String message) {
         return new MessageController(message, "/com/fagi/view/conversation/MyMessage.fxml");
     }
 
-    @Contract("_, _ -> !null")
     private HBox getBox(String message, String username) {
         return new MessageController(message, "/com/fagi/view/conversation/TheirMessage.fxml",
                                      username);

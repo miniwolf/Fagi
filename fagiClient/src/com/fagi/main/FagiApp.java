@@ -3,16 +3,22 @@ package com.fagi.main;
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 
+import com.fagi.config.ServerConfig;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
+import com.fagi.encryption.AES;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.utility.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * JavaFX application class for handling GUI.
@@ -46,20 +52,66 @@ public class FagiApp extends Application {
         scene = new Scene(new AnchorPane());
 
         ChatManager.setApplication(this);
-        showLoginScreen();
+        MasterLogin masterLogin = showLoginScreen();
         primaryStage.setTitle("Fagi Welcome");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        startCommunication(masterLogin);
+    }
+
+    private void startCommunication(MasterLogin masterLogin) {
+        // TODO: Let the user browse for the file path
+        String configLocation = "config/serverinfo.config";
+        Thread thread = new Thread(() -> {
+            AtomicBoolean successfulConnection = new AtomicBoolean(false);
+            try {
+                ServerConfig config = ServerConfig.pathToServerConfig(configLocation);
+                AES aes = new AES();
+                aes.generateKey(128);
+                while (!successfulConnection.get()) {
+                    Platform.runLater(() -> {
+                        try {
+                            Communication communication = new Communication(config.getIp(),
+                                                                            config.getPort(), aes,
+                                                                            config.getServerKey());
+                            ChatManager.setCommunication(communication);
+                            masterLogin.setMessageLabel("Connected to server: " + config.getName());
+                            successfulConnection.set(true);
+                        } catch (IOException e) {
+                            Platform.runLater(
+                                    () -> masterLogin.setMessageLabel("Connection refused"));
+                            e.printStackTrace();
+                            Logger.logStackTrace(e);
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                Platform.runLater(() -> masterLogin.setMessageLabel("Could not load config file."));
+                e.printStackTrace();
+                Logger.logStackTrace(e);
+            } catch (ClassNotFoundException e) {
+                Platform.runLater(() -> masterLogin.setMessageLabel("Not a valid config file."));
+                e.printStackTrace();
+                Logger.logStackTrace(e);
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
      * Shows initial window for login. This method will also be called
      * when the user log out and the com.fagi.main screen shut down.
      */
-    public void showLoginScreen() {
-        // TODO : Let the user browse for the file path
-        String configLocation = "config/serverinfo.config";
-        new MasterLogin(this, configLocation, primaryStage, scene);
+    public MasterLogin showLoginScreen() {
+        return new MasterLogin(this, primaryStage, scene);
     }
 
     /**

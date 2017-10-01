@@ -41,19 +41,19 @@ public class SignOutTests extends GuiTest {
     @Override
     protected Parent getRootNode() {
         System.out.println("Starting SignOut tests");
-        Communication communication = Mockito.mock(Communication.class);
         Stage stage = (Stage) targetWindow();
         stage.setScene(new Scene(new AnchorPane()));
+        Communication communication = Mockito.mock(Communication.class);
+        FagiApp fagiApp = Mockito.mock(FagiApp.class);
+
         ChatManager.setCommunication(communication);
+        ChatManager.setApplication(fagiApp);
 
         MainScreen test = new MainScreen("Test", communication, stage);
         test.initCommunication();
-        FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Mockito.doAnswer(invocationOnMock ->
-                                 new MasterLogin(fagiApp, "config/serverinfo.config", stage,
-                                                 stage.getScene()))
+
+        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, stage, stage.getScene()))
                .when(fagiApp).showLoginScreen();
-        ChatManager.setApplication(fagiApp);
         return test;
     }
 }

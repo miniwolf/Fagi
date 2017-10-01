@@ -32,14 +32,17 @@ public class InputHandler implements Runnable {
             new ConcurrentHashMap<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
-    private final Thread distributorThread;
+    private Thread distributorThread;
     private boolean running = true;
     private InputDistributor distributor;
 
     public InputHandler(ObjectInputStream in, EncryptionAlgorithm encryption) {
         this.in = in;
         this.encryption = encryption;
-        distributor = new InputDistributor(containers);
+    }
+
+    public void setupDistributor() {
+        distributor = new InputDistributor();
         distributorThread = new Thread(distributor);
         distributorThread.start();
     }
@@ -78,7 +81,11 @@ public class InputHandler implements Runnable {
             inputs.add((Response) input);
             return;
         }
-        distributor.addMessage((InGoingMessages)input);
+        addIngoingMessage((InGoingMessages) input);
+    }
+
+    public void addIngoingMessage(InGoingMessages input) {
+        distributor.addMessage(input);
     }
 
     /**
@@ -141,5 +148,9 @@ public class InputHandler implements Runnable {
             return updates;
         }
         return null;
+    }
+
+    public static Map<Class, Container> getContainers() {
+        return containers;
     }
 }

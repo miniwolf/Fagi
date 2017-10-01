@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 
-<fx:root styleClass="item-holder" stylesheets="@../../style/conversationlist.css" type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="item-holder" id="UniqueContact" stylesheets="@../../style/conversationlist.css" type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <HBox onMouseClicked="#openConversation" styleClass="conversation-item">
         <Pane styleClass="image">
             <ImageView fx:id="image" fitHeight="46.0" fitWidth="46.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
