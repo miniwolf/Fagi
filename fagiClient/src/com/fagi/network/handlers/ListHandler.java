@@ -8,6 +8,7 @@ import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.lists.ListAccess;
+import com.fagi.network.InputDistributor;
 import com.fagi.network.InputHandler;
 
 import com.fagi.network.handlers.container.Container;
@@ -41,8 +42,8 @@ public class ListHandler implements Handler {
         this.requestList = requestList;
         friendContainer.setThread(runnable);
         friendRequestContainer.setThread(runnable);
-        InputHandler.register(FriendList.class, friendContainer);
-        InputHandler.register(FriendRequestList.class, friendRequestContainer);
+        InputDistributor.register(FriendList.class, friendContainer);
+        InputDistributor.register(FriendRequestList.class, friendRequestContainer);
     }
 
     @Override

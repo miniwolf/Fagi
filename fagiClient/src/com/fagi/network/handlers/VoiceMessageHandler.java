@@ -6,6 +6,7 @@ package com.fagi.network.handlers;
 
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.VoiceMessage;
+import com.fagi.network.InputDistributor;
 import com.fagi.network.InputHandler;
 import com.fagi.network.VoiceReceiver;
 import com.fagi.network.handlers.container.Container;
@@ -20,7 +21,7 @@ public class VoiceMessageHandler implements Handler {
 
     public VoiceMessageHandler() {
         container.setThread(runnable);
-        InputHandler.register(VoiceMessage.class, container);
+        InputDistributor.register(VoiceMessage.class, container);
     }
 
     @Override

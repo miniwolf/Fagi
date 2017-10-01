@@ -4,12 +4,15 @@ import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.handlers.container.Container;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Marcus on 09-07-2016.
  */
 public class InputDistributor implements Runnable {
+    private static final Map<Class, Container> containers = new ConcurrentHashMap<>();
+
     private LinkedBlockingQueue<InGoingMessages> messages = new LinkedBlockingQueue<>();
     private boolean running = true;
 
@@ -18,7 +21,7 @@ public class InputDistributor implements Runnable {
         try {
             while (running) {
                 InGoingMessages input = messages.take();
-                Container container = InputHandler.getContainers().get(input.getClass());
+                Container container = containers.get(input.getClass());
                 if ( container == null ) {
                     messages.put(input);
                     continue;
@@ -28,6 +31,14 @@ public class InputDistributor implements Runnable {
         } catch(InterruptedException e) {
             running = false;
         }
+    }
+
+    public static void register(Class clazz, Container handler) {
+        containers.put(clazz, handler);
+    }
+
+    public static void unregister(Class clazz) {
+        containers.remove(clazz);
     }
 
     public void addMessage(InGoingMessages msg) {
