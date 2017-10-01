@@ -4,18 +4,11 @@
 
 package com.fagi.controller.login;
 
-import com.fagi.config.ServerConfig;
 import com.fagi.controller.utility.Draggable;
-import com.fagi.encryption.AES;
 import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
-import com.fagi.network.Communication;
 
-import java.io.IOException;
-
-import com.fagi.utility.Logger;
-import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,92 +22,29 @@ import javafx.stage.Stage;
  * class.
  */
 public class MasterLogin {
-    private String username;
-    private LoginController controller;
-
-    private String messageLabel;
-
-    private LoginState state = LoginState.LOGIN;
-
+    private final Stage primaryStage;
     private final FagiApp fagiApp;
-    private final String configFileLocation;
     private final Draggable draggable;
     private final Scene scene;
+    private LoginController controller;
+    private LoginState state = LoginState.LOGIN;
     private String password;
-    private String inviteCode;
-    private boolean successfulConnection = false;
+    private String username;
+    private String messageLabel;
 
     /**
      * Constructor will create and show the first screen.
-     *
-     * @param fagiApp            FagiApp used to login
-     * @param configFileLocation Location for the config file
-     * @param primaryStage       Stage to show the scene
-     * @param scene              scene to add content
+     *  @param fagiApp      FagiApp used to login
+     * @param primaryStage Stage to show the scene
+     * @param scene        scene to add content
      */
-    public MasterLogin(FagiApp fagiApp, String configFileLocation,
-                       Stage primaryStage, Scene scene) {
+    public MasterLogin(FagiApp fagiApp, Stage primaryStage, Scene scene) {
         this.fagiApp = fagiApp;
-        this.configFileLocation = configFileLocation;
+        this.primaryStage = primaryStage;
         draggable = new Draggable(primaryStage);
         this.scene = scene;
-
         showScreen(state);
-        initCommunication();
         primaryStage.sizeToScene();
-    }
-
-    /**
-     * Setting up communication with the server, this is created when the UI has been loaded.
-     * This means that one should never call this before initComponents.
-     * Function calls in this method depends on the initComponents.
-     */
-    private void initCommunication() {
-        Thread thread = new Thread(() -> {
-            successfulConnection = false;
-            try {
-                ServerConfig config = ServerConfig.pathToServerConfig(configFileLocation);
-                AES aes = new AES();
-                aes.generateKey(128);
-                while (!successfulConnection) {
-                    Platform.runLater(() -> {
-                        try {
-                            Communication communication = new Communication(config.getIp(), config.getPort(), aes,
-                                                                            config.getServerKey());
-                            ChatManager.setCommunication(communication);
-                            messageLabel = "Connected to server: " + config.getName();
-                            successfulConnection = true;
-                        } catch (IOException e) {
-                            Platform.runLater(() -> {
-                                messageLabel = "Connection refused";
-                            });
-                            e.printStackTrace();
-                            Logger.logStackTrace(e);
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (IOException e) {
-                Platform.runLater(() -> {
-                    messageLabel = "Could not load config file.";
-                });
-                e.printStackTrace();
-                Logger.logStackTrace(e);
-            } catch (ClassNotFoundException e) {
-                Platform.runLater(() -> {
-                    messageLabel = "Not a valid config file.";
-                });
-                e.printStackTrace();
-                Logger.logStackTrace(e);
-            }
-        });
-        thread.setDaemon(true);
-        thread.start();
     }
 
     /**
@@ -253,7 +183,7 @@ public class MasterLogin {
         return password;
     }
 
-    public String getInviteCode() {
-        return inviteCode;
+    public void setMessageLabel(String messageLabel) {
+        this.messageLabel = messageLabel;
     }
 }

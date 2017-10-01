@@ -96,8 +96,7 @@ public class FriendsTests extends GuiTest {
         Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
         Mockito.doCallRealMethod().when(inputHandler).setupDistributor();
         Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, "config/serverinfo.config",
-                                                             stage, stage.getScene()))
+        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, stage, stage.getScene()))
                .when(fagiApp).showLoginScreen();
 
         Thread inputThread = new Thread(inputHandler);

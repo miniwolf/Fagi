@@ -135,12 +135,12 @@ public class MainScreen extends Pane {
         setupFriendList();
         setupContactList();
         TextMessageHandler messageHandler = new TextMessageHandler(this);
-        messageThread = new Thread(messageHandler.getRunnable());
+        messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
         messageThread.start();
 
         GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
         generalHandler = factory.construct();
-        generalHandlerThread = new Thread(generalHandler.getRunnable());
+        generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
         generalHandlerThread.start();
 
         updateConversationListFromServer(conversations);
