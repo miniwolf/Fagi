@@ -69,7 +69,7 @@
     <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.7.19.jar"/>
   </path>
   
-  <path id="library.testfx.classpath">
+  <path id="library.testfx-master.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/TestFX-master.jar"/>
   </path>
   
@@ -160,6 +160,6 @@
       <report todir="${module.test.basedir}" format="frames"/>
     </junitreport>-->
   </target>
-  
+
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>

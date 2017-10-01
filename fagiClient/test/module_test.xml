@@ -16,7 +16,7 @@
     <pathelement location="${fagiclient.output.dir}"/>
     <path refid="library.mockito.classpath"/>
     <path refid="library.mock-dependencies.classpath"/>
-    <path refid="library.testfx.classpath"/>
+      <path refid="library.testfx-master.classpath"/>
   </path>
   
   <path id="test.runtime.production.module.classpath">
@@ -24,7 +24,7 @@
     <path refid="fagiclient.runtime.production.module.classpath"/>
     <path refid="library.mockito.classpath"/>
     <path refid="library.mock-dependencies.classpath"/>
-    <path refid="library.testfx.classpath"/>
+      <path refid="library.testfx-master.classpath"/>
   </path>
   
   <path id="test.module.classpath">
@@ -33,15 +33,11 @@
     <pathelement location="${fagiclient.output.dir}"/>
     <pathelement location="${shared.testoutput.dir}"/>
     <pathelement location="${shared.output.dir}"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/junit-jupiter-api-5.0.0-M3.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/opentest4j-1.0.0-M1.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
     <path refid="library.mockito.classpath"/>
     <path refid="library.mock-dependencies.classpath"/>
+      <path refid="library.testfx-master.classpath"/>
     <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
-    <path refid="library.testfx.classpath"/>
   </path>
   
   <path id="test.runtime.module.classpath">
@@ -49,15 +45,11 @@
     <pathelement location="${test.output.dir}"/>
     <path refid="fagiclient.runtime.module.classpath"/>
     <path refid="shared.runtime.module.classpath"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/junit-jupiter-api-5.0.0-M3.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/opentest4j-1.0.0-M1.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
     <path refid="library.mockito.classpath"/>
     <path refid="library.mock-dependencies.classpath"/>
+      <path refid="library.testfx-master.classpath"/>
     <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
-    <path refid="library.testfx.classpath"/>
   </path>
   
   
