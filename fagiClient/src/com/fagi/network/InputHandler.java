@@ -10,16 +10,13 @@ import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.model.HistoryUpdates;
 import com.fagi.model.messages.InGoingMessages;
-import com.fagi.network.handlers.container.Container;
 import com.fagi.responses.Response;
 import com.fagi.utility.Logger;
 import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -28,8 +25,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class InputHandler implements Runnable {
     private final Queue<Response> inputs = new LinkedBlockingQueue<>();
-    private static final Map<Class, Container> containers =
-            new ConcurrentHashMap<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
     private Thread distributorThread;
@@ -108,14 +103,6 @@ public class InputHandler implements Runnable {
         return null;
     }
 
-    public static void register(Class clazz, Container handler) {
-        containers.put(clazz, handler);
-    }
-
-    public static void unregister(Class clazz) {
-        containers.remove(clazz);
-    }
-
     public void close() {
         running = false;
         distributor.stop();
@@ -148,9 +135,5 @@ public class InputHandler implements Runnable {
             return updates;
         }
         return null;
-    }
-
-    public static Map<Class, Container> getContainers() {
-        return containers;
     }
 }

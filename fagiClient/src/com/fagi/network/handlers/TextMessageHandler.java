@@ -12,6 +12,7 @@ import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
+import com.fagi.network.InputDistributor;
 import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
@@ -30,7 +31,7 @@ public class TextMessageHandler implements Handler {
 
     public TextMessageHandler(MainScreen mainScreen) {
         container.setThread(runnable);
-        InputHandler.register(TextMessage.class, container);
+        InputDistributor.register(TextMessage.class, container);
         this.mainScreen = mainScreen;
     }
 

@@ -1,6 +1,7 @@
 package com.fagi.network.handlers;
 
 import com.fagi.model.messages.InGoingMessages;
+import com.fagi.network.InputDistributor;
 import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
@@ -46,13 +47,9 @@ public class GeneralHandler implements Handler {
         threads.add(thread);
     }
 
-    public void stop() {
-        threads.forEach(Thread::interrupt);
-        for (Class clazz : handlers.keySet()) {
-            handlers.remove(clazz);
-            InputHandler.unregister(clazz);
-        }
-
+    public static void registerHandler(Class clazz, Handler handler) {
+        handlers.put(clazz, handler);
+        InputDistributor.register(clazz, container);
     }
 
     @Override
@@ -60,8 +57,12 @@ public class GeneralHandler implements Handler {
         return runnable;
     }
 
-    public static void registerHandler(Class clazz, Handler handler) {
-        handlers.put(clazz, handler);
-        InputHandler.register(clazz, container);
+    public void stop() {
+        threads.forEach(Thread::interrupt);
+        for (Class clazz : handlers.keySet()) {
+            handlers.remove(clazz);
+            InputDistributor.unregister(clazz);
+        }
+
     }
 }
