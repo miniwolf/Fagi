@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
@@ -81,7 +82,27 @@ public class FriendsTests extends GuiTest {
                                                   .map(node -> ((Label) node).getText())
                                                   .collect(Collectors.toList());
 
-        Assert.assertThat(collect, contains("Friend", "Friend2"));
+        Assert.assertThat(collect, containsInAnyOrder("Friend", "Friend2"));
+    }
+
+    @Test
+    public void receivingFriendListFromServer_FriendsArePostedInAlphabeticalOrder() {
+        List<Friend> friends = new ArrayList<>();
+        friends.add(new Friend("AFriend", true));
+        friends.add(new Friend("CFriend", true));
+        friends.add(new Friend("BFriend", true));
+        FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
+        inputHandler.addIngoingMessage(friendList);
+
+        // Make sure that we are on the contact list.
+        // This might be default, be we cannot verify this as a feature
+        clickOn((Node) lookup(".contact-button").query());
+        List<String> collect = lookup("#userName").queryAll().stream()
+                                                  .map(node -> ((Label) node).getText())
+                                                  .collect(Collectors.toList());
+
+        // Contains will check the order, containsInAnyOrder for other test
+        Assert.assertThat(collect, contains("AFriend", "BFriend", "CFriend"));
     }
 
     @Override
