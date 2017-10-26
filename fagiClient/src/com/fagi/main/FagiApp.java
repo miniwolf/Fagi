@@ -1,11 +1,12 @@
 package com.fagi.main;
-/*
- * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
- */
+        /*
+         * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
+         */
 
 import com.fagi.config.ServerConfig;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
+import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -73,8 +74,8 @@ public class FagiApp extends Application {
                     Platform.runLater(() -> {
                         try {
                             Communication communication = new Communication(config.getIp(),
-                                                                            config.getPort(), aes,
-                                                                            config.getServerKey());
+                                    config.getPort(), aes,
+                                    config.getServerKey());
                             ChatManager.setCommunication(communication);
                             masterLogin.setMessageLabel("Connected to server: " + config.getName());
                             successfulConnection.set(true);
@@ -111,7 +112,7 @@ public class FagiApp extends Application {
      * when the user log out and the com.fagi.main screen shut down.
      */
     public MasterLogin showLoginScreen() {
-        return new MasterLogin(this, primaryStage, scene);
+        return new MasterLogin(this, new Draggable(primaryStage), scene);
     }
 
     /**

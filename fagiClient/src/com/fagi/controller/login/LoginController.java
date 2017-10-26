@@ -5,6 +5,7 @@
 package com.fagi.controller.login;
 
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -32,4 +33,6 @@ public interface LoginController {
     void setMessage(String message);
 
     String getMessageLabel();
+
+    Parent getParent();
 }

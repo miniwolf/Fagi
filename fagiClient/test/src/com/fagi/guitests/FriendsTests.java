@@ -2,6 +2,7 @@ package com.fagi.guitests;
 
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
+import com.fagi.controller.utility.Draggable;
 import com.fagi.main.FagiApp;
 import com.fagi.model.Friend;
 import com.fagi.model.messages.lists.DefaultListAccess;
@@ -145,6 +146,7 @@ public class FriendsTests extends GuiTest {
         System.out.println("Starting FriendsTests tests");
         Stage stage = (Stage) targetWindow();
         stage.setScene(new Scene(new AnchorPane()));
+        Draggable draggable = new Draggable(stage);
 
         Communication communication = Mockito.mock(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
@@ -152,7 +154,7 @@ public class FriendsTests extends GuiTest {
         Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
         Mockito.doCallRealMethod().when(inputHandler).setupDistributor();
         Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, stage, stage.getScene()))
+        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, draggable, stage.getScene()))
                .when(fagiApp).showLoginScreen();
 
         Thread inputThread = new Thread(inputHandler);

@@ -2,6 +2,7 @@ package com.fagi.guitests;
 
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
+import com.fagi.controller.utility.Draggable;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -52,7 +53,8 @@ public class SignOutTests extends GuiTest {
         MainScreen test = new MainScreen("Test", communication, stage);
         test.initCommunication();
 
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, stage, stage.getScene()))
+        Draggable draggable = new Draggable(stage);
+        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, draggable, stage.getScene()))
                .when(fagiApp).showLoginScreen();
         return test;
     }
