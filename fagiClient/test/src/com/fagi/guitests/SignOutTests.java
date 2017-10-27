@@ -6,6 +6,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.responses.AllIsWell;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -45,6 +46,7 @@ public class SignOutTests extends GuiTest {
         Stage stage = (Stage) targetWindow();
         stage.setScene(new Scene(new AnchorPane()));
         Communication communication = Mockito.mock(Communication.class);
+        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
 
         ChatManager.setCommunication(communication);
@@ -54,7 +56,9 @@ public class SignOutTests extends GuiTest {
         test.initCommunication();
 
         Draggable draggable = new Draggable(stage);
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, draggable, stage.getScene()))
+        Mockito.doAnswer(invocationOnMock -> {
+            return new MasterLogin(fagiApp, stage, draggable);
+        })
                .when(fagiApp).showLoginScreen();
         return test;
     }

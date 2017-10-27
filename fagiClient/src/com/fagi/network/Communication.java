@@ -18,6 +18,7 @@ import com.fagi.utility.Logger;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
@@ -40,7 +41,7 @@ public class Communication {
     public Communication(String host, int port, EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
         this.encryption = encryption;
         try {
-            socket = new Socket(host, port);
+            socket = new Socket(InetAddress.getLocalHost(), port);
             out = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
             setupInputHandler(encryption, inputStream);

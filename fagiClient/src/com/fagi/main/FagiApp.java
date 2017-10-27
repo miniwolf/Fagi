@@ -53,15 +53,13 @@ public class FagiApp extends Application {
         scene = new Scene(new AnchorPane());
 
         ChatManager.setApplication(this);
-        MasterLogin masterLogin = showLoginScreen();
+        showLoginScreen();
         primaryStage.setTitle("Fagi Welcome");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        startCommunication(masterLogin);
     }
 
-    private void startCommunication(MasterLogin masterLogin) {
+    public void startCommunication(MasterLogin masterLogin) {
         // TODO: Let the user browse for the file path
         String configLocation = "config/serverinfo.config";
         Thread thread = new Thread(() -> {
@@ -112,7 +110,9 @@ public class FagiApp extends Application {
      * when the user log out and the com.fagi.main screen shut down.
      */
     public MasterLogin showLoginScreen() {
-        return new MasterLogin(this, new Draggable(primaryStage), scene);
+        MasterLogin masterLogin = new MasterLogin(this, primaryStage, new Draggable(primaryStage));
+        startCommunication(masterLogin);
+        return masterLogin;
     }
 
     /**

@@ -9,10 +9,10 @@ import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  * Controller class for the login screen, used by the JavaFX thread.
@@ -34,14 +34,14 @@ public class MasterLogin {
      *
      * @param fagiApp   FagiApp used to login
      * @param draggable Passes the draggable from the stage
-     * @param scene     scene to add content
      */
-    public MasterLogin(FagiApp fagiApp, Draggable draggable, Scene scene) {
+    public MasterLogin(FagiApp fagiApp, Stage stage, Draggable draggable) {
         this.fagiApp = fagiApp;
         this.draggable = draggable;
-        this.scene = scene;
+        this.scene = stage.getScene();
         showScreen(state);
-        //primaryStage.sizeToScene();
+        // THis is soo stupid...
+        stage.sizeToScene();
         // TODO: Decide if this should be done before calling or this should be done inside here.
     }
 
@@ -144,12 +144,12 @@ public class MasterLogin {
             default:
                 return false;
         }
-        setController((Parent) controller, controller);
+        setController(/*(Parent) controller, */controller);
         return true;
     }
 
-    private void setController(Parent pane, LoginController controller) {
-        scene.setRoot(pane);
+    private void setController(LoginController controller) {
+        scene.setRoot(controller.getParentNode());
         this.controller = controller;
     }
 

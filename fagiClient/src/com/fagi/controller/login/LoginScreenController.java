@@ -7,9 +7,9 @@ package com.fagi.controller.login;
 import com.fagi.action.items.LoadFXML;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -90,5 +90,10 @@ public class LoginScreenController extends Pane implements LoginController {
     @Override
     public String getMessageLabel() {
         return messageLabel.getText();
+    }
+
+    @Override
+    public Parent getParentNode() {
+        return this;
     }
 }

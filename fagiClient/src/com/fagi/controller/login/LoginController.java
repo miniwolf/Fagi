@@ -34,5 +34,5 @@ public interface LoginController {
 
     String getMessageLabel();
 
-    Parent getParent();
+    Parent getParentNode();
 }
