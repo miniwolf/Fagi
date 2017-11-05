@@ -53,7 +53,8 @@ public class FagiApp extends Application {
         scene = new Scene(new AnchorPane());
 
         ChatManager.setApplication(this);
-        showLoginScreen();
+        MasterLogin masterLogin = showLoginScreen();
+        scene.setRoot(masterLogin.getController().getParentNode());
         primaryStage.setTitle("Fagi Welcome");
         primaryStage.setScene(scene);
         primaryStage.show();

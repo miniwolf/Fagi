@@ -149,7 +149,6 @@ public class MasterLogin {
     }
 
     private void setController(LoginController controller) {
-        scene.setRoot(controller.getParentNode());
         this.controller = controller;
     }
 

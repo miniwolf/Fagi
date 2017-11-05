@@ -44,7 +44,8 @@ public class SignOutTests extends GuiTest {
     protected Parent getRootNode() {
         System.out.println("Starting SignOut tests");
         Stage stage = (Stage) targetWindow();
-        stage.setScene(new Scene(new AnchorPane()));
+        Scene scene = new Scene(new AnchorPane());
+        stage.setScene(scene);
         Communication communication = Mockito.mock(Communication.class);
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
@@ -57,9 +58,12 @@ public class SignOutTests extends GuiTest {
 
         Draggable draggable = new Draggable(stage);
         Mockito.doAnswer(invocationOnMock -> {
-            return new MasterLogin(fagiApp, stage, draggable);
-        })
-               .when(fagiApp).showLoginScreen();
+            MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable);
+            scene.setRoot(masterLogin.getController().getParentNode());
+            stage.setScene(scene);
+            stage.showAndWait();
+            return masterLogin;
+        }).when(fagiApp).showLoginScreen();
         return test;
     }
 }
