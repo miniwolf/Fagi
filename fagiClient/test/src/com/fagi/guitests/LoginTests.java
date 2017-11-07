@@ -16,6 +16,22 @@ import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
 
 public class LoginTests extends GuiTest {
+    MasterLogin spy;
+
+    @Test
+    public void LoginWithWrongPassword_WillPostCorrectErrorMessage() {
+        String username = "username";
+        Node usernameField = lookup("#username").query();
+        clickOn(usernameField).write(username);
+
+        String password = "password";
+        Node passwordField = lookup("#password").query();
+        clickOn(passwordField).window(password);
+
+        Node loginBtn = lookup("#loginBtn").query();
+        clickOn(loginBtn);
+    }
+
     @Test
     public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields() {
         String testText = "ThisTextShould Exist";
@@ -35,7 +51,8 @@ public class LoginTests extends GuiTest {
         Stage stage = (Stage) targetWindow();
         stage.setScene(new Scene(new AnchorPane()));
         Draggable draggable = new Draggable(stage);
-        MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable);
+        MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable)
+        spy = Mockito.spy(masterLogin);
         return masterLogin.getController().getParentNode();
     }
 }

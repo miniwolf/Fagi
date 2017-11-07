@@ -1,23 +1,12 @@
 package com.fagi.network;
-/*
- * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * ChatManager.java
- */
+        /*
+         * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
+         * ChatManager.java
+         */
 
 import com.fagi.main.FagiApp;
-import com.fagi.model.CreateUser;
-import com.fagi.model.InviteCode;
-import com.fagi.model.Login;
-import com.fagi.model.Logout;
-import com.fagi.model.UserNameAvailableRequest;
-import com.fagi.responses.AllIsWell;
-import com.fagi.responses.IllegalInviteCode;
-import com.fagi.responses.NoSuchUser;
-import com.fagi.responses.PasswordError;
-import com.fagi.responses.Response;
-import com.fagi.responses.UserExists;
-import com.fagi.responses.UserOnline;
-
+import com.fagi.model.*;
+import com.fagi.responses.*;
 import javafx.scene.control.Label;
 
 import java.util.regex.Pattern;
@@ -54,13 +43,10 @@ public class ChatManager {
         if (response instanceof AllIsWell) {
             application.showMainScreen(login.getUsername(), communication);
         } else {
-            labelCreateUser.setText(response instanceof NoSuchUser
-                                    ? "User doesn't exist"
-                                    : response instanceof UserOnline
-                                      ? "You are already online"
-                                      : response instanceof PasswordError
-                                        ? "Wrong password"
-                                        : "Unknown Exception: " + response.toString());
+            labelCreateUser.setText(response instanceof NoSuchUser ? "User doesn't exist"
+                    : response instanceof UserOnline ? "You are already online"
+                    : response instanceof PasswordError ? "Wrong password"
+                    : "Unknown Exception: " + response.toString());
         }
     }
 
@@ -75,7 +61,7 @@ public class ChatManager {
         Response response = communication.getNextResponse();
         if (!(response instanceof AllIsWell)) {
             System.err.println("Could not log out properly. "
-                               + "Shut down and let server handle the response");
+                    + "Shut down and let server handle the response");
         }
         communication.close();
         application.showLoginScreen();
