@@ -10,6 +10,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.util.DependencyInjectionSystem;
 import com.fagi.utility.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -62,44 +63,33 @@ public class FagiApp extends Application {
 
     public void startCommunication(MasterLogin masterLogin) {
         // TODO: Let the user browse for the file path
-        String configLocation = "config/serverinfo.config";
         Thread thread = new Thread(() -> {
             AtomicBoolean successfulConnection = new AtomicBoolean(false);
-            try {
-                ServerConfig config = ServerConfig.pathToServerConfig(configLocation);
-                AES aes = new AES();
-                aes.generateKey(128);
-                while (!successfulConnection.get()) {
-                    Platform.runLater(() -> {
-                        try {
-                            Communication communication = new Communication(config.getIp(),
-                                    config.getPort(), aes,
-                                    config.getServerKey());
-                            ChatManager.setCommunication(communication);
-                            masterLogin.setMessageLabel("Connected to server: " + config.getName());
-                            successfulConnection.set(true);
-                        } catch (IOException e) {
-                            Platform.runLater(
-                                    () -> masterLogin.setMessageLabel("Connection refused"));
-                            e.printStackTrace();
-                            Logger.logStackTrace(e);
-                        }
-                    });
-
+            AES aes = new AES();
+            aes.generateKey(128);
+            Communication communication = DependencyInjectionSystem.getInstance().getInstance(
+                    Communication.class);
+            while (!successfulConnection.get()) {
+                Platform.runLater(() -> {
                     try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
+                        communication.connect(aes);
+                        ChatManager.setCommunication(communication);
+                        masterLogin
+                                .setMessageLabel("Connected to server: " + communication.getName());
+                        successfulConnection.set(true);
+                    } catch (IOException e) {
+                        Platform.runLater(
+                                () -> masterLogin.setMessageLabel("Connection refused"));
                         e.printStackTrace();
+                        Logger.logStackTrace(e);
                     }
+                });
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                Platform.runLater(() -> masterLogin.setMessageLabel("Could not load config file."));
-                e.printStackTrace();
-                Logger.logStackTrace(e);
-            } catch (ClassNotFoundException e) {
-                Platform.runLater(() -> masterLogin.setMessageLabel("Not a valid config file."));
-                e.printStackTrace();
-                Logger.logStackTrace(e);
             }
         });
         thread.setDaemon(true);
@@ -121,10 +111,9 @@ public class FagiApp extends Application {
      * Switching com.fagi.controller to MainScreen.
      *
      * @param username      Username logged in.
-     * @param communication instance of Communication for the MainScreen.
      */
-    public void showMainScreen(String username, Communication communication) {
-        MainScreen controller = new MainScreen(username, communication, primaryStage);
+    public void showMainScreen(String username) {
+        MainScreen controller = new MainScreen(username, primaryStage);
         scene.setRoot(controller);
         controller.initCommunication();
         primaryStage.sizeToScene();

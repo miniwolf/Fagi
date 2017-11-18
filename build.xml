@@ -59,6 +59,18 @@
     <pathelement location="${basedir}/fagiServer/lib/gson-2.7.jar"/>
   </path>
   
+  <path id="library.guice-4.1.0-no_aop.classpath">
+    <pathelement location="${basedir}/fagiClient/lib/guice-4.1.0-no_aop.jar"/>
+  </path>
+  
+  <path id="library.guice-4.1.0.classpath">
+    <pathelement location="${basedir}/fagiClient/lib/guice-4.1.0.jar"/>
+  </path>
+  
+  <path id="library.javax.inject-1.classpath">
+    <pathelement location="${basedir}/fagiClient/lib/javax.inject-1.jar"/>
+  </path>
+  
   <path id="library.mock-dependencies.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.6.12.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.6.12.jar"/>
@@ -160,6 +172,6 @@
       <report todir="${module.test.basedir}" format="frames"/>
     </junitreport>-->
   </target>
-
+  
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>

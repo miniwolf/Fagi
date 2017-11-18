@@ -14,11 +14,11 @@ import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.Response;
 import com.fagi.utility.Logger;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
@@ -32,16 +32,28 @@ public class Communication {
     private InputHandler inputHandler;
     private Socket socket;
     private Thread inputThread;
-    private EncryptionAlgorithm encryption;
+    private String name;
+    private String host;
+    private int port;
+    private PublicKey serverKey;
     private ObjectInputStream inputStream;
+    private EncryptionAlgorithm encryption;
 
     public Communication() {
     }
 
-    public Communication(String host, int port, EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
+    @Inject
+    public Communication(String name, String host, int port, PublicKey serverKey) {
+        this.name = name;
+        this.host = host;
+        this.port = port;
+        this.serverKey = serverKey;
+    }
+
+    public void connect(EncryptionAlgorithm encryption) throws IOException {
         this.encryption = encryption;
         try {
-            socket = new Socket(InetAddress.getLocalHost(), port);
+            socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
             setupInputHandler(encryption, inputStream);
@@ -63,14 +75,17 @@ public class Communication {
         inputThread.start();
     }
 
-    private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
+    private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey)
+            throws IOException {
         RSA rsa = new RSA();
         rsa.setEncryptionKey(new RSAKey(new KeyPair(serverKey, null)));
-        out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
+        out.writeObject(
+                rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
         out.flush();
 
         Response obj;
-        while ((obj = inputHandler.containsResponse()) == null) {}
+        while ((obj = inputHandler.containsResponse()) == null) {
+        }
         if (obj instanceof AllIsWell) {
 
         }
@@ -101,7 +116,8 @@ public class Communication {
 
     public Response getNextResponse() {
         Response response;
-        while ( (response = inputHandler.containsResponse()) == null ) {}
+        while ((response = inputHandler.containsResponse()) == null) {
+        }
         return response;
     }
 
@@ -127,5 +143,9 @@ public class Communication {
 
     public void setInputHandler(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
+    }
+
+    public String getName() {
+        return name;
     }
 }

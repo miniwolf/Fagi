@@ -7,6 +7,10 @@ import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
+import com.fagi.util.DefaultWiringModule;
+import com.fagi.util.DependencyInjectionSystem;
+import com.google.inject.AbstractModule;
+import com.google.inject.util.Modules;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -53,7 +57,15 @@ public class SignOutTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        MainScreen test = new MainScreen("Test", communication, stage);
+        DependencyInjectionSystem.setModule(Modules.override(
+                new DefaultWiringModule()).with(new AbstractModule() {
+            @Override
+            protected void configure() {
+                this.bind(Communication.class).toInstance(communication);
+            }
+        }));
+
+        MainScreen test = new MainScreen("Test", stage);
         test.initCommunication();
 
         Draggable draggable = new Draggable(stage);

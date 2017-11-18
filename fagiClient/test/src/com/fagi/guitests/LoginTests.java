@@ -3,6 +3,11 @@ package com.fagi.guitests;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.main.FagiApp;
+import com.fagi.network.Communication;
+import com.fagi.util.DefaultWiringModule;
+import com.fagi.util.DependencyInjectionSystem;
+import com.google.inject.AbstractModule;
+import com.google.inject.util.Modules;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,7 +31,7 @@ public class LoginTests extends GuiTest {
 
         String password = "password";
         Node passwordField = lookup("#password").query();
-        clickOn(passwordField).window(password);
+        clickOn(passwordField).write(password);
 
         Node loginBtn = lookup("#loginBtn").query();
         clickOn(loginBtn);
@@ -51,7 +56,7 @@ public class LoginTests extends GuiTest {
         Stage stage = (Stage) targetWindow();
         stage.setScene(new Scene(new AnchorPane()));
         Draggable draggable = new Draggable(stage);
-        MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable)
+        MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable);
         spy = Mockito.spy(masterLogin);
         return masterLogin.getController().getParentNode();
     }

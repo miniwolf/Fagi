@@ -14,23 +14,35 @@
   
   <path id="fagiclient.module.production.classpath">
     <pathelement location="${shared.output.dir}"/>
+    <path refid="library.guice-4.1.0.classpath"/>
+    <path refid="library.javax.inject-1.classpath"/>
+    <path refid="library.guice-4.1.0-no_aop.classpath"/>
   </path>
   
   <path id="fagiclient.runtime.production.module.classpath">
     <pathelement location="${fagiclient.output.dir}"/>
     <path refid="shared.runtime.production.module.classpath"/>
+    <path refid="library.guice-4.1.0.classpath"/>
+    <path refid="library.javax.inject-1.classpath"/>
+    <path refid="library.guice-4.1.0-no_aop.classpath"/>
   </path>
   
   <path id="fagiclient.module.classpath">
     <pathelement location="${fagiclient.output.dir}"/>
     <pathelement location="${shared.testoutput.dir}"/>
     <pathelement location="${shared.output.dir}"/>
+    <path refid="library.guice-4.1.0.classpath"/>
+    <path refid="library.javax.inject-1.classpath"/>
+    <path refid="library.guice-4.1.0-no_aop.classpath"/>
   </path>
   
   <path id="fagiclient.runtime.module.classpath">
     <pathelement location="${fagiclient.testoutput.dir}"/>
     <pathelement location="${fagiclient.output.dir}"/>
     <path refid="shared.runtime.module.classpath"/>
+    <path refid="library.guice-4.1.0.classpath"/>
+    <path refid="library.javax.inject-1.classpath"/>
+    <path refid="library.guice-4.1.0-no_aop.classpath"/>
   </path>
   
   

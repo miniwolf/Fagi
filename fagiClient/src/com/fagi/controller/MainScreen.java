@@ -29,6 +29,7 @@ import com.fagi.network.Communication;
 import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
+import com.fagi.util.DependencyInjectionSystem;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.utility.Logger;
 import javafx.application.Platform;
@@ -112,12 +113,12 @@ public class MainScreen extends Pane {
      * Creates new form ContactScreen.
      *
      * @param usernameString which is used all around the class for knowing who the user is
-     * @param communication  granted by the LoginScreen class
      * @param primaryStage   primary stage used to create a draggable.
      */
-    public MainScreen(String usernameString, Communication communication, Stage primaryStage) {
+    public MainScreen(String usernameString, Stage primaryStage) {
         this.usernameString = usernameString;
-        this.communication = communication;
+        this.communication = DependencyInjectionSystem.getInstance()
+                                                      .getInstance(Communication.class);
         this.draggable = new Draggable(primaryStage);
         listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;

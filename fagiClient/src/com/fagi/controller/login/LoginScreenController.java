@@ -5,8 +5,12 @@
 package com.fagi.controller.login;
 
 import com.fagi.action.items.LoadFXML;
+import com.fagi.login.LoginResultHandler;
+import com.fagi.login.LoginSystem;
 import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
+import com.fagi.responses.Response;
+import com.google.inject.Injector;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -54,7 +58,9 @@ public class LoginScreenController extends Pane implements LoginController {
 
     @FXML
     private void handleLogin() {
-        ChatManager.handleLogin(new Login(username.getText(), password.getText()), messageLabel);
+        Login data = new Login(username.getText(), password.getText());
+        Response loginResponse = new LoginSystem().login(data);
+        new LoginResultHandler().handle(loginResponse, data.getUsername(), messageLabel);
     }
 
     @Override
