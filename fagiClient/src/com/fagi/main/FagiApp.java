@@ -50,14 +50,13 @@ public class FagiApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         primaryStage.initStyle(StageStyle.UNDECORATED);
+        ChatManager.setApplication(this);
 
         scene = new Scene(new AnchorPane());
-
-        ChatManager.setApplication(this);
-        MasterLogin masterLogin = showLoginScreen();
-        scene.setRoot(masterLogin.getController().getParentNode());
-        primaryStage.setTitle("Fagi Welcome");
         primaryStage.setScene(scene);
+
+        showLoginScreen();
+        primaryStage.setTitle("Fagi Welcome");
         primaryStage.show();
     }
 
@@ -103,6 +102,7 @@ public class FagiApp extends Application {
     public MasterLogin showLoginScreen() {
         MasterLogin masterLogin = new MasterLogin(this, primaryStage, new Draggable(primaryStage));
         startCommunication(masterLogin);
+        masterLogin.showMasterLoginScreen();
         return masterLogin;
     }
 

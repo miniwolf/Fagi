@@ -8,6 +8,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -23,6 +24,7 @@ public class MasterLogin {
     private final FagiApp fagiApp;
     private final Draggable draggable;
     private final Scene scene;
+    private final Stage stage;
     private LoginController controller;
     private LoginState state = LoginState.LOGIN;
     private String password;
@@ -39,6 +41,10 @@ public class MasterLogin {
         this.fagiApp = fagiApp;
         this.draggable = draggable;
         this.scene = stage.getScene();
+        this.stage = stage;
+    }
+
+    public void showMasterLoginScreen() {
         showScreen(state);
         // THis is soo stupid...
         stage.sizeToScene();
@@ -122,7 +128,12 @@ public class MasterLogin {
         if (!setupController(screen)) {
             return;
         }
+        updateRoot();
         controller.setMessage(messageLabel);
+    }
+
+    public void updateRoot() {
+        stage.getScene().setRoot(controller.getParentNode());
     }
 
     private boolean setupController(LoginState screen) {
@@ -144,12 +155,8 @@ public class MasterLogin {
             default:
                 return false;
         }
-        setController(/*(Parent) controller, */controller);
-        return true;
-    }
-
-    private void setController(LoginController controller) {
         this.controller = controller;
+        return true;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
@@ -182,5 +189,16 @@ public class MasterLogin {
 
     public void setMessageLabel(String messageLabel) {
         this.messageLabel = messageLabel;
+        if (controller != null) {
+            Platform.runLater(() -> controller.setMessage(messageLabel));
+        }
+    }
+
+    public void setState(LoginState state) {
+        this.state = state;
+    }
+
+    public LoginState getState() {
+        return state;
     }
 }

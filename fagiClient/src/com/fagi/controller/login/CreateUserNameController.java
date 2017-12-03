@@ -37,15 +37,18 @@ public class CreateUserNameController extends DefaultLoginController {
             messageLabel.setText("Username cannot be empty");
             return;
         }
-
-        boolean available = ChatManager.checkIfUserNameIsAvailable(username.getText());
         boolean valid = ChatManager.isValidUserName(username.getText());
 
-        if (available && valid) {
+        if (!valid) {
+            messageLabel.setText("Username may not contain special symbols");
+            return;
+        }
+
+        boolean available = ChatManager.checkIfUserNameIsAvailable(username.getText());
+
+        if (available) {
             masterLogin.setUsername(username.getText());
             masterLogin.next();
-        } else if (!valid) {
-            messageLabel.setText("Username may not contain special symbols");
         } else {
             messageLabel.setText("Username is not available");
         }
