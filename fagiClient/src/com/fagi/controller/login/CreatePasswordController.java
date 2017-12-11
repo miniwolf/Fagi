@@ -29,6 +29,16 @@ public class CreatePasswordController extends DefaultLoginController {
 
     @Override
     public void next() {
+        if (password.getText() == null || password.getText().equals("")) {
+            messageLabel.setText("Password field must not be empty");
+            return;
+        }
+
+        if (passwordRepeat.getText() == null || passwordRepeat.getText().equals("")) {
+            messageLabel.setText("Repeat password field must not be empty");
+            return;
+        }
+
         if (!password.getText().equals(passwordRepeat.getText())) {
             messageLabel.setText("Passwords does not match");
             return;

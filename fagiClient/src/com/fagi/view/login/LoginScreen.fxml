@@ -32,7 +32,7 @@
         <Button fx:id="loginBtn" mnemonicParsing="false" onMousePressed="#handleLogin"
                 styleClass="input, rc-button, rc-button-submit" text="Login"/>
         <HBox prefHeight="22.0" prefWidth="254.0">
-            <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="147.0"/>
+            <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="250.0"/>
             <Label fx:id="newAccount" onMousePressed="#next" styleClass="a" text="Create new account"/>
         </HBox>
     </VBox>

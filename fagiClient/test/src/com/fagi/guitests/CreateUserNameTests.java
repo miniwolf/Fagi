@@ -29,6 +29,16 @@ public class CreateUserNameTests extends GuiTest {
     private MasterLogin spy;
 
     @Test
+    public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise() {
+        Node nextBtn = lookup("#loginBtn").query();
+        clickOn(nextBtn);
+
+        Label messageLabel = lookup("#messageLabel").query();
+
+        Assert.assertEquals("Username cannot be empty", messageLabel.getText());
+    }
+
+    @Test
     public void WhenUserExistsOnServerCreatingANewUser_InformNewUser() {
         Mockito.when(communication.getNextResponse()).thenReturn(new UserExists());
 

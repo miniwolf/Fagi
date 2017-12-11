@@ -6,6 +6,8 @@ import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.IllegalInviteCode;
 import com.fagi.util.DefaultWiringModule;
 import com.fagi.util.DependencyInjectionSystem;
 import com.google.inject.AbstractModule;
@@ -14,7 +16,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
@@ -24,67 +25,52 @@ import org.mockito.Mockito;
 
 import java.awt.*;
 
-public class CreatePasswordTests extends GuiTest {
+public class InviteCodeTests extends GuiTest {
     private Communication communication;
     private MasterLogin spy;
 
     @Test
-    public void PasswordFieldMustHaveAValue_MessageShouldIndicateOtherwise() {
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+    public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis() {
+        Mockito.when(communication.getNextResponse()).thenReturn(new IllegalInviteCode());
 
-        Label messageLabel = lookup("#messageLabel").query();
+        String inviteCode = "41";
 
-        Assert.assertEquals("Password field must not be empty", messageLabel.getText());
-    }
-
-    @Test
-    public void PasswordRepeatFieldMustHaveAValue_MessageShouldIndicateOtherwise() {
-        String password = "thisisapassword";
-
-        PasswordField pwfield = lookup("#password").query();
-        clickOn(pwfield).write(password);
-
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
-
-        Label messageLabel = lookup("#messageLabel").query();
-
-        Assert.assertEquals("Repeat password field must not be empty", messageLabel.getText());
-    }
-
-    @Test
-    public void RepeatPasswordMustMatchPassword_ErrorInformUser() {
-        String password = "thisisapassword";
-        String repeat = "thisisadiffrentpassword";
-
-        PasswordField pwfield = lookup("#password").query();
-        clickOn(pwfield).write(password);
-        PasswordField pwRepeatfield = lookup("#passwordRepeat").query();
-        clickOn(pwRepeatfield).write(repeat);
+        Node field = lookup("#inviteCode").query();
+        clickOn(field).write(inviteCode);
 
         Node btn = lookup("#loginBtn").query();
         clickOn(btn);
 
         Label messageLabel = lookup("#messageLabel").query();
-
-        Assert.assertEquals("Passwords does not match", messageLabel.getText());
-    }
-
-    @Test
-    public void SuccessfullPasswordCreation_ShouldShowInviteCodeScreen() {
-        String password = "thisisapassword";
-
-        PasswordField pwfield = lookup("#password").query();
-        clickOn(pwfield).write(password);
-        PasswordField pwRepeatfield = lookup("#passwordRepeat").query();
-        clickOn(pwRepeatfield).write(password);
-
-        Node btn = lookup("#loginBtn").query();
-        clickOn(btn);
 
         Assert.assertEquals(LoginState.INVITE_CODE, spy.getState());
-        Assert.assertNotNull(lookup("#UniqueInviteCode"));
+        Assert.assertEquals("Error: Illegal invite code. Contact host", messageLabel.getText());
+    }
+
+    @Test
+    public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise() {
+        Node btn = lookup("#loginBtn").query();
+        clickOn(btn);
+
+        Label messageLabel = lookup("#messageLabel").query();
+
+        Assert.assertEquals("Invite code cannot be empty", messageLabel.getText());
+    }
+
+    @Test
+    public void GivenAValidInviteCode_TheLoginScreenShouldBeShown() {
+        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
+
+        String inviteCode = "42";
+
+        Node field = lookup("#inviteCode").query();
+        clickOn(field).write(inviteCode);
+
+        Node btn = lookup("#loginBtn").query();
+        clickOn(btn);
+
+        Assert.assertEquals(LoginState.LOGIN, spy.getState());
+        Assert.assertNotNull(lookup("#UniqueLoginScreen").query());
     }
 
     @Override
@@ -108,12 +94,15 @@ public class CreatePasswordTests extends GuiTest {
         }));
 
         MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable);
-        masterLogin.setState(LoginState.PASSWORD);
+        masterLogin.setState(LoginState.INVITE_CODE);
         spy = Mockito.spy(masterLogin);
 
         Mockito.doNothing().when(spy).updateRoot();
         spy.showMasterLoginScreen();
         Mockito.doCallRealMethod().when(spy).updateRoot();
+
+        spy.setUsername("ThisIsAUsername");
+        spy.setPassword("ThisIsAPassword");
         return spy.getController().getParentNode();
     }
 }

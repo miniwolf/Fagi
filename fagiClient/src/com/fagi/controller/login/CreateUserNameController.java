@@ -33,7 +33,7 @@ public class CreateUserNameController extends DefaultLoginController {
 
     @Override
     public void next() {
-        if ("".equals(username.getText())) {
+        if (username.getText() == null || "".equals(username.getText())) {
             messageLabel.setText("Username cannot be empty");
             return;
         }

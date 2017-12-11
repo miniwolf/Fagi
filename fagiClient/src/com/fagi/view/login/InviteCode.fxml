@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Circle?>
 
 
-<fx:root type="Pane" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
+<fx:root type="Pane" id="UniqueInviteCode" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
          prefHeight="301.0" prefWidth="305.0" styleClass="card" stylesheets="@../../style/Login.css"
          xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <VBox fx:id="content" alignment="CENTER" layoutX="1.0" spacing="10.0"
@@ -41,7 +41,7 @@
         <Button fx:id="loginBtn" mnemonicParsing="false" onMousePressed="#next"
                 styleClass="input, rc-button, rc-button-submit" text="Create User"/>
         <HBox prefHeight="22.0" prefWidth="254.0">
-            <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="240.0"/>
+            <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="250.0"/>
         </HBox>
     </VBox>
     <Button layoutX="270.0" layoutY="-6.0" mnemonicParsing="false" onMouseClicked="#handleQuit"
