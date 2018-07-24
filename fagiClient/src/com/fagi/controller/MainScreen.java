@@ -185,10 +185,7 @@ public class MainScreen extends Pane {
                         e.printStackTrace();
                         Logger.logStackTrace(e);
                     } finally {
-                        Platform.runLater(() -> {
-                            System.out.println("Width: " + newSceneWidth);
-                            search = new Search(searchBox, searchHeader, mainScreen);
-                        });
+                        Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
                     }
                 };
 

@@ -41,20 +41,6 @@ public class LoginTests extends GuiTest {
     }
 
     @Test
-    public void LoginWithWrongPassword_WillPostCorrectErrorMessage() {
-        String username = "username";
-        Node usernameField = lookup("#username").query();
-        clickOn(usernameField).write(username);
-
-        String password = "password";
-        Node passwordField = lookup("#password").query();
-        clickOn(passwordField).write(password);
-
-        Node loginBtn = lookup("#loginBtn").query();
-        clickOn(loginBtn);
-    }
-
-    @Test
     public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields() {
         String testText = "ThisTextShould Exist";
         Node usernameField = lookup("#username").query();

@@ -58,11 +58,10 @@ public class SignOutTests extends GuiTest {
 
         Draggable draggable = new Draggable(stage);
         Mockito.doAnswer(invocationOnMock -> {
+            stage.setScene(scene);
             MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
             masterLogin.showMasterLoginScreen();
-            scene.setRoot(masterLogin.getController().getParentNode());
-            stage.setScene(scene);
-            stage.showAndWait();
+            stage.show();
             return masterLogin;
         }).when(fagiApp).showLoginScreen();
         return test;
