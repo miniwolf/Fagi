@@ -23,7 +23,7 @@
           styleClass="card, signin-card" xmlns="http://javafx.com/javafx/8.0.60"
           xmlns:fx="http://javafx.com/fxml/1">
         <Pane>
-            <Button mnemonicParsing="false" styleClass="a" onAction="#back">
+            <Button fx:id="backBtn" mnemonicParsing="false" styleClass="a" onAction="#back">
                 <graphic>
                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                preserveRatio="true">

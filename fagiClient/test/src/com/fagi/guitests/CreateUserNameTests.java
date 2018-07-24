@@ -86,6 +86,59 @@ public class CreateUserNameTests extends GuiTest {
         Assert.assertNotNull(lookup("#passwordRepeat"));
     }
 
+    @Test
+    public void ClickingOnBackButton_ResultsInReturningToLoginScreen() {
+        String username = "username";
+
+        TextField usernameTextField = lookup("#username").query();
+        clickOn(usernameTextField).write(username);
+
+        Node backBtn = lookup("#backBtn").query();
+        clickOn(backBtn);
+
+        Assert.assertNotNull(lookup("#UniqueLoginScreen").query());
+    }
+
+    @Test
+    public void WritingUsernameClickingOnBackButtonAndGoingBackToCreateUsername_ResultsInUsernameFieldCleared() {
+        String username = "username";
+
+        TextField usernameTextField = lookup("#username").query();
+        clickOn(usernameTextField).write(username);
+
+        Node backBtn = lookup("#backBtn").query();
+        clickOn(backBtn);
+
+        Node btn = lookup("#newAccount").query();
+        clickOn(btn);
+
+        usernameTextField = lookup("#username").query();
+
+        Assert.assertNull(usernameTextField.getText());
+    }
+
+    @Test
+    public void GoingBackFromCreatePassword_ShouldKeepUsername() {
+        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
+
+        String username = "username";
+
+        TextField usernameTextField = lookup("#username").query();
+        clickOn(usernameTextField).write(username);
+
+        Node nextBtn = lookup("#loginBtn").query();
+        clickOn(nextBtn);
+
+        Node backBtn = lookup("#backBtn").query();
+        clickOn(backBtn);
+
+        usernameTextField = lookup("#username").query();
+
+        System.out.println(usernameTextField.getText());
+
+        Assert.assertNotNull(usernameTextField.getText());
+    }
+
     @Override
     protected Parent getRootNode() {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
