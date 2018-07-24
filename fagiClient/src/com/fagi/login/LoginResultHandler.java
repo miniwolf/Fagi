@@ -1,17 +1,20 @@
 package com.fagi.login;
 
 import com.fagi.network.ChatManager;
-import com.fagi.responses.AllIsWell;
-import com.fagi.responses.NoSuchUser;
-import com.fagi.responses.PasswordError;
-import com.fagi.responses.Response;
-import com.fagi.responses.UserOnline;
+import com.fagi.network.Communication;
+import com.fagi.responses.*;
 import javafx.scene.control.Label;
 
 public class LoginResultHandler {
+    private final Communication communication;
+
+    public LoginResultHandler(Communication communication) {
+        this.communication = communication;
+    }
+
     public void handle(Response response, String username, Label messageLabel) {
         if (response instanceof AllIsWell) {
-            ChatManager.getApplication().showMainScreen(username);
+            ChatManager.getApplication().showMainScreen(username, communication);
         } else if (response instanceof FieldEmpty) {
             messageLabel.setText("Fields cannot be empty");
         } else if (response instanceof NoSuchUser) {

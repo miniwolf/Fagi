@@ -60,12 +60,13 @@ public class FagiApp extends Application {
         primaryStage.show();
     }
 
-    public void startCommunication(MasterLogin masterLogin) {
+    private void startCommunication(MasterLogin masterLogin) {
         // TODO: Let the user browse for the file path
         Thread thread = new Thread(() -> {
             AtomicBoolean successfulConnection = new AtomicBoolean(false);
             AES aes = new AES();
             aes.generateKey(128);
+
             Communication communication = DependencyInjectionSystem.getInstance().getInstance(
                     Communication.class);
             while (!successfulConnection.get()) {
@@ -100,10 +101,29 @@ public class FagiApp extends Application {
      * when the user log out and the com.fagi.main screen shut down.
      */
     public MasterLogin showLoginScreen() {
-        MasterLogin masterLogin = new MasterLogin(this, primaryStage, new Draggable(primaryStage));
+        Communication communication = setupCommunication();
+        if (communication == null) {
+            return null;
+        }
+
+        MasterLogin masterLogin = new MasterLogin(this, communication, primaryStage, new Draggable(primaryStage));
+
         startCommunication(masterLogin);
         masterLogin.showMasterLoginScreen();
         return masterLogin;
+    }
+
+    private Communication setupCommunication() {
+        ServerConfig config;
+        try {
+            String configLocation = "config/serverinfo.config";
+            config = ServerConfig.pathToServerConfig(configLocation);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return new Communication(config.getName(), config.getIp(), config.getPort(),
+                config.getServerKey());
     }
 
     /**
@@ -112,8 +132,8 @@ public class FagiApp extends Application {
      *
      * @param username      Username logged in.
      */
-    public void showMainScreen(String username) {
-        MainScreen controller = new MainScreen(username, primaryStage);
+    public void showMainScreen(String username, Communication communication) {
+        MainScreen controller = new MainScreen(username, communication, primaryStage);
         scene.setRoot(controller);
         controller.initCommunication();
         primaryStage.sizeToScene();

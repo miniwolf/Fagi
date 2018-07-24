@@ -11,10 +11,6 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
 import com.fagi.uimodel.FagiImage;
-import com.fagi.util.DefaultWiringModule;
-import com.fagi.util.DependencyInjectionSystem;
-import com.google.inject.AbstractModule;
-import com.google.inject.util.Modules;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -158,16 +154,16 @@ public class FriendsTests extends GuiTest {
         Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
         Mockito.doCallRealMethod().when(inputHandler).setupDistributor();
         Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, stage, draggable))
+        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                .when(fagiApp).showLoginScreen();
 
-        DependencyInjectionSystem.setModule(Modules.override(
-                new DefaultWiringModule()).with(new AbstractModule() {
-            @Override
-            protected void configure() {
-                this.bind(Communication.class).toInstance(communication);
-            }
-        }));
+//        DependencyInjectionSystem.setModule(Modules.override(
+//                new DefaultWiringModule()).with(new AbstractModule() {
+//            @Override
+//            protected void configure() {
+//                this.bind(Communication.class).toInstance(communication);
+//            }
+//        }));
 
         Thread inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);
@@ -178,7 +174,7 @@ public class FriendsTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        MainScreen test = new MainScreen("Test", stage);
+        MainScreen test = new MainScreen("Test", communication, stage);
         test.initCommunication();
         return test;
     }

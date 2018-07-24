@@ -16,8 +16,6 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.handler.Search;
-import com.fagi.uimodel.FagiImage;
-import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.Logout;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -29,7 +27,8 @@ import com.fagi.network.Communication;
 import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
-import com.fagi.util.DependencyInjectionSystem;
+import com.fagi.uimodel.FagiImage;
+import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.utility.Logger;
 import javafx.application.Platform;
@@ -115,10 +114,9 @@ public class MainScreen extends Pane {
      * @param usernameString which is used all around the class for knowing who the user is
      * @param primaryStage   primary stage used to create a draggable.
      */
-    public MainScreen(String usernameString, Stage primaryStage) {
+    public MainScreen(String usernameString, Communication communication, Stage primaryStage) {
         this.usernameString = usernameString;
-        this.communication = DependencyInjectionSystem.getInstance()
-                                                      .getInstance(Communication.class);
+        this.communication = communication;
         this.draggable = new Draggable(primaryStage);
         listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;

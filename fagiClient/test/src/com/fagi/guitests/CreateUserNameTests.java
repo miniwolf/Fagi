@@ -8,10 +8,6 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserExists;
-import com.fagi.util.DefaultWiringModule;
-import com.fagi.util.DependencyInjectionSystem;
-import com.google.inject.AbstractModule;
-import com.google.inject.util.Modules;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -151,15 +147,15 @@ public class CreateUserNameTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        DependencyInjectionSystem.setModule(Modules.override(
-                new DefaultWiringModule()).with(new AbstractModule() {
-            @Override
-            protected void configure() {
-                this.bind(Communication.class).toInstance(communication);
-            }
-        }));
+//        DependencyInjectionSystem.setModule(Modules.override(
+//                new DefaultWiringModule()).with(new AbstractModule() {
+//            @Override
+//            protected void configure() {
+//                this.bind(Communication.class).toInstance(communication);
+//            }
+//        }));
 
-        MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable);
+        MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         masterLogin.setState(LoginState.USERNAME);
         spy = Mockito.spy(masterLogin);
 

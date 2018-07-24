@@ -3,9 +3,14 @@ package com.fagi.login;
 import com.fagi.model.Login;
 import com.fagi.network.Communication;
 import com.fagi.responses.Response;
-import com.fagi.util.DependencyInjectionSystem;
 
 public class LoginSystem {
+    private Communication communication;
+
+    public LoginSystem(Communication communication) {
+        this.communication = communication;
+    }
+
     private static boolean isEmpty(String string) {
         return string == null || "".equals(string);
     }
@@ -26,8 +31,6 @@ public class LoginSystem {
             return new FieldEmpty();
         }
 
-        Communication communication = DependencyInjectionSystem.getInstance()
-                                                               .getInstance(Communication.class);
         communication.sendObject(loginData);
         return communication.getNextResponse();
     }

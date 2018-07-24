@@ -8,6 +8,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
+import com.fagi.network.Communication;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
  */
 public class MasterLogin {
     private final FagiApp fagiApp;
+    private final Communication communication;
     private final Draggable draggable;
     private final Scene scene;
     private final Stage stage;
@@ -37,8 +39,9 @@ public class MasterLogin {
      * @param fagiApp   FagiApp used to login
      * @param draggable Passes the draggable from the stage
      */
-    public MasterLogin(FagiApp fagiApp, Stage stage, Draggable draggable) {
+    public MasterLogin(FagiApp fagiApp, Communication communication, Stage stage, Draggable draggable) {
         this.fagiApp = fagiApp;
+        this.communication = communication;
         this.draggable = draggable;
         this.scene = stage.getScene();
         this.stage = stage;
@@ -141,7 +144,7 @@ public class MasterLogin {
         LoginController controller;
         switch (screen) {
             case LOGIN:
-                controller = new LoginScreenController(this);
+                controller = new LoginScreenController(this, communication);
                 break;
             case USERNAME:
                 controller = new CreateUserNameController(this);

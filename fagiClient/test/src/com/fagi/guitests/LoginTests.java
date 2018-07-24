@@ -7,12 +7,9 @@ import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-import com.fagi.responses.*;
-import com.fagi.util.DefaultWiringModule;
-import com.fagi.util.DependencyInjectionSystem;
-import com.fagi.utility.JsonFileOperations;
-import com.google.inject.AbstractModule;
-import com.google.inject.util.Modules;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.PasswordError;
+import com.fagi.responses.UserOnline;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,8 +27,8 @@ import org.mockito.Mockito;
 import java.io.IOException;
 
 public class LoginTests extends GuiTest {
-    MasterLogin spy;
-    Communication communication;
+    private MasterLogin spy;
+    private Communication communication;
 
     @BeforeClass
     public static void onlyOnce() {
@@ -165,15 +162,15 @@ public class LoginTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        DependencyInjectionSystem.setModule(Modules.override(
-                new DefaultWiringModule()).with(new AbstractModule() {
-            @Override
-            protected void configure() {
-                this.bind(Communication.class).toInstance(communication);
-            }
-        }));
+//        DependencyInjectionSystem.setModule(Modules.override(
+//                new DefaultWiringModule()).with(new AbstractModule() {
+//            @Override
+//            protected void configure() {
+//                this.bind(Communication.class).toInstance(communication);
+//            }
+//        }));
 
-        MasterLogin masterLogin = new MasterLogin(fagiApp, stage, draggable);
+        MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         spy = Mockito.spy(masterLogin);
 
         Mockito.doNothing().when(spy).updateRoot();
