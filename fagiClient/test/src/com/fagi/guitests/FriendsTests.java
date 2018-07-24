@@ -157,14 +157,6 @@ public class FriendsTests extends GuiTest {
         Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                .when(fagiApp).showLoginScreen();
 
-//        DependencyInjectionSystem.setModule(Modules.override(
-//                new DefaultWiringModule()).with(new AbstractModule() {
-//            @Override
-//            protected void configure() {
-//                this.bind(Communication.class).toInstance(communication);
-//            }
-//        }));
-
         Thread inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);
         inputThread.start();

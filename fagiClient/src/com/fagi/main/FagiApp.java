@@ -10,7 +10,6 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-import com.fagi.util.DependencyInjectionSystem;
 import com.fagi.utility.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -60,15 +59,14 @@ public class FagiApp extends Application {
         primaryStage.show();
     }
 
-    private void startCommunication(MasterLogin masterLogin) {
+    private void startCommunication(final MasterLogin masterLogin,
+                                    final Communication communication) {
         // TODO: Let the user browse for the file path
         Thread thread = new Thread(() -> {
             AtomicBoolean successfulConnection = new AtomicBoolean(false);
             AES aes = new AES();
             aes.generateKey(128);
 
-            Communication communication = DependencyInjectionSystem.getInstance().getInstance(
-                    Communication.class);
             while (!successfulConnection.get()) {
                 Platform.runLater(() -> {
                     try {
@@ -108,7 +106,7 @@ public class FagiApp extends Application {
 
         MasterLogin masterLogin = new MasterLogin(this, communication, primaryStage, new Draggable(primaryStage));
 
-        startCommunication(masterLogin);
+        startCommunication(masterLogin, communication);
         masterLogin.showMasterLoginScreen();
         return masterLogin;
     }

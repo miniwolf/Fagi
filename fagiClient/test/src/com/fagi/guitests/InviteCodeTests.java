@@ -79,14 +79,6 @@ public class InviteCodeTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-//        DependencyInjectionSystem.setModule(Modules.override(
-//                new DefaultWiringModule()).with(new AbstractModule() {
-//            @Override
-//            protected void configure() {
-//                this.bind(Communication.class).toInstance(communication);
-//            }
-//        }));
-
         MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         masterLogin.setState(LoginState.INVITE_CODE);
         spy = Mockito.spy(masterLogin);

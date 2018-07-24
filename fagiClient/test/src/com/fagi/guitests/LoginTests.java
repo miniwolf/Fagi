@@ -162,14 +162,6 @@ public class LoginTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-//        DependencyInjectionSystem.setModule(Modules.override(
-//                new DefaultWiringModule()).with(new AbstractModule() {
-//            @Override
-//            protected void configure() {
-//                this.bind(Communication.class).toInstance(communication);
-//            }
-//        }));
-
         MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         spy = Mockito.spy(masterLogin);
 

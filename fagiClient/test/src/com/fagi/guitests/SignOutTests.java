@@ -53,14 +53,6 @@ public class SignOutTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-//        DependencyInjectionSystem.setModule(Modules.override(
-//                new DefaultWiringModule()).with(new AbstractModule() {
-//            @Override
-//            protected void configure() {
-//                this.bind(Communication.class).toInstance(communication);
-//            }
-//        }));
-
         MainScreen test = new MainScreen("Test", communication, stage);
         test.initCommunication();
 

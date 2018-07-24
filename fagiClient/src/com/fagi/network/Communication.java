@@ -14,7 +14,6 @@ import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.Response;
 import com.fagi.utility.Logger;
-import com.google.inject.Inject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +41,6 @@ public class Communication {
     public Communication() {
     }
 
-    @Inject
     public Communication(String name, String host, int port, PublicKey serverKey) {
         this.name = name;
         this.host = host;
