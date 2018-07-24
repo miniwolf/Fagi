@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.config.ServerConfig;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
@@ -9,6 +10,7 @@ import com.fagi.network.Communication;
 import com.fagi.responses.*;
 import com.fagi.util.DefaultWiringModule;
 import com.fagi.util.DependencyInjectionSystem;
+import com.fagi.utility.JsonFileOperations;
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Modules;
 import javafx.scene.Node;
@@ -20,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
@@ -29,6 +32,16 @@ import java.io.IOException;
 public class LoginTests extends GuiTest {
     MasterLogin spy;
     Communication communication;
+
+    @BeforeClass
+    public static void onlyOnce() {
+        ServerConfig config = new ServerConfig("test", "127.0.0.1", 1337, null);
+        try {
+            config.saveToPath("config/serverinfo.config");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void LoginWithWrongPassword_WillPostCorrectErrorMessage() {
