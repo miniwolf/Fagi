@@ -59,30 +59,20 @@
     <pathelement location="${basedir}/fagiServer/lib/gson-2.7.jar"/>
   </path>
   
-  <path id="library.guice-4.1.0-no_aop.classpath">
-    <pathelement location="${basedir}/fagiClient/lib/guice-4.1.0-no_aop.jar"/>
-  </path>
-  
-  <path id="library.guice-4.1.0.classpath">
-    <pathelement location="${basedir}/fagiClient/lib/guice-4.1.0.jar"/>
-  </path>
-  
-  <path id="library.javax.inject-1.classpath">
-    <pathelement location="${basedir}/fagiClient/lib/javax.inject-1.jar"/>
-  </path>
-  
   <path id="library.mock-dependencies.classpath">
-    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.6.12.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.6.12.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/objenesis-2.5.1.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.8.13.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.8.13.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/objenesis-2.6.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/java-hamcrest-2.0.0.0.jar"/>
   </path>
   
   <path id="library.mockito.classpath">
-    <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.7.19.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.20.0.jar"/>
   </path>
   
   <path id="library.testfx-master.classpath">
-    <pathelement location="${basedir}/fagiClient/test/lib/TestFX-master.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/testfx-core-4.0.13-alpha.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit-4.0.13-alpha.jar"/>
   </path>
   
   

@@ -11,22 +11,20 @@ import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
 import com.fagi.responses.UserOnline;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
+import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.IOException;
 
-public class LoginTests extends GuiTest {
+public class LoginTests extends ApplicationTest {
     private MasterLogin spy;
     private Communication communication;
 
@@ -137,10 +135,8 @@ public class LoginTests extends GuiTest {
     }
 
     @Override
-    protected Parent getRootNode() {
+    public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Stage stage = (Stage) targetWindow();
-        stage.setScene(new Scene(new AnchorPane()));
         Draggable draggable = new Draggable(stage);
 
         communication = Mockito.mock(Communication.class);
@@ -155,6 +151,7 @@ public class LoginTests extends GuiTest {
         spy.showMasterLoginScreen();
         Mockito.doCallRealMethod().when(spy).updateRoot();
 
-        return spy.getController().getParentNode();
+        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.show();
     }
 }

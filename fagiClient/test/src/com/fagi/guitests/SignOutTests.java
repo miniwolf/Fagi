@@ -8,16 +8,27 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
+import org.testfx.api.FxToolkit;
+import org.testfx.framework.junit.ApplicationTest;
 
-public class SignOutTests extends GuiTest {
+import java.util.concurrent.TimeoutException;
+
+public class SignOutTests extends ApplicationTest {
+    @BeforeClass
+    public static void setUpClass() {
+        try {
+            FxToolkit.registerPrimaryStage();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void clickOnToggleSignOut_WillChangeVisibilityOnDropdownId() {
         Node signOutPane = lookup("#dropdown").query();
@@ -41,11 +52,7 @@ public class SignOutTests extends GuiTest {
     }
 
     @Override
-    protected Parent getRootNode() {
-        System.out.println("Starting SignOut tests");
-        Stage stage = (Stage) targetWindow();
-        Scene scene = new Scene(new AnchorPane());
-        stage.setScene(scene);
+    public void start(Stage stage) {
         Communication communication = Mockito.mock(Communication.class);
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
@@ -57,6 +64,7 @@ public class SignOutTests extends GuiTest {
         test.initCommunication();
 
         Draggable draggable = new Draggable(stage);
+        Scene scene = new Scene(test);
         Mockito.doAnswer(invocationOnMock -> {
             stage.setScene(scene);
             MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
@@ -64,6 +72,7 @@ public class SignOutTests extends GuiTest {
             stage.show();
             return masterLogin;
         }).when(fagiApp).showLoginScreen();
-        return test;
+        stage.setScene(scene);
+        stage.show();
     }
 }

@@ -9,18 +9,16 @@ import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserExists;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
+import org.testfx.framework.junit.ApplicationTest;
 
-public class CreateUserNameTests extends GuiTest {
+public class CreateUserNameTests extends ApplicationTest {
     private Communication communication;
     private MasterLogin spy;
 
@@ -136,10 +134,8 @@ public class CreateUserNameTests extends GuiTest {
     }
 
     @Override
-    protected Parent getRootNode() {
+    public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Stage stage = (Stage) targetWindow();
-        stage.setScene(new Scene(new AnchorPane()));
         Draggable draggable = new Draggable(stage);
 
         communication = Mockito.mock(Communication.class);
@@ -154,6 +150,8 @@ public class CreateUserNameTests extends GuiTest {
         Mockito.doNothing().when(spy).updateRoot();
         spy.showMasterLoginScreen();
         Mockito.doCallRealMethod().when(spy).updateRoot();
-        return spy.getController().getParentNode();
+
+        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.show();
     }
 }

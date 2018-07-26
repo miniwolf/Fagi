@@ -5,8 +5,14 @@ package com.fagi.network;
          */
 
 import com.fagi.main.FagiApp;
-import com.fagi.model.*;
-import com.fagi.responses.*;
+import com.fagi.model.CreateUser;
+import com.fagi.model.InviteCode;
+import com.fagi.model.Logout;
+import com.fagi.model.UserNameAvailableRequest;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.IllegalInviteCode;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserExists;
 import javafx.scene.control.Label;
 
 import java.util.ServiceLoader;
@@ -106,8 +112,6 @@ public class ChatManager {
 
         communication.sendObject(request);
         Response response = communication.getNextResponse();
-
-        System.out.println(response.getClass());
 
         return response instanceof AllIsWell;
     }

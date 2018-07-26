@@ -7,18 +7,16 @@ import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
+import org.testfx.framework.junit.ApplicationTest;
 
-public class CreatePasswordTests extends GuiTest {
+public class CreatePasswordTests extends ApplicationTest {
     private Communication communication;
     private MasterLogin spy;
 
@@ -82,10 +80,8 @@ public class CreatePasswordTests extends GuiTest {
     }
 
     @Override
-    protected Parent getRootNode() {
+    public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Stage stage = (Stage) targetWindow();
-        stage.setScene(new Scene(new AnchorPane()));
         Draggable draggable = new Draggable(stage);
 
         communication = Mockito.mock(Communication.class);
@@ -100,6 +96,8 @@ public class CreatePasswordTests extends GuiTest {
         Mockito.doNothing().when(spy).updateRoot();
         spy.showMasterLoginScreen();
         Mockito.doCallRealMethod().when(spy).updateRoot();
-        return spy.getController().getParentNode();
+
+        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.show();
     }
 }

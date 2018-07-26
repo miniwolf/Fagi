@@ -9,17 +9,15 @@ import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
+import org.testfx.framework.junit.ApplicationTest;
 
-public class InviteCodeTests extends GuiTest {
+public class InviteCodeTests extends ApplicationTest {
     private Communication communication;
     private MasterLogin spy;
 
@@ -68,10 +66,8 @@ public class InviteCodeTests extends GuiTest {
     }
 
     @Override
-    protected Parent getRootNode() {
+    public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Stage stage = (Stage) targetWindow();
-        stage.setScene(new Scene(new AnchorPane()));
         Draggable draggable = new Draggable(stage);
 
         communication = Mockito.mock(Communication.class);
@@ -89,6 +85,8 @@ public class InviteCodeTests extends GuiTest {
 
         spy.setUsername("ThisIsAUsername");
         spy.setPassword("ThisIsAPassword");
-        return spy.getController().getParentNode();
+
+        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.show();
     }
 }

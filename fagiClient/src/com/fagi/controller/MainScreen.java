@@ -27,7 +27,6 @@ import com.fagi.network.Communication;
 import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
-import com.fagi.uimodel.FagiImage;
 import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.utility.Logger;
@@ -147,16 +146,10 @@ public class MainScreen extends Pane {
 
     @FXML
     private void initialize() {
-        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
-                                     event -> System.out.println("mouse click detected: "
-                                                                 + event.getTarget()));
-
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
             primaryStage.setIconified(true);
         });
-
-        primaryStage.setOnShowing(event -> System.out.println("Test"));
 
         currentPane = messages;
         currentPaneContent = PaneContent.Messages;
@@ -164,17 +157,25 @@ public class MainScreen extends Pane {
         emptyFocusElement = messages;
         username.setText(usernameString);
         char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
-        Image tiny = new FagiImage("/com/fagi/style/material-icons/" + cUpper + ".png", 40, 40,
-                                   true, true);
+        Image tiny = new Image(
+                "/com/fagi/style/material-icons/" + cUpper + ".png",
+                40,
+                40,
+                true,
+                true);
         this.tinyIcon.setImage(tiny);
-        Image large = new FagiImage("/com/fagi/style/material-icons/" + cUpper + ".png", 96, 96,
-                                    true, true);
+        Image large = new Image(
+                "/com/fagi/style/material-icons/" + cUpper + ".png",
+                96,
+                96,
+                true,
+                true);
         this.largeIcon.setImage(large);
         this.requestFocus();
 
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
+        scene.widthProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue,
                                 Number oldSceneWidth, Number newSceneWidth) {

@@ -22,7 +22,6 @@ public class DefaultThreadHandler implements Runnable {
     @Override
     public void run() {
         while ( running ) {
-            System.out.println("Handling Messages");
             while ( !container.getQueue().isEmpty() ) {
                 handler.handle(container.getQueue().remove());
             }
