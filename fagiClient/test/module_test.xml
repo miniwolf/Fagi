@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_test" default="compile.module.test">
   <dirname property="module.test.basedir" file="${ant.file.module_test}"/>
-  
-  
-  <property name="compiler.args.test" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+
+  <property name="module.jdk.home.test" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.test" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.test" value="${project.jdk.classpath}"/>
+
+  <property name="compiler.args.test" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
   
   <property name="test.output.dir" value="${module.test.basedir}/../../out/production/test"/>
   <property name="test.testoutput.dir" value="${module.test.basedir}/../../out/test/test"/>
@@ -13,43 +16,47 @@
   </path>
   
   <path id="test.module.production.classpath">
+    <path refid="${module.jdk.classpath.test}"/>
     <pathelement location="${fagiclient.output.dir}"/>
-    <path refid="library.mockito.classpath"/>
-    <path refid="library.mock-dependencies.classpath"/>
     <path refid="library.testfx-master.classpath"/>
+    <path refid="library.junit.classpath"/>
+    <pathelement location="${shared.output.dir}"/>
+    <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
+    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="test.runtime.production.module.classpath">
     <pathelement location="${test.output.dir}"/>
     <path refid="fagiclient.runtime.production.module.classpath"/>
-    <path refid="library.mockito.classpath"/>
-    <path refid="library.mock-dependencies.classpath"/>
     <path refid="library.testfx-master.classpath"/>
+    <path refid="library.junit.classpath"/>
+    <path refid="shared.runtime.production.module.classpath"/>
+    <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
+    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="test.module.classpath">
+    <path refid="${module.jdk.classpath.test}"/>
     <pathelement location="${test.output.dir}"/>
     <pathelement location="${fagiclient.testoutput.dir}"/>
     <pathelement location="${fagiclient.output.dir}"/>
+    <path refid="library.testfx-master.classpath"/>
+    <path refid="library.junit.classpath"/>
     <pathelement location="${shared.testoutput.dir}"/>
     <pathelement location="${shared.output.dir}"/>
-    <path refid="library.mockito.classpath"/>
-    <path refid="library.mock-dependencies.classpath"/>
-    <path refid="library.testfx-master.classpath"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
+    <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
+    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="test.runtime.module.classpath">
     <pathelement location="${test.testoutput.dir}"/>
     <pathelement location="${test.output.dir}"/>
     <path refid="fagiclient.runtime.module.classpath"/>
-    <path refid="shared.runtime.module.classpath"/>
-    <path refid="library.mockito.classpath"/>
-    <path refid="library.mock-dependencies.classpath"/>
     <path refid="library.testfx-master.classpath"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
+    <path refid="library.junit.classpath"/>
+    <path refid="shared.runtime.module.classpath"/>
+    <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
+    <path refid="library.javafx.classpath"/>
   </path>
   
   
@@ -60,36 +67,38 @@
   <patternset id="excluded.from.compilation.test">
     <patternset refid="excluded.from.module.test"/>
   </patternset>
-  
-  <path id="test.module.test.sourcepath">
+
+  <path id="test.module.sourcepath">
     <dirset dir="${module.test.basedir}">
       <include name="src"/>
     </dirset>
   </path>
-  
-  
+
   <target name="compile.module.test" depends="compile.module.test.production,compile.module.test.tests" description="Compile module test"/>
-  
-  <target name="compile.module.test.production" depends="compile.module.fagiclient,compile.module.shared" description="Compile module test; production classes"/>
-  
-  <target name="compile.module.test.tests" depends="compile.module.test.production" description="compile module test; test classes" unless="skip.tests">
-    <mkdir dir="${test.testoutput.dir}"/>
-    <javac destdir="${test.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+
+  <target name="compile.module.test.tests" depends="compile.module.test.production"
+          description="compile module test; test classes" unless="skip.tests"/>
+
+  <target name="compile.module.test.production" depends="compile.module.fagiclient,compile.module.shared"
+          description="Compile module test; production classes">
+    <mkdir dir="${test.output.dir}"/>
+    <javac destdir="${test.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+           memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.test}/javac">
       <compilerarg line="${compiler.args.test}"/>
       <bootclasspath refid="test.module.bootclasspath"/>
-      <classpath refid="test.module.classpath"/>
-      <src refid="test.module.test.sourcepath"/>
+      <classpath refid="test.module.production.classpath"/>
+      <src refid="test.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.test"/>
     </javac>
-    
-    <copy todir="${test.testoutput.dir}">
+
+    <copy todir="${test.output.dir}">
       <fileset dir="${module.test.basedir}/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
     </copy>
   </target>
-  
+
   <target name="clean.module.test" description="cleanup module">
     <delete dir="${test.output.dir}"/>
     <delete dir="${test.testoutput.dir}"/>

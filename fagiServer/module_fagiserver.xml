@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_fagiserver" default="compile.module.fagiserver">
   <dirname property="module.fagiserver.basedir" file="${ant.file.module_fagiserver}"/>
-  
-  
-  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+
+  <property name="module.jdk.home.fagiserver" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.fagiserver" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.fagiserver" value="${project.jdk.classpath}"/>
+
+  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
   
   <property name="fagiserver.output.dir" value="${module.fagiserver.basedir}/../out/production/fagiServer"/>
   <property name="fagiserver.testoutput.dir" value="${module.fagiserver.basedir}/../out/test/fagiServer"/>
@@ -13,6 +16,7 @@
   </path>
   
   <path id="fagiserver.module.production.classpath">
+    <path refid="${module.jdk.classpath.fagiserver}"/>
     <path refid="library.gson-2.7.classpath"/>
     <pathelement location="${shared.output.dir}"/>
   </path>
@@ -24,6 +28,7 @@
   </path>
   
   <path id="fagiserver.module.classpath">
+    <path refid="${module.jdk.classpath.fagiserver}"/>
     <pathelement location="${fagiserver.output.dir}"/>
     <path refid="library.gson-2.7.classpath"/>
     <pathelement location="${shared.testoutput.dir}"/>

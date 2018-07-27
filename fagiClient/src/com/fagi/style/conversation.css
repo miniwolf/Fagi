@@ -40,7 +40,7 @@
 
 .message-title .picture {
   -fx-background-repeat:no-repeat;
-  -fx-background-image: url(https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png);
+  -fx-background-image: url("/icons/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -474px -340px;
   -fx-background-size: 617px, 557px;
   -fx-pref-height: 14px;
@@ -74,7 +74,7 @@
   -fx-pref-width:24px;
   -fx-background-repeat:no-repeat;
   -fx-background-color:transparent;
-  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
 }
 
 .icon .button:hover {
@@ -133,7 +133,7 @@
 .field .smiley {
   -fx-background-color:transparent;
   -fx-background-repeat:no-repeat;
-  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position: -217px 0;
   -fx-pref-height:20px;
   -fx-pref-width:20px;
@@ -190,13 +190,13 @@
 .button-wrapper .toggled {
   -fx-background-repeat: no-repeat;
 
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-image: url("/icons/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -107px -505px;
   -fx-background-size: 617px, 557px;
 }
 
 .button-wrapper .untoggled {
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position: -107px -120px;
 }
 
@@ -250,7 +250,7 @@
 
 .holder .tip {
   -fx-background-repeat:no-repeat;
-  -fx-background-image:url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-pref-width:7px;
   -fx-pref-height:10px;
 }
@@ -475,7 +475,7 @@
 
 .addpeoplebutton {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url(https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png);
+  -fx-background-image: url("/icons/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -560px -17px;
   -fx-background-size: 617px, 557px;
   -fx-pref-width: 29px !important;
@@ -503,25 +503,25 @@
 
 .archive {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-image: url("/icons/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -49px -17px;
 }
 
 .delete {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-image: url("/icons/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -98px -451px;
 }
 
 .block {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
+  -fx-background-image: url("/icons/sprites/highdpi-1cb87125492385c4ff0cd94fb144aa0f.png");
   -fx-background-position: -511px -136px;
 }
 
 .leave {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position: -457px -149px;
   -fx-background-size: auto;
 }

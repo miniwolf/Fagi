@@ -29,7 +29,7 @@
 }
 
 .clicker-holder .clicker {
-  -fx-background-image: url(http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png);
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-repeat:no-repeat;
   -fx-background-position:-107px -120px;
   -fx-pref-height:16px;

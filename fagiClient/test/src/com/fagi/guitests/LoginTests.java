@@ -121,8 +121,8 @@ public class LoginTests extends ApplicationTest {
     public void WhenCallingSetMessageLabel_NewMessageShouldAppear() {
         spy.setMessageLabel("Connection refused");
 
-        Node messageLabel = lookup("#messageLabel").query();
-        Assert.assertEquals("Connection refused", ((Label)messageLabel).getText());
+        Label messageLabel = lookup("#messageLabel").query();
+        Assert.assertEquals("Connection refused", messageLabel.getText());
     }
 
     @Test

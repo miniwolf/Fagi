@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-
-
 <fx:root type="Pane" id="UniqueInviteCode" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed"
          prefHeight="301.0" prefWidth="305.0" styleClass="card" stylesheets="@../../style/Login.css"
          xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
@@ -25,7 +20,7 @@
                         <viewport>
                             <Rectangle2D height="24.0" width="24.0"/>
                         </viewport>
-                        <Image url="https://www.gstatic.com/images/icons/material/system/1x/arrow_back_grey600_24dp.png"/>
+                        <Image url="/icons/arrow_back_grey600_24dp.png"/>
                     </ImageView>
                 </graphic>
             </Button>

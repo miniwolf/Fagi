@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="fagi" default="all">
-  
-  
-  <property file="build.properties"/>
+
   <!-- Uncomment the following property if no tests compilation is needed -->
-  <!-- 
+  <!--
   <property name="skip.tests" value="true"/>
    -->
-  
+
   <!-- Compiler options -->
-  
+
   <property name="compiler.debug" value="on"/>
   <property name="compiler.generate.no.warnings" value="off"/>
   <property name="compiler.args" value=""/>
@@ -51,96 +49,63 @@
     <exclude name="**/?*.clj"/>
     <exclude name="**/?*.aj"/>
   </patternset>
-  
-  
+
   <!-- Project Libraries -->
-  
+
   <path id="library.gson-2.7.classpath">
     <pathelement location="${basedir}/fagiServer/lib/gson-2.7.jar"/>
   </path>
-  
-  <path id="library.mock-dependencies.classpath">
-    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.8.13.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.8.13.jar"/>
-    <pathelement location="${basedir}/fagiClient/test/lib/objenesis-2.6.jar"/>
+
+  <path id="library.java-hamcrest-2.0.0.0.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/java-hamcrest-2.0.0.0.jar"/>
   </path>
-  
-  <path id="library.mockito.classpath">
-    <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.20.0.jar"/>
+
+  <path id="library.javafx.classpath">
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx-swt.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.base.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.controls.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.fxml.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.graphics.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.media.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.swing.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.web.jar"/>
   </path>
-  
+
+  <path id="library.junit.classpath">
+    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.8.13.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.8.13.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/hamcrest-core-1.3.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/junit-4.12.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/mockito-core-2.20.0.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/objenesis-2.6.jar"/>
+  </path>
+
   <path id="library.testfx-master.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-core-4.0.13-alpha.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit-4.0.13-alpha.jar"/>
+    <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit5-4.0.13-alpha.jar"/>
   </path>
-  
-  
+
+
   <!-- Global Libraries -->
-  
+
   <!-- Modules -->
-  
+
   <import file="${basedir}/shared/module_shared.xml"/>
-  
+
   <import file="${basedir}/fagiClient/module_fagiclient.xml"/>
-  
+
   <import file="${basedir}/fagiServer/module_fagiserver.xml"/>
-  
+
   <import file="${basedir}/fagiClient/test/module_test.xml"/>
-  
+
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
-  
+
   <target name="clean" depends="clean.module.shared, clean.module.fagiclient, clean.module.fagiserver, clean.module.test" description="cleanup all"/>
-  
+
   <target name="build.modules" depends="init, clean, compile.module.shared, compile.module.fagiclient, compile.module.fagiserver, compile.module.test" description="build all modules"/>
-  
-  <target name="init.artifacts">
-    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
-    <property name="artifact.output.fagiclient:jar" value="${basedir}/out/artifacts/fagiClient_jar"/>
-    <property name="artifact.output.fagiserver:jar" value="${basedir}/out/artifacts/fagiServer_jar"/>
-    <mkdir dir="${artifacts.temp.dir}"/>
-    <property name="temp.jar.path.fagiClient.jar" value="${artifacts.temp.dir}/fagiClient.jar"/>
-    <property name="temp.jar.path.fagiServer.jar" value="${artifacts.temp.dir}/fagiServer.jar"/>
-  </target>
-  
-  <target name="artifact.fagiclient:jar" depends="init.artifacts, compile.module.fagiclient, compile.module.shared" description="Build &#39;fagiClient:jar&#39; artifact">
-    <property name="artifact.temp.output.fagiclient:jar" value="${artifacts.temp.dir}/fagiClient_jar"/>
-    <mkdir dir="${artifact.temp.output.fagiclient:jar}"/>
-    <jar destfile="${temp.jar.path.fagiClient.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
-      <zipfileset dir="${fagiclient.output.dir}"/>
-      <zipfileset dir="${shared.output.dir}"/>
-      <zipfileset src="${basedir}/fagiClient/lib/annotations-java8.jar"/>
-      <zipfileset src="${basedir}/fagiServer/lib/gson-2.7.jar"/>
-    </jar>
-    <copy file="${temp.jar.path.fagiClient.jar}" tofile="${artifact.temp.output.fagiclient:jar}/fagiClient.jar"/>
-  </target>
-  
-  <target name="artifact.fagiserver:jar" depends="init.artifacts, compile.module.fagiserver, compile.module.shared" description="Build &#39;fagiServer:jar&#39; artifact">
-    <property name="artifact.temp.output.fagiserver:jar" value="${artifacts.temp.dir}/fagiServer_jar"/>
-    <mkdir dir="${artifact.temp.output.fagiserver:jar}"/>
-    <jar destfile="${temp.jar.path.fagiServer.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
-      <zipfileset dir="${fagiserver.output.dir}"/>
-      <zipfileset dir="${shared.output.dir}"/>
-      <zipfileset src="${basedir}/fagiServer/lib/gson-2.7.jar"/>
-    </jar>
-    <copy file="${temp.jar.path.fagiServer.jar}" tofile="${artifact.temp.output.fagiserver:jar}/fagiServer.jar"/>
-  </target>
-  
-  <target name="build.all.artifacts" depends="artifact.fagiclient:jar, artifact.fagiserver:jar" description="Build all artifacts">
-    <mkdir dir="${artifact.output.fagiclient:jar}"/>
-    <copy todir="${artifact.output.fagiclient:jar}">
-      <fileset dir="${artifact.temp.output.fagiclient:jar}"/>
-    </copy>
-    <mkdir dir="${artifact.output.fagiserver:jar}"/>
-    <copy todir="${artifact.output.fagiserver:jar}">
-      <fileset dir="${artifact.temp.output.fagiserver:jar}"/>
-    </copy>
-    
-    <!-- Delete temporary files -->
-    <delete dir="${artifacts.temp.dir}"/>
-  </target>
 
   <target name="test" description="run all tests">
     <junit showoutput="yes" haltonfailure="yes"> <!--printsummary="withOutAndErr"-->
@@ -162,6 +127,6 @@
       <report todir="${module.test.basedir}" format="frames"/>
     </junitreport>-->
   </target>
-  
-  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+
+  <target name="all" depends="build.modules" description="build all"/>
 </project>
