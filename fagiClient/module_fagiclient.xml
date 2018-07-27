@@ -2,10 +2,6 @@
 <project name="module_fagiclient" default="compile.module.fagiclient">
   <dirname property="module.fagiclient.basedir" file="${ant.file.module_fagiclient}"/>
 
-  <property name="module.jdk.home.fagiclient" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.fagiclient" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.fagiclient" value="${project.jdk.classpath}"/>
-
   <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
   
   <property name="fagiclient.output.dir" value="${module.fagiclient.basedir}/../out/production/fagiClient"/>
@@ -16,7 +12,6 @@
   </path>
   
   <path id="fagiclient.module.production.classpath">
-    <path refid="${module.jdk.classpath.fagiclient}"/>
     <pathelement location="${shared.output.dir}"/>
     <path refid="library.javafx.classpath"/>
   </path>
@@ -28,7 +23,6 @@
   </path>
   
   <path id="fagiclient.module.classpath">
-    <path refid="${module.jdk.classpath.fagiclient}"/>
     <pathelement location="${fagiclient.output.dir}"/>
     <pathelement location="${shared.testoutput.dir}"/>
     <pathelement location="${shared.output.dir}"/>

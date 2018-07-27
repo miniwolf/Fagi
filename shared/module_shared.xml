@@ -2,10 +2,6 @@
 <project name="module_shared" default="compile.module.shared">
   <dirname property="module.shared.basedir" file="${ant.file.module_shared}"/>
 
-    <property name="module.jdk.home.shared" value="${project.jdk.home}"/>
-    <property name="module.jdk.bin.shared" value="${project.jdk.bin}"/>
-    <property name="module.jdk.classpath.shared" value="${project.jdk.classpath}"/>
-
     <property name="compiler.args.shared" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
   
   <property name="shared.output.dir" value="${module.shared.basedir}/../out/production/shared"/>
@@ -16,7 +12,6 @@
   </path>
   
   <path id="shared.module.production.classpath">
-      <path refid="${module.jdk.classpath.shared}"/>
     <path refid="library.gson-2.7.classpath"/>
   </path>
   
@@ -26,7 +21,6 @@
   </path>
   
   <path id="shared.module.classpath">
-      <path refid="${module.jdk.classpath.shared}"/>
     <pathelement location="${shared.output.dir}"/>
     <path refid="library.gson-2.7.classpath"/>
   </path>
@@ -58,7 +52,7 @@
     <target name="compile.module.shared.production" description="Compile module shared; production classes">
     <mkdir dir="${shared.output.dir}"/>
         <javac destdir="${shared.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
-               memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.shared}/javac">
+               memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.shared}"/>
       <bootclasspath refid="shared.module.bootclasspath"/>
       <classpath refid="shared.module.production.classpath"/>

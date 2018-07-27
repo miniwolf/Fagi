@@ -2,10 +2,6 @@
 <project name="module_test" default="compile.module.test">
   <dirname property="module.test.basedir" file="${ant.file.module_test}"/>
 
-  <property name="module.jdk.home.test" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.test" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.test" value="${project.jdk.classpath}"/>
-
   <property name="compiler.args.test" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
   
   <property name="test.output.dir" value="${module.test.basedir}/../../out/production/test"/>
@@ -16,7 +12,6 @@
   </path>
   
   <path id="test.module.production.classpath">
-    <path refid="${module.jdk.classpath.test}"/>
     <pathelement location="${fagiclient.output.dir}"/>
     <path refid="library.testfx-master.classpath"/>
     <path refid="library.junit.classpath"/>
@@ -36,7 +31,6 @@
   </path>
   
   <path id="test.module.classpath">
-    <path refid="${module.jdk.classpath.test}"/>
     <pathelement location="${test.output.dir}"/>
     <pathelement location="${fagiclient.testoutput.dir}"/>
     <pathelement location="${fagiclient.output.dir}"/>
@@ -83,7 +77,7 @@
           description="Compile module test; production classes">
     <mkdir dir="${test.output.dir}"/>
     <javac destdir="${test.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
-           memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.test}/javac">
+           memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.test}"/>
       <bootclasspath refid="test.module.bootclasspath"/>
       <classpath refid="test.module.production.classpath"/>
