@@ -61,14 +61,14 @@
   </path>
 
   <path id="library.javafx.classpath">
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx-swt.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.base.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.controls.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.fxml.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.graphics.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.media.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.swing.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/lib/javafx.web.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx-swt.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.base.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.controls.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.fxml.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.graphics.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.media.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.swing.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.web.jar"/>
   </path>
 
   <path id="library.junit.classpath">
