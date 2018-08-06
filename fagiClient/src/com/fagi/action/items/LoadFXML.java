@@ -45,6 +45,7 @@ public class LoadFXML implements Action {
             Logger.logStackTrace(ioe);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e.getStackTrace());
         }
     }
 }
