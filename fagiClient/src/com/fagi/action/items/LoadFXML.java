@@ -28,12 +28,19 @@ public class LoadFXML implements Action {
 
     @Override
     public void execute() {
+        System.out.println("Creating loader");
         FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+        System.out.println("Created loader");
         loader.setController(parent);
+        System.out.println("the controller is set");
         loader.setRoot(parent);
+        System.out.println("The parent is set");
         try {
+            System.out.println("Attepmting to load");
             loader.load();
+            System.out.println("Load successful");
         } catch (IOException ioe) {
+            System.out.println(ioe.getStackTrace().toString());
             ioe.printStackTrace();
             Logger.logStackTrace(ioe);
         }
