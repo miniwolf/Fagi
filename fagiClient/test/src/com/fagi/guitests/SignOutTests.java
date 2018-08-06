@@ -21,7 +21,8 @@ import java.util.concurrent.TimeoutException;
 
 public class SignOutTests extends ApplicationTest {
     @BeforeClass
-    public static void setUpClass() {
+    public static void initialize() {
+        System.out.println("Starting SignOutTests");
         try {
             FxToolkit.registerPrimaryStage();
         } catch (TimeoutException e) {

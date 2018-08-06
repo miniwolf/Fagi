@@ -12,13 +12,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
 
 public class CreatePasswordTests extends ApplicationTest {
-    private Communication communication;
     private MasterLogin spy;
+
+    @BeforeClass
+    public static void initialize() {
+        System.out.println("Starting CreatePasswordTests");
+    }
 
     @Test
     public void PasswordFieldMustHaveAValue_MessageShouldIndicateOtherwise() {
@@ -84,7 +89,7 @@ public class CreatePasswordTests extends ApplicationTest {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
         Draggable draggable = new Draggable(stage);
 
-        communication = Mockito.mock(Communication.class);
+        Communication communication = Mockito.mock(Communication.class);
 
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);

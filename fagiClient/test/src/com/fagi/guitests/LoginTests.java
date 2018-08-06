@@ -29,8 +29,8 @@ public class LoginTests extends ApplicationTest {
     private Communication communication;
 
     @BeforeClass
-    public static void onlyOnce() {
-        System.out.println("onlyOnce");
+    public static void initialize() {
+        System.out.println("Starting login tests");
         ServerConfig config = new ServerConfig("test", "127.0.0.1", 1337, null);
         try {
             config.saveToPath("config/serverinfo.config");
@@ -41,7 +41,6 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields() {
-        System.out.println("WhenFocusedOnFieldAndTyping_TextIsContainedInFields");
         String testText = "ThisTextShould Exist";
         Node usernameField = lookup("#username").query();
         clickOn(usernameField).write(testText);
@@ -55,7 +54,6 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenGivingWrongPassword_ErrorMessageShouldShowThis() {
-        System.out.println("WhenGivingWrongPassword_ErrorMessageShouldShowThis");
         Mockito.when(communication.getNextResponse()).thenReturn(new PasswordError());
 
         String username = "dinMor";
@@ -78,7 +76,6 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenGivingWrongUsername_ErrorMessageShouldShowThis() {
-        System.out.println("WhenGivingWrongUsername_ErrorMessageShouldShowThis");
         Mockito.when(communication.getNextResponse()).thenReturn(new NoSuchUser());
 
         String username = "dinMor";
@@ -101,7 +98,6 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenUserIsAlreadyOnline_ErrorMessageShouldShowThis() {
-        System.out.println("WhenUserIsAlreadyOnline_ErrorMessageShouldShowThis");
         Mockito.when(communication.getNextResponse()).thenReturn(new UserOnline());
 
         String username = "dinMor";
@@ -124,7 +120,6 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenCallingSetMessageLabel_NewMessageShouldAppear() {
-        System.out.println("WhenCallingSetMessageLabel_NewMessageShouldAppear");
         spy.setMessageLabel("Connection refused");
 
         Label messageLabel = lookup("#messageLabel").query();
@@ -133,23 +128,15 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenClickingOnCreateNewUser_ShowCreateUsernameScreen() {
-        System.out.println("WhenClickingOnCreateNewUser_ShowCreateUsernameScreen");
-        System.out.println("Dimmer6");
         Node btn = lookup("#newAccount").query();
-        System.out.println("Dimmer4");
         clickOn(btn);
-        System.out.println("Dimmer5");
 
-        System.out.println("Dimmer");
         Assert.assertEquals(LoginState.USERNAME, spy.getState());
-        System.out.println("Dimmer2");
         Assert.assertNotNull(lookup("#UniqueCreateUsernameView").query());
-        System.out.println("Dimmer3");
     }
 
     @Override
     public void start(Stage stage) {
-        System.out.println("start");
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
         Draggable draggable = new Draggable(stage);
 

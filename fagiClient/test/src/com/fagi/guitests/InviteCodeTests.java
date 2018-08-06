@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
@@ -20,6 +21,11 @@ import org.testfx.framework.junit.ApplicationTest;
 public class InviteCodeTests extends ApplicationTest {
     private Communication communication;
     private MasterLogin spy;
+
+    @BeforeClass
+    public static void initialize() {
+        System.out.println("Starting InviteCodeTests");
+    }
 
     @Test
     public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis() {

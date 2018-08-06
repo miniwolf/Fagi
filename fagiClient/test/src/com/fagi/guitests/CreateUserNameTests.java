@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
@@ -21,6 +22,11 @@ import org.testfx.framework.junit.ApplicationTest;
 public class CreateUserNameTests extends ApplicationTest {
     private Communication communication;
     private MasterLogin spy;
+
+    @BeforeClass
+    public static void initialize() {
+        System.out.println("Starting CreateUserNameTests");
+    }
 
     @Test
     public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise() {

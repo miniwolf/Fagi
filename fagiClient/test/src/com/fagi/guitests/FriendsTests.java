@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
@@ -33,6 +34,11 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 public class FriendsTests extends ApplicationTest {
     private InputHandler inputHandler;
+
+    @BeforeClass
+    public static void initialize() {
+        System.out.println("Starting FriendsTests tests");
+    }
 
     @Test
     public void receivingFriendListFromServer_FriendIsVisibleOnContent() {
@@ -141,7 +147,6 @@ public class FriendsTests extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        System.out.println("Starting FriendsTests tests");
         Draggable draggable = new Draggable(stage);
 
         Communication communication = Mockito.mock(Communication.class);
