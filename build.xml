@@ -60,17 +60,6 @@
     <pathelement location="${basedir}/fagiClient/test/lib/java-hamcrest-2.0.0.0.jar"/>
   </path>
 
-  <path id="library.javafx.classpath">
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx-swt.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.base.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.controls.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.fxml.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.graphics.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.media.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.swing.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/openjfx/linux/lib/javafx.web.jar"/>
-  </path>
-
   <path id="library.junit.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.8.13.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.8.13.jar"/>
@@ -119,13 +108,12 @@
         </fileset>
       </batchtest>
     </junit>
-    <!--
     <junitreport todir="${module.test.basedir}">
       <fileset dir="${module.test.basedir}">
         <include name="TEST-*.xml"/>
       </fileset>
       <report todir="${module.test.basedir}" format="frames"/>
-    </junitreport>-->
+    </junitreport>
   </target>
 
   <target name="all" depends="build.modules" description="build all"/>

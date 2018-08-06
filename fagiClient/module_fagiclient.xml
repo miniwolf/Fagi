@@ -13,27 +13,23 @@
   
   <path id="fagiclient.module.production.classpath">
     <pathelement location="${shared.output.dir}"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="fagiclient.runtime.production.module.classpath">
     <pathelement location="${fagiclient.output.dir}"/>
     <path refid="shared.runtime.production.module.classpath"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="fagiclient.module.classpath">
     <pathelement location="${fagiclient.output.dir}"/>
     <pathelement location="${shared.testoutput.dir}"/>
     <pathelement location="${shared.output.dir}"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="fagiclient.runtime.module.classpath">
     <pathelement location="${fagiclient.testoutput.dir}"/>
     <pathelement location="${fagiclient.output.dir}"/>
     <path refid="shared.runtime.module.classpath"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   

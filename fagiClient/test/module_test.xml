@@ -17,7 +17,6 @@
     <path refid="library.junit.classpath"/>
     <pathelement location="${shared.output.dir}"/>
     <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="test.runtime.production.module.classpath">
@@ -27,7 +26,6 @@
     <path refid="library.junit.classpath"/>
     <path refid="shared.runtime.production.module.classpath"/>
     <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="test.module.classpath">
@@ -39,7 +37,6 @@
     <pathelement location="${shared.testoutput.dir}"/>
     <pathelement location="${shared.output.dir}"/>
     <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   <path id="test.runtime.module.classpath">
@@ -50,7 +47,6 @@
     <path refid="library.junit.classpath"/>
     <path refid="shared.runtime.module.classpath"/>
     <path refid="library.java-hamcrest-2.0.0.0.classpath"/>
-    <path refid="library.javafx.classpath"/>
   </path>
   
   
