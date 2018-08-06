@@ -40,10 +40,12 @@ public class LoadFXML implements Action {
             loader.load();
             System.out.println("Load successful");
         } catch (IOException ioe) {
+            System.out.println("IO Wat");
             System.out.println(ioe.getStackTrace());
             ioe.printStackTrace();
             Logger.logStackTrace(ioe);
         } catch (Exception e) {
+            System.out.println("Wat");
             e.printStackTrace();
             System.out.println(e.getStackTrace());
         }
