@@ -98,11 +98,10 @@ public class MainScreen extends Pane {
     private List<Conversation> conversations;
     private Stage primaryStage;
 
-    private Thread messageThread;
     private Thread voiceThread;
     private Draggable draggable;
+    private TextMessageHandler messageHandler;
     private GeneralHandler generalHandler;
-    private Thread generalHandlerThread;
     private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
     private List<Conversation> currentConversations = new ArrayList<>();
     private List<ConversationController> conversationControllers = new ArrayList<>();
@@ -132,13 +131,14 @@ public class MainScreen extends Pane {
         setupConversationList();
         setupFriendList();
         setupContactList();
-        TextMessageHandler messageHandler = new TextMessageHandler(this);
-        messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
+        messageHandler = new TextMessageHandler(this);
+
+        var messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
         messageThread.start();
 
         GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
         generalHandler = factory.construct();
-        generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
+        var generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
         generalHandlerThread.start();
 
         updateConversationListFromServer(conversations);
@@ -176,6 +176,7 @@ public class MainScreen extends Pane {
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
         scene.widthProperty().addListener(new ChangeListener<>() {
+            // TODO: Fix this, it seems we want initialization to happen before we can do the search.
             @Override
             public void changed(ObservableValue<? extends Number> observableValue,
                                 Number oldSceneWidth, Number newSceneWidth) {
@@ -219,10 +220,10 @@ public class MainScreen extends Pane {
 
     @FXML
     private void logoutRequest() {
-        interrupt(messageThread);
+        messageHandler.getRunnable().stop();
         //interrupt(voiceThread);
         generalHandler.stop();
-        interrupt(generalHandlerThread);
+        generalHandler.getRunnable().stop();
 
         ChatManager.handleLogout(new Logout());
 
@@ -230,21 +231,6 @@ public class MainScreen extends Pane {
         });
 
         this.messageItems.forEach(MessageItemController::stopTimer);
-    }
-
-    private void interrupt(Thread thread) {
-        if (thread == null) {
-            return;
-        }
-        thread.interrupt();
-        while (!thread.isInterrupted()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-                Logger.logStackTrace(ie);
-            }
-        }
     }
 
     public void removeConversation(Conversation conversation) {

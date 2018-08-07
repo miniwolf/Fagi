@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 public class TextMessageHandler implements Handler {
     private Container container = new DefaultContainer();
-    private Runnable runnable = new DefaultThreadHandler(container, this);
+    private DefaultThreadHandler runnable = new DefaultThreadHandler(container, this);
     private final MainScreen mainScreen;
 
     public TextMessageHandler(MainScreen mainScreen) {
@@ -77,7 +77,7 @@ public class TextMessageHandler implements Handler {
     }
 
     @Override
-    public Runnable getRunnable() {
+    public DefaultThreadHandler getRunnable() {
         return runnable;
     }
 }

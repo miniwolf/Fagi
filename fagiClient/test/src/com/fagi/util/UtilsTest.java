@@ -1,10 +1,7 @@
 package com.fagi.util;
 
 import javafx.scene.text.Font;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import rules.JavaFXThreadingRule;
 
 /**
@@ -20,7 +17,12 @@ public class UtilsTest {
 
     @Before
     public void setup() {
+        Assume.assumeTrue(isWindows());
         System.out.println("Starting UtilsTest");
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").startsWith("Windows");
     }
 
     @Test
@@ -45,6 +47,7 @@ public class UtilsTest {
     }
 
     @Test
+
     public void sixtyNineCharactersReturnsTwoLine() {
         String message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 12345";
         Assert.assertEquals("Should return three lines", 52,

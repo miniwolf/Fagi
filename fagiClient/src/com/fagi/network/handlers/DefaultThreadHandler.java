@@ -6,13 +6,15 @@ package com.fagi.network.handlers;
 
 import com.fagi.network.handlers.container.Container;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * @author miniwolf
  */
 public class DefaultThreadHandler implements Runnable {
     private Container container;
     private Handler handler;
-    private boolean running = true;
+    private AtomicBoolean running = new AtomicBoolean(true);
 
     public DefaultThreadHandler(Container container, Handler handler) {
         this.container = container;
@@ -21,8 +23,8 @@ public class DefaultThreadHandler implements Runnable {
 
     @Override
     public void run() {
-        while ( running ) {
-            while ( !container.getQueue().isEmpty() ) {
+        while (running.get()) {
+            while (!container.getQueue().isEmpty()) {
                 handler.handle(container.getQueue().remove());
             }
             try {
@@ -30,9 +32,16 @@ public class DefaultThreadHandler implements Runnable {
                     wait();
                 }
             } catch (InterruptedException e) {
-                running = false;
+                running.set(false);
                 System.out.println("Stopped the thread handler");
             }
+        }
+    }
+
+    public void stop() {
+        running.set(false);
+        synchronized (this) {
+            notify();
         }
     }
 }

@@ -19,7 +19,7 @@ public class GeneralHandler implements Handler {
     private static final Map<Class, Handler> handlers = new ConcurrentHashMap<>();
     private static final Container container = new DefaultContainer();
 
-    private Runnable runnable = new DefaultThreadHandler(container, this);
+    private DefaultThreadHandler runnable = new DefaultThreadHandler(container, this);
     private final List<Object> unhandledObjects = new ArrayList<>();
     private final List<Thread> threads = new CopyOnWriteArrayList<>();
 
@@ -53,7 +53,7 @@ public class GeneralHandler implements Handler {
     }
 
     @Override
-    public Runnable getRunnable() {
+    public DefaultThreadHandler getRunnable() {
         return runnable;
     }
 

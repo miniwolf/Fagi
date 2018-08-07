@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -167,9 +168,10 @@ public class FriendsTests extends ApplicationTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
+        stage.setScene(new Scene(new AnchorPane()));
         MainScreen test = new MainScreen("Test", communication, stage);
+        stage.getScene().setRoot(test);
         test.initCommunication();
-        stage.setScene(new Scene(test));
         stage.show();
     }
 }
