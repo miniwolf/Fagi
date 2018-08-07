@@ -1,11 +1,12 @@
 package com.fagi.main;
-/*
- * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
- */
+        /*
+         * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
+         */
 
 import com.fagi.config.ServerConfig;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
+import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -48,58 +49,45 @@ public class FagiApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         primaryStage.initStyle(StageStyle.UNDECORATED);
+        ChatManager.setApplication(this);
 
         scene = new Scene(new AnchorPane());
-
-        ChatManager.setApplication(this);
-        MasterLogin masterLogin = showLoginScreen();
-        primaryStage.setTitle("Fagi Welcome");
         primaryStage.setScene(scene);
-        primaryStage.show();
 
-        startCommunication(masterLogin);
+        showLoginScreen();
+        primaryStage.setTitle("Fagi Welcome");
+        primaryStage.show();
     }
 
-    private void startCommunication(MasterLogin masterLogin) {
+    private void startCommunication(final MasterLogin masterLogin,
+                                    final Communication communication) {
         // TODO: Let the user browse for the file path
-        String configLocation = "config/serverinfo.config";
         Thread thread = new Thread(() -> {
             AtomicBoolean successfulConnection = new AtomicBoolean(false);
-            try {
-                ServerConfig config = ServerConfig.pathToServerConfig(configLocation);
-                AES aes = new AES();
-                aes.generateKey(128);
-                while (!successfulConnection.get()) {
-                    Platform.runLater(() -> {
-                        try {
-                            Communication communication = new Communication(config.getIp(),
-                                                                            config.getPort(), aes,
-                                                                            config.getServerKey());
-                            ChatManager.setCommunication(communication);
-                            masterLogin.setMessageLabel("Connected to server: " + config.getName());
-                            successfulConnection.set(true);
-                        } catch (IOException e) {
-                            Platform.runLater(
-                                    () -> masterLogin.setMessageLabel("Connection refused"));
-                            e.printStackTrace();
-                            Logger.logStackTrace(e);
-                        }
-                    });
+            AES aes = new AES();
+            aes.generateKey(128);
 
+            while (!successfulConnection.get()) {
+                Platform.runLater(() -> {
                     try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
+                        communication.connect(aes);
+                        ChatManager.setCommunication(communication);
+                        masterLogin
+                                .setMessageLabel("Connected to server: " + communication.getName());
+                        successfulConnection.set(true);
+                    } catch (IOException e) {
+                        Platform.runLater(
+                                () -> masterLogin.setMessageLabel("Connection refused"));
                         e.printStackTrace();
+                        Logger.logStackTrace(e);
                     }
+                });
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                Platform.runLater(() -> masterLogin.setMessageLabel("Could not load config file."));
-                e.printStackTrace();
-                Logger.logStackTrace(e);
-            } catch (ClassNotFoundException e) {
-                Platform.runLater(() -> masterLogin.setMessageLabel("Not a valid config file."));
-                e.printStackTrace();
-                Logger.logStackTrace(e);
             }
         });
         thread.setDaemon(true);
@@ -111,7 +99,29 @@ public class FagiApp extends Application {
      * when the user log out and the com.fagi.main screen shut down.
      */
     public MasterLogin showLoginScreen() {
-        return new MasterLogin(this, primaryStage, scene);
+        Communication communication = setupCommunication();
+        if (communication == null) {
+            return null;
+        }
+
+        MasterLogin masterLogin = new MasterLogin(this, communication, primaryStage, new Draggable(primaryStage));
+
+        startCommunication(masterLogin, communication);
+        masterLogin.showMasterLoginScreen();
+        return masterLogin;
+    }
+
+    private Communication setupCommunication() {
+        ServerConfig config;
+        try {
+            String configLocation = "config/serverinfo.config";
+            config = ServerConfig.pathToServerConfig(configLocation);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return new Communication(config.getName(), config.getIp(), config.getPort(),
+                config.getServerKey());
     }
 
     /**
@@ -119,7 +129,6 @@ public class FagiApp extends Application {
      * Switching com.fagi.controller to MainScreen.
      *
      * @param username      Username logged in.
-     * @param communication instance of Communication for the MainScreen.
      */
     public void showMainScreen(String username, Communication communication) {
         MainScreen controller = new MainScreen(username, communication, primaryStage);

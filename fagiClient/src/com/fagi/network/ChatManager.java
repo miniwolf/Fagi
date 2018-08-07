@@ -1,25 +1,21 @@
 package com.fagi.network;
-/*
- * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * ChatManager.java
- */
+        /*
+         * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
+         * ChatManager.java
+         */
 
 import com.fagi.main.FagiApp;
 import com.fagi.model.CreateUser;
 import com.fagi.model.InviteCode;
-import com.fagi.model.Login;
 import com.fagi.model.Logout;
 import com.fagi.model.UserNameAvailableRequest;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
-import com.fagi.responses.NoSuchUser;
-import com.fagi.responses.PasswordError;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserExists;
-import com.fagi.responses.UserOnline;
-
 import javafx.scene.control.Label;
 
+import java.util.ServiceLoader;
 import java.util.regex.Pattern;
 
 /**
@@ -30,38 +26,11 @@ import java.util.regex.Pattern;
 public class ChatManager {
     private static Communication communication = null;
     private static FagiApp application;
+    private ServiceLoader<Communication> communicationLoader;
 
-    /**
-     * Sending a request to the server, asking for a login.
-     * If the server cannot find a created user by the username it will return
-     * a NoSuchUser.
-     * UserOnlineException will be returned if the user is already online, to avoid
-     * multiple instances of the same user.
-     * Wrong password will give PasswordException. This is done to distinguish
-     * between wrong username and wrong password. (Better user experience...)
-     *
-     * @param login           contains the login object.
-     * @param labelCreateUser respond to the user is posted here.
-     */
-    public static void handleLogin(Login login, Label labelCreateUser) {
-        if (isEmpty(login.getUsername()) || isEmpty(login.getPassword())) {
-            labelCreateUser.setText("Fields cannot be empty");
-            return;
-        }
-
-        communication.sendObject(login);
-        Response response = communication.getNextResponse();
-        if (response instanceof AllIsWell) {
-            application.showMainScreen(login.getUsername(), communication);
-        } else {
-            labelCreateUser.setText(response instanceof NoSuchUser
-                                    ? "User doesn't exist"
-                                    : response instanceof UserOnline
-                                      ? "You are already online"
-                                      : response instanceof PasswordError
-                                        ? "Wrong password"
-                                        : "Unknown Exception: " + response.toString());
-        }
+    public void test() {
+        communicationLoader = ServiceLoader.load(Communication.class);
+        communicationLoader.iterator().next();
     }
 
     /**
@@ -75,7 +44,7 @@ public class ChatManager {
         Response response = communication.getNextResponse();
         if (!(response instanceof AllIsWell)) {
             System.err.println("Could not log out properly. "
-                               + "Shut down and let server handle the response");
+                    + "Shut down and let server handle the response");
         }
         communication.close();
         application.showLoginScreen();
@@ -143,8 +112,6 @@ public class ChatManager {
 
         communication.sendObject(request);
         Response response = communication.getNextResponse();
-
-        System.out.println(response.getClass());
 
         return response instanceof AllIsWell;
     }

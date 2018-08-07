@@ -139,20 +139,6 @@ input .form-error {
 .clearfix {
   zoom:1;
 }
-.header .logo {
-  background-image: url(https://ssl.gstatic.com/accounts/ui/logo_1x.png);
-  background-size: 116px 38px;
-  background-repeat: no-repeat;
-  margin: 17px 0 0;
-  float: left;
-  height: 38px;
-  width: 116px;
-}
-.header .logo-w {
-  background-image: url(https://ssl.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_112x36dp.png);
-  background-size: 112px 36px;
-  margin: 21px 0 0;
-}
 .header .secondary-link {
   margin: 28px 0 0;
   float: right;
@@ -352,12 +338,6 @@ html, body {
 .lang-chooser-wrap {
   display: none;
 }
-.header .logo {
-  background-image: url(https://ssl.gstatic.com/accounts/ui/logo_2x.png);
-}
-.header .logo-w {
-  background-image: url(https://ssl.gstatic.com/images/branding/googlelogo/2x/googlelogo_color_112x36dp.png);
-}
 .banner h1 {
   font-family: 'Open Sans', arial;
   color: #555;
@@ -434,15 +414,6 @@ html, body {
 .one-google p.switch-account {
   margin-bottom: 60px;
 }
-.one-google .logo-strip {
-  background-repeat: no-repeat;
-  display: block;
-  margin: 10px 65px;
-  background-image: url(https://ssl.gstatic.com/accounts/ui/wlogostrip_230x17_1x.png);
-  background-size: 230px 17px;
-  width: 230px;
-  height: 17px;
-}
 .banner h1 {
   font-size: 38px;
   margin-bottom: 15px;
@@ -483,9 +454,6 @@ html, body {
   -fx-pref-width: 72px;
   -fx-pref-height: 72px;
   -fx-border-radius: 72px;
-}
-.one-google .logo-strip {
-  background-image: url(https://ssl.gstatic.com/accounts/ui/wlogostrip_230x17_2x.png);
 }
 .captcha-box {
   background: #fff;
@@ -638,7 +606,7 @@ html, body {
   -fx-background-radius: 25;
   -fx-background-size: 96px;
   -fx-background-repeat: no-repeat;
-  -fx-background-image:url(https://ssl.gstatic.com/accounts/ui/avatar_2x.png);
+  -fx-background-image: url("/icons/avatar_2x.png");
 }
 .main {
   overflow: hidden;
@@ -714,13 +682,6 @@ html, body {
   height: 681px;
 ;
 }
-.card-mask {
-  -fx-background-color: #fff;
-  -fx-background-position: 50% 0;
-  -fx-background-repeat: no-repeat;
-  -fx-background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAAGCAIAAABhDpMcAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gkeFxks6YflLAAAAKlJREFUWMPt2CEShDAMheGmMCFV1MH9z8MtarC4QKfNiuwwOyxHeJ9r6iJ+ETKz3vu+7/M8D8MQAADetNaO41jXNcYYfUREpZRaK7YDAP9qraUUIvLn6NVg5t77tm2qamZYEwDciEhElmVhZm/H6B8ppZxzCOE8T4QDAB7hmKYp55xS+k48E601VVXV67oQDgB4hIOZRURE/BJKv5kwM1QDAF7bcR84Qggf4ShHovU/ogcAAAAASUVORK5CYII=);
-  min-height: 300px;
-}
 .card {
   -fx-end-margin:0;
   margin-bottom: 0;
@@ -758,12 +719,8 @@ html, body {
 .card-mask-wrap {
   width: 300px;
 }
-.card-mask {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAS4AAAAGCAIAAADyquT7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDcyMjMyQ0NFODg4MTFFNEEzRkU5RDVERTUwRUQ5OTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDcyMjMyQ0RFODg4MTFFNEEzRkU5RDVERTUwRUQ5OTAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENzIyMzJDQUU4ODgxMUU0QTNGRTlENURFNTBFRDk5MCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENzIyMzJDQkU4ODgxMUU0QTNGRTlENURFNTBFRDk5MCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqGCc+MAAACnSURBVHja7Ng7DoQgFIXhYTAKFXS6//W4CxtaOh4B5sQ7mcwGpDpfpdjd5M9V1Rij9x5CcM5prV9ENEtrLcZ4HMcb5EgpdV1XrZXTIZoDuSE6pCe3i3S4rit243meKSXsSY6J6FGIzhiz7zvSkxoXeWCt9d7jIufMFIkmpLhtG6JDet8TCQ/vrOlWSmGKRBNSxD40N/lHo/7DGzeOiWhOjb8PRfgIMAAaYEeit6tkKwAAAABJRU5ErkJggg==);
-}
 .main-content {
   height: 350px;
-;
 }
 .signin-card {
   width: 256px;

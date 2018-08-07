@@ -73,7 +73,7 @@
 
 .eHsso {
   -fx-cursor: hand;
-  -fx-background-image:url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+    -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-repeat:no-repeat;
   -fx-background-position:-1220px -108px;
   -fx-pref-height: 24px;

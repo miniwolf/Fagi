@@ -33,19 +33,22 @@ public class CreateUserNameController extends DefaultLoginController {
 
     @Override
     public void next() {
-        if ("".equals(username.getText())) {
+        if (username.getText() == null || "".equals(username.getText())) {
             messageLabel.setText("Username cannot be empty");
+            return;
+        }
+        boolean valid = ChatManager.isValidUserName(username.getText());
+
+        if (!valid) {
+            messageLabel.setText("Username may not contain special symbols");
             return;
         }
 
         boolean available = ChatManager.checkIfUserNameIsAvailable(username.getText());
-        boolean valid = ChatManager.isValidUserName(username.getText());
 
-        if (available && valid) {
+        if (available) {
             masterLogin.setUsername(username.getText());
             masterLogin.next();
-        } else if (!valid) {
-            messageLabel.setText("Username may not contain special symbols");
         } else {
             messageLabel.setText("Username is not available");
         }

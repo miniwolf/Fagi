@@ -6,7 +6,6 @@ import com.fagi.model.DeleteFriendRequest;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
-import com.fagi.uimodel.FagiImage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -35,10 +34,18 @@ public class ReceivedInvitationController extends BorderPane {
 
         char uChar = Character.toUpperCase(request.getMessage().getMessageInfo().getSender()
                                                   .toCharArray()[0]);
-        Image smallImage = new FagiImage("/com/fagi/style/material-icons/" + uChar + ".png", 32, 32,
-                                         true, true);
-        Image bigImage = new FagiImage("/com/fagi/style/material-icons/" + uChar + ".png", 64, 64,
-                                       true, true);
+        var smallImage = new Image(
+                "/com/fagi/style/material-icons/" + uChar + ".png",
+                32,
+                32,
+                true,
+                true);
+        var bigImage = new Image(
+                "/com/fagi/style/material-icons/" + uChar + ".png",
+                64,
+                64,
+                true,
+                true);
         this.topPicture.setImage(bigImage);
         this.messagePicture.setImage(smallImage);
     }

@@ -1,16 +1,14 @@
 package rules;
 
-import java.util.concurrent.CountDownLatch;
-
-import javax.swing.SwingUtilities;
-
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import javax.swing.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * A JUnit {@link Rule} for running tests on the JavaFX thread and performing

@@ -12,7 +12,7 @@
 
 .ebeE0d {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position: -1197px -133px;
   -fx-pref-height: 82px;
   -fx-pref-width: 68px;
@@ -20,7 +20,7 @@
 
 .W4rVif {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position:-128px -95px;
   -fx-pref-height: 24px;
   -fx-pref-width: 24px;
@@ -28,7 +28,7 @@
 
 .wWim8b {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("https://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position: -217px -156px;
   -fx-pref-height: 32px;
   -fx-pref-width: 32px;
@@ -61,7 +61,7 @@
 
 .ci {
   -fx-background-repeat: no-repeat;
-  -fx-background-image: url("http://ssl.gstatic.com/chat/babble/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
+  -fx-background-image: url("/icons/sprites/common-517bca7f07a37c64c3263a1411e266a5.png");
   -fx-background-position: -449px -138px;
   -fx-pref-width: 7px;
   -fx-max-height: 10px;

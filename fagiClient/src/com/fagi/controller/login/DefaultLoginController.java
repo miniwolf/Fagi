@@ -1,6 +1,7 @@
 package com.fagi.controller.login;
 
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -48,5 +49,10 @@ public abstract class DefaultLoginController extends Pane implements LoginContro
     @Override
     public String getMessageLabel() {
         return messageLabel.getText();
+    }
+
+    @Override
+    public Parent getParentNode() {
+        return this;
     }
 }

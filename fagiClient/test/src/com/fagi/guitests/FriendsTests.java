@@ -2,6 +2,7 @@ package com.fagi.guitests;
 
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
+import com.fagi.controller.utility.Draggable;
 import com.fagi.main.FagiApp;
 import com.fagi.model.Friend;
 import com.fagi.model.messages.lists.DefaultListAccess;
@@ -9,18 +10,18 @@ import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
-import com.fagi.uimodel.FagiImage;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.mockito.Mockito;
+import org.testfx.framework.junit.ApplicationTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +33,13 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
-public class FriendsTests extends GuiTest {
+public class FriendsTests extends ApplicationTest {
     private InputHandler inputHandler;
+
+    @BeforeClass
+    public static void initialize() {
+        System.out.println("Starting FriendsTests tests");
+    }
 
     @Test
     public void receivingFriendListFromServer_FriendIsVisibleOnContent() {
@@ -41,9 +47,9 @@ public class FriendsTests extends GuiTest {
         friends.add(new Friend("Friend", true));
         FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
         inputHandler.addIngoingMessage(friendList);
-        Assert.assertNull(
+        Assert.assertFalse(
                 "Should not find friend item before changing the content list to contacts",
-                lookup("#UniqueContact").query());
+                lookup("#UniqueContact").tryQuery().isPresent());
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
@@ -58,7 +64,7 @@ public class FriendsTests extends GuiTest {
         Set<ImageView> imageView = lookup("#image").queryAll();
         Assert.assertThat(imageView, hasSize(1));
 
-        FagiImage o = (FagiImage) ((ImageView) imageView.toArray()[0]).getImage();
+        var o = (Image) ((ImageView) imageView.toArray()[0]).getImage();
         Assert.assertTrue(o.getUrl().contains("F.png"));
 
         Node query = lookup("#status").query();
@@ -141,10 +147,8 @@ public class FriendsTests extends GuiTest {
     }
 
     @Override
-    protected Parent getRootNode() {
-        System.out.println("Starting FriendsTests tests");
-        Stage stage = (Stage) targetWindow();
-        stage.setScene(new Scene(new AnchorPane()));
+    public void start(Stage stage) {
+        Draggable draggable = new Draggable(stage);
 
         Communication communication = Mockito.mock(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
@@ -152,7 +156,7 @@ public class FriendsTests extends GuiTest {
         Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
         Mockito.doCallRealMethod().when(inputHandler).setupDistributor();
         Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, stage, stage.getScene()))
+        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                .when(fagiApp).showLoginScreen();
 
         Thread inputThread = new Thread(inputHandler);
@@ -164,8 +168,10 @@ public class FriendsTests extends GuiTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
+        stage.setScene(new Scene(new AnchorPane()));
         MainScreen test = new MainScreen("Test", communication, stage);
+        stage.getScene().setRoot(test);
         test.initCommunication();
-        return test;
+        stage.show();
     }
 }

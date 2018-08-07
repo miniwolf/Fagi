@@ -16,8 +16,6 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.handler.Search;
-import com.fagi.uimodel.FagiImage;
-import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.Logout;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -29,6 +27,7 @@ import com.fagi.network.Communication;
 import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
+import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.utility.Logger;
 import javafx.application.Platform;
@@ -99,11 +98,10 @@ public class MainScreen extends Pane {
     private List<Conversation> conversations;
     private Stage primaryStage;
 
-    private Thread messageThread;
     private Thread voiceThread;
     private Draggable draggable;
+    private TextMessageHandler messageHandler;
     private GeneralHandler generalHandler;
-    private Thread generalHandlerThread;
     private FriendList friendList = new FriendList(new DefaultListAccess(new ArrayList<>()));
     private List<Conversation> currentConversations = new ArrayList<>();
     private List<ConversationController> conversationControllers = new ArrayList<>();
@@ -112,7 +110,6 @@ public class MainScreen extends Pane {
      * Creates new form ContactScreen.
      *
      * @param usernameString which is used all around the class for knowing who the user is
-     * @param communication  granted by the LoginScreen class
      * @param primaryStage   primary stage used to create a draggable.
      */
     public MainScreen(String usernameString, Communication communication, Stage primaryStage) {
@@ -134,13 +131,14 @@ public class MainScreen extends Pane {
         setupConversationList();
         setupFriendList();
         setupContactList();
-        TextMessageHandler messageHandler = new TextMessageHandler(this);
-        messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
+        messageHandler = new TextMessageHandler(this);
+
+        var messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
         messageThread.start();
 
         GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
         generalHandler = factory.construct();
-        generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
+        var generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
         generalHandlerThread.start();
 
         updateConversationListFromServer(conversations);
@@ -148,16 +146,10 @@ public class MainScreen extends Pane {
 
     @FXML
     private void initialize() {
-        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,
-                                     event -> System.out.println("mouse click detected: "
-                                                                 + event.getTarget()));
-
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
             primaryStage.setIconified(true);
         });
-
-        primaryStage.setOnShowing(event -> System.out.println("Test"));
 
         currentPane = messages;
         currentPaneContent = PaneContent.Messages;
@@ -165,17 +157,26 @@ public class MainScreen extends Pane {
         emptyFocusElement = messages;
         username.setText(usernameString);
         char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
-        Image tiny = new FagiImage("/com/fagi/style/material-icons/" + cUpper + ".png", 40, 40,
-                                   true, true);
+        Image tiny = new Image(
+                "/com/fagi/style/material-icons/" + cUpper + ".png",
+                40,
+                40,
+                true,
+                true);
         this.tinyIcon.setImage(tiny);
-        Image large = new FagiImage("/com/fagi/style/material-icons/" + cUpper + ".png", 96, 96,
-                                    true, true);
+        Image large = new Image(
+                "/com/fagi/style/material-icons/" + cUpper + ".png",
+                96,
+                96,
+                true,
+                true);
         this.largeIcon.setImage(large);
         this.requestFocus();
 
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
+        scene.widthProperty().addListener(new ChangeListener<>() {
+            // TODO: Fix this, it seems we want initialization to happen before we can do the search.
             @Override
             public void changed(ObservableValue<? extends Number> observableValue,
                                 Number oldSceneWidth, Number newSceneWidth) {
@@ -186,10 +187,7 @@ public class MainScreen extends Pane {
                         e.printStackTrace();
                         Logger.logStackTrace(e);
                     } finally {
-                        Platform.runLater(() -> {
-                            System.out.println("Width: " + newSceneWidth);
-                            search = new Search(searchBox, searchHeader, mainScreen);
-                        });
+                        Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
                     }
                 };
 
@@ -222,10 +220,10 @@ public class MainScreen extends Pane {
 
     @FXML
     private void logoutRequest() {
-        interrupt(messageThread);
+        messageHandler.getRunnable().stop();
         //interrupt(voiceThread);
         generalHandler.stop();
-        interrupt(generalHandlerThread);
+        generalHandler.getRunnable().stop();
 
         ChatManager.handleLogout(new Logout());
 
@@ -233,21 +231,6 @@ public class MainScreen extends Pane {
         });
 
         this.messageItems.forEach(MessageItemController::stopTimer);
-    }
-
-    private void interrupt(Thread thread) {
-        if (thread == null) {
-            return;
-        }
-        thread.interrupt();
-        while (!thread.isInterrupted()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-                Logger.logStackTrace(ie);
-            }
-        }
     }
 
     public void removeConversation(Conversation conversation) {

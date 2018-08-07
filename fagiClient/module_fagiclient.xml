@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_fagiclient" default="compile.module.fagiclient">
   <dirname property="module.fagiclient.basedir" file="${ant.file.module_fagiclient}"/>
-  
-  
-  <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+
+  <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
   
   <property name="fagiclient.output.dir" value="${module.fagiclient.basedir}/../out/production/fagiClient"/>
   <property name="fagiclient.testoutput.dir" value="${module.fagiclient.basedir}/../out/test/fagiClient"/>
@@ -45,6 +44,7 @@
   <path id="fagiclient.module.sourcepath">
     <dirset dir="${module.fagiclient.basedir}">
       <include name="src"/>
+      <include name="resources"/>
     </dirset>
   </path>
   
@@ -63,6 +63,10 @@
     
     <copy todir="${fagiclient.output.dir}">
       <fileset dir="${module.fagiclient.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.fagiclient.basedir}/resources">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>

@@ -78,7 +78,7 @@ class Data {
         nextConversationId = id;
     }
 
-    public static Object createUser(String userName, String pass) {
+    public static synchronized Object createUser(String userName, String pass) {
         if ( registeredUsers.containsKey(userName) ) {
             return new UserExists();
         }

@@ -8,9 +8,9 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
-
+import com.fagi.network.Communication;
+import javafx.application.Platform;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -22,10 +22,11 @@ import javafx.stage.Stage;
  * class.
  */
 public class MasterLogin {
-    private final Stage primaryStage;
     private final FagiApp fagiApp;
+    private final Communication communication;
     private final Draggable draggable;
     private final Scene scene;
+    private final Stage stage;
     private LoginController controller;
     private LoginState state = LoginState.LOGIN;
     private String password;
@@ -34,17 +35,23 @@ public class MasterLogin {
 
     /**
      * Constructor will create and show the first screen.
-     *  @param fagiApp      FagiApp used to login
-     * @param primaryStage Stage to show the scene
-     * @param scene        scene to add content
+     *
+     * @param fagiApp   FagiApp used to login
+     * @param draggable Passes the draggable from the stage
      */
-    public MasterLogin(FagiApp fagiApp, Stage primaryStage, Scene scene) {
+    public MasterLogin(FagiApp fagiApp, Communication communication, Stage stage, Draggable draggable) {
         this.fagiApp = fagiApp;
-        this.primaryStage = primaryStage;
-        draggable = new Draggable(primaryStage);
-        this.scene = scene;
+        this.communication = communication;
+        this.draggable = draggable;
+        this.scene = stage.getScene();
+        this.stage = stage;
+    }
+
+    public void showMasterLoginScreen() {
         showScreen(state);
-        primaryStage.sizeToScene();
+        // THis is soo stupid...
+        stage.sizeToScene();
+        // TODO: Decide if this should be done before calling or this should be done inside here.
     }
 
     /**
@@ -124,7 +131,12 @@ public class MasterLogin {
         if (!setupController(screen)) {
             return;
         }
+        updateRoot();
         controller.setMessage(messageLabel);
+    }
+
+    public void updateRoot() {
+        stage.getScene().setRoot(controller.getParentNode());
     }
 
     private boolean setupController(LoginState screen) {
@@ -132,7 +144,7 @@ public class MasterLogin {
         LoginController controller;
         switch (screen) {
             case LOGIN:
-                controller = new LoginScreenController(this);
+                controller = new LoginScreenController(this, communication);
                 break;
             case USERNAME:
                 controller = new CreateUserNameController(this);
@@ -146,13 +158,8 @@ public class MasterLogin {
             default:
                 return false;
         }
-        setController((Parent) controller, controller);
-        return true;
-    }
-
-    private void setController(Parent pane, LoginController controller) {
-        scene.setRoot(pane);
         this.controller = controller;
+        return true;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
@@ -167,7 +174,7 @@ public class MasterLogin {
         this.username = username;
     }
 
-    public Object getController() {
+    public LoginController getController() {
         return controller;
     }
 
@@ -185,5 +192,16 @@ public class MasterLogin {
 
     public void setMessageLabel(String messageLabel) {
         this.messageLabel = messageLabel;
+        if (controller != null) {
+            Platform.runLater(() -> controller.setMessage(messageLabel));
+        }
+    }
+
+    public void setState(LoginState state) {
+        this.state = state;
+    }
+
+    public LoginState getState() {
+        return state;
     }
 }

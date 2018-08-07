@@ -1,10 +1,14 @@
 package com.fagi.config;
 
 import com.fagi.encryption.Conversion;
-import java.io.*;
+
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.PublicKey;
 
 /**
@@ -40,9 +44,13 @@ public class ServerConfig implements Serializable {
 
     public void saveToPath(String path) throws IOException {
         byte[] config = Conversion.convertToBytes(this);
-        FileOutputStream fos = new FileOutputStream(path);
-        fos.write(config);
-        fos.close();
+        Path savePath = Paths.get(path).toAbsolutePath();
+        if (Files.exists(savePath)) {
+            Files.delete(savePath);
+        }
+        Files.createDirectories(savePath.getParent());
+        Files.createFile(savePath);
+        Files.write(savePath, config, StandardOpenOption.WRITE);
     }
 
     public static ServerConfig pathToServerConfig(String path) throws IOException, ClassNotFoundException {

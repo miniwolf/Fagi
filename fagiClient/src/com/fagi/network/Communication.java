@@ -31,13 +31,24 @@ public class Communication {
     private InputHandler inputHandler;
     private Socket socket;
     private Thread inputThread;
-    private EncryptionAlgorithm encryption;
+    private String name;
+    private String host;
+    private int port;
+    private PublicKey serverKey;
     private ObjectInputStream inputStream;
+    private EncryptionAlgorithm encryption;
 
     public Communication() {
     }
 
-    public Communication(String host, int port, EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
+    public Communication(String name, String host, int port, PublicKey serverKey) {
+        this.name = name;
+        this.host = host;
+        this.port = port;
+        this.serverKey = serverKey;
+    }
+
+    public void connect(EncryptionAlgorithm encryption) throws IOException {
         this.encryption = encryption;
         try {
             socket = new Socket(host, port);
@@ -62,14 +73,17 @@ public class Communication {
         inputThread.start();
     }
 
-    private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey) throws IOException {
+    private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey)
+            throws IOException {
         RSA rsa = new RSA();
         rsa.setEncryptionKey(new RSAKey(new KeyPair(serverKey, null)));
-        out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
+        out.writeObject(
+                rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
         out.flush();
 
         Response obj;
-        while ((obj = inputHandler.containsResponse()) == null) {}
+        while ((obj = inputHandler.containsResponse()) == null) {
+        }
         if (obj instanceof AllIsWell) {
 
         }
@@ -100,7 +114,8 @@ public class Communication {
 
     public Response getNextResponse() {
         Response response;
-        while ( (response = inputHandler.containsResponse()) == null ) {}
+        while ((response = inputHandler.containsResponse()) == null) {
+        }
         return response;
     }
 
@@ -126,5 +141,9 @@ public class Communication {
 
     public void setInputHandler(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
+    }
+
+    public String getName() {
+        return name;
     }
 }
