@@ -175,6 +175,7 @@ public class MainScreen extends Pane {
 
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
+        Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
         scene.widthProperty().addListener(new ChangeListener<>() {
             // TODO: Fix this, it seems we want initialization to happen before we can do the search.
             @Override

@@ -41,11 +41,7 @@ public class InputDistributor implements Runnable {
         containers.remove(clazz);
     }
 
-    public void addMessage(InGoingMessages msg) {
-        messages.add(msg);
-    }
+    public void addMessage(InGoingMessages msg) { messages.add(msg); }
 
-    public void stop() {
-        this.running = false;
-    }
+    public void stop() { this.running = false; }
 }
