@@ -49,6 +49,20 @@ public class SearchUserTests extends ApplicationTest {
     }
 
     @Test
+    public void WhenAddingANewCharacter_ANewSearchResultIsGenerated() {
+        TextField field = lookup("#searchBox").query();
+
+        clickOn(field).write("ab");
+
+        ArgumentCaptor<SearchUsersRequest> argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
+        Mockito.verify(communication, Mockito.times(4)).sendObject(argument.capture());
+
+        Assert.assertEquals("a", argument.getAllValues().get(2).getSearchString());
+        Assert.assertEquals("ab", argument.getAllValues().get(3).getSearchString());
+        Assert.assertNotEquals(argument.getAllValues().get(2).getSearchString(), argument.getAllValues().get(3).getSearchString());
+    }
+
+    @Test
     public void WhenDeletingACharacterInSearchBox_ANewSearchRequestIsGenerated() {
         TextField field = lookup("#searchBox").query();
 
@@ -116,13 +130,13 @@ public class SearchUserTests extends ApplicationTest {
         Set<Node> nodes = lookup("#UniqueContact").queryAll();
         Assert.assertThat(nodes, hasSize(2));
 
+        var username = "a";
+        var usernames = new ArrayList<String>();
+
         TextField field = lookup("#searchBox").query();
 
-        clickOn(field).write("a");
+        clickOn(field).write(username);
 
-        var username = "a";
-
-        var usernames = new ArrayList<String>();
         usernames.add(username);
 
         var result = new SearchUsersResult(usernames, new ArrayList<>());
@@ -133,6 +147,21 @@ public class SearchUserTests extends ApplicationTest {
 
         Set<Node> contactNodes = lookup("#UniqueSearchItem").queryAll();
         Assert.assertThat(contactNodes, hasSize(2));
+    }
+
+    @Test
+    public void UnsuccessfulSearch_ResultsInAnEmptyView() {
+        var username = "a";
+        var result = new SearchUsersResult(new ArrayList<>(), new ArrayList<>());
+
+        var field = lookup("#searchBox").query();
+        clickOn(field).write(username);
+
+        addIngoingMessageToInputHandler(result);
+
+        var nodes = lookup("#UniqueSearchItem").queryAll();
+
+        Assert.assertThat(nodes, hasSize(0));
     }
 
 
