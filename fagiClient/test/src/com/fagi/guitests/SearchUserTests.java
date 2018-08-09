@@ -16,6 +16,7 @@ import com.fagi.network.InputHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -164,6 +165,43 @@ public class SearchUserTests extends ApplicationTest {
         Assert.assertThat(nodes, hasSize(0));
     }
 
+    @Test
+    public void WhenSearchingForUsers_TheResultingNamesMustBeVisible() {
+        var username1 = "a";
+        var username2 = "ab";
+        var usernames = new ArrayList<String>();
+        usernames.add(username1);
+        usernames.add(username2);
+
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
+
+        ArrayList<Node> contactNodes = new ArrayList<>(lookup("#UniqueSearchItem").queryAll());
+        Label label1 = from(contactNodes.get(0)).lookup("#userName").query();
+        Label label2 = from(contactNodes.get(1)).lookup("#userName").query();
+
+        Assert.assertTrue(label1.isVisible());
+        Assert.assertTrue(label2.isVisible());
+        Assert.assertEquals(username1, label1.getText());
+        Assert.assertEquals(username2, label2.getText());
+    }
+
+    @Test
+    public void WhenSearchingForUsers_TheResultingProfilePicturesShouldBeVisible() {
+        var username1 = "a";
+        var username2 = "ab";
+        var usernames = new ArrayList<String>();
+        usernames.add(username1);
+        usernames.add(username2);
+
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
+
+        ArrayList<Node> contactNodes = new ArrayList<>(lookup("#UniqueSearchItem").queryAll());
+        ImageView label1 = from(contactNodes.get(0)).lookup("#image").query();
+        ImageView label2 = from(contactNodes.get(1)).lookup("#image").query();
+
+        Assert.assertTrue(label1.isVisible());
+        Assert.assertTrue(label2.isVisible());
+    }
 
     @Override
     public void start(Stage stage) {
