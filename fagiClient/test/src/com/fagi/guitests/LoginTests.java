@@ -114,6 +114,11 @@ public class LoginTests extends ApplicationTest {
     public void WhenCallingSetMessageLabel_NewMessageShouldAppear() {
         masterLogin.setMessageLabel("Connection refused");
 
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Label messageLabel = lookup("#messageLabel").query();
         Assert.assertEquals("Connection refused", messageLabel.getText());
     }
