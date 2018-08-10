@@ -1,6 +1,5 @@
 package com.fagi.guitests;
 
-import com.fagi.config.ServerConfig;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
@@ -15,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -22,21 +22,13 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
 
-import java.io.IOException;
-
 public class LoginTests extends ApplicationTest {
-    private MasterLogin spy;
+    private MasterLogin masterLogin;
     private Communication communication;
 
     @BeforeClass
     public static void initialize() {
         System.out.println("Starting login tests");
-        ServerConfig config = new ServerConfig("test", "127.0.0.1", 1337, null);
-        try {
-            config.saveToPath("config/serverinfo.config");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -120,8 +112,13 @@ public class LoginTests extends ApplicationTest {
 
     @Test
     public void WhenCallingSetMessageLabel_NewMessageShouldAppear() {
-        spy.setMessageLabel("Connection refused");
+        masterLogin.setMessageLabel("Connection refused");
 
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Label messageLabel = lookup("#messageLabel").query();
         Assert.assertEquals("Connection refused", messageLabel.getText());
     }
@@ -131,7 +128,7 @@ public class LoginTests extends ApplicationTest {
         Node btn = lookup("#newAccount").query();
         clickOn(btn);
 
-        Assert.assertEquals(LoginState.USERNAME, spy.getState());
+        Assert.assertEquals(LoginState.USERNAME, masterLogin.getState());
         Assert.assertNotNull(lookup("#UniqueCreateUsernameView").query());
     }
 
@@ -145,14 +142,11 @@ public class LoginTests extends ApplicationTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
-        spy = Mockito.spy(masterLogin);
+        stage.setScene(new Scene(new AnchorPane()));
+        masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
+        masterLogin.showMasterLoginScreen();
 
-        Mockito.doNothing().when(spy).updateRoot();
-        spy.showMasterLoginScreen();
-        Mockito.doCallRealMethod().when(spy).updateRoot();
-
-        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.getScene().setRoot(masterLogin.getController().getParentNode());
         stage.show();
     }
 }
