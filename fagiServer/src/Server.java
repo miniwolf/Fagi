@@ -27,7 +27,7 @@ class Server {
         this.port = port;
         try {
             String name = "test";
-            String ip = getExternalIP();
+            String ip = "127.0.0.1"; //getExternalIP();
             PublicKey pk = ((RSAKey) Encryption.getInstance().getRSA().getKey()).getKey().getPublic();
             ServerConfig config = new ServerConfig(name, ip, port, pk);
             config.saveToPath(configFile);

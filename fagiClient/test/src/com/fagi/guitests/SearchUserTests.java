@@ -3,6 +3,8 @@ package com.fagi.guitests;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
+import com.fagi.conversation.Conversation;
+import com.fagi.conversation.ConversationType;
 import com.fagi.main.FagiApp;
 import com.fagi.model.Friend;
 import com.fagi.model.SearchUsersRequest;
@@ -201,6 +203,76 @@ public class SearchUserTests extends ApplicationTest {
 
         Assert.assertTrue(label1.isVisible());
         Assert.assertTrue(label2.isVisible());
+    }
+
+    @Test
+    public void UserThatCameFromFriendListStartedSearchingAndThenPressedStopSearching_ShouldReturnToFriendList() {
+        var username = "a";
+        var usernames = new ArrayList<String>();
+        List<Friend> friends = new ArrayList<>();
+        friends.add(new Friend("Friend", true));
+
+        FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
+        addIngoingMessageToInputHandler(friendList);
+
+        clickOn((Node) lookup(".contact-button").query());
+
+        Set<Node> contactNodes = lookup("#UniqueContact").queryAll();
+        Assert.assertThat(contactNodes, hasSize(1));
+
+        TextField field = lookup("#searchBox").query();
+
+        clickOn(field).write(username);
+
+        usernames.add(username);
+
+        var result = new SearchUsersResult(usernames, new ArrayList<>());
+
+        addIngoingMessageToInputHandler(result);
+
+        clickOn((Node) lookup("#stopSearchingBtn").query());
+
+        contactNodes = lookup("#UniqueContact").queryAll();
+        Assert.assertThat(contactNodes, hasSize(1));
+    }
+
+    @Test
+    public void UserThatCameFromConversationListStartedSearchingAndThenPressedStopSearching_ShouldReturnToConversationList() {
+        var username = "a";
+        var usernames = new ArrayList<String>();
+        var conversation = new Conversation(1, "test", ConversationType.Placeholder);
+        conversation.addUser(username);
+
+        addIngoingMessageToInputHandler(conversation);
+
+        clickOn((Node) lookup(".message-button").query());
+
+        Set<Node> contactNodes = lookup("#UniqueConversation").queryAll();
+        Assert.assertThat(contactNodes, hasSize(1));
+
+        TextField field = lookup("#searchBox").query();
+
+        clickOn(field).write(username);
+
+        usernames.add(username);
+
+        var result = new SearchUsersResult(usernames, new ArrayList<>());
+
+        addIngoingMessageToInputHandler(result);
+
+        clickOn((Node) lookup("#stopSearchingBtn").query());
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        contactNodes = lookup("#UniqueConversation").queryAll();
+
+        //clickOn((Node) lookup(".message-button").query());
+
+        Assert.assertThat(contactNodes, hasSize(1));
     }
 
     @Override

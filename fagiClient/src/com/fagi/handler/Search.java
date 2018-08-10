@@ -73,8 +73,9 @@ public class Search {
      * will turn off the styling of the x button and change the menu style to current pane.
      */
     public void stopSearching() {
+        mainScreen.changeMenuStyle(mainScreen.getCurrentPaneContent().toString());
         searchBox.setText("");
         searchHeader.getStyleClass().remove("dlrqf");
-        mainScreen.changeMenuStyle(mainScreen.getCurrentPaneContent().toString());
+        mainScreen.requestFocus();
     }
 }
