@@ -1,6 +1,5 @@
 package com.fagi.guitests;
 
-import com.fagi.config.ServerConfig;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
@@ -23,8 +22,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
 
-import java.io.IOException;
-
 public class LoginTests extends ApplicationTest {
     private MasterLogin masterLogin;
     private Communication communication;
@@ -32,12 +29,6 @@ public class LoginTests extends ApplicationTest {
     @BeforeClass
     public static void initialize() {
         System.out.println("Starting login tests");
-        ServerConfig config = new ServerConfig("test", "127.0.0.1", 1337, null);
-        try {
-            config.saveToPath("config/serverinfo.config");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test

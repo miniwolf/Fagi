@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -18,7 +19,7 @@ import org.mockito.Mockito;
 import org.testfx.framework.junit.ApplicationTest;
 
 public class CreatePasswordTests extends ApplicationTest {
-    private MasterLogin spy;
+    private MasterLogin masterLogin;
 
     @BeforeClass
     public static void initialize() {
@@ -80,7 +81,7 @@ public class CreatePasswordTests extends ApplicationTest {
         Node btn = lookup("#loginBtn").query();
         clickOn(btn);
 
-        Assert.assertEquals(LoginState.INVITE_CODE, spy.getState());
+        Assert.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
         Assert.assertNotNull(lookup("#UniqueInviteCode"));
     }
 
@@ -94,15 +95,12 @@ public class CreatePasswordTests extends ApplicationTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
+        stage.setScene(new Scene(new AnchorPane()));
+        masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         masterLogin.setState(LoginState.PASSWORD);
-        spy = Mockito.spy(masterLogin);
+        masterLogin.showMasterLoginScreen();
 
-        Mockito.doNothing().when(spy).updateRoot();
-        spy.showMasterLoginScreen();
-        Mockito.doCallRealMethod().when(spy).updateRoot();
-
-        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.getScene().setRoot(masterLogin.getController().getParentNode());
         stage.show();
     }
 }

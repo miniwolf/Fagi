@@ -11,6 +11,7 @@ import com.fagi.responses.IllegalInviteCode;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,7 +21,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 public class InviteCodeTests extends ApplicationTest {
     private Communication communication;
-    private MasterLogin spy;
+    private MasterLogin masterLogin;
 
     @BeforeClass
     public static void initialize() {
@@ -41,7 +42,7 @@ public class InviteCodeTests extends ApplicationTest {
 
         Label messageLabel = lookup("#messageLabel").query();
 
-        Assert.assertEquals(LoginState.INVITE_CODE, spy.getState());
+        Assert.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
         Assert.assertEquals("Error: Illegal invite code. Contact host", messageLabel.getText());
     }
 
@@ -67,7 +68,7 @@ public class InviteCodeTests extends ApplicationTest {
         Node btn = lookup("#loginBtn").query();
         clickOn(btn);
 
-        Assert.assertEquals(LoginState.LOGIN, spy.getState());
+        Assert.assertEquals(LoginState.LOGIN, masterLogin.getState());
         Assert.assertNotNull(lookup("#UniqueLoginScreen").query());
     }
 
@@ -81,18 +82,16 @@ public class InviteCodeTests extends ApplicationTest {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
+        stage.setScene(new Scene(new AnchorPane()));
+        masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         masterLogin.setState(LoginState.INVITE_CODE);
-        spy = Mockito.spy(masterLogin);
 
-        Mockito.doNothing().when(spy).updateRoot();
-        spy.showMasterLoginScreen();
-        Mockito.doCallRealMethod().when(spy).updateRoot();
+        masterLogin.showMasterLoginScreen();
 
-        spy.setUsername("ThisIsAUsername");
-        spy.setPassword("ThisIsAPassword");
+        masterLogin.setUsername("ThisIsAUsername");
+        masterLogin.setPassword("ThisIsAPassword");
 
-        stage.setScene(new Scene(spy.getController().getParentNode()));
+        stage.getScene().setRoot(masterLogin.getController().getParentNode());
         stage.show();
     }
 }
