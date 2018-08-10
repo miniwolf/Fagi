@@ -20,6 +20,7 @@ public class Search {
     private TextField searchBox;
     private Pane searchHeader;
     private MainScreen mainScreen;
+    private boolean searchEnabled;
 
     public Search(TextField searchBox, Pane searchHeader, MainScreen mainScreen) {
         this.searchBox = searchBox;
@@ -29,6 +30,7 @@ public class Search {
     }
 
     private void initialize() {
+        searchEnabled = true;
         searchBox.textProperty()
                  .addListener((observable, oldValue, newValue) -> searchUser(newValue));
         searchBox.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) ->
@@ -36,6 +38,8 @@ public class Search {
     }
 
     private void searchUser(String searchString) {
+        if (!searchEnabled) return;
+
         if (searchString.isEmpty()) {
             defaultFriendList();
             return;
@@ -73,9 +77,11 @@ public class Search {
      * will turn off the styling of the x button and change the menu style to current pane.
      */
     public void stopSearching() {
+        searchEnabled = false;
         mainScreen.changeMenuStyle(mainScreen.getCurrentPaneContent().toString());
         searchBox.setText("");
         searchHeader.getStyleClass().remove("dlrqf");
         mainScreen.requestFocus();
+        searchEnabled = true;
     }
 }

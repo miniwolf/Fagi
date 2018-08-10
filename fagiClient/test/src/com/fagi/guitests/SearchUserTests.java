@@ -262,15 +262,7 @@ public class SearchUserTests extends ApplicationTest {
 
         clickOn((Node) lookup("#stopSearchingBtn").query());
 
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         contactNodes = lookup("#UniqueConversation").queryAll();
-
-        //clickOn((Node) lookup(".message-button").query());
 
         Assert.assertThat(contactNodes, hasSize(1));
     }
