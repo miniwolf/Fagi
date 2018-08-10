@@ -267,6 +267,37 @@ public class SearchUserTests extends ApplicationTest {
         Assert.assertThat(contactNodes, hasSize(1));
     }
 
+    @Test
+    public void WhenClientShowsSearchResults_ItShouldBeInTheOrderThatTheyWereReceived() {
+        var username1 = "q";
+        var username2 = "heja";
+        var username3 = "humus";
+        var username4 = "borris";
+        var username5 = "retsu";
+
+        var usernames = new ArrayList<String>();
+        usernames.add(username1);
+        usernames.add(username2);
+        usernames.add(username3);
+        usernames.add(username4);
+        usernames.add(username5);
+
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
+
+        ArrayList<Node> contactNodes = new ArrayList<>(lookup("#UniqueSearchItem").queryAll());
+        Label label1 = from(contactNodes.get(0)).lookup("#userName").query();
+        Label label2 = from(contactNodes.get(1)).lookup("#userName").query();
+        Label label3 = from(contactNodes.get(2)).lookup("#userName").query();
+        Label label4 = from(contactNodes.get(3)).lookup("#userName").query();
+        Label label5 = from(contactNodes.get(4)).lookup("#userName").query();
+
+        Assert.assertEquals(username1, label1.getText());
+        Assert.assertEquals(username2, label2.getText());
+        Assert.assertEquals(username3, label3.getText());
+        Assert.assertEquals(username4, label4.getText());
+        Assert.assertEquals(username5, label5.getText());
+    }
+
     @Override
     public void start(Stage stage) {
         var fagiApp = Mockito.mock(FagiApp.class);
