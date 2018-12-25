@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_fagiclient" default="compile.module.fagiclient">
   <dirname property="module.fagiclient.basedir" file="${ant.file.module_fagiclient}"/>
-
+  
+  
   <property name="compiler.args.fagiclient" value="-encoding UTF-8 -source 11 -target 11 ${compiler.args}"/>
   
   <property name="fagiclient.output.dir" value="${module.fagiclient.basedir}/../out/production/fagiClient"/>

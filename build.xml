@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="fagi" default="all">
 
-  <!-- Uncomment the following property if no tests compilation is needed -->
-  <!--
-  <property name="skip.tests" value="true"/>
-   -->
-
+  
   <!-- Compiler options -->
-
+  
   <property name="compiler.debug" value="on"/>
   <property name="compiler.generate.no.warnings" value="off"/>
   <property name="compiler.args" value=""/>
@@ -33,6 +29,7 @@
     <include name="*.egg"/>
     <include name="*.jar"/>
     <include name="*.ear"/>
+    <include name="*.klib"/>
     <include name="*.swc"/>
     <include name="*.war"/>
     <include name="*.zip"/>
@@ -49,24 +46,25 @@
     <exclude name="**/?*.clj"/>
     <exclude name="**/?*.aj"/>
   </patternset>
-
+  
+  
   <!-- Project Libraries -->
-
+  
   <path id="library.gson-2.7.classpath">
     <pathelement location="${basedir}/fagiServer/lib/gson-2.7.jar"/>
   </path>
-
+  
   <path id="library.javafx.classpath">
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx-swt.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.base.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.controls.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.fxml.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.graphics.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.media.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.swing.jar"/>
-    <pathelement location="${basedir}/fagiClient/lib/javafx/win/lib/javafx.web.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx-swt.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.base.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.controls.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.fxml.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.graphics.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.media.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.swing.jar"/>
+    <pathelement location="${basedir}/fagiClient/lib/javafx/linux/lib/javafx.web.jar"/>
   </path>
-
+  
   <path id="library.lib.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-1.8.13.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/byte-buddy-agent-1.8.13.jar"/>
@@ -82,36 +80,33 @@
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit-4.0.13-alpha.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit5-4.0.13-alpha.jar"/>
   </path>
-
+  
   <path id="library.testfx.classpath">
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-core-4.0.15-alpha.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit-4.0.15-alpha.jar"/>
     <pathelement location="${basedir}/fagiClient/test/lib/testfx-junit5-4.0.15-alpha.jar"/>
   </path>
-
-
-  <!-- Global Libraries -->
-
+  
   <!-- Modules -->
-
+  
   <import file="${basedir}/shared/module_shared.xml"/>
-
+  
   <import file="${basedir}/fagiClient/module_fagiclient.xml"/>
-
+  
   <import file="${basedir}/fagiServer/module_fagiserver.xml"/>
-
+  
   <import file="${basedir}/fagiClient/test/module_test.xml"/>
-
+  
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
-
+  
   <target name="clean" depends="clean.module.shared, clean.module.fagiclient, clean.module.fagiserver, clean.module.test" description="cleanup all"/>
-
+  
   <target name="build.modules" depends="init, clean, compile.module.shared, compile.module.fagiclient, compile.module.fagiserver, compile.module.test" description="build all modules"/>
 
   <target name="test" description="run all tests">
-    <junit showoutput="yes" haltonfailure="yes"> <!--printsummary="withOutAndErr"-->
+    <junit showoutput="yes" printsummary="withOutAndErr">
       <classpath refid="test.runtime.module.classpath"/>
       <!--<formatter type="plain" usefile="false"/>-->
       <batchtest>
@@ -129,6 +124,6 @@
       <report todir="${module.test.basedir}" format="frames"/>
     </junitreport>
   </target>
-
+  
   <target name="all" depends="build.modules" description="build all"/>
 </project>
