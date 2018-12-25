@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_fagiserver" default="compile.module.fagiserver">
   <dirname property="module.fagiserver.basedir" file="${ant.file.module_fagiserver}"/>
-
-  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
+  
+  
+  <property name="compiler.args.fagiserver" value="-encoding UTF-8 -source 11 -target 11 ${compiler.args}"/>
   
   <property name="fagiserver.output.dir" value="${module.fagiserver.basedir}/../out/production/fagiServer"/>
   <property name="fagiserver.testoutput.dir" value="${module.fagiserver.basedir}/../out/test/fagiServer"/>
