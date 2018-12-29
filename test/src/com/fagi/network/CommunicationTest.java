@@ -2,8 +2,8 @@ package com.fagi.network;
 
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.ObjectOutputStream;
@@ -15,7 +15,7 @@ import java.io.ObjectOutputStream;
  */
 public class CommunicationTest {
     private Communication communication;
-    @Before
+    @BeforeEach
     public void init() {
         System.out.println("Starting communicationTests");
         communication = new Communication();

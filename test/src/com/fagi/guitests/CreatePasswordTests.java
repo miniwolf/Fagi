@@ -12,80 +12,84 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
-public class CreatePasswordTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class CreatePasswordTests {
     private MasterLogin masterLogin;
 
-    @BeforeClass
+    @BeforeAll
     public static void initialize() {
         System.out.println("Starting CreatePasswordTests");
     }
 
     @Test
-    public void PasswordFieldMustHaveAValue_MessageShouldIndicateOtherwise() {
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+    public void PasswordFieldMustHaveAValue_MessageShouldIndicateOtherwise(FxRobot robot) {
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Password field must not be empty", messageLabel.getText());
+        Assertions.assertEquals("Password field must not be empty", messageLabel.getText());
     }
 
     @Test
-    public void PasswordRepeatFieldMustHaveAValue_MessageShouldIndicateOtherwise() {
+    public void PasswordRepeatFieldMustHaveAValue_MessageShouldIndicateOtherwise(FxRobot robot) {
         String password = "thisisapassword";
 
-        PasswordField pwfield = lookup("#password").query();
-        clickOn(pwfield).write(password);
+        PasswordField pwfield = robot.lookup("#password").query();
+        robot.clickOn(pwfield).write(password);
 
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Repeat password field must not be empty", messageLabel.getText());
+        Assertions.assertEquals("Repeat password field must not be empty", messageLabel.getText());
     }
 
     @Test
-    public void RepeatPasswordMustMatchPassword_ErrorInformUser() {
+    public void RepeatPasswordMustMatchPassword_ErrorInformUser(FxRobot robot) {
         String password = "thisisapassword";
         String repeat = "thisisadiffrentpassword";
 
-        PasswordField pwfield = lookup("#password").query();
-        clickOn(pwfield).write(password);
-        PasswordField pwRepeatfield = lookup("#passwordRepeat").query();
-        clickOn(pwRepeatfield).write(repeat);
+        PasswordField pwfield = robot.lookup("#password").query();
+        robot.clickOn(pwfield).write(password);
+        PasswordField pwRepeatfield = robot.lookup("#passwordRepeat").query();
+        robot.clickOn(pwRepeatfield).write(repeat);
 
-        Node btn = lookup("#loginBtn").query();
-        clickOn(btn);
+        Node btn = robot.lookup("#loginBtn").query();
+        robot.clickOn(btn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Passwords does not match", messageLabel.getText());
+        Assertions.assertEquals("Passwords does not match", messageLabel.getText());
     }
 
     @Test
-    public void SuccessfullPasswordCreation_ShouldShowInviteCodeScreen() {
+    public void SuccessfulPasswordCreation_ShouldShowInviteCodeScreen(FxRobot robot) {
         String password = "thisisapassword";
 
-        PasswordField pwfield = lookup("#password").query();
-        clickOn(pwfield).write(password);
-        PasswordField pwRepeatfield = lookup("#passwordRepeat").query();
-        clickOn(pwRepeatfield).write(password);
+        PasswordField pwfield = robot.lookup("#password").query();
+        robot.clickOn(pwfield).write(password);
+        PasswordField pwRepeatfield = robot.lookup("#passwordRepeat").query();
+        robot.clickOn(pwRepeatfield).write(password);
 
-        Node btn = lookup("#loginBtn").query();
-        clickOn(btn);
+        Node btn = robot.lookup("#loginBtn").query();
+        robot.clickOn(btn);
 
-        Assert.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
-        Assert.assertNotNull(lookup("#UniqueInviteCode"));
+        Assertions.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
+        Assertions.assertNotNull(robot.lookup("#UniqueInviteCode"));
     }
 
-    @Override
+    @Start
     public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
         Draggable draggable = new Draggable(stage);

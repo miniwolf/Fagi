@@ -13,66 +13,70 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
-public class InviteCodeTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class InviteCodeTests {
     private Communication communication;
     private MasterLogin masterLogin;
 
-    @BeforeClass
+    @BeforeAll
     public static void initialize() {
         System.out.println("Starting InviteCodeTests");
     }
 
     @Test
-    public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis() {
+    public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new IllegalInviteCode());
 
         String inviteCode = "41";
 
-        Node field = lookup("#inviteCode").query();
-        clickOn(field).write(inviteCode);
+        Node field = robot.lookup("#inviteCode").query();
+        robot.clickOn(field).write(inviteCode);
 
-        Node btn = lookup("#loginBtn").query();
-        clickOn(btn);
+        Node btn = robot.lookup("#loginBtn").query();
+        robot.clickOn(btn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
-        Assert.assertEquals("Error: Illegal invite code. Contact host", messageLabel.getText());
+        Assertions.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
+        Assertions.assertEquals("Error: Illegal invite code. Contact host", messageLabel.getText());
     }
 
     @Test
-    public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise() {
-        Node btn = lookup("#loginBtn").query();
-        clickOn(btn);
+    public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise(FxRobot robot) {
+        Node btn = robot.lookup("#loginBtn").query();
+        robot.clickOn(btn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Invite code cannot be empty", messageLabel.getText());
+        Assertions.assertEquals("Invite code cannot be empty", messageLabel.getText());
     }
 
     @Test
-    public void GivenAValidInviteCode_TheLoginScreenShouldBeShown() {
+    public void GivenAValidInviteCode_TheLoginScreenShouldBeShown(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
         String inviteCode = "42";
 
-        Node field = lookup("#inviteCode").query();
-        clickOn(field).write(inviteCode);
+        Node field = robot.lookup("#inviteCode").query();
+        robot.clickOn(field).write(inviteCode);
 
-        Node btn = lookup("#loginBtn").query();
-        clickOn(btn);
+        Node btn = robot.lookup("#loginBtn").query();
+        robot.clickOn(btn);
 
-        Assert.assertEquals(LoginState.LOGIN, masterLogin.getState());
-        Assert.assertNotNull(lookup("#UniqueLoginScreen").query());
+        Assertions.assertEquals(LoginState.LOGIN, masterLogin.getState());
+        Assertions.assertNotNull(robot.lookup("#UniqueLoginScreen").query());
     }
 
-    @Override
+    @Start
     public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
         Draggable draggable = new Draggable(stage);

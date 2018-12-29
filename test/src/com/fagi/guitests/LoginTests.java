@@ -16,102 +16,106 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
-public class LoginTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class LoginTests {
     private MasterLogin masterLogin;
     private Communication communication;
 
-    @BeforeClass
+    @BeforeAll
     public static void initialize() {
         System.out.println("Starting login tests");
     }
 
     @Test
-    public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields() {
+    public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields(FxRobot robot) {
         String testText = "ThisTextShould Exist";
-        Node usernameField = lookup("#username").query();
-        clickOn(usernameField).write(testText);
+        Node usernameField = robot.lookup("#username").query();
+        robot.clickOn(usernameField).write(testText);
 
-        Assert.assertEquals(((TextField) usernameField).getText(), testText);
+        Assertions.assertEquals(((TextField) usernameField).getText(), testText);
 
-        Node passwordField = lookup("#password").query();
-        clickOn(passwordField).write(testText);
-        Assert.assertEquals(((PasswordField) passwordField).getText(), testText);
+        Node passwordField = robot.lookup("#password").query();
+        robot.clickOn(passwordField).write(testText);
+        Assertions.assertEquals(((PasswordField) passwordField).getText(), testText);
     }
 
     @Test
-    public void WhenGivingWrongPassword_ErrorMessageShouldShowThis() {
+    public void WhenGivingWrongPassword_ErrorMessageShouldShowThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new PasswordError());
 
         String username = "dinMor";
         String password = "password";
         String errorMsg = "Wrong password";
 
-        Node usernameField = lookup("#username").query();
-        clickOn(usernameField).write(username);
+        Node usernameField = robot.lookup("#username").query();
+        robot.clickOn(usernameField).write(username);
 
-        Node passwordField = lookup("#password").query();
-        clickOn(passwordField).write(password);
+        Node passwordField = robot.lookup("#password").query();
+        robot.clickOn(passwordField).write(password);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Node signinBtn = lookup("#loginBtn").query();
-        clickOn(signinBtn);
+        Node signinBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(signinBtn);
 
-        Assert.assertEquals(errorMsg, messageLabel.getText());
+        Assertions.assertEquals(errorMsg, messageLabel.getText());
     }
 
     @Test
-    public void WhenGivingWrongUsername_ErrorMessageShouldShowThis() {
+    public void WhenGivingWrongUsername_ErrorMessageShouldShowThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new NoSuchUser());
 
         String username = "dinMor";
         String password = "password";
         String errorMsg = "User doesn't exist";
 
-        Node usernameField = lookup("#username").query();
-        clickOn(usernameField).write(username);
+        Node usernameField = robot.lookup("#username").query();
+        robot.clickOn(usernameField).write(username);
 
-        Node passwordField = lookup("#password").query();
-        clickOn(passwordField).write(password);
+        Node passwordField = robot.lookup("#password").query();
+        robot.clickOn(passwordField).write(password);
 
-        Node messageLabel = lookup("#messageLabel").query();
+        Node messageLabel = robot.lookup("#messageLabel").query();
 
-        Node signinBtn = lookup("#loginBtn").query();
-        clickOn(signinBtn);
+        Node signinBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(signinBtn);
 
-        Assert.assertEquals(errorMsg, ((Label)messageLabel).getText());
+        Assertions.assertEquals(errorMsg, ((Label)messageLabel).getText());
     }
 
     @Test
-    public void WhenUserIsAlreadyOnline_ErrorMessageShouldShowThis() {
+    public void WhenUserIsAlreadyOnline_ErrorMessageShouldShowThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new UserOnline());
 
         String username = "dinMor";
         String password = "password";
         String errorMsg = "You are already online";
 
-        Node usernameField = lookup("#username").query();
-        clickOn(usernameField).write(username);
+        Node usernameField = robot.lookup("#username").query();
+        robot.clickOn(usernameField).write(username);
 
-        Node passwordField = lookup("#password").query();
-        clickOn(passwordField).write(password);
+        Node passwordField = robot.lookup("#password").query();
+        robot.clickOn(passwordField).write(password);
 
-        Node messageLabel = lookup("#messageLabel").query();
+        Node messageLabel = robot.lookup("#messageLabel").query();
 
-        Node signinBtn = lookup("#loginBtn").query();
-        clickOn(signinBtn);
+        Node signinBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(signinBtn);
 
-        Assert.assertEquals(errorMsg, ((Label)messageLabel).getText());
+        Assertions.assertEquals(errorMsg, ((Label)messageLabel).getText());
     }
 
     @Test
-    public void WhenCallingSetMessageLabel_NewMessageShouldAppear() {
+    public void WhenCallingSetMessageLabel_NewMessageShouldAppear(FxRobot robot) {
         masterLogin.setMessageLabel("Connection refused");
 
         try {
@@ -119,20 +123,20 @@ public class LoginTests extends ApplicationTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Label messageLabel = lookup("#messageLabel").query();
-        Assert.assertEquals("Connection refused", messageLabel.getText());
+        Label messageLabel = robot.lookup("#messageLabel").query();
+        Assertions.assertEquals("Connection refused", messageLabel.getText());
     }
 
     @Test
-    public void WhenClickingOnCreateNewUser_ShowCreateUsernameScreen() {
-        Node btn = lookup("#newAccount").query();
-        clickOn(btn);
+    public void WhenClickingOnCreateNewUser_ShowCreateUsernameScreen(FxRobot robot) {
+        Node btn = robot.lookup("#newAccount").query();
+        robot.clickOn(btn);
 
-        Assert.assertEquals(LoginState.USERNAME, masterLogin.getState());
-        Assert.assertNotNull(lookup("#UniqueCreateUsernameView").query());
+        Assertions.assertEquals(LoginState.USERNAME, masterLogin.getState());
+        Assertions.assertNotNull(robot.lookup("#UniqueCreateUsernameView").query());
     }
 
-    @Override
+    @Start
     public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
         Draggable draggable = new Draggable(stage);

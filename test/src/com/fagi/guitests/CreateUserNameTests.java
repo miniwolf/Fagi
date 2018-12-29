@@ -14,133 +14,137 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
-public class CreateUserNameTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class CreateUserNameTests {
     private Communication communication;
     private MasterLogin masterLogin;
 
-    @BeforeClass
+    @BeforeAll
     public static void initialize() {
         System.out.println("Starting CreateUserNameTests");
     }
 
     @Test
-    public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise() {
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+    public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise(FxRobot robot) {
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Username cannot be empty", messageLabel.getText());
+        Assertions.assertEquals("Username cannot be empty", messageLabel.getText());
     }
 
     @Test
-    public void WhenUserExistsOnServerCreatingANewUser_InformNewUser() {
+    public void WhenUserExistsOnServerCreatingANewUser_InformNewUser(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new UserExists());
 
         String username = "DinMor";
 
-        TextField usernameTextField = lookup("#username").query();
-        clickOn(usernameTextField).write(username);
+        TextField usernameTextField = robot.lookup("#username").query();
+        robot.clickOn(usernameTextField).write(username);
 
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Username is not available", messageLabel.getText());
+        Assertions.assertEquals("Username is not available", messageLabel.getText());
     }
 
     @Test
-    public void UsernameMustNotContainAnySpecialCharacters_InformNemUser() {
+    public void UsernameMustNotContainAnySpecialCharacters_InformNemUser(FxRobot robot) {
         String username = "Din Mor";
 
-        TextField usernameTextField = lookup("#username").query();
-        clickOn(usernameTextField).write(username);
+        TextField usernameTextField = robot.lookup("#username").query();
+        robot.clickOn(usernameTextField).write(username);
 
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Label messageLabel = lookup("#messageLabel").query();
+        Label messageLabel = robot.lookup("#messageLabel").query();
 
-        Assert.assertEquals("Username may not contain special symbols", messageLabel.getText());
+        Assertions.assertEquals("Username may not contain special symbols", messageLabel.getText());
     }
 
     @Test
-    public void UsernameIsValidAndAvailable_ShowsCreatePasswordScreen() {
+    public void UsernameIsValidAndAvailable_ShowsCreatePasswordScreen(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
         String username = "username";
 
-        TextField usernameTextField = lookup("#username").query();
-        clickOn(usernameTextField).write(username);
+        TextField usernameTextField = robot.lookup("#username").query();
+        robot.clickOn(usernameTextField).write(username);
 
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Assert.assertEquals(LoginState.PASSWORD, masterLogin.getState());
-        Assert.assertNotNull(lookup("#passwordRepeat"));
+        Assertions.assertEquals(LoginState.PASSWORD, masterLogin.getState());
+        Assertions.assertNotNull(robot.lookup("#passwordRepeat"));
     }
 
     @Test
-    public void ClickingOnBackButton_ResultsInReturningToLoginScreen() {
+    public void ClickingOnBackButton_ResultsInReturningToLoginScreen(FxRobot robot) {
         String username = "username";
 
-        TextField usernameTextField = lookup("#username").query();
-        clickOn(usernameTextField).write(username);
+        TextField usernameTextField = robot.lookup("#username").query();
+        robot.clickOn(usernameTextField).write(username);
 
-        Node backBtn = lookup("#backBtn").query();
-        clickOn(backBtn);
+        Node backBtn = robot.lookup("#backBtn").query();
+        robot.clickOn(backBtn);
 
-        Assert.assertNotNull(lookup("#UniqueLoginScreen").query());
+        Assertions.assertNotNull(robot.lookup("#UniqueLoginScreen").query());
     }
 
     @Test
-    public void WritingUsernameClickingOnBackButtonAndGoingBackToCreateUsername_ResultsInUsernameFieldCleared() {
+    public void WritingUsernameClickingOnBackButtonAndGoingBackToCreateUsername_ResultsInUsernameFieldCleared(FxRobot robot) {
         String username = "username";
 
-        TextField usernameTextField = lookup("#username").query();
-        clickOn(usernameTextField).write(username);
+        TextField usernameTextField = robot.lookup("#username").query();
+        robot.clickOn(usernameTextField).write(username);
 
-        Node backBtn = lookup("#backBtn").query();
-        clickOn(backBtn);
+        Node backBtn = robot.lookup("#backBtn").query();
+        robot.clickOn(backBtn);
 
-        Node btn = lookup("#newAccount").query();
-        clickOn(btn);
+        Node btn = robot.lookup("#newAccount").query();
+        robot.clickOn(btn);
 
-        usernameTextField = lookup("#username").query();
+        usernameTextField = robot.lookup("#username").query();
 
-        Assert.assertNull(usernameTextField.getText());
+        Assertions.assertNull(usernameTextField.getText());
     }
 
     @Test
-    public void GoingBackFromCreatePassword_ShouldKeepUsername() {
+    public void GoingBackFromCreatePassword_ShouldKeepUsername(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
         String username = "username";
 
-        TextField usernameTextField = lookup("#username").query();
-        clickOn(usernameTextField).write(username);
+        TextField usernameTextField = robot.lookup("#username").query();
+        robot.clickOn(usernameTextField).write(username);
 
-        Node nextBtn = lookup("#loginBtn").query();
-        clickOn(nextBtn);
+        Node nextBtn = robot.lookup("#loginBtn").query();
+        robot.clickOn(nextBtn);
 
-        Node backBtn = lookup("#backBtn").query();
-        clickOn(backBtn);
+        Node backBtn = robot.lookup("#backBtn").query();
+        robot.clickOn(backBtn);
 
-        usernameTextField = lookup("#username").query();
+        usernameTextField = robot.lookup("#username").query();
 
         System.out.println(usernameTextField.getText());
 
-        Assert.assertNotNull(usernameTextField.getText());
+        Assertions.assertNotNull(usernameTextField.getText());
     }
 
-    @Override
+    @Start
     public void start(Stage stage) {
         FagiApp fagiApp = Mockito.mock(FagiApp.class);
         Draggable draggable = new Draggable(stage);

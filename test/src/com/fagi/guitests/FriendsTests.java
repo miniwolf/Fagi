@@ -17,11 +17,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,62 +37,63 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
-public class FriendsTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class FriendsTests {
     private InputHandler inputHandler;
 
-    @BeforeClass
+    @BeforeAll
     public static void initialize() {
         System.out.println("Starting FriendsTests tests");
     }
 
     @Test
-    public void receivingFriendListFromServer_FriendIsVisibleOnContent() {
+    public void receivingFriendListFromServer_FriendIsVisibleOnContent(FxRobot robot) {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("Friend", true));
         FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
         inputHandler.addIngoingMessage(friendList);
-        Assert.assertFalse(
-                "Should not find friend item before changing the content list to contacts",
-                lookup("#UniqueContact").tryQuery().isPresent());
+        Assertions.assertFalse(
+                robot.lookup("#UniqueContact").tryQuery().isPresent(),
+                "Should not find friend item before changing the content list to contacts");
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        Node contactsButton = lookup(".contact-button").query();
-        Assert.assertNotNull(contactsButton);
-        clickOn(contactsButton);
+        Node contactsButton = robot.lookup(".contact-button").query();
+        Assertions.assertNotNull(contactsButton);
+        robot.clickOn(contactsButton);
 
-        Node contactNode = lookup("#UniqueContact").query();
-        Assert.assertNotNull(contactNode);
-        Label nameLabel = lookup("#userName").query();
-        Assert.assertEquals("Friend", nameLabel.getText());
-        Set<ImageView> imageView = lookup("#image").queryAll();
-        Assert.assertThat(imageView, hasSize(1));
+        Node contactNode = robot.lookup("#UniqueContact").query();
+        Assertions.assertNotNull(contactNode);
+        Label nameLabel = robot.lookup("#userName").query();
+        Assertions.assertEquals("Friend", nameLabel.getText());
+        Set<ImageView> imageView = robot.lookup("#image").queryAll();
+        MatcherAssert.assertThat(imageView, hasSize(1));
 
         var o = (Image) ((ImageView) imageView.toArray()[0]).getImage();
-        Assert.assertTrue(o.getUrl().contains("F.png"));
+        Assertions.assertTrue(o.getUrl().contains("F.png"));
 
-        Node query = lookup("#status").query();
-        Assert.assertThat(query.getStyleClass(), containsInAnyOrder("pD", "flaeQ"));
+        Node query = robot.lookup("#status").query();
+        MatcherAssert.assertThat(query.getStyleClass(), containsInAnyOrder("pD", "flaeQ"));
     }
 
     @Test
-    public void receivingFriendListFromServer_OfflineFriendGuiSetup() {
+    public void receivingFriendListFromServer_OfflineFriendGuiSetup(FxRobot robot) {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("Friend", false));
         FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
         inputHandler.addIngoingMessage(friendList);
 
-        clickOn((Node) lookup(".contact-button").query());
+        robot.clickOn((Node) robot.lookup(".contact-button").query());
 
-        Label nameLabel = lookup("#userName").query();
-        Assert.assertEquals("Friend", nameLabel.getText());
+        Label nameLabel = robot.lookup("#userName").query();
+        Assertions.assertEquals("Friend", nameLabel.getText());
 
-        Node query = lookup("#status").query();
-        Assert.assertThat(query.getStyleClass(), not(contains("pD")));
+        Node query = robot.lookup("#status").query();
+        MatcherAssert.assertThat(query.getStyleClass(), not(contains("pD")));
     }
 
     @Test
-    public void receivingFriendListFromServer_AllFriendsAreVisibleOnContent() {
+    public void receivingFriendListFromServer_AllFriendsAreVisibleOnContent(FxRobot robot) {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("Friend", true));
         friends.add(new Friend("Friend2", true));
@@ -97,22 +102,22 @@ public class FriendsTests extends ApplicationTest {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        Node contactsButton = lookup(".contact-button").query();
-        Assert.assertNotNull(contactsButton);
-        clickOn(contactsButton);
+        Node contactsButton = robot.lookup(".contact-button").query();
+        Assertions.assertNotNull(contactsButton);
+        robot.clickOn(contactsButton);
 
-        Set<Node> contactNodes = lookup("#UniqueContact").queryAll();
-        Assert.assertThat(contactNodes, hasSize(2));
+        Set<Node> contactNodes = robot.lookup("#UniqueContact").queryAll();
+        MatcherAssert.assertThat(contactNodes, hasSize(2));
 
-        List<String> collect = lookup("#userName").queryAll().stream()
+        List<String> collect = robot.lookup("#userName").queryAll().stream()
                                                   .map(node -> ((Label) node).getText())
                                                   .collect(Collectors.toList());
 
-        Assert.assertThat(collect, containsInAnyOrder("Friend", "Friend2"));
+        MatcherAssert.assertThat(collect, containsInAnyOrder("Friend", "Friend2"));
     }
 
     @Test
-    public void receivingFriendListFromServer_FriendsArePostedInAlphabeticalOrder() {
+    public void receivingFriendListFromServer_FriendsArePostedInAlphabeticalOrder(FxRobot robot) throws InterruptedException {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("AFriend", true));
         friends.add(new Friend("CFriend", true));
@@ -122,17 +127,17 @@ public class FriendsTests extends ApplicationTest {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        clickOn((Node) lookup(".contact-button").query());
-        List<String> collect = lookup("#userName").queryAll().stream()
+        robot.clickOn((Node) robot.lookup(".contact-button").query());
+        List<String> collect = robot.lookup("#userName").queryAll().stream()
                                                   .map(node -> ((Label) node).getText())
                                                   .collect(Collectors.toList());
 
         // Contains will check the order, containsInAnyOrder for other test
-        Assert.assertThat(collect, contains("AFriend", "BFriend", "CFriend"));
+        MatcherAssert.assertThat(collect, contains("AFriend", "BFriend", "CFriend"));
     }
 
     @Test
-    public void receivingFriendListFromServer_OfflineFriendsAreInList() {
+    public void receivingFriendListFromServer_OfflineFriendsAreInList(FxRobot robot) {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("Friend", true));
         friends.add(new Friend("Friend2", false));
@@ -141,12 +146,12 @@ public class FriendsTests extends ApplicationTest {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        clickOn((Node) lookup(".contact-button").query());
-        Set<Node> contactNodes = lookup("#UniqueContact").queryAll();
-        Assert.assertThat(contactNodes, hasSize(2));
+        robot.clickOn((Node) robot.lookup(".contact-button").query());
+        Set<Node> contactNodes = robot.lookup("#UniqueContact").queryAll();
+        MatcherAssert.assertThat(contactNodes, hasSize(2));
     }
 
-    @Override
+    @Start
     public void start(Stage stage) {
         Draggable draggable = new Draggable(stage);
 
@@ -162,6 +167,7 @@ public class FriendsTests extends ApplicationTest {
         Thread inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);
         inputThread.start();
+
         communication.setInputHandler(inputHandler);
         inputHandler.setupDistributor();
 
@@ -170,8 +176,8 @@ public class FriendsTests extends ApplicationTest {
 
         stage.setScene(new Scene(new AnchorPane()));
         MainScreen test = new MainScreen("Test", communication, stage);
-        stage.getScene().setRoot(test);
         test.initCommunication();
+        stage.setScene(new Scene(test));
         stage.show();
     }
 }

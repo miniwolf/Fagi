@@ -1,8 +1,12 @@
 package com.fagi.util;
 
 import javafx.scene.text.Font;
-import org.junit.*;
-import rules.JavaFXThreadingRule;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import rules.JavaFXThreadingExtension;
 
 /**
  * Testing that our current font returns the correct size for the surrounding textarea.
@@ -11,13 +15,13 @@ import rules.JavaFXThreadingRule;
  *
  * @author miniwolf
  */
+@ExtendWith(JavaFXThreadingExtension.class)
 public class UtilsTest {
-    @Rule public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private static final Font ROBOTO = new Font("Roboto-Regular", 13);
 
-    @Before
+    @BeforeEach
     public void setup() {
-        Assume.assumeTrue(isWindows());
+        Assumptions.assumeTrue(isWindows());
         System.out.println("Starting UtilsTest");
     }
 
@@ -28,43 +32,61 @@ public class UtilsTest {
     @Test
     public void thirtyFourCharactersReturnsOneLine() {
         String message = "123456789 123456789 123456789 1234";
-        Assert.assertEquals("Should return one line", 18,
-                          Utils.computeTextHeight(ROBOTO, message, 232), 0.001);
+        Assertions.assertEquals(
+                18,
+                Utils.computeTextHeight(ROBOTO, message, 232),
+                0.001,
+                "Should return one line");
     }
 
     @Test
     public void thirtyFiveCharactersReturnsTwoLines() {
         String message = "123456789 123456789 123456789 12345";
-        Assert.assertEquals("Should return two lines", 35,
-                            Utils.computeTextHeight(ROBOTO, message, 232), 0.001);
+        Assertions.assertEquals(
+                35,
+                Utils.computeTextHeight(ROBOTO, message, 232),
+                0.001,
+                "Should return two lines");
     }
 
     @Test
     public void sixtyEightCharactersReturnsTwoLines() {
         String message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 1234";
-        Assert.assertEquals("Should return two lines", 35,
-                            Utils.computeTextHeight(ROBOTO, message, 232), 0.001);
+        Assertions.assertEquals(
+                35,
+                Utils.computeTextHeight(ROBOTO, message, 232),
+                0.001,
+                "Should return two lines");
     }
 
     @Test
 
     public void sixtyNineCharactersReturnsTwoLine() {
         String message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 12345";
-        Assert.assertEquals("Should return three lines", 52,
-                            Utils.computeTextHeight(ROBOTO, message, 232), 0.001);
+        Assertions.assertEquals(
+                52,
+                Utils.computeTextHeight(ROBOTO, message, 232),
+                0.001,
+                "Should return three lines");
     }
 
     @Test
     public void computeTextHeight() {
         String message = "123456789 123456789 123456789 1234";
-        Assert.assertEquals("Should return one line", 228,
-                            Utils.computeTextWidth(ROBOTO, message, 232), 0.001);
+        Assertions.assertEquals(
+                228,
+                Utils.computeTextWidth(ROBOTO, message, 232),
+                0.001,
+                "Should return one line");
     }
 
     @Test
     public void computeTextHeightOverflow() {
         String message = "123456789 123456789 123456789 12345678";
-        Assert.assertEquals("Should return one line", 232,
-                            Utils.computeTextWidth(ROBOTO, message, 232), 0.001);
+        Assertions.assertEquals(
+                232,
+                Utils.computeTextWidth(ROBOTO, message, 232),
+                0.001,
+                "Should return one line");
     }
 }
