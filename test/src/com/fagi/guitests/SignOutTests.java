@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 

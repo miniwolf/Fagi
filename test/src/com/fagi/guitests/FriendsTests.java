@@ -117,7 +117,7 @@ public class FriendsTests {
     }
 
     @Test
-    public void receivingFriendListFromServer_FriendsArePostedInAlphabeticalOrder(FxRobot robot) throws InterruptedException {
+    public void receivingFriendListFromServer_FriendsArePostedInAlphabeticalOrder(FxRobot robot) {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("AFriend", true));
         friends.add(new Friend("CFriend", true));

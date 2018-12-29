@@ -42,9 +42,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 @ExtendWith(ApplicationExtension.class)
 public class SearchUserTests {
     private Communication communication;
-    private Communication comspy;
     private InputHandler inputHandler;
-    private MainScreen screen;
 
     @Test
     public void WhenWritingInSearchBox_TextIsShownInSearchBox(FxRobot robot) {
@@ -316,7 +314,7 @@ public class SearchUserTests {
         Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp).showLoginScreen();
 
-        comspy = Mockito.spy(communication);
+        Communication comspy = Mockito.spy(communication);
         Mockito.doNothing().when(comspy).sendObject(Mockito.any());
 
         Thread inputThread = new Thread(inputHandler);
@@ -330,7 +328,7 @@ public class SearchUserTests {
         ChatManager.setApplication(fagiApp);
 
         stage.setScene(new Scene(new AnchorPane()));
-        screen = new MainScreen("Test", communication, stage);
+        MainScreen screen = new MainScreen("Test", communication, stage);
         screen.initCommunication();
         stage.setScene(new Scene(screen));
         stage.show();
