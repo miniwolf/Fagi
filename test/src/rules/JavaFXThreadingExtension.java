@@ -8,23 +8,23 @@ import javax.swing.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * A JUnit {@link Rule} for running tests on the JavaFX thread and performing
- * JavaFX initialisation.  To include in your test case, add the following code:
+ * A JUnit {@link BeforeAllCallback} for running tests on the JavaFX thread and performing
+ * JavaFX initialisation.  To include in your test case, add the following code above the class declaration:
  * <p>
  * <pre>
- * {@literal @}Rule
- * public rules.JavaFXThreadingRule jfxRule = new rules.JavaFXThreadingRule();
+ * {@literal @}ExtendsWith(JavaFXThreadingExtension.class)
  * </pre>
  *
  * @author Andy Till
+ * @author miniwolf
  */
 public class JavaFXThreadingExtension implements BeforeAllCallback {
 
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
-        long timeMillis = System.currentTimeMillis();
+        var timeMillis = System.currentTimeMillis();
 
-        final CountDownLatch latch = new CountDownLatch(1);
+        final var latch = new CountDownLatch(1);
 
         SwingUtilities.invokeLater(() -> {
             // initializes JavaFX environment

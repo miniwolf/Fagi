@@ -5,6 +5,7 @@ import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import rules.JavaFXThreadingExtension;
@@ -20,12 +21,12 @@ public class LoadFXMLTest {
     @BeforeEach
     public void init() {
         System.out.println("Starting LoadFXMLtests");
-        MainScreen mainScreen = Mockito.mock(MainScreen.class);
+        var mainScreen = Mockito.mock(MainScreen.class);
         this.mock = new ConversationController(mainScreen, new Conversation(), "");
         loadFXML = new LoadFXML(this.mock, "/com/fagi/view/conversation/Conversation.fxml");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void test() {
         loadFXML.execute();
         Assertions.assertNotNull(mock.getCenter(), "Should contain center element");

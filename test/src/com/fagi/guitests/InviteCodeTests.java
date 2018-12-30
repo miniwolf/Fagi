@@ -36,13 +36,8 @@ public class InviteCodeTests {
     public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new IllegalInviteCode());
 
-        String inviteCode = "41";
-
-        Node field = robot.lookup("#inviteCode").query();
-        robot.clickOn(field).write(inviteCode);
-
-        Node btn = robot.lookup("#loginBtn").query();
-        robot.clickOn(btn);
+        robot.clickOn("#inviteCode").write("41");
+        robot.clickOn("#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -52,8 +47,7 @@ public class InviteCodeTests {
 
     @Test
     public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise(FxRobot robot) {
-        Node btn = robot.lookup("#loginBtn").query();
-        robot.clickOn(btn);
+        robot.clickOn("#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -64,22 +58,19 @@ public class InviteCodeTests {
     public void GivenAValidInviteCode_TheLoginScreenShouldBeShown(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
-        String inviteCode = "42";
-
-        Node field = robot.lookup("#inviteCode").query();
-        robot.clickOn(field).write(inviteCode);
-
-        Node btn = robot.lookup("#loginBtn").query();
-        robot.clickOn(btn);
+        robot.clickOn("#inviteCode").write("42");
+        robot.clickOn("#loginBtn");
 
         Assertions.assertEquals(LoginState.LOGIN, masterLogin.getState());
-        Assertions.assertNotNull(robot.lookup("#UniqueLoginScreen").query());
+        Assertions.assertTrue(
+                robot.lookup("#UniqueLoginScreen").tryQuery().isPresent(),
+                "The screen should return to login screen.");
     }
 
     @Start
     public void start(Stage stage) {
-        FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Draggable draggable = new Draggable(stage);
+        var fagiApp = Mockito.mock(FagiApp.class);
+        var draggable = new Draggable(stage);
 
         communication = Mockito.mock(Communication.class);
 

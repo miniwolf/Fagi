@@ -8,7 +8,6 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserExists;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -35,8 +34,7 @@ public class CreateUserNameTests {
 
     @Test
     public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise(FxRobot robot) {
-        Node nextBtn = robot.lookup("#loginBtn").query();
-        robot.clickOn(nextBtn);
+        robot.clickOn("#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -47,13 +45,8 @@ public class CreateUserNameTests {
     public void WhenUserExistsOnServerCreatingANewUser_InformNewUser(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new UserExists());
 
-        String username = "DinMor";
-
-        TextField usernameTextField = robot.lookup("#username").query();
-        robot.clickOn(usernameTextField).write(username);
-
-        Node nextBtn = robot.lookup("#loginBtn").query();
-        robot.clickOn(nextBtn);
+        robot.clickOn("#username").write("DinMor");
+        robot.clickOn("#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -62,13 +55,8 @@ public class CreateUserNameTests {
 
     @Test
     public void UsernameMustNotContainAnySpecialCharacters_InformNemUser(FxRobot robot) {
-        String username = "Din Mor";
-
-        TextField usernameTextField = robot.lookup("#username").query();
-        robot.clickOn(usernameTextField).write(username);
-
-        Node nextBtn = robot.lookup("#loginBtn").query();
-        robot.clickOn(nextBtn);
+        robot.clickOn("#username").write("Din Mor");
+        robot.clickOn("#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -79,13 +67,8 @@ public class CreateUserNameTests {
     public void UsernameIsValidAndAvailable_ShowsCreatePasswordScreen(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
-        String username = "username";
-
-        TextField usernameTextField = robot.lookup("#username").query();
-        robot.clickOn(usernameTextField).write(username);
-
-        Node nextBtn = robot.lookup("#loginBtn").query();
-        robot.clickOn(nextBtn);
+        robot.clickOn("#username").write("username");
+        robot.clickOn("#loginBtn");
 
         Assertions.assertEquals(LoginState.PASSWORD, masterLogin.getState());
         Assertions.assertNotNull(robot.lookup("#passwordRepeat"));
@@ -93,31 +76,19 @@ public class CreateUserNameTests {
 
     @Test
     public void ClickingOnBackButton_ResultsInReturningToLoginScreen(FxRobot robot) {
-        String username = "username";
-
-        TextField usernameTextField = robot.lookup("#username").query();
-        robot.clickOn(usernameTextField).write(username);
-
-        Node backBtn = robot.lookup("#backBtn").query();
-        robot.clickOn(backBtn);
+        robot.clickOn("#username").write("username");
+        robot.clickOn("#backBtn");
 
         Assertions.assertNotNull(robot.lookup("#UniqueLoginScreen").query());
     }
 
     @Test
     public void WritingUsernameClickingOnBackButtonAndGoingBackToCreateUsername_ResultsInUsernameFieldCleared(FxRobot robot) {
-        String username = "username";
+        robot.clickOn("#username").write("username");
+        robot.clickOn("#backBtn");
+        robot.clickOn("#newAccount");
 
         TextField usernameTextField = robot.lookup("#username").query();
-        robot.clickOn(usernameTextField).write(username);
-
-        Node backBtn = robot.lookup("#backBtn").query();
-        robot.clickOn(backBtn);
-
-        Node btn = robot.lookup("#newAccount").query();
-        robot.clickOn(btn);
-
-        usernameTextField = robot.lookup("#username").query();
 
         Assertions.assertNull(usernameTextField.getText());
     }
@@ -126,28 +97,19 @@ public class CreateUserNameTests {
     public void GoingBackFromCreatePassword_ShouldKeepUsername(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
-        String username = "username";
+        robot.clickOn("#username").write("username");
+        robot.clickOn("#loginBtn");
+        robot.clickOn("#backBtn");
 
         TextField usernameTextField = robot.lookup("#username").query();
-        robot.clickOn(usernameTextField).write(username);
-
-        Node nextBtn = robot.lookup("#loginBtn").query();
-        robot.clickOn(nextBtn);
-
-        Node backBtn = robot.lookup("#backBtn").query();
-        robot.clickOn(backBtn);
-
-        usernameTextField = robot.lookup("#username").query();
-
-        System.out.println(usernameTextField.getText());
 
         Assertions.assertNotNull(usernameTextField.getText());
     }
 
     @Start
     public void start(Stage stage) {
-        FagiApp fagiApp = Mockito.mock(FagiApp.class);
-        Draggable draggable = new Draggable(stage);
+        var fagiApp = Mockito.mock(FagiApp.class);
+        var draggable = new Draggable(stage);
 
         communication = Mockito.mock(Communication.class);
 

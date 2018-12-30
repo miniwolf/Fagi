@@ -50,16 +50,14 @@ public class SearchUserTests {
 
         robot.clickOn(field).write("test");
 
-        Assertions.assertEquals(field.getText(), "test");
+        Assertions.assertEquals("test", field.getText());
     }
 
     @Test
     public void WhenAddingANewCharacter_ANewSearchResultIsGenerated(FxRobot robot) {
-        TextField field = robot.lookup("#searchBox").query();
+        robot.clickOn("#searchBox").write("ab");
 
-        robot.clickOn(field).write("ab");
-
-        ArgumentCaptor<SearchUsersRequest> argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
+        var argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
         Mockito.verify(communication, Mockito.times(4)).sendObject(argument.capture());
 
         Assertions.assertEquals("a", argument.getAllValues().get(2).getSearchString());
@@ -69,12 +67,10 @@ public class SearchUserTests {
 
     @Test
     public void WhenDeletingACharacterInSearchBox_ANewSearchRequestIsGenerated(FxRobot robot) {
-        TextField field = robot.lookup("#searchBox").query();
-
-        robot.clickOn(field).write("ab");
+        robot.clickOn("#searchBox").write("ab");
         robot.press(KeyCode.BACK_SPACE);
 
-        ArgumentCaptor<SearchUsersRequest> argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
+        var argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
         Mockito.verify(communication, Mockito.times(5)).sendObject(argument.capture());
 
         Assertions.assertEquals("ab", argument.getAllValues().get(3).getSearchString());
@@ -85,16 +81,13 @@ public class SearchUserTests {
     @Test
     public void WhenHandlingSearchResultWithSingleUser_ShouldShowAMatchingSearchContact(FxRobot robot) {
         var username = "test";
-        var usernames = new ArrayList<String>();
-        usernames.add(username);
+        var usernames = new ArrayList<String>() {{ add(username); }};
 
-        var result = new SearchUsersResult(usernames, new ArrayList<>());
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        addIngoingMessageToInputHandler(result);
+        Label label = robot.lookup("#userName").query();
 
-        var label = robot.lookup("#userName").query();
-
-        Assertions.assertEquals(username, ((Label) label).getText());
+        Assertions.assertEquals(username, label.getText());
     }
 
     @Test
@@ -102,70 +95,52 @@ public class SearchUserTests {
         var username = "a";
 
         TextField field = robot.lookup("#searchBox").query();
-
         robot.clickOn(field).write(username);
 
-        var usernames = new ArrayList<String>();
-        usernames.add(username);
+        var usernames = new ArrayList<String>() {{ add(username); }};
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        var result = new SearchUsersResult(usernames, new ArrayList<>());
-
-        addIngoingMessageToInputHandler(result);
-
-        var label = robot.lookup("#userName").query();
-
-        Assertions.assertEquals(username, ((Label) label).getText());
+        Label label = robot.lookup("#userName").query();
+        Assertions.assertEquals(username, label.getText());
 
         robot.clickOn(field).press(KeyCode.BACK_SPACE);
 
         var searchNodes = robot.lookup("#UniqueSearchItem").queryAll();
-
         Assertions.assertEquals(0, searchNodes.size());
     }
 
     @Test
     public void WhenDeletingLastCharacter_ReturnToFriendListAsSearchResult(FxRobot robot) {
-        List<Friend> friends = new ArrayList<>();
-        friends.add(new Friend("Friend", true));
-        friends.add(new Friend("Friend2", false));
-        FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
-        inputHandler.addIngoingMessage(friendList);
+        List<Friend> friends = new ArrayList<>() {{
+            add(new Friend("Friend", true));
+            add(new Friend("Friend2", false));
+        }};
+        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
 
-        robot.clickOn((Node) robot.lookup(".contact-button").query());
-        Set<Node> nodes = robot.lookup("#UniqueContact").queryAll();
+        robot.clickOn(".contact-button");
+        var nodes = robot.lookup("#UniqueContact").queryAll();
         MatcherAssert.assertThat(nodes, hasSize(2));
 
         var username = "a";
-        var usernames = new ArrayList<String>();
 
-        TextField field = robot.lookup("#searchBox").query();
+        robot.clickOn("#searchBox").write(username);
 
-        robot.clickOn(field).write(username);
-
-        usernames.add(username);
-
-        var result = new SearchUsersResult(usernames, new ArrayList<>());
-
-        addIngoingMessageToInputHandler(result);
+        var usernames = new ArrayList<String>() {{ add(username); }};
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
         robot.press(KeyCode.BACK_SPACE);
 
-        Set<Node> contactNodes = robot.lookup("#UniqueSearchItem").queryAll();
+        var contactNodes = robot.lookup("#UniqueSearchItem").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(2));
     }
 
     @Test
     public void UnsuccessfulSearch_ResultsInAnEmptyView(FxRobot robot) {
-        var username = "a";
-        var result = new SearchUsersResult(new ArrayList<>(), new ArrayList<>());
+        robot.clickOn("#searchBox").write("a");
 
-        var field = robot.lookup("#searchBox").query();
-        robot.clickOn(field).write(username);
-
-        addIngoingMessageToInputHandler(result);
+        addIngoingMessageToInputHandler(new SearchUsersResult(new ArrayList<>(), new ArrayList<>()));
 
         var nodes = robot.lookup("#UniqueSearchItem").queryAll();
-
         MatcherAssert.assertThat(nodes, hasSize(0));
     }
 
@@ -173,13 +148,10 @@ public class SearchUserTests {
     public void WhenSearchingForUsers_TheResultingNamesMustBeVisible(FxRobot robot) {
         var username1 = "a";
         var username2 = "ab";
-        var usernames = new ArrayList<String>();
-        usernames.add(username1);
-        usernames.add(username2);
-
+        var usernames = new ArrayList<String>() {{ add(username1); add(username2); }};
         addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        ArrayList<Node> contactNodes = new ArrayList<>(robot.lookup("#UniqueSearchItem").queryAll());
+        var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchItem").queryAll());
         Label label1 = robot.from(contactNodes.get(0)).lookup("#userName").query();
         Label label2 = robot.from(contactNodes.get(1)).lookup("#userName").query();
 
@@ -191,15 +163,10 @@ public class SearchUserTests {
 
     @Test
     public void WhenSearchingForUsers_TheResultingProfilePicturesShouldBeVisible(FxRobot robot) {
-        var username1 = "a";
-        var username2 = "ab";
-        var usernames = new ArrayList<String>();
-        usernames.add(username1);
-        usernames.add(username2);
-
+        var usernames = new ArrayList<String>() {{ add("a"); add("ab"); }};
         addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        ArrayList<Node> contactNodes = new ArrayList<>(robot.lookup("#UniqueSearchItem").queryAll());
+        var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchItem").queryAll());
         ImageView label1 = robot.from(contactNodes.get(0)).lookup("#image").query();
         ImageView label2 = robot.from(contactNodes.get(1)).lookup("#image").query();
 
@@ -209,30 +176,21 @@ public class SearchUserTests {
 
     @Test
     public void UserThatCameFromFriendListStartedSearchingAndThenPressedStopSearching_ShouldReturnToFriendList(FxRobot robot) {
-        var username = "a";
-        var usernames = new ArrayList<String>();
-        List<Friend> friends = new ArrayList<>();
-        friends.add(new Friend("Friend", true));
+        List<Friend> friends = new ArrayList<>() {{ add(new Friend("Friend", true)); }};
+        addIngoingMessageToInputHandler(new FriendList(new DefaultListAccess<>(friends)));
 
-        FriendList friendList = new FriendList(new DefaultListAccess<>(friends));
-        addIngoingMessageToInputHandler(friendList);
+        robot.clickOn(".contact-button");
 
-        robot.clickOn((Node) robot.lookup(".contact-button").query());
-
-        Set<Node> contactNodes = robot.lookup("#UniqueContact").queryAll();
+        var contactNodes = robot.lookup("#UniqueContact").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(1));
 
-        TextField field = robot.lookup("#searchBox").query();
+        var username = "a";
+        robot.clickOn("#searchBox").write(username);
 
-        robot.clickOn(field).write(username);
+        var usernames = new ArrayList<String>() {{ add(username); }};
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        usernames.add(username);
-
-        var result = new SearchUsersResult(usernames, new ArrayList<>());
-
-        addIngoingMessageToInputHandler(result);
-
-        robot.clickOn((Node) robot.lookup("#stopSearchingBtn").query());
+        robot.clickOn("#stopSearchingBtn");
 
         contactNodes = robot.lookup("#UniqueContact").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(1));
@@ -241,31 +199,24 @@ public class SearchUserTests {
     @Test
     public void UserThatCameFromConversationListStartedSearchingAndThenPressedStopSearching_ShouldReturnToConversationList(FxRobot robot) {
         var username = "a";
-        var usernames = new ArrayList<String>();
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser(username);
 
         addIngoingMessageToInputHandler(conversation);
 
-        robot.clickOn((Node) robot.lookup(".message-button").query());
+        robot.clickOn(".message-button");
 
-        Set<Node> contactNodes = robot.lookup("#UniqueConversation").queryAll();
+        var contactNodes = robot.lookup("#UniqueConversation").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(1));
 
-        TextField field = robot.lookup("#searchBox").query();
+        robot.clickOn("#searchBox").write(username);
 
-        robot.clickOn(field).write(username);
+        var usernames = new ArrayList<String>() {{ add(username); }};
+        addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        usernames.add(username);
-
-        var result = new SearchUsersResult(usernames, new ArrayList<>());
-
-        addIngoingMessageToInputHandler(result);
-
-        robot.clickOn((Node) robot.lookup("#stopSearchingBtn").query());
+        robot.clickOn("#stopSearchingBtn");
 
         contactNodes = robot.lookup("#UniqueConversation").queryAll();
-
         MatcherAssert.assertThat(contactNodes, hasSize(1));
     }
 
@@ -276,17 +227,13 @@ public class SearchUserTests {
         var username3 = "humus";
         var username4 = "borris";
         var username5 = "retsu";
-
-        var usernames = new ArrayList<String>();
-        usernames.add(username1);
-        usernames.add(username2);
-        usernames.add(username3);
-        usernames.add(username4);
-        usernames.add(username5);
+        var usernames = new ArrayList<String>() {{
+            add(username1); add(username2); add(username3); add(username4); add(username5);
+        }};
 
         addIngoingMessageToInputHandler(new SearchUsersResult(usernames, new ArrayList<>()));
 
-        ArrayList<Node> contactNodes = new ArrayList<>(robot.lookup("#UniqueSearchItem").queryAll());
+        var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchItem").queryAll());
         Label label1 = robot.from(contactNodes.get(0)).lookup("#userName").query();
         Label label2 = robot.from(contactNodes.get(1)).lookup("#userName").query();
         Label label3 = robot.from(contactNodes.get(2)).lookup("#userName").query();
@@ -314,10 +261,10 @@ public class SearchUserTests {
         Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp).showLoginScreen();
 
-        Communication comspy = Mockito.spy(communication);
+        var comspy = Mockito.spy(communication);
         Mockito.doNothing().when(comspy).sendObject(Mockito.any());
 
-        Thread inputThread = new Thread(inputHandler);
+        var inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);
         inputThread.start();
 
@@ -328,7 +275,7 @@ public class SearchUserTests {
         ChatManager.setApplication(fagiApp);
 
         stage.setScene(new Scene(new AnchorPane()));
-        MainScreen screen = new MainScreen("Test", communication, stage);
+        var screen = new MainScreen("Test", communication, stage);
         screen.initCommunication();
         stage.setScene(new Scene(screen));
         stage.show();

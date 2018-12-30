@@ -31,7 +31,7 @@ public class UtilsTest {
 
     @Test
     public void thirtyFourCharactersReturnsOneLine() {
-        String message = "123456789 123456789 123456789 1234";
+        var message = "123456789 123456789 123456789 1234";
         Assertions.assertEquals(
                 18,
                 Utils.computeTextHeight(ROBOTO, message, 232),
@@ -41,7 +41,7 @@ public class UtilsTest {
 
     @Test
     public void thirtyFiveCharactersReturnsTwoLines() {
-        String message = "123456789 123456789 123456789 12345";
+        var message = "123456789 123456789 123456789 12345";
         Assertions.assertEquals(
                 35,
                 Utils.computeTextHeight(ROBOTO, message, 232),
@@ -51,7 +51,7 @@ public class UtilsTest {
 
     @Test
     public void sixtyEightCharactersReturnsTwoLines() {
-        String message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 1234";
+        var message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 1234";
         Assertions.assertEquals(
                 35,
                 Utils.computeTextHeight(ROBOTO, message, 232),
@@ -62,7 +62,7 @@ public class UtilsTest {
     @Test
 
     public void sixtyNineCharactersReturnsTwoLine() {
-        String message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 12345";
+        var message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 12345";
         Assertions.assertEquals(
                 52,
                 Utils.computeTextHeight(ROBOTO, message, 232),
@@ -72,7 +72,7 @@ public class UtilsTest {
 
     @Test
     public void computeTextHeight() {
-        String message = "123456789 123456789 123456789 1234";
+        var message = "123456789 123456789 123456789 1234";
         Assertions.assertEquals(
                 228,
                 Utils.computeTextWidth(ROBOTO, message, 232),
@@ -82,7 +82,7 @@ public class UtilsTest {
 
     @Test
     public void computeTextHeightOverflow() {
-        String message = "123456789 123456789 123456789 12345678";
+        var message = "123456789 123456789 123456789 12345678";
         Assertions.assertEquals(
                 232,
                 Utils.computeTextWidth(ROBOTO, message, 232),

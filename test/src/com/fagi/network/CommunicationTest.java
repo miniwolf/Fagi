@@ -23,14 +23,14 @@ public class CommunicationTest {
 
     @Test
     public void sendObject() throws Exception {
-        String objectToBeSend = "Dimmer";
-        byte[] bytes = Conversion.convertToBytes(objectToBeSend);
+        var objectToBeSend = "Dimmer";
+        var bytes = Conversion.convertToBytes(objectToBeSend);
 
-        ObjectOutputStream out = Mockito.spy(ObjectOutputStream.class);
+        var out = Mockito.spy(ObjectOutputStream.class);
         Mockito.doNothing().when(out).writeObject(Mockito.any());
         Mockito.doNothing().when(out).flush();
 
-        EncryptionAlgorithm encryptionAlgorithm = Mockito.mock(EncryptionAlgorithm.class);
+        var encryptionAlgorithm = Mockito.mock(EncryptionAlgorithm.class);
         Mockito.doReturn(bytes).when(encryptionAlgorithm).encrypt(Mockito.any());
         communication.setOut(out);
         communication.setEncryption(encryptionAlgorithm);

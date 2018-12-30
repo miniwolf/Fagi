@@ -36,9 +36,9 @@ public class SignOutTests {
 
     @Test
     public void clickOnToggleSignOut_WillChangeVisibilityOnDropdownId(FxRobot robot) {
-        Node signOutPane = robot.lookup("#dropdown").query();
+        var signOutPane = robot.lookup("#dropdown").query();
         Assertions.assertFalse(signOutPane.isVisible());
-        Node toggleSignOut = robot.lookup(".gb_b").query();
+        var toggleSignOut = robot.lookup(".gb_b").query();
         robot.clickOn(toggleSignOut);
         Assertions.assertTrue(signOutPane.isVisible());
         robot.clickOn(toggleSignOut);
@@ -47,32 +47,31 @@ public class SignOutTests {
 
     @Test
     public void clickOnSignOut_WillStartTheLoginScreen(FxRobot robot) {
-        Node toggleSignOut = robot.lookup(".gb_b").query();
-        robot.clickOn(toggleSignOut);
-        Node logoutButton = robot.lookup(".gb_Fa").query();
-        robot.clickOn(logoutButton);
-        // This is supposed to check that we are on the loginscreen
-        Node query = robot.lookup("#UniqueLoginScreen").query();
-        Assertions.assertNotNull(query);
+        robot.clickOn(".gb_b");
+        robot.clickOn(".gb_Fa");
+
+        Assertions.assertTrue(
+                robot.lookup("#UniqueLoginScreen").tryQuery().isPresent(),
+                "Should got to the login screen view.");
     }
 
     @Start
     public void start(Stage stage) {
-        Communication communication = Mockito.mock(Communication.class);
+        var communication = Mockito.mock(Communication.class);
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
-        FagiApp fagiApp = Mockito.mock(FagiApp.class);
+        var fagiApp = Mockito.mock(FagiApp.class);
 
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
-        MainScreen test = new MainScreen("Test", communication, stage);
+        var test = new MainScreen("Test", communication, stage);
         test.initCommunication();
 
-        Draggable draggable = new Draggable(stage);
-        Scene scene = new Scene(test);
+        var draggable = new Draggable(stage);
+        var scene = new Scene(test);
         Mockito.doAnswer(invocationOnMock -> {
             stage.setScene(scene);
-            MasterLogin masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
+            var masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
             masterLogin.showMasterLoginScreen();
             stage.show();
             return masterLogin;
