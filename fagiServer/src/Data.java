@@ -63,7 +63,7 @@ class Data {
         JsonFileOperations.loadAllConversations().forEach(c -> conversations.put(c.getId(), c));
 
         Set<Long> keys = conversations.keySet();
-        if ( keys.size() > 0 ) {
+        if (keys.size() > 0) {
             setNextConversationId(Collections.max(keys) + 1);
         } else {
             setNextConversationId(0);
@@ -79,7 +79,7 @@ class Data {
     }
 
     public static synchronized Object createUser(String userName, String pass) {
-        if ( registeredUsers.containsKey(userName) ) {
+        if (registeredUsers.containsKey(userName)) {
             return new UserExists();
         }
 
@@ -100,10 +100,10 @@ class Data {
 
             File file = new File("users/" + user.getUserName());
             File folder = new File("users/");
-            if ( !folder.exists() && !folder.mkdir() ) {
+            if (!folder.exists() && !folder.mkdir()) {
                 System.err.println("Couldn't create folder");
             }
-            if ( !file.exists() && !file.createNewFile() ) {
+            if (!file.exists() && !file.createNewFile()) {
                 System.err.println("Can't create file");
             }
 
@@ -118,28 +118,16 @@ class Data {
     }
 
     public static void loadUsers() {
-        try {
-            File folder = new File("users/");
-            if (!folder.exists()) return;
+        File folder = new File("users/");
+        if (!folder.exists()) return;
 
-            File[] files = folder.listFiles();
-            if (files == null) return;
+        File[] files = folder.listFiles();
+        if (files == null) return;
 
-            for (File file : files) {
-                StringBuilder json = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                while (reader.ready()) {
-                    json.append(reader.readLine());
-                }
-
-                Gson gson = new Gson();
-
-                User user = gson.fromJson(json.toString(), User.class);
-                //TODO Display exception to user concerning invalid userIndex file.
-                registeredUsers.put(user.getUserName(), user);
-            }
-        } catch (IOException ie) {
-            ie.printStackTrace();
+        for (File file : files) {
+            User user = JsonFileOperations.loadObjectFromFile(file.getPath(), User.class);
+            //TODO Display exception to user concerning invalid userIndex file.
+            registeredUsers.put(user.getUserName(), user);
         }
     }
 
@@ -153,14 +141,14 @@ class Data {
 
     public static Response userLogin(String userName, String pass, OutputWorker worker,
                                      InputWorker inputWorker) {
-        if ( OUTPUT_WORKER_MAP.containsKey(userName) ) {
+        if (OUTPUT_WORKER_MAP.containsKey(userName)) {
             return new UserOnline();
         }
         User user = registeredUsers.get(userName);
-        if ( user == null ) {
+        if (user == null) {
             return new NoSuchUser();
         }
-        if ( !user.getPass().equals(pass) ) {
+        if (!user.getPass().equals(pass)) {
             return new PasswordError();
         }
         OUTPUT_WORKER_MAP.put(userName, worker);
@@ -169,10 +157,10 @@ class Data {
     }
 
     public static void userLogout(String userName) {
-        if ( userName == null ) {
+        if (userName == null) {
             return;
         }
-        if ( OUTPUT_WORKER_MAP.containsKey(userName) ) {
+        if (OUTPUT_WORKER_MAP.containsKey(userName)) {
             OUTPUT_WORKER_MAP.remove(userName);
             INPUT_WORKER_MAP.remove(userName);
         } else {
@@ -193,7 +181,7 @@ class Data {
     }
 
     public static User getUser(String name) {
-        if ( name == null ) {
+        if (name == null) {
             return null;
         }
         return registeredUsers.get(name);
