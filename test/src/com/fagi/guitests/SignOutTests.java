@@ -9,6 +9,7 @@ import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,6 +39,7 @@ public class SignOutTests {
     public void clickOnToggleSignOut_WillChangeVisibilityOnDropdownId(FxRobot robot) {
         var signOutPane = robot.lookup("#dropdown").query();
         Assertions.assertFalse(signOutPane.isVisible());
+        Assertions.assertNotNull(robot.lookup(".gb_b").query());
         var toggleSignOut = robot.lookup(".gb_b").query();
         robot.clickOn(toggleSignOut);
         Assertions.assertTrue(signOutPane.isVisible());
@@ -46,9 +48,12 @@ public class SignOutTests {
     }
 
     @Test
-    public void clickOnSignOut_WillStartTheLoginScreen(FxRobot robot) {
+    public void clickOnSignOut_WillStartTheLoginScreen(FxRobot robot) throws InterruptedException {
+        Assertions.assertNotNull(robot.lookup(".gb_b").query());
         robot.clickOn(".gb_b");
+        Thread.sleep(100);
         robot.clickOn(".gb_Fa");
+        Thread.sleep(100);
 
         Assertions.assertTrue(
                 robot.lookup("#UniqueLoginScreen").tryQuery().isPresent(),
@@ -64,6 +69,7 @@ public class SignOutTests {
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
+        stage.setScene(new Scene(new AnchorPane()));
         var test = new MainScreen("Test", communication, stage);
         test.initCommunication();
 
