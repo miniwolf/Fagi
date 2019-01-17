@@ -44,7 +44,7 @@
             <Pane layoutX="24.0" layoutY="16.0" styleClass="search-icon"/>
             <TextField fx:id="searchBox" layoutX="55.0" layoutY="1.0" promptText="New conversation"
                        styleClass="search-area, persistent-prompt"/>
-            <Button layoutX="353.0" layoutY="16.0" mnemonicParsing="false" onAction="#stopSearching"
+            <Button fx:id="stopSearchingBtn" layoutX="353.0" layoutY="16.0" mnemonicParsing="false" onAction="#stopSearching"
                     styleClass="DIyFQb"/>
         </Pane>
         <ScrollPane fx:id="listContent" styleClass="list-content"/>

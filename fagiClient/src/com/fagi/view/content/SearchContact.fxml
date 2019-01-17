@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<fx:root type="HBox" styleClass="search-item" stylesheets="@../../style/searchlist.css"
+<fx:root type="HBox" fx:id="UniqueSearchItem" styleClass="search-item" stylesheets="@../../style/searchlist.css"
          xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
          onMouseClicked="#openConversation">
     <Pane visible="false" styleClass="clicker-holder">

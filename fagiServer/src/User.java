@@ -10,6 +10,7 @@ import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserExists;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +19,7 @@ import java.util.Optional;
  * TODO: Add description, password protection OTR:
  * https://otr.cypherpunks.ca/otr-wpes.pdf
  */
-public class User {
+public class User implements Serializable {
     private final String pass;
     private final String userName;
     private List<String> friends;
