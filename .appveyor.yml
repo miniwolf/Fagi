@@ -1,0 +1,11 @@
+image: Visual Studio 2017
+build_script:
+  - ./build.bat build "C:\Program Files\Java\jdk11\bin\javac.exe"
+test_script:
+  - ./build.bat test "C:\Program Files\Java\jdk11\bin\java.exe"
+notifications:
+  - provider: Email
+    to:
+      - miniwolf1508@gmail.com
+      - costa@hotmail.dk
+    on_build_failure: true

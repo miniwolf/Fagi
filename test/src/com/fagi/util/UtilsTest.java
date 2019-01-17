@@ -5,29 +5,37 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ConditionEvaluationResult;
+import org.junit.jupiter.api.extension.ExecutionCondition;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import rules.JavaFXThreadingExtension;
 
-/**
- * Testing that our current font returns the correct size for the surrounding textarea.
- *
- * Values tested will be passed to the pref height and width.
- *
- * @author miniwolf
- */
-@ExtendWith(JavaFXThreadingExtension.class)
-public class UtilsTest {
-    private static final Font ROBOTO = new Font("Roboto-Regular", 13);
-
-    @BeforeEach
-    public void setup() {
-        Assumptions.assumeTrue(isWindows());
-        System.out.println("Starting UtilsTest");
+class DisableOnLinuxAndMacCondition implements ExecutionCondition {
+    @Override
+    public ConditionEvaluationResult evaluateExecutionCondition(ExtensionContext context) {
+        if (isWindows()) {
+            return ConditionEvaluationResult.enabled("Test enabled");
+        } else {
+            return ConditionEvaluationResult.disabled("Test disabled on mac and linux");
+        }
     }
 
     private boolean isWindows() {
         return System.getProperty("os.name").startsWith("Windows");
     }
+}
+
+/**
+ * Testing that our current font returns the correct size for the surrounding textarea.
+ * <p>
+ * Values tested will be passed to the pref height and width.
+ *
+ * @author miniwolf
+ */
+@ExtendWith({JavaFXThreadingExtension.class, DisableOnLinuxAndMacCondition.class})
+public class UtilsTest {
+    private static final Font ROBOTO = new Font("Roboto-Regular", 13);
 
     @Test
     public void thirtyFourCharactersReturnsOneLine() {
