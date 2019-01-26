@@ -36,12 +36,14 @@ public class SearchContactController extends HBox {
                 true);
         this.image.setImage(image);
         userName.setText(username);
+        actionable.assign(
+                isFriend
+                ? new OpenConversation(mainScreen, userName)
+                : new OpenInvitation(mainScreen, userName.getText()));
     }
 
     @FXML
     private void initialize() {
-        actionable.assign(isFriend ? new OpenConversation(mainScreen, userName)
-                                   : new OpenInvitation(mainScreen, userName.getText()));
     }
 
     @FXML

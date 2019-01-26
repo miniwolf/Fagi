@@ -75,7 +75,7 @@ public class User implements Serializable {
     public Response removeFriendRequest(String userName) {
         Optional<FriendRequest> opt = incFriendReq.stream().filter(x -> x.getMessage().getMessageInfo().getSender().equals(userName)).findFirst();
 
-        if (!opt.isPresent()) {
+        if (opt.isEmpty()) {
             return new NoSuchUser();
         }
 

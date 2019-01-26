@@ -13,14 +13,7 @@ import com.fagi.model.messages.lists.FriendRequestList;
  * Created by Marcus on 08-07-2016.
  */
 public class GeneralHandlerFactory {
-
-    private MainScreen mainScreen;
-
-    public GeneralHandlerFactory(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
-
-    public GeneralHandler construct() {
+    public GeneralHandler construct(MainScreen mainScreen) {
         GeneralHandler handler = new GeneralHandler();
 
         GeneralHandler.registerHandler(SearchUsersResult.class, new SearchHandler(mainScreen));

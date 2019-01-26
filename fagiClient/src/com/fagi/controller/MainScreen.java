@@ -136,8 +136,7 @@ public class MainScreen extends Pane {
         var messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
         messageThread.start();
 
-        GeneralHandlerFactory factory = new GeneralHandlerFactory(this);
-        generalHandler = factory.construct();
+        generalHandler = new GeneralHandlerFactory().construct(this);
         var generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
         generalHandlerThread.start();
 
