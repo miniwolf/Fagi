@@ -10,10 +10,8 @@ import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -32,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.fagi.helpers.InputHandlerTestHelper.addIngoingMessageToInputHandler;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -49,7 +48,7 @@ public class FriendsTests {
     @Test
     public void receivingFriendListFromServer_FriendIsVisibleOnContent(FxRobot robot) {
         List<Friend> friends = new ArrayList<>() {{ add(new Friend("Friend", true)); }};
-        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
+        addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
         Assertions.assertFalse(
                 robot.lookup("#UniqueContact").tryQuery().isPresent(),
                 "Should not find friend item before changing the content list to contacts");
@@ -76,7 +75,7 @@ public class FriendsTests {
     @Test
     public void receivingFriendListFromServer_OfflineFriendGuiSetup(FxRobot robot) {
         List<Friend> friends = new ArrayList<>() {{ add(new Friend("Friend", false)); }};
-        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
+        addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
 
         robot.clickOn(".contact-button");
 
@@ -93,7 +92,7 @@ public class FriendsTests {
             add(new Friend("Friend", true));
             add(new Friend("Friend2", true));
         }};
-        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
+        addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
@@ -116,7 +115,7 @@ public class FriendsTests {
             add(new Friend("CFriend", true));
             add(new Friend("BFriend", true));
         }};
-        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
+        addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
@@ -135,7 +134,7 @@ public class FriendsTests {
             add(new Friend("Friend", true));
             add(new Friend("Friend2", false));
         }};
-        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
+        addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature

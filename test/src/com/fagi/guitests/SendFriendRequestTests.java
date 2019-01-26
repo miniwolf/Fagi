@@ -49,11 +49,11 @@ public class SendFriendRequestTests {
     void WhenOpeningANewFriendInvitation_SendInvitationContainsContactUserName(FxRobot robot) {
         var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
         Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
-        Label nameLabel = (Label) robot.lookup("#name").tryQuery().orElse(null);
-        Assert.assertNotNull(nameLabel);
+        Assume.assumeTrue(robot.lookup("#name").tryQuery().isPresent());
+        Label nameLabel = robot.lookup("#name").query();
         Assert.assertThat(nameLabel.getText(), is(username));
     }
 
@@ -61,10 +61,10 @@ public class SendFriendRequestTests {
     void WhenClickingOnSendInvitationButton_FriendRequestIsSendToServer(FxRobot robot) {
         var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
         Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
-        Assert.assertTrue(robot.lookup("#send").tryQuery().isPresent());
+        Assume.assumeTrue(robot.lookup("#send").tryQuery().isPresent());
 
         robot.clickOn("#send");
 
@@ -80,12 +80,12 @@ public class SendFriendRequestTests {
     void WhenClickingOnSendInvitationButton_TheWrittenMessageIsIncluded(FxRobot robot) {var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
         var message = "Do you want to build a snowman?";
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
         Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
 
         Node messageField = robot.lookup("#message").tryQuery().orElse(null);
-        Assert.assertNotNull(messageField);
+        Assume.assumeNotNull(messageField);
         robot.clickOn(messageField).write(message);
 
         Assume.assumeTrue(robot.lookup("#send").tryQuery().isPresent());
