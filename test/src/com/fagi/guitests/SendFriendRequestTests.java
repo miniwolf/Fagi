@@ -26,8 +26,10 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static com.fagi.helpers.InputHandlerTestHelper.addIngoingMessageToInputHandler;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 
 
@@ -49,12 +51,12 @@ public class SendFriendRequestTests {
     void WhenOpeningANewFriendInvitation_SendInvitationContainsContactUserName(FxRobot robot) {
         var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
         Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
-        Assume.assumeTrue(robot.lookup("#name").tryQuery().isPresent());
-        Label nameLabel = robot.lookup("#name").query();
-        Assert.assertThat(nameLabel.getText(), is(username));
+        Optional<Label> nameLabel = robot.lookup("#name").tryQuery();
+        assertThat(nameLabel).hasValueSatisfying(label ->
+                assertThat(label.getText()).isEqualTo(username));
     }
 
     @Test
@@ -77,7 +79,8 @@ public class SendFriendRequestTests {
     }
 
     @Test
-    void WhenClickingOnSendInvitationButton_TheWrittenMessageIsIncluded(FxRobot robot) {var username = "a";
+    void WhenClickingOnSendInvitationButton_TheWrittenMessageIsIncluded(FxRobot robot) {
+        var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
         var message = "Do you want to build a snowman?";
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));

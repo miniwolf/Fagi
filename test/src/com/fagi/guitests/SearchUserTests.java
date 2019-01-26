@@ -115,7 +115,7 @@ public class SearchUserTests {
             add(new Friend("Friend", true));
             add(new Friend("Friend2", false));
         }};
-        inputHandler.addIngoingMessage(new FriendList(new DefaultListAccess<>(friends)));
+        addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
 
         robot.clickOn(".contact-button");
         var nodes = robot.lookup("#UniqueContact").queryAll();
@@ -149,7 +149,7 @@ public class SearchUserTests {
         var username1 = "a";
         var username2 = "ab";
         var usernames = new ArrayList<String>() {{ add(username1); add(username2); }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), usernames.size());
 
         var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchContact").queryAll());
         Label label1 = robot.from(contactNodes.get(0)).lookup("#userName").query();
@@ -232,7 +232,7 @@ public class SearchUserTests {
             add(username1); add(username2); add(username3); add(username4); add(username5);
         }};
 
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 5);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), usernames.size());
 
         var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchContact").queryAll());
         Label label1 = robot.from(contactNodes.get(0)).lookup("#userName").query();
