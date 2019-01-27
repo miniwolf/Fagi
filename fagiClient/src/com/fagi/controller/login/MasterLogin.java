@@ -11,7 +11,6 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import javafx.application.Platform;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -25,7 +24,6 @@ public class MasterLogin {
     private final FagiApp fagiApp;
     private final Communication communication;
     private final Draggable draggable;
-    private final Scene scene;
     private final Stage stage;
     private LoginController controller;
     private LoginState state = LoginState.LOGIN;
@@ -43,7 +41,6 @@ public class MasterLogin {
         this.fagiApp = fagiApp;
         this.communication = communication;
         this.draggable = draggable;
-        this.scene = stage.getScene();
         this.stage = stage;
     }
 
