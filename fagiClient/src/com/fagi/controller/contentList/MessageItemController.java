@@ -36,7 +36,7 @@ public class MessageItemController extends HBox {
         this.username = username;
         this.ID = ID;
 
-        new LoadFXML(this, "/com/fagi/view/content/Conversation.fxml").execute();
+        new LoadFXML(this, "/com/fagi/view/content/ConversationItem.fxml").execute();
         getStyleClass().add("contact");
     }
 
@@ -66,9 +66,11 @@ public class MessageItemController extends HBox {
                     this.cancel();
                     return;
                 }
-                Platform.runLater(() -> date.setText(convertDate(dateInstance)));
-                lastMessage.applyCss();
-                lastMessage.layout();
+                Platform.runLater(() -> {
+                    date.setText(convertDate(dateInstance));
+                    lastMessage.applyCss();
+                    lastMessage.layout();
+                });
             }
         }, 0, 1000);
     }
@@ -97,7 +99,7 @@ public class MessageItemController extends HBox {
 
         long diffMinutes = diff / (60 * 1000) % 60;
         if (diffMinutes != 0) {
-            return Long.toString(diffMinutes) + " min";
+            return diffMinutes + " min";
         }
         return "now";
     }

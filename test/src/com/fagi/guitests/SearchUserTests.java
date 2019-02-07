@@ -207,7 +207,7 @@ public class SearchUserTests {
 
         robot.clickOn(".message-button");
 
-        var contactNodes = robot.lookup("#UniqueConversation").queryAll();
+        var contactNodes = robot.lookup("#UniqueConversationItem").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(1));
 
         robot.clickOn("#searchBox").write(username);
@@ -217,7 +217,7 @@ public class SearchUserTests {
 
         robot.clickOn("#stopSearchingBtn");
 
-        contactNodes = robot.lookup("#UniqueConversation").queryAll();
+        contactNodes = robot.lookup("#UniqueConversationItem").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(1));
     }
 

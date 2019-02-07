@@ -16,7 +16,7 @@
 <fx:root alignment="CENTER_LEFT" styleClass="contact" stylesheets="@../../style/contact.css"
          onMouseClicked="#openConversation"
          type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-         fx:id="UniqueConversation">
+         fx:id="UniqueConversationItem">
     <Pane styleClass="image">
         <ImageView fx:id="image" fitHeight="46.0" fitWidth="46.0" layoutY="3.0" pickOnBounds="true"
                    preserveRatio="true">
