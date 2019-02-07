@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class DefaultMessageInfo implements MessageInfo {
     private String sender;
     private long conversationID;
-    private Timestamp timestamp;
+    private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     private long currentTime;
 
     public DefaultMessageInfo(String sender, long conversationID) {

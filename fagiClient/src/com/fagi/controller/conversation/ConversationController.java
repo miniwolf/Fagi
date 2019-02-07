@@ -9,21 +9,21 @@ import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
-
-import java.util.Date;
-import java.util.stream.Collectors;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * @author miniwolf
@@ -66,19 +66,28 @@ public class ConversationController extends BorderPane {
         }
         date.setText(dateString);
 
-        message.setOnKeyPressed(event -> {
-            if (!event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
-                sendMessage();
-                message.setText("");
-                event.consume();
-            }
-        });
+        message.setOnKeyPressed(this::handleEnterBehaviour);
 
         fillChat();
 
         scroller.vvalueProperty().addListener(
                 observable -> this.isUserScrolling = scroller.getVvalue() != 1.0
                                                      && !isInternalScroll);
+    }
+
+    private void handleEnterBehaviour(KeyEvent event) {
+        if (event.getCode() != KeyCode.ENTER) {
+            return;
+        }
+
+        if (!event.isShiftDown()) {
+            sendMessage();
+            message.setText("");
+        } else {
+            message.setText(message.getText() + "\n");
+            message.positionCaret(message.getText().length());
+        }
+        event.consume();
     }
 
     private void sendMessage() {
