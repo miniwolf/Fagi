@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -30,7 +31,7 @@ public class CreatePasswordTests {
 
     @Test
     public void PasswordFieldMustHaveAValue_MessageShouldIndicateOtherwise(FxRobot robot) {
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -39,8 +40,8 @@ public class CreatePasswordTests {
 
     @Test
     public void PasswordRepeatFieldMustHaveAValue_MessageShouldIndicateOtherwise(FxRobot robot) {
-        robot.clickOn("#password").write("thisisapassword");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "thisisapassword");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -49,9 +50,9 @@ public class CreatePasswordTests {
 
     @Test
     public void RepeatPasswordMustMatchPassword_ErrorInformUser(FxRobot robot) {
-        robot.clickOn("#password").write("thisisapassword");
-        robot.clickOn("#passwordRepeat").write("thisisadiffrentpassword");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "thisisapassword");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#passwordRepeat", "thisisadiffrentpassword");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -62,9 +63,9 @@ public class CreatePasswordTests {
     public void SuccessfulPasswordCreation_ShouldShowInviteCodeScreen(FxRobot robot) {
         var password = "thisisapassword";
 
-        robot.clickOn("#password").write(password);
-        robot.clickOn("#passwordRepeat").write(password);
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", password);
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#passwordRepeat", password);
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
         Assertions.assertNotNull(robot.lookup("#UniqueInviteCode"));

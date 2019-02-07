@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.model.Friend;
 import com.fagi.model.messages.lists.DefaultListAccess;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.fagi.helpers.InputHandlerTestHelper.addIngoingMessageToInputHandler;
+import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -55,7 +56,7 @@ public class FriendsTests {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        robot.clickOn(".contact-button");
+        WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
         Assertions.assertTrue(
                 robot.lookup("#UniqueContact").tryQuery().isPresent(),
                 "Cannot see friend item after switching the content list to contacts.");
@@ -77,7 +78,7 @@ public class FriendsTests {
         List<Friend> friends = new ArrayList<>() {{ add(new Friend("Friend", false)); }};
         addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
 
-        robot.clickOn(".contact-button");
+        WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
         Label nameLabel = robot.lookup("#userName").query();
         Assertions.assertEquals("Friend", nameLabel.getText());
@@ -96,7 +97,7 @@ public class FriendsTests {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        robot.clickOn(".contact-button");
+        WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
         var contactNodes = robot.lookup("#UniqueContact").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(2));
@@ -119,7 +120,7 @@ public class FriendsTests {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        robot.clickOn(".contact-button");
+        WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
         var collect = robot.lookup("#userName").queryAll().stream()
                                                   .map(node -> ((Label) node).getText())
                                                   .collect(Collectors.toList());
@@ -138,7 +139,7 @@ public class FriendsTests {
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
-        robot.clickOn(".contact-button");
+        WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
         var contactNodes = robot.lookup("#UniqueContact").queryAll();
         MatcherAssert.assertThat(contactNodes, hasSize(2));

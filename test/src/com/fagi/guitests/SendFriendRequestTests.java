@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.SearchUsersResult;
@@ -23,12 +24,11 @@ import org.mockito.Mockito;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.fagi.helpers.InputHandlerTestHelper.addIngoingMessageToInputHandler;
+import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -68,9 +68,7 @@ public class SendFriendRequestTests {
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
         Assume.assumeTrue(robot.lookup("#send").tryQuery().isPresent());
 
-        robot.clickOn("#send");
-
-        WaitForAsyncUtils.waitForFxEvents();
+        WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
@@ -89,13 +87,11 @@ public class SendFriendRequestTests {
 
         Node messageField = robot.lookup("#message").tryQuery().orElse(null);
         Assume.assumeNotNull(messageField);
-        robot.clickOn(messageField).write(message);
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, messageField, message);
 
         Assume.assumeTrue(robot.lookup("#send").tryQuery().isPresent());
 
-        robot.clickOn("#send");
-
-        WaitForAsyncUtils.waitForFxEvents();
+        WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());

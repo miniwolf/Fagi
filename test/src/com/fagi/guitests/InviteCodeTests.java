@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -36,8 +37,8 @@ public class InviteCodeTests {
     public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new IllegalInviteCode());
 
-        robot.clickOn("#inviteCode").write("41");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#inviteCode", "41");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -47,7 +48,7 @@ public class InviteCodeTests {
 
     @Test
     public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise(FxRobot robot) {
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -58,8 +59,8 @@ public class InviteCodeTests {
     public void GivenAValidInviteCode_TheLoginScreenShouldBeShown(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
-        robot.clickOn("#inviteCode").write("42");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#inviteCode", "42");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.LOGIN, masterLogin.getState());
         Assertions.assertTrue(

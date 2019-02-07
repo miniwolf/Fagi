@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -40,16 +41,16 @@ public class SignOutTests {
         var signOutPane = robot.lookup("#dropdown").query();
         Assertions.assertFalse(signOutPane.isVisible());
         var toggleSignOut = robot.lookup(".gb_b").query();
-        robot.clickOn(toggleSignOut);
+        WaitForFXEventsTestHelper.clickOn(robot, toggleSignOut);
         Assertions.assertTrue(signOutPane.isVisible());
-        robot.clickOn(toggleSignOut);
+        WaitForFXEventsTestHelper.clickOn(robot, toggleSignOut);
         Assertions.assertFalse(signOutPane.isVisible());
     }
 
     @Test
     public void clickOnSignOut_WillStartTheLoginScreen(FxRobot robot) {
-        robot.clickOn(".gb_b");
-        robot.clickOn(".gb_Fa");
+        WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
+        WaitForFXEventsTestHelper.clickOn(robot, ".gb_Fa");
 
         Assertions.assertTrue(
                 robot.lookup("#UniqueLoginScreen").tryQuery().isPresent(),

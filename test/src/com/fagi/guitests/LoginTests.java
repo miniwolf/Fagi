@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -39,12 +40,12 @@ public class LoginTests {
     public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields(FxRobot robot) {
         var testText = "ThisTextShould Exist";
         TextField usernameField = robot.lookup("#username").query();
-        robot.clickOn(usernameField).write(testText);
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, usernameField, testText);
 
         Assertions.assertEquals(testText, usernameField.getText());
 
         PasswordField passwordField = robot.lookup("#password").query();
-        robot.clickOn(passwordField).write(testText);
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, passwordField, testText);
 
         Assertions.assertEquals(testText, passwordField.getText());
     }
@@ -53,9 +54,9 @@ public class LoginTests {
     public void WhenGivingWrongPassword_ErrorMessageShouldShowThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new PasswordError());
 
-        robot.clickOn("#username").write("dinMor");
-        robot.clickOn("#password").write("password");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "dinMor");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
         Assertions.assertEquals("Wrong password", messageLabel.getText());
@@ -65,9 +66,9 @@ public class LoginTests {
     public void WhenGivingWrongUsername_ErrorMessageShouldShowThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new NoSuchUser());
 
-        robot.clickOn("#username").write("dinMor");
-        robot.clickOn("#password").write("password");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "dinMor");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
         Assertions.assertEquals("User doesn't exist", messageLabel.getText());
@@ -77,9 +78,9 @@ public class LoginTests {
     public void WhenUserIsAlreadyOnline_ErrorMessageShouldShowThis(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new UserOnline());
 
-        robot.clickOn("#username").write("dinMor");
-        robot.clickOn("#password").write("password");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "dinMor");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
         Assertions.assertEquals("You are already online", messageLabel.getText());
@@ -100,7 +101,7 @@ public class LoginTests {
 
     @Test
     public void WhenClickingOnCreateNewUser_ShowCreateUsernameScreen(FxRobot robot) {
-        robot.clickOn("#newAccount");
+        WaitForFXEventsTestHelper.clickOn(robot, "#newAccount");
 
         Assertions.assertEquals(LoginState.USERNAME, masterLogin.getState());
         Assertions.assertTrue(

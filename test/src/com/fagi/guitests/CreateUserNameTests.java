@@ -3,6 +3,7 @@ package com.fagi.guitests;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -34,7 +35,7 @@ public class CreateUserNameTests {
 
     @Test
     public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise(FxRobot robot) {
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -45,8 +46,8 @@ public class CreateUserNameTests {
     public void WhenUserExistsOnServerCreatingANewUser_InformNewUser(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new UserExists());
 
-        robot.clickOn("#username").write("DinMor");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "DinMor");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -55,8 +56,8 @@ public class CreateUserNameTests {
 
     @Test
     public void UsernameMustNotContainAnySpecialCharacters_InformNemUser(FxRobot robot) {
-        robot.clickOn("#username").write("Din Mor");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "Din Mor");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Label messageLabel = robot.lookup("#messageLabel").query();
 
@@ -67,8 +68,8 @@ public class CreateUserNameTests {
     public void UsernameIsValidAndAvailable_ShowsCreatePasswordScreen(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
-        robot.clickOn("#username").write("username");
-        robot.clickOn("#loginBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.PASSWORD, masterLogin.getState());
         Assertions.assertNotNull(robot.lookup("#passwordRepeat"));
@@ -76,17 +77,17 @@ public class CreateUserNameTests {
 
     @Test
     public void ClickingOnBackButton_ResultsInReturningToLoginScreen(FxRobot robot) {
-        robot.clickOn("#username").write("username");
-        robot.clickOn("#backBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
+        WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
 
         Assertions.assertNotNull(robot.lookup("#UniqueLoginScreen").query());
     }
 
     @Test
     public void WritingUsernameClickingOnBackButtonAndGoingBackToCreateUsername_ResultsInUsernameFieldCleared(FxRobot robot) {
-        robot.clickOn("#username").write("username");
-        robot.clickOn("#backBtn");
-        robot.clickOn("#newAccount");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
+        WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
+        WaitForFXEventsTestHelper.clickOn(robot, "#newAccount");
 
         TextField usernameTextField = robot.lookup("#username").query();
 
@@ -97,9 +98,9 @@ public class CreateUserNameTests {
     public void GoingBackFromCreatePassword_ShouldKeepUsername(FxRobot robot) {
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
 
-        robot.clickOn("#username").write("username");
-        robot.clickOn("#loginBtn");
-        robot.clickOn("#backBtn");
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
+        WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
+        WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
 
         TextField usernameTextField = robot.lookup("#username").query();
 
