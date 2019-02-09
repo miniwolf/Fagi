@@ -14,6 +14,7 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -23,12 +24,14 @@ import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableWithSize;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
@@ -45,11 +48,17 @@ public class ConversationTests {
     private InputHandler inputHandler;
     private Communication communication;
 
+    @BeforeAll
+    public static void intialize() {
+        System.out.println("Starting conversation tests");
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+    }
+
     @AfterEach
     void Dispose() {
-        deleteFolder("../test/MyUsername/conversations");
-        deleteFolder("../test/MyUsername");
-        deleteFolder("../test/conversations");
+        deleteFolder("MyUsername/conversations");
+        deleteFolder("MyUsername");
+        deleteFolder("conversations");
     }
 
     private void deleteFolder(String path) {
@@ -176,7 +185,7 @@ public class ConversationTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#message").write("Hello").press(KeyCode.ENTER);
+        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         var textMessageCaptor = ArgumentCaptor.forClass(TextMessage.class);
@@ -203,11 +212,11 @@ public class ConversationTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#message").write("Hello").press(KeyCode.ENTER);
+        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         FxAssert.verifyThat(
-                "#message",
+                "#conversationTextarea",
                 TextInputControlMatchers.hasText(""),
                 builder -> builder.append("Field should be emptied after sending the message")
         );
@@ -227,11 +236,11 @@ public class ConversationTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#message").write("Hello").press(KeyCode.SHIFT, KeyCode.ENTER).write("Dimmer");
+        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.SHIFT, KeyCode.ENTER).write("Dimmer");
         WaitForAsyncUtils.waitForFxEvents();
 
         FxAssert.verifyThat(
-                "#message",
+                "#conversationTextarea",
                 TextInputControlMatchers.hasText("Hello\nDimmer"),
                 builder -> builder.append("Field should add new line with shift enter.")
         );
@@ -251,7 +260,7 @@ public class ConversationTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#message").write("Hello").press(KeyCode.ENTER);
+        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         var textMessageCaptor = ArgumentCaptor.forClass(TextMessage.class);

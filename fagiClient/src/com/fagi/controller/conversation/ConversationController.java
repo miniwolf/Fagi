@@ -31,7 +31,8 @@ import java.util.stream.Collectors;
 public class ConversationController extends BorderPane {
     @FXML private Label name;
     @FXML private Label date;
-    @FXML private TextArea message;
+    @FXML
+    private TextArea conversationTextarea;
     @FXML private VBox chat;
     @FXML private ScrollPane scroller;
 
@@ -66,7 +67,7 @@ public class ConversationController extends BorderPane {
         }
         date.setText(dateString);
 
-        message.setOnKeyPressed(this::handleEnterBehaviour);
+        conversationTextarea.setOnKeyPressed(this::handleEnterBehaviour);
 
         fillChat();
 
@@ -82,17 +83,19 @@ public class ConversationController extends BorderPane {
 
         if (!event.isShiftDown()) {
             sendMessage();
-            message.setText("");
+            conversationTextarea.setText("");
         } else {
-            message.setText(message.getText() + "\n");
-            message.positionCaret(message.getText().length());
+            conversationTextarea.setText(conversationTextarea.getText() + "\n");
+            conversationTextarea.positionCaret(conversationTextarea.getText().length());
         }
         event.consume();
     }
 
     private void sendMessage() {
-        TextMessage textMessage = new TextMessage(message.getText(), username,
-                                                  conversation.getId());
+        TextMessage textMessage = new TextMessage(
+                conversationTextarea.getText(),
+                username,
+                conversation.getId());
         communication.sendObject(textMessage);
     }
 

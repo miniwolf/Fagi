@@ -63,7 +63,7 @@
         <Pane minWidth="-Infinity" prefWidth="400.0" styleClass="outline, field">
             <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" visible="false"/>
             <Pane layoutX="28.0" styleClass="area">
-                <TextArea fx:id="message" layoutY="1.0" promptText="Send a message"
+                <TextArea fx:id="conversationTextarea" layoutY="1.0" promptText="Send a message"
                           styleClass="text, persistent-prompt"/>
             </Pane>
         </Pane>

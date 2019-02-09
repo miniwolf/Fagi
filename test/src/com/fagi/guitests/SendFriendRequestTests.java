@@ -33,7 +33,6 @@ import java.util.ArrayList;
 
 import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
 
-
 @ExtendWith(ApplicationExtension.class)
 public class SendFriendRequestTests {
     private Communication communication;
@@ -41,7 +40,7 @@ public class SendFriendRequestTests {
 
     @BeforeAll
     static void initialize() {
-        System.out.println("Starting search user tests");
+        System.out.println("Starting send friend request tests");
         FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
     }
 
