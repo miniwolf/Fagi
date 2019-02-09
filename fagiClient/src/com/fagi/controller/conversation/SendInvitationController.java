@@ -40,7 +40,9 @@ public class SendInvitationController extends BorderPane implements ActionContai
     private void setUsername(String username) {
         this.username = username;
         header.setText(header.getText().replace("$", username));
-        name.setText(username);
+        if (name != null) {
+            name.setText(username);
+        }
     }
 
     @FXML

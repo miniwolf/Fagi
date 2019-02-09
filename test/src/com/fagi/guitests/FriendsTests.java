@@ -11,20 +11,26 @@ import com.fagi.model.messages.lists.FriendList;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.collection.IsIterableWithSize;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.base.StyleableMatchers;
+import org.testfx.matcher.control.LabeledMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +38,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -44,6 +49,7 @@ public class FriendsTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting FriendsTests tests");
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
     }
 
     @Test
@@ -80,11 +86,15 @@ public class FriendsTests {
 
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
-        Label nameLabel = robot.lookup("#userName").query();
-        Assertions.assertEquals("Friend", nameLabel.getText());
+        FxAssert.verifyThat(
+                "#userName",
+                LabeledMatchers.hasText("Friend")
+        );
 
-        var status = robot.lookup("#status").query();
-        MatcherAssert.assertThat(status.getStyleClass(), not(contains("pD")));
+        FxAssert.verifyThat(
+                "#status",
+                StyleableMatchers.doesntContainsClass("pD")
+        );
     }
 
     @Test
@@ -99,8 +109,10 @@ public class FriendsTests {
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
-        var contactNodes = robot.lookup("#UniqueContact").queryAll();
-        MatcherAssert.assertThat(contactNodes, hasSize(2));
+        FxAssert.verifyThatIter(
+                "#UniqueContact",
+                IsIterableWithSize.iterableWithSize(2)
+        );
 
         var collect = robot.lookup("#userName").queryAll().stream()
                                                   .map(node -> ((Label) node).getText())
@@ -141,8 +153,10 @@ public class FriendsTests {
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
-        var contactNodes = robot.lookup("#UniqueContact").queryAll();
-        MatcherAssert.assertThat(contactNodes, hasSize(2));
+        FxAssert.verifyThatIter(
+                "#UniqueContact",
+                IsIterableWithSize.iterableWithSize(2)
+        );
     }
 
     @Start

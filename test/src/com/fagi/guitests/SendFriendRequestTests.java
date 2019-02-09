@@ -10,27 +10,28 @@ import com.fagi.model.SearchUsersResult;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
-import javafx.scene.Node;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Assume;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.matcher.control.LabeledMatchers;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
 
 
 @ExtendWith(ApplicationExtension.class)
@@ -38,13 +39,22 @@ public class SendFriendRequestTests {
     private Communication communication;
     private InputHandler inputHandler;
 
+    @BeforeAll
+    static void initialize() {
+        System.out.println("Starting search user tests");
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+    }
+
     @Test
     void WhenClickingOnSearchContactThatIsNotAFriend_ANewFriendInvitationIsOpened(FxRobot robot) {
         var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
-        Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
-        Assert.assertTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
+        FxAssert.verifyThat(
+                "#InvitationConversation",
+                NodeMatchers.isNotNull()
+        );
     }
 
     @Test
@@ -52,11 +62,12 @@ public class SendFriendRequestTests {
         var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
-        Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
+        WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
-        Optional<Label> nameLabel = robot.lookup("#name").tryQuery();
-        assertThat(nameLabel).hasValueSatisfying(label ->
-                assertThat(label.getText()).isEqualTo(username));
+
+        FxAssert.verifyThat(
+                "#name",
+                LabeledMatchers.hasText(username));
     }
 
     @Test
@@ -64,16 +75,16 @@ public class SendFriendRequestTests {
         var username = "a";
         var usernames = new ArrayList<String>() {{ add(username); }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
-        Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
+
+        WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
-        Assume.assumeTrue(robot.lookup("#send").tryQuery().isPresent());
 
         WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
 
-        Assert.assertThat(argument.getAllValues().get(2).getFriendUsername(), is(username));
+        Assert.assertEquals(argument.getAllValues().get(2).getFriendUsername(), username);
     }
 
     @Test
@@ -82,21 +93,17 @@ public class SendFriendRequestTests {
         var usernames = new ArrayList<String>() {{ add(username); }};
         var message = "Do you want to build a snowman?";
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
-        Assume.assumeNotNull(robot.clickOn("#UniqueSearchContact"));
+
+        WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
 
-        Node messageField = robot.lookup("#message").tryQuery().orElse(null);
-        Assume.assumeNotNull(messageField);
-        WaitForFXEventsTestHelper.clickOnAndWrite(robot, messageField, message);
-
-        Assume.assumeTrue(robot.lookup("#send").tryQuery().isPresent());
-
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#message", message);
         WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
 
-        Assert.assertThat(argument.getAllValues().get(2).getMessage().getData(), is(message));
+        Assert.assertEquals(argument.getAllValues().get(2).getMessage().getData(), message);
     }
 
     @Start

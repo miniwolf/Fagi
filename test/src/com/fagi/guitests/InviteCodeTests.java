@@ -9,7 +9,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
-import javafx.scene.Node;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -19,7 +19,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -31,6 +33,7 @@ public class InviteCodeTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting InviteCodeTests");
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
     }
 
     @Test
@@ -40,19 +43,22 @@ public class InviteCodeTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#inviteCode", "41");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-
         Assertions.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
-        Assertions.assertEquals("Error: Illegal invite code. Contact host", messageLabel.getText());
+
+        FxAssert.verifyThat(
+                "#messageLabel",
+                (Label messageLabel) -> messageLabel.getText().equals("Error: Illegal invite code. Contact host")
+        );
     }
 
     @Test
     public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-
-        Assertions.assertEquals("Invite code cannot be empty", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                (Label messageLabel) -> messageLabel.getText().equals("Invite code cannot be empty")
+        );
     }
 
     @Test

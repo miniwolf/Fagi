@@ -10,21 +10,24 @@ import com.fagi.network.Communication;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
 import com.fagi.responses.UserOnline;
-import javafx.scene.Node;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.matcher.control.LabeledMatchers;
+import org.testfx.matcher.control.TextInputControlMatchers;
+import org.testfx.util.WaitForAsyncUtils;
 
 @ExtendWith(ApplicationExtension.class)
 public class LoginTests {
@@ -34,20 +37,24 @@ public class LoginTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting login tests");
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
     }
 
     @Test
     public void WhenFocusedOnFieldAndTyping_TextIsContainedInFields(FxRobot robot) {
         var testText = "ThisTextShould Exist";
-        TextField usernameField = robot.lookup("#username").query();
-        WaitForFXEventsTestHelper.clickOnAndWrite(robot, usernameField, testText);
 
-        Assertions.assertEquals(testText, usernameField.getText());
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", testText);
 
-        PasswordField passwordField = robot.lookup("#password").query();
-        WaitForFXEventsTestHelper.clickOnAndWrite(robot, passwordField, testText);
+        FxAssert.verifyThat(
+                "#username",
+                TextInputControlMatchers.hasText(testText));
 
-        Assertions.assertEquals(testText, passwordField.getText());
+        WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", testText);
+
+        FxAssert.verifyThat(
+                "#password",
+                TextInputControlMatchers.hasText(testText));
     }
 
     @Test
@@ -58,8 +65,9 @@ public class LoginTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-        Assertions.assertEquals("Wrong password", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                LabeledMatchers.hasText("Wrong password"));
     }
 
     @Test
@@ -70,8 +78,9 @@ public class LoginTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-        Assertions.assertEquals("User doesn't exist", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                LabeledMatchers.hasText("User doesn't exist"));
     }
 
     @Test
@@ -82,31 +91,31 @@ public class LoginTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-        Assertions.assertEquals("You are already online", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                LabeledMatchers.hasText("You are already online"));
     }
 
     @Test
     public void WhenCallingSetMessageLabel_NewMessageShouldAppear(FxRobot robot) {
         masterLogin.setMessageLabel("Connection refused");
+        WaitForAsyncUtils.waitForFxEvents();
 
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Label messageLabel = robot.lookup("#messageLabel").query();
-        Assertions.assertEquals("Connection refused", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                LabeledMatchers.hasText("Connection refused"));
     }
 
     @Test
     public void WhenClickingOnCreateNewUser_ShowCreateUsernameScreen(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOn(robot, "#newAccount");
 
-        Assertions.assertEquals(LoginState.USERNAME, masterLogin.getState());
-        Assertions.assertTrue(
-                robot.lookup("#UniqueCreateUsernameView").tryQuery().isPresent(),
-                "Should switch to Create Username View.");
+        Assumptions.assumeTrue(LoginState.USERNAME.equals(masterLogin.getState()));
+        FxAssert.verifyThat(
+                "#UniqueCreateUsernameView",
+                NodeMatchers.isNotNull(),
+                builder -> builder.append("Should switch to Create Username View.")
+        );
     }
 
     @Start

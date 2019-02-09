@@ -9,6 +9,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserExists;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,9 +20,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.base.NodeMatchers;
 
 @ExtendWith(ApplicationExtension.class)
 public class CreateUserNameTests {
@@ -31,15 +35,17 @@ public class CreateUserNameTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting CreateUserNameTests");
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
     }
 
     @Test
     public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-
-        Assertions.assertEquals("Username cannot be empty", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                (Label messageLabel) -> messageLabel.getText().equals("Username cannot be empty")
+        );
     }
 
     @Test
@@ -49,9 +55,10 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "DinMor");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-
-        Assertions.assertEquals("Username is not available", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                (Label messageLabel) -> messageLabel.getText().equals("Username is not available")
+        );
     }
 
     @Test
@@ -59,9 +66,10 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "Din Mor");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        Label messageLabel = robot.lookup("#messageLabel").query();
-
-        Assertions.assertEquals("Username may not contain special symbols", messageLabel.getText());
+        FxAssert.verifyThat(
+                "#messageLabel",
+                (Label messageLabel) -> messageLabel.getText().equals("Username may not contain special symbols")
+        );
     }
 
     @Test
@@ -72,7 +80,10 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.PASSWORD, masterLogin.getState());
-        Assertions.assertNotNull(robot.lookup("#passwordRepeat"));
+        FxAssert.verifyThat(
+                "#passwordRepeat",
+                NodeMatchers.isNotNull()
+        );
     }
 
     @Test
@@ -80,7 +91,10 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
         WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
 
-        Assertions.assertNotNull(robot.lookup("#UniqueLoginScreen").query());
+        FxAssert.verifyThat(
+                "#UniqueLoginScreen",
+                NodeMatchers.isNotNull()
+        );
     }
 
     @Test
@@ -89,9 +103,10 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
         WaitForFXEventsTestHelper.clickOn(robot, "#newAccount");
 
-        TextField usernameTextField = robot.lookup("#username").query();
-
-        Assertions.assertNull(usernameTextField.getText());
+        FxAssert.verifyThat(
+                "#username",
+                (TextField usernameTextField) -> usernameTextField.getText() == null
+        );
     }
 
     @Test
@@ -102,9 +117,10 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
         WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
 
-        TextField usernameTextField = robot.lookup("#username").query();
-
-        Assertions.assertNotNull(usernameTextField.getText());
+        FxAssert.verifyThat(
+                "#username",
+                (TextField usernameTextField) -> usernameTextField.getText() != null
+        );
     }
 
     @Start
