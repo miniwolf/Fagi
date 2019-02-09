@@ -15,8 +15,6 @@ matrix:
         - set -e
         - ./build_osx.sh javac
         - ./run_osx.sh java
-  allow_failures:
-    - os: osx
 
 jdk: openjdk11
 notifications:
