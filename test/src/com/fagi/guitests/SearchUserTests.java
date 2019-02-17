@@ -276,11 +276,13 @@ public class SearchUserTests {
         Label label4 = robot.from(contactNodes.get(3)).lookup("#userName").query();
         Label label5 = robot.from(contactNodes.get(4)).lookup("#userName").query();
 
-        FxAssert.verifyThat(label1, LabeledMatchers.hasText(username1));
-        FxAssert.verifyThat(label2, LabeledMatchers.hasText(username2));
-        FxAssert.verifyThat(label3, LabeledMatchers.hasText(username3));
-        FxAssert.verifyThat(label4, LabeledMatchers.hasText(username4));
-        FxAssert.verifyThat(label5, LabeledMatchers.hasText(username5));
+        Assertions.assertAll(
+                () -> FxAssert.verifyThat(label1, LabeledMatchers.hasText(username1)),
+                () -> FxAssert.verifyThat(label2, LabeledMatchers.hasText(username2)),
+                () -> FxAssert.verifyThat(label3, LabeledMatchers.hasText(username3)),
+                () -> FxAssert.verifyThat(label4, LabeledMatchers.hasText(username4)),
+                () -> FxAssert.verifyThat(label5, LabeledMatchers.hasText(username5))
+        );
     }
 
     @Start

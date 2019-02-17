@@ -31,8 +31,7 @@ import java.util.stream.Collectors;
 public class ConversationController extends BorderPane {
     @FXML private Label name;
     @FXML private Label date;
-    @FXML
-    private TextArea conversationTextarea;
+    @FXML private TextArea conversationTextarea;
     @FXML private VBox chat;
     @FXML private ScrollPane scroller;
 
