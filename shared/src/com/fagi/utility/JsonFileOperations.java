@@ -44,7 +44,9 @@ public class JsonFileOperations {
         T res = null;
         try {
             File file = new File(fileName);
-            if (!file.exists()) return null;
+            if (!file.exists()) {
+                return null;
+            }
 
             StringBuilder json = new StringBuilder();
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -66,13 +68,22 @@ public class JsonFileOperations {
         List<T> res = new CopyOnWriteArrayList<>();
 
         File folder = new File(folderName);
-        if (!folder.exists()) return res;
+        if (!folder.exists()) {
+            return res;
+        }
 
         File[] files = folder.listFiles();
-        if (files == null) return res;
+        if (files == null) {
+            return res;
+        }
 
         for (File file : files) {
-            res.add(loadObjectFromFile(file.getAbsolutePath(), clazz));
+            var loadedObj = loadObjectFromFile(file.getAbsolutePath(), clazz);
+            if (loadedObj == null) {
+                System.err.println("Warning: We were about to add null due to this file path: " + file.getAbsolutePath());
+                continue;
+            }
+            res.add(loadedObj);
         }
 
         return res;

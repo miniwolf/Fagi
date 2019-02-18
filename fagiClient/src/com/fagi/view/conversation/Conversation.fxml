@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root styleClass="message" stylesheets="@../../style/conversation.css" type="BorderPane"
+<fx:root fx:id="UniqueConversation" styleClass="message" stylesheets="@../../style/conversation.css" type="BorderPane"
          xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <VBox>
@@ -63,7 +63,7 @@
         <Pane minWidth="-Infinity" prefWidth="400.0" styleClass="outline, field">
             <Button layoutX="8.0" layoutY="8.0" styleClass="icon, smiley" visible="false"/>
             <Pane layoutX="28.0" styleClass="area">
-                <TextArea fx:id="message" layoutY="1.0" promptText="Send a message"
+                <TextArea fx:id="conversationTextarea" layoutY="1.0" promptText="Send a message"
                           styleClass="text, persistent-prompt"/>
             </Pane>
         </Pane>

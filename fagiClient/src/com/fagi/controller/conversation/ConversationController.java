@@ -9,21 +9,21 @@ import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
-
-import java.util.Date;
-import java.util.stream.Collectors;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * @author miniwolf
@@ -31,7 +31,7 @@ import javafx.stage.Stage;
 public class ConversationController extends BorderPane {
     @FXML private Label name;
     @FXML private Label date;
-    @FXML private TextArea message;
+    @FXML private TextArea conversationTextarea;
     @FXML private VBox chat;
     @FXML private ScrollPane scroller;
 
@@ -66,13 +66,7 @@ public class ConversationController extends BorderPane {
         }
         date.setText(dateString);
 
-        message.setOnKeyPressed(event -> {
-            if (!event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
-                sendMessage();
-                message.setText("");
-                event.consume();
-            }
-        });
+        conversationTextarea.setOnKeyPressed(this::handleEnterBehaviour);
 
         fillChat();
 
@@ -81,9 +75,26 @@ public class ConversationController extends BorderPane {
                                                      && !isInternalScroll);
     }
 
+    private void handleEnterBehaviour(KeyEvent event) {
+        if (event.getCode() != KeyCode.ENTER) {
+            return;
+        }
+
+        if (!event.isShiftDown()) {
+            sendMessage();
+            conversationTextarea.setText("");
+        } else {
+            conversationTextarea.setText(conversationTextarea.getText() + "\n");
+            conversationTextarea.positionCaret(conversationTextarea.getText().length());
+        }
+        event.consume();
+    }
+
     private void sendMessage() {
-        TextMessage textMessage = new TextMessage(message.getText(), username,
-                                                  conversation.getId());
+        TextMessage textMessage = new TextMessage(
+                conversationTextarea.getText(),
+                username,
+                conversation.getId());
         communication.sendObject(textMessage);
     }
 

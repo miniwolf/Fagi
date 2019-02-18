@@ -10,7 +10,9 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<fx:root layoutX="10.0" layoutY="10.0" styleClass="holder, me" stylesheets="@../../style/conversation.css" type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root xmlns:fx="http://javafx.com/fxml/1" fx:id="UniqueMyMessage" layoutX="10.0" layoutY="10.0"
+         styleClass="holder, me" stylesheets="@../../style/conversation.css" type="HBox"
+         xmlns="http://javafx.com/javafx/8.0.111">
     <Pane HBox.hgrow="ALWAYS" />
    <TextArea fx:id="message" editable="false" prefColumnCount="0" prefRowCount="0" styleClass="text-message" wrapText="true" />
     <Pane maxHeight="-Infinity" styleClass="tip">

@@ -3,57 +3,61 @@ package com.fagi.guitests;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
+import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.responses.AllIsWell;
-import javafx.scene.Node;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
-import org.testfx.api.FxToolkit;
+import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-
-import java.util.concurrent.TimeoutException;
+import org.testfx.matcher.base.NodeMatchers;
 
 @ExtendWith(ApplicationExtension.class)
 public class SignOutTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting SignOutTests");
-        try {
-            FxToolkit.registerPrimaryStage();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
+        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
     }
 
     @Test
     public void clickOnToggleSignOut_WillChangeVisibilityOnDropdownId(FxRobot robot) {
-        var signOutPane = robot.lookup("#dropdown").query();
-        Assertions.assertFalse(signOutPane.isVisible());
-        var toggleSignOut = robot.lookup(".gb_b").query();
-        robot.clickOn(toggleSignOut);
-        Assertions.assertTrue(signOutPane.isVisible());
-        robot.clickOn(toggleSignOut);
-        Assertions.assertFalse(signOutPane.isVisible());
+        FxAssert.verifyThat(
+                "#dropdown",
+                NodeMatchers.isInvisible());
+
+        WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
+        FxAssert.verifyThat(
+                "#dropdown",
+                NodeMatchers.isVisible());
+
+        WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
+        FxAssert.verifyThat(
+                "#dropdown",
+                NodeMatchers.isInvisible());
     }
 
     @Test
     public void clickOnSignOut_WillStartTheLoginScreen(FxRobot robot) {
-        robot.clickOn(".gb_b");
-        robot.clickOn(".gb_Fa");
+        WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
+        WaitForFXEventsTestHelper.clickOn(robot, ".gb_Fa");
 
-        Assertions.assertTrue(
-                robot.lookup("#UniqueLoginScreen").tryQuery().isPresent(),
-                "Should got to the login screen view.");
+        FxAssert.verifyThat(
+                "#UniqueLoginScreen",
+                NodeMatchers.isNotNull(),
+                builder -> builder.append("Should got to the login screen view.")
+        );
     }
 
     @Start
