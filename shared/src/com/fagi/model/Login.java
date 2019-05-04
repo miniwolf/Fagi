@@ -8,8 +8,8 @@ package com.fagi.model;/*
 import java.io.Serializable;
 
 public class Login implements Serializable {
-    private final String username;
-    private final String password;
+    private String username;
+    private String password;
 
     public Login(String username, String password) {
         this.username = username;
@@ -22,5 +22,13 @@ public class Login implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

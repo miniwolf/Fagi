@@ -4,7 +4,7 @@
 
 package com.fagi.controller.conversation;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
@@ -50,7 +50,7 @@ public class ConversationController extends BorderPane {
         this.username = username;
         this.communication = mainScreen.getCommunication();
         this.primaryStage = mainScreen.getPrimaryStage();
-        new LoadFXML(this, "/com/fagi/view/conversation/Conversation.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/conversation/Conversation.fxml").execute();
     }
 
     @FXML

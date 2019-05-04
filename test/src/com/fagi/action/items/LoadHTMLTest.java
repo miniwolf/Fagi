@@ -14,8 +14,8 @@ import rules.JavaFXThreadingExtension;
  * Created by miniwolf on 01-04-2017.
  */
 @ExtendWith(JavaFXThreadingExtension.class)
-public class LoadFXMLTest {
-    private LoadFXML loadFXML;
+public class LoadHTMLTest {
+    private LoadHTML loadHTML;
     private ConversationController mock;
 
     @BeforeEach
@@ -23,12 +23,12 @@ public class LoadFXMLTest {
         System.out.println("Starting LoadFXMLtests");
         var mainScreen = Mockito.mock(MainScreen.class);
         this.mock = new ConversationController(mainScreen, new Conversation(), "");
-        loadFXML = new LoadFXML(this.mock, "/com/fagi/view/conversation/Conversation.fxml");
+        loadHTML = new LoadHTML(this.mock, engine, "/com/fagi/view/conversation/Conversation.fxml");
     }
 
     @Test
     public void test() {
-        loadFXML.execute();
+        loadHTML.execute();
         Assertions.assertNotNull(mock.getCenter(), "Should contain center element");
     }
 }

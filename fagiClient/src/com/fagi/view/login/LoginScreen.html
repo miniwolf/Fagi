@@ -18,31 +18,40 @@
                         with your Fagi Account
                     </div>
                 </div>
-                <div class="pwWryf outermargin">
-                    <div class="Wxwduf ContentBorder ">
-                        <div class="WEQkZc bCAAsb">
+                <div class="outermargintransition outermargin">
+                    <div class="ContentWidth ContentBorder ">
+                        <div class="LoginWrapper bCAAsb">
                             <form method="post">
-                                <div class="dMArKd outermargin outerpadding">
-                                    <div class="">
-                                        <div class="InnerWidth KSczvd uyaebd vHVGub  PaddingTopFix PaddingBottomFix">
-                                            <div class="UsernameHeight oJeWuf">
-                                                <div class="FlexDisplay PositionFix FlexFix">
-                                                    <input autocapitalize="none" autocomplete="username" class="TextInputField TextInputBorder" dir="ltr" id="identifierId" spellcheck="false" tabindex="0" type="email"/>
-                                                    <div class="TextWrapperStyling TextWrapper">Username</div>
-                                                </div>
-                                                <div class="i9lrp mIZh1c"></div>
+                                <div class="formmarginfix outermargin outerpadding">
+                                    <div class="InnerWidth KSczvd uyaebd vHVGub PaddingTopFix PaddingBottomFix" id="username">
+                                        <div class="UsernameHeight oJeWuf">
+                                            <div class="FlexDisplay PositionFix FlexFix">
+                                                <input autocapitalize="none" autocomplete="username" class="TextInputField TextInputBorder" dir="ltr" id="identifierId" onfocusout="app.checkUsername(this.value)" spellcheck="false" tabindex="0" type="text"/>
+                                                <div class="TextWrapperStyling TextWrapper">Username</div>
                                             </div>
+                                            <div class="i9lrp mIZh1c"></div>
+                                        </div>
+                                        <div class="LXRPh">
+                                            <div class="ovnfwe Is7Fhb" id="usernameLabel">You can use letters, numbers &amp; periods</div>
+<!--                                            <div class="dEOOab RxsGPe">-->
+<!--                                                <div class="GQ8Pzc">-->
+<!--                                                    <span class="TQGan">-->
+<!--                                                        <svg focusable="false" width="16px" height="16px" viewBox="0 0 24 24" fill="currentColor">-->
+<!--                                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>-->
+<!--                                                            <path d="M0 0h24v24H0z" fill="none"></path>-->
+<!--                                                        </svg>-->
+<!--                                                    </span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
                                         </div>
                                     </div>
-                                    <div class="">
-                                        <div class="InnerWidth KSczvd uyaebd vHVGub  PaddingTopFix PaddingBottomFix">
-                                            <div class="UsernameHeight oJeWuf">
-                                                <div class="FlexDisplay PositionFix FlexFix">
-                                                    <input class="TextInputField TextInputBorder" name="hiddenPassword" spellcheck="false" tabindex="-1" type="password"/>
-                                                    <div class="TextWrapperStyling TextWrapper">Password</div>
-                                                </div>
-                                                <div class="i9lrp mIZh1c"></div>
+                                    <div class="InnerWidth KSczvd uyaebd vHVGub  PaddingTopFix PaddingBottomFix">
+                                        <div class="UsernameHeight oJeWuf">
+                                            <div class="FlexDisplay PositionFix FlexFix">
+                                                <input class="TextInputField TextInputBorder" id="identifierHiddenPassword" spellcheck="false" tabindex="-1" type="password"/>
+                                                <div class="TextWrapperStyling TextWrapper">Password</div>
                                             </div>
+                                            <div class="i9lrp mIZh1c"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -51,7 +60,7 @@
                         <div class="zQJV3">
                             <div class="dG5hZc">
                                 <div class="qhFLie">
-                                    <div class="U26fgb O0WRkf zZhnYe e3Duub C0oVfc nDKKZc DL0QTb" id="identifierNext" role="button" tabindex="0">
+                                    <div class="U26fgb O0WRkf zZhnYe e3Duub C0oVfc nDKKZc DL0QTb" id="identifierNext" onclick="app.handleLogin()" role="button" tabindex="0">
                                         <div class="ZFr60d CeoRYc"></div>
                                         <span class="RveJvd TextWrapper">Login</span>
                                     </div>

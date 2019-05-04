@@ -101,20 +101,7 @@ public class ChatManager {
         return Integer.valueOf(inviteCode);
     }
 
-    /**
-     * Checks if a given username is available.
-     *
-     * @param username username from the CreateUserNameScreen
-     * @return true if the username is available
-     */
-    public static boolean checkIfUserNameIsAvailable(String username) {
-        UserNameAvailableRequest request = new UserNameAvailableRequest(username);
 
-        communication.sendObject(request);
-        Response response = communication.getNextResponse();
-
-        return response instanceof AllIsWell;
-    }
 
     public static void setCommunication(Communication communication) {
         ChatManager.communication = communication;

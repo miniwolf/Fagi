@@ -2,7 +2,7 @@ package com.fagi.controller.contentList;
 
 import com.fagi.action.Actionable;
 import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -23,7 +23,7 @@ public class ContactItemController extends HBox {
     private final Actionable actionable = new ActionableImpl();
 
     public ContactItemController() {
-        new LoadFXML(this, "/com/fagi/view/content/Contact.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/content/Contact.fxml").execute();
     }
 
     @FXML

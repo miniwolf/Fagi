@@ -4,7 +4,7 @@
 
 package com.fagi.controller.login;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.network.ChatManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -19,7 +19,7 @@ public class InviteCodeController extends DefaultLoginController {
 
     public InviteCodeController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
-        new LoadFXML(this, "/com/fagi/view/login/InviteCode.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/login/InviteCode.fxml").execute();
     }
 
     @FXML

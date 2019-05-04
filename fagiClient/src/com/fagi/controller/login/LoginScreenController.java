@@ -4,12 +4,15 @@
 
 package com.fagi.controller.login;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
+import com.fagi.controller.MissingElement;
+import com.fagi.login.CheckUsername;
 import com.fagi.login.LoginResultHandler;
 import com.fagi.login.LoginSystem;
 import com.fagi.model.Login;
 import com.fagi.network.Communication;
 import com.fagi.responses.Response;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -20,6 +23,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import netscape.javascript.JSObject;
+import org.w3c.dom.Element;
+import org.w3c.dom.events.EventTarget;
+
+import java.net.URL;
+import java.util.function.Function;
 
 /**
  * Handles the login screen. Here it is possible to start creation process
@@ -28,40 +38,58 @@ import javafx.scene.layout.Pane;
  * @author miniwolf
  */
 public class LoginScreenController extends Pane implements LoginController {
-    @FXML Label messageLabel;
-    @FXML TextField username;
-    @FXML PasswordField password;
-    @FXML Button loginBtn;
+    private static final String resourcePath = "/com/fagi/view/login/LoginScreen.html";
+    Label messageLabel;
+    Element username;
     private MasterLogin masterLogin;
     private final Communication communication;
+    Element password;
+    private WebEngine engine;
 
-    public LoginScreenController(MasterLogin masterLogin, Communication communication) {
+    public LoginScreenController(
+            MasterLogin masterLogin,
+            Communication communication) {
         this.masterLogin = masterLogin;
         this.communication = communication;
-        new LoadFXML(this, "/com/fagi/view/login/LoginScreen.fxml").execute();
     }
 
-    @FXML
-    private void initialize() {
-        username.setText(masterLogin.getUsername());
-        password.setText(masterLogin.getPassword());
-        assignToLogin(username);
-        assignToLogin(password);
-    }
+    private void initialize(WebEngine engine) throws MissingElement {
+        this.engine = engine;
 
-    private void assignToLogin(Node node) {
-        node.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                handleLogin();
+        new LoadHTML(this, engine, resourcePath).execute();
+
+        engine.getLoadWorker().stateProperty().addListener((observableValue, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                var document = engine.getDocument();
+                username = document.getElementById("identifierId");
+                password = document.getElementById("identifierHiddenPassword");
             }
         });
+        if (username == null) {
+            throw new MissingElement("identifierId", resourcePath);
+        }
+        username.setTextContent(masterLogin.getLogin().getUsername());
+        if (password == null) {
+            throw new MissingElement("identifierHiddenPassword", resourcePath);
+        }
+        password.setTextContent(masterLogin.getLogin().getPassword());
     }
 
-    @FXML
-    private void handleLogin() {
-        Login data = new Login(username.getText(), password.getText());
+    public void handleLogin() {
+        Login data = new Login(username.getTextContent(), password.getTextContent());
+        masterLogin.setLogin(data);
         Response loginResponse = new LoginSystem(communication).login(data);
         new LoginResultHandler(communication).handle(loginResponse, data.getUsername(), messageLabel);
+    }
+
+    public void checkUsername(String username) {
+        var result = new CheckUsername(username, communication).checkValidUsername();
+        switch (result) {
+            case Valid:
+
+                break;
+            default:
+        }
     }
 
     @Override

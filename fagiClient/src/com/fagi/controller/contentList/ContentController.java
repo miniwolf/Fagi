@@ -4,7 +4,7 @@
 
 package com.fagi.controller.contentList;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.uimodel.FriendListItem;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class ContentController extends VBox {
     public ContentController(String resource) {
-        new LoadFXML(this, resource).execute();
+        new LoadHTML(this, engine, resource).execute();
     }
 
     public synchronized void addToContentList(Parent parent) {

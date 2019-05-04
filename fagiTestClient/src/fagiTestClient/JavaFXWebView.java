@@ -21,11 +21,10 @@ public class JavaFXWebView extends Application
         // Create the WebView
         WebView webView = new WebView();
 
-        // Create the WebEngine
         final WebEngine webEngine = webView.getEngine();
+        LoginSystem.initialize(webEngine);
 
-        // LOad the Start-Page
-        webEngine.load("http://www.oracle.com");
+        // Load the Start-Page
 
         // Update the stage title when a new web page title is available
         webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
@@ -40,14 +39,6 @@ public class JavaFXWebView extends Application
         VBox root = new VBox();
         // Add the WebView to the VBox
         root.getChildren().add(webView);
-
-        // Set the Style-properties of the VBox
-        root.setStyle("-fx-padding: 10;" +
-                "-fx-border-style: solid inside;" +
-                "-fx-border-width: 2;" +
-                "-fx-border-insets: 5;" +
-                "-fx-border-radius: 5;" +
-                "-fx-border-color: blue;");
 
         // Create the Scene
         Scene scene = new Scene(root);

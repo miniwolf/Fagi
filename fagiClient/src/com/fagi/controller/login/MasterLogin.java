@@ -7,12 +7,14 @@ package com.fagi.controller.login;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
 import com.fagi.main.FagiApp;
+import com.fagi.model.Login;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 
 /**
@@ -25,10 +27,10 @@ public class MasterLogin {
     private final Communication communication;
     private final Draggable draggable;
     private final Stage stage;
+    private WebEngine webEngine;
     private LoginController controller;
     private LoginState state = LoginState.LOGIN;
-    private String password;
-    private String username;
+    private Login login;
     private String messageLabel;
 
     /**
@@ -37,11 +39,17 @@ public class MasterLogin {
      * @param fagiApp   FagiApp used to login
      * @param draggable Passes the draggable from the stage
      */
-    public MasterLogin(FagiApp fagiApp, Communication communication, Stage stage, Draggable draggable) {
+    public MasterLogin(
+            FagiApp fagiApp,
+            Communication communication,
+            Stage stage,
+            Draggable draggable,
+            WebEngine webEngine) {
         this.fagiApp = fagiApp;
         this.communication = communication;
         this.draggable = draggable;
         this.stage = stage;
+        this.webEngine = webEngine;
     }
 
     public void showMasterLoginScreen() {
@@ -125,38 +133,22 @@ public class MasterLogin {
     }
 
     private void showScreen(LoginState screen) {
-        if (!setupController(screen)) {
-            return;
-        }
-        updateRoot();
+        setupController(screen);
+        controller.initialize();
         controller.setMessage(messageLabel);
     }
 
-    public void updateRoot() {
-        stage.getScene().setRoot(controller.getParentNode());
-    }
-
-    private boolean setupController(LoginState screen) {
-        // TODO: Rewrite this into proper interface usage
-        LoginController controller;
+    private void setupController(LoginState screen) {
         switch (screen) {
             case LOGIN:
-                controller = new LoginScreenController(this, communication);
+                this.controller = new LoginScreenController(this, communication);
                 break;
-            case USERNAME:
-                controller = new CreateUserNameController(this);
-                break;
-            case PASSWORD:
-                controller = new CreatePasswordController(this);
-                break;
-            case INVITE_CODE:
-                controller = new InviteCodeController(this);
+            case CREATE_USER:
+                this.controller = new CreateUserController(this);
                 break;
             default:
-                return false;
+                throw new InvalidLoginState();
         }
-        this.controller = controller;
-        return true;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
@@ -167,24 +159,16 @@ public class MasterLogin {
         draggable.mouseDragged(mouseEvent);
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login data) {
+        login = data;
     }
 
     public LoginController getController() {
         return controller;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setMessageLabel(String messageLabel) {

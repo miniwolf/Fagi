@@ -2,7 +2,7 @@ package com.fagi.controller.contentList;
 
 import com.fagi.action.Actionable;
 import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.message.TextMessage;
@@ -36,7 +36,7 @@ public class MessageItemController extends HBox {
         this.username = username;
         this.ID = ID;
 
-        new LoadFXML(this, "/com/fagi/view/content/ConversationItem.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/content/ConversationItem.fxml").execute();
         getStyleClass().add("contact");
     }
 

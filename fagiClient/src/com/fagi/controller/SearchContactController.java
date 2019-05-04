@@ -2,7 +2,7 @@ package com.fagi.controller;
 
 import com.fagi.action.Actionable;
 import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.action.items.OpenConversation;
 import com.fagi.action.items.OpenInvitation;
 import javafx.fxml.FXML;
@@ -27,7 +27,7 @@ public class SearchContactController extends HBox {
         this.isFriend = isFriend;
         this.mainScreen = mainScreen;
 
-        new LoadFXML(this, "/com/fagi/view/content/SearchContact.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/content/SearchContact.fxml").execute();
         var image = new Image(
                 "/com/fagi/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
                 32,

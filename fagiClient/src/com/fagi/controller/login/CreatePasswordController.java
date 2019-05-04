@@ -4,7 +4,7 @@
 
 package com.fagi.controller.login;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 
@@ -19,7 +19,7 @@ public class CreatePasswordController extends DefaultLoginController {
 
     public CreatePasswordController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
-        new LoadFXML(this, "/com/fagi/view/login/CreatePassword.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/login/CreatePassword.fxml").execute();
     }
 
     @FXML

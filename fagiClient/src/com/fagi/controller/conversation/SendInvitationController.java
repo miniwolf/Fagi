@@ -4,7 +4,7 @@ import com.fagi.action.Action;
 import com.fagi.action.ActionContainer;
 import com.fagi.action.Actionable;
 import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.action.items.SendInvitation;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.messages.message.TextMessage;
@@ -28,7 +28,7 @@ public class SendInvitationController extends BorderPane implements ActionContai
 
     public SendInvitationController(MainScreen mainScreen, String username) {
         this.mainScreen = mainScreen;
-        new LoadFXML(this, "/com/fagi/view/conversation/Invitation.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/conversation/Invitation.fxml").execute();
         setUsername(username);
     }
 

@@ -7,7 +7,7 @@
 
 package com.fagi.controller;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.action.items.OpenConversationFromID;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.contentList.MessageItemController;
@@ -120,7 +120,7 @@ public class MainScreen extends Pane {
         this.primaryStage = primaryStage;
         this.friendMapWrapper = new FriendMapWrapper(this);
 
-        new LoadFXML(this, "/com/fagi/view/Main.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/Main.fxml").execute();
     }
 
     /**

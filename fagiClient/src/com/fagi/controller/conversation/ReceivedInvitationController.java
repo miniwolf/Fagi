@@ -1,6 +1,6 @@
 package com.fagi.controller.conversation;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.DeleteFriendRequest;
 import com.fagi.model.FriendRequest;
@@ -30,7 +30,7 @@ public class ReceivedInvitationController extends BorderPane {
         this.communication = mainScreen.getCommunication();
         this.mainScreen = mainScreen;
 
-        new LoadFXML(this, "/com/fagi/view/conversation/ReceivedInvitation.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/conversation/ReceivedInvitation.fxml").execute();
 
         char uChar = Character.toUpperCase(request.getMessage().getMessageInfo().getSender()
                                                   .toCharArray()[0]);

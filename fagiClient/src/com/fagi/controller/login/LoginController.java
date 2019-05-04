@@ -4,6 +4,7 @@
 
 package com.fagi.controller.login;
 
+import com.fagi.controller.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -14,7 +15,7 @@ import javafx.scene.input.MouseEvent;
  *
  * @author miniwolf
  */
-public interface LoginController {
+public interface LoginController extends Controller {
     @FXML
     void next();
 

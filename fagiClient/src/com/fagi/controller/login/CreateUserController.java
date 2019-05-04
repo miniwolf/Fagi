@@ -4,7 +4,7 @@
 
 package com.fagi.controller.login;
 
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.items.LoadHTML;
 import com.fagi.network.ChatManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,12 +16,12 @@ import javafx.scene.control.TextField;
  *
  * @author miniwolf
  */
-public class CreateUserNameController extends DefaultLoginController {
+public class CreateUserController extends DefaultLoginController {
     @FXML private TextField username;
 
-    public CreateUserNameController(MasterLogin masterLogin) {
+    public CreateUserController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
-        new LoadFXML(this, "/com/fagi/view/login/CreateUserName.fxml").execute();
+        new LoadHTML(this, engine, "/com/fagi/view/login/CreateUserName.fxml").execute();
     }
 
     @FXML
