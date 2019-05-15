@@ -1,0 +1,12 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+            resources.srcDir 'resources'
+        }
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

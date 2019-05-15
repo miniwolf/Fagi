@@ -1,0 +1,14 @@
+allprojects {
+    group 'com.fagi'
+    version '1.0-snapshot'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 1.11
+}
