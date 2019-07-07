@@ -1,16 +1,23 @@
 plugins {
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
 }
 
-mainClassName = 'com.fagi.Main'
+mainClassName = 'com.fagi.main.FagiApp'
 
 sourceSets {
     main {
         java {
             srcDir 'src'
-            resources.srcDir 'resources'
+            exclude 'src/com/fagi/view'
+            resources.srcDirs = ['resources','src/com/fagi/view']
         }
     }
+}
+
+javafx {
+    version = "11"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {
