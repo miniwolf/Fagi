@@ -50,7 +50,7 @@ public class ConversationController extends BorderPane {
         this.username = username;
         this.communication = mainScreen.getCommunication();
         this.primaryStage = mainScreen.getPrimaryStage();
-        new LoadFXML(this, "/com/fagi/view/conversation/Conversation.fxml").execute();
+        new LoadFXML(this, "/view/conversation/Conversation.fxml").execute();
     }
 
     @FXML
@@ -143,11 +143,11 @@ public class ConversationController extends BorderPane {
     }
 
     private HBox getBox(String message) {
-        return new MessageController(message, "/com/fagi/view/conversation/MyMessage.fxml");
+        return new MessageController(message, "/view/conversation/MyMessage.fxml");
     }
 
     private HBox getBox(String message, String username) {
-        return new MessageController(message, "/com/fagi/view/conversation/TheirMessage.fxml",
+        return new MessageController(message, "/view/conversation/TheirMessage.fxml",
                                      username);
     }
 

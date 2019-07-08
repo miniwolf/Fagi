@@ -26,7 +26,7 @@ public class FriendRequestHandler implements Handler {
         mainScreen.setFriendRequestList(friendRequestList);
 
         ContentController contentController =
-            new ContentController("/com/fagi/view/content/ContentList.fxml");
+            new ContentController("/view/content/ContentList.fxml");
 
         for (FriendRequest request : friendRequestList.getAccess().getData()) {
             MessageItemController messageItemController =

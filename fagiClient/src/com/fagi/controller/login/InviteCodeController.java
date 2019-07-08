@@ -19,7 +19,7 @@ public class InviteCodeController extends DefaultLoginController {
 
     public InviteCodeController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
-        new LoadFXML(this, "/com/fagi/view/login/InviteCode.fxml").execute();
+        new LoadFXML(this, "/view/login/InviteCode.fxml").execute();
     }
 
     @FXML

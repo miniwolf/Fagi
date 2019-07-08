@@ -120,7 +120,7 @@ public class MainScreen extends Pane {
         this.primaryStage = primaryStage;
         this.friendMapWrapper = new FriendMapWrapper(this);
 
-        new LoadFXML(this, "/com/fagi/view/Main.fxml").execute();
+        new LoadFXML(this, "/view/Main.fxml").execute();
     }
 
     /**
@@ -157,14 +157,14 @@ public class MainScreen extends Pane {
         username.setText(usernameString);
         char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
         Image tiny = new Image(
-                "/com/fagi/style/material-icons/" + cUpper + ".png",
+                "/style/material-icons/" + cUpper + ".png",
                 40,
                 40,
                 true,
                 true);
         this.tinyIcon.setImage(tiny);
         Image large = new Image(
-                "/com/fagi/style/material-icons/" + cUpper + ".png",
+                "/style/material-icons/" + cUpper + ".png",
                 96,
                 96,
                 true,
@@ -357,13 +357,13 @@ public class MainScreen extends Pane {
 
     private void setupContactList() {
         ContentController contactContentController =
-                new ContentController("/com/fagi/view/content/ContentList.fxml");
+                new ContentController("/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Contacts, contactContentController);
     }
 
     private synchronized void setupConversationList() {
         conversationContentController =
-                new ContentController("/com/fagi/view/content/ContentList.fxml");
+                new ContentController("/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Messages, conversationContentController);
 
         messageItems.forEach(MessageItemController::stopTimer);

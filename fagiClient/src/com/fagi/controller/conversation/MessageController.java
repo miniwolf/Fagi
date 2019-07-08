@@ -28,7 +28,7 @@ public class MessageController extends HBox {
         this.stringMessage = stringMessage;
         new LoadFXML(this, resource).execute();
         var image = new Image(
-                "/com/fagi/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
+                "/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
                 32,
                 32,
                 true,

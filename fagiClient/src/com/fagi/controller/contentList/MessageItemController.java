@@ -36,7 +36,7 @@ public class MessageItemController extends HBox {
         this.username = username;
         this.ID = ID;
 
-        new LoadFXML(this, "/com/fagi/view/content/ConversationItem.fxml").execute();
+        new LoadFXML(this, "/view/content/ConversationItem.fxml").execute();
         getStyleClass().add("contact");
     }
 
@@ -115,7 +115,7 @@ public class MessageItemController extends HBox {
                                                .collect(Collectors.toList());
         this.usernameLabel.setText(String.join(", ", meExcludedList));
         Image image = new Image(
-                "/com/fagi/style/material-icons/" + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0]) + ".png",
+                "/style/material-icons/" + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0]) + ".png",
                 46,
                 46,
                 true,

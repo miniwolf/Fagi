@@ -28,7 +28,7 @@ public class SendInvitationController extends BorderPane implements ActionContai
 
     public SendInvitationController(MainScreen mainScreen, String username) {
         this.mainScreen = mainScreen;
-        new LoadFXML(this, "/com/fagi/view/conversation/Invitation.fxml").execute();
+        new LoadFXML(this, "/view/conversation/Invitation.fxml").execute();
         setUsername(username);
     }
 

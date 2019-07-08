@@ -27,9 +27,9 @@ public class SearchContactController extends HBox {
         this.isFriend = isFriend;
         this.mainScreen = mainScreen;
 
-        new LoadFXML(this, "/com/fagi/view/content/SearchContact.fxml").execute();
+        new LoadFXML(this, "/view/content/SearchContact.fxml").execute();
         var image = new Image(
-                "/com/fagi/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
+                "/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
                 32,
                 32,
                 true,

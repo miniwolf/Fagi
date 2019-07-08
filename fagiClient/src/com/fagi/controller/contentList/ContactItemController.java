@@ -23,7 +23,7 @@ public class ContactItemController extends HBox {
     private final Actionable actionable = new ActionableImpl();
 
     public ContactItemController() {
-        new LoadFXML(this, "/com/fagi/view/content/Contact.fxml").execute();
+        new LoadFXML(this, "/view/content/Contact.fxml").execute();
     }
 
     @FXML
@@ -42,7 +42,7 @@ public class ContactItemController extends HBox {
     public void setUserName(String userName) {
         this.userName.setText(userName);
         Image image = new Image(
-                "/com/fagi/style/material-icons/" + Character.toUpperCase(userName.toCharArray()[0]) + ".png",
+                "/style/material-icons/" + Character.toUpperCase(userName.toCharArray()[0]) + ".png",
                 46,
                 46,
                 true,

@@ -32,7 +32,7 @@ public class CreateSearchList implements Action {
     @Override
     public void execute() {
         ContentController contentController =
-                new ContentController("/com/fagi/view/content/SearchContent.fxml");
+                new ContentController("/view/content/SearchContent.fxml");
 
         usernames.forEach(username -> {
             SearchContactController controller = new SearchContactController(isFriends, mainScreen,

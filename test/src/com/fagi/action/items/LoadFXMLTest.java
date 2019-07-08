@@ -23,7 +23,7 @@ public class LoadFXMLTest {
         System.out.println("Starting LoadFXMLtests");
         var mainScreen = Mockito.mock(MainScreen.class);
         this.mock = new ConversationController(mainScreen, new Conversation(), "");
-        loadFXML = new LoadFXML(this.mock, "/com/fagi/view/conversation/Conversation.fxml");
+        loadFXML = new LoadFXML(this.mock, "/view/conversation/Conversation.fxml");
     }
 
     @Test

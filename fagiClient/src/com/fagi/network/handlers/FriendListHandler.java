@@ -32,7 +32,7 @@ public class FriendListHandler implements Handler {
 
         // Required here to get the load inside the constructor
         ContentController contentController =
-            new ContentController("/com/fagi/view/content/ContentList.fxml");
+            new ContentController("/view/content/ContentList.fxml");
 
         List<Friend> friends = friendList.getAccess().getData();
         Collections.sort(friends);
