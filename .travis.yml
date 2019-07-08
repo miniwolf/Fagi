@@ -1,4 +1,7 @@
 language: java
+install: true
+jdk: openjdk11
+
 matrix:
   include:
     - os: linux
@@ -7,16 +10,11 @@ matrix:
         - export DISPLAY=:99.0
         - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1920x1080x16
       script:
-        - set -e
-        - ./build_linux.sh javac
-        - ./run_linux.sh java
+        - ./gradlew clean test --info
     - os: osx
       script:
-        - set -e
-        - ./build_osx.sh javac
-        - ./run_osx.sh java
+        - ./gradlew clean test --info
 
-jdk: openjdk11
 notifications:
   email:
     recipients:
