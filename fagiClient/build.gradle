@@ -9,8 +9,9 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            exclude 'src/com/fagi/view'
-            resources.srcDirs = ['resources','src/com/fagi/view']
+        }
+        resources {
+            srcDir 'resources'
         }
     }
 }
