@@ -12,11 +12,6 @@ sourceSets {
             srcDir 'src'
         }
     }
-    testHeadless {
-        java {
-            srcDir 'src'
-        }
-    }
 }
 
 javafx {
