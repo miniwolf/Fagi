@@ -8,3 +8,5 @@ users
 *.key
 *.config
 *.fagi
+.gradle/*
+*/build/*

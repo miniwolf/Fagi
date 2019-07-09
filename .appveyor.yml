@@ -1,8 +1,8 @@
 image: Visual Studio 2017
 build_script:
-  - ./build.bat build "C:\Program Files\Java\jdk11\bin\javac.exe"
+  - set JAVA_HOME="C:\Program Files\Java\jdk11"
 test_script:
-  - ./build.bat test "C:\Program Files\Java\jdk11\bin\java.exe"
+  - ./gradlew.bat clean test --info
 notifications:
   - provider: Email
     to:

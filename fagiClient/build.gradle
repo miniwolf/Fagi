@@ -1,0 +1,34 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+mainClassName = 'com.fagi.main.FagiApp'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+javafx {
+    version = "11"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+dependencies {
+    compile project(':shared')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.28.2'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '2.1'
+    testCompile (name:'testfx-core-4.0.15-alpha', ext:'jar')
+    testCompile (name:'testfx-junit5-4.0.15-alpha', ext:'jar')
+    testCompile (name:'javafx.swing', ext:'jar')
+    testCompile group: 'org.testfx', name: 'openjfx-monocle', version: 'jdk-11+26'
+}
