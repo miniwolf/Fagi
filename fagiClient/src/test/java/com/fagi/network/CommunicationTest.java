@@ -2,7 +2,6 @@ package com.fagi.network;
 
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
-import com.fagi.network.Communication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

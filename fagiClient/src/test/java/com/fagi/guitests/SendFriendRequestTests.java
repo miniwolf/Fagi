@@ -3,7 +3,6 @@ package com.fagi.guitests;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
-import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.model.FriendRequest;
@@ -11,11 +10,12 @@ import com.fagi.model.SearchUsersResult;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
+import com.fagi.testfxExtension.FagiNodeFinderImpl;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.Assert;
-import org.junit.Assume;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +62,7 @@ public class SendFriendRequestTests {
         var usernames = new ArrayList<String>() {{ add(username); }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        Assumptions.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
 
         FxAssert.verifyThat(
                 "#name",
@@ -76,14 +76,14 @@ public class SendFriendRequestTests {
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        Assumptions.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
 
         WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
 
-        Assert.assertEquals(argument.getAllValues().get(2).getFriendUsername(), username);
+        Assertions.assertEquals(argument.getAllValues().get(2).getFriendUsername(), username);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class SendFriendRequestTests {
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        Assume.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        Assumptions.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#message", message);
         WaitForFXEventsTestHelper.clickOn(robot, "#send");
@@ -102,7 +102,7 @@ public class SendFriendRequestTests {
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
 
-        Assert.assertEquals(argument.getAllValues().get(2).getMessage().getData(), message);
+        Assertions.assertEquals(argument.getAllValues().get(2).getMessage().getData(), message);
     }
 
     @Start
