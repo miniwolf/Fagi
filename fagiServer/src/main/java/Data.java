@@ -22,7 +22,7 @@ import com.fagi.responses.UserOnline;
  * TODO: Add description, maybe think about .fagi file ending
  * Contains and update information on users.
  */
-class Data {
+public class Data {
     private final Map<String, OutputAgent> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
     private final Map<String, InputAgent> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
     private final Map<String, User> registeredUsers = new ConcurrentHashMap<>();

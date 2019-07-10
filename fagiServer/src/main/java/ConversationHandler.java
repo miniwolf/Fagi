@@ -17,19 +17,23 @@ public class ConversationHandler implements Runnable {
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
-            try {
-                TextMessage message = queue.take();
-                Conversation conversation =
-                        data.getConversation(message.getMessageInfo().getConversationID());
-                conversation.getParticipants().stream().filter(data::isUserOnline)
-                            .forEach(
-                                participant -> data.getOutputWorker(participant).addMessage(message));
+            tick();
+        }
+    }
 
-                conversation.addMessage(message);
-                data.storeConversation(conversation);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
+    public void tick() {
+        try {
+            TextMessage message = queue.take();
+            Conversation conversation =
+                    data.getConversation(message.getMessageInfo().getConversationID());
+            conversation.getParticipants().stream().filter(data::isUserOnline)
+                    .forEach(
+                            participant -> data.getOutputWorker(participant).addMessage(message));
+
+            conversation.addMessage(message);
+            data.storeConversation(conversation);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
         }
     }
 

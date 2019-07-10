@@ -300,8 +300,6 @@ public class InputHandler {
     }
 
     private Object handleTextMessage(TextMessage arg) {
-        System.out.println("MessageInfo");
-
         Conversation con = data.getConversation(arg.getMessageInfo().getConversationID());
         if (con == null) {
             return new NoSuchConversation();

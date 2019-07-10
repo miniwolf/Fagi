@@ -137,7 +137,7 @@ public class OutputWorker extends Worker implements OutputAgent {
             return true;
         }
 
-        if (one == null || one != null && two == null || one.size() != two.size()) {
+        if (one == null || two == null || one.size() != two.size()) {
             return false;
         }
 
