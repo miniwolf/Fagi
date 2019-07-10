@@ -31,7 +31,7 @@ public class InputWorker extends Worker implements InputAgent {
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
         this.out = out;
-        this.inputHandler = new InputHandler(this, out, handler);
+        this.inputHandler = new InputHandler(this, out, handler, data);
     }
 
     @Override
