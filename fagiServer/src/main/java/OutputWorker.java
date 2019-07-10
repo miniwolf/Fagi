@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * @author miniwolf
  */
-public class OutputWorker extends Worker {
+public class OutputWorker extends Worker implements OutputAgent {
     private final Queue<InGoingMessages> messages = new ConcurrentLinkedQueue<>();
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
     private final Data data;
@@ -107,20 +107,29 @@ public class OutputWorker extends Worker {
         return new DefaultListAccess<>(me.getFriendReq());
     }
 
+    @Override
     public void setAes(EncryptionAlgorithm<AESKey> aes) {
         this.aes = aes;
     }
 
-    synchronized void addMessage(InGoingMessages message) {
+    @Override
+    public synchronized void addMessage(InGoingMessages message) {
         messages.add(message);
     }
 
-    synchronized void addResponse(Object responseObj) {
+    @Override
+    public synchronized void addResponse(Object responseObj) {
         respondObjects.add(responseObj);
     }
 
+    @Override
     public void setUserName(String userName) {
         this.myUserName = userName;
+    }
+
+    @Override
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     private <T extends Comparable> boolean equalLists(List<T> one, List<T> two) {
