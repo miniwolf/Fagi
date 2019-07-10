@@ -1,4 +1,4 @@
-package com.fagi.guitests;
+package test.java.com.fagi.guitests;
 
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;

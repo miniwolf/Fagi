@@ -15,7 +15,7 @@ import java.util.Date;
 public class ContactItemController extends ContentItemController {
     @FXML private Pane status;
 
-    private static final String fxmlResource = "/com/fagi/view/content/Contact.fxml";
+    private static final String fxmlResource = "/view/content/Contact.fxml";
 
     private final Action<String> action;
 

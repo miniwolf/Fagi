@@ -6,9 +6,7 @@ package com.fagi.action.items;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.contentList.ContentItemController;
 import com.fagi.controller.conversation.SendInvitationController;
-import javafx.scene.control.Label;
 
 /**
  * @author miniwolf

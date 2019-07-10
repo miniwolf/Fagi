@@ -3,6 +3,7 @@ package com.fagi.controller.contentList;
 import com.fagi.action.Action;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
+import com.fagi.controller.contentList.ContentItemController;
 import com.fagi.util.DateTimeUtils;
 import javafx.fxml.FXML;
 

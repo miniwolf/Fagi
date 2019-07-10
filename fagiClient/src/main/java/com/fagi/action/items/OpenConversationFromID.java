@@ -2,7 +2,6 @@ package com.fagi.action.items;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.contentList.ContentItemController;
 import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
