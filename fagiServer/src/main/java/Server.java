@@ -18,13 +18,15 @@ import java.util.ArrayList;
 
 class Server {
     private final String configFile = "config/serverinfo.config";
+    private final Data data;
     private boolean running = true;
     private final int port;
-    private final ConversationHandler handler = new ConversationHandler();
-    private Thread conversationHandlerThread;
+    private final ConversationHandler handler;
 
-    public Server(int port) {
+    public Server(int port, Data data) {
         this.port = port;
+        this.data = data;
+        handler = new ConversationHandler(data);
         try {
             String name = "test";
             String ip = "127.0.0.1"; //getExternalIP();
@@ -33,7 +35,7 @@ class Server {
             config.saveToPath(configFile);
             File inviteCodesFile = new File(JsonFileOperations.INVITE_CODES_FILE_PATH);
             if (!inviteCodesFile.exists()) {
-                Data.storeInviteCodes(new InviteCodeContainer(new ArrayList<>()));
+                data.storeInviteCodes(new InviteCodeContainer(new ArrayList<>()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,9 +52,10 @@ class Server {
             running = false;
         }
 
-        conversationHandlerThread = new Thread(handler);
+        Thread conversationHandlerThread = new Thread(handler);
+        conversationHandlerThread.setDaemon(true);
         conversationHandlerThread.start();
-        Data.loadConversations();
+        data.loadConversations();
 
         while ( running ) {
             try {
@@ -78,9 +81,9 @@ class Server {
 
     private void workerCreation(ServerSocket serverSocket) throws IOException {
         Socket socket = serverSocket.accept();
-        OutputWorker outWorker = new OutputWorker(socket);
+        OutputWorker outWorker = new OutputWorker(socket, data);
         Thread outputWorker = new Thread(outWorker);
-        Thread inputWorker = new Thread(new InputWorker(socket, outWorker, handler));
+        Thread inputWorker = new Thread(new InputWorker(socket, outWorker, handler, data));
         outputWorker.start();
         inputWorker.start();
     }

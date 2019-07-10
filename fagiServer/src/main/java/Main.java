@@ -8,11 +8,12 @@
  */
 class Main {
     public static void main(String[] args) {
-        Data.loadUsers();
+        Data data = new Data();
+        data.loadUsers();
 
         int port = args.length > 0 ? Integer.parseInt(args[0]) : 4242;
 
-        Server server = new Server(port);
+        Server server = new Server(port, data);
         server.start();
     }
 }

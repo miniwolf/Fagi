@@ -6,14 +6,7 @@
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.utility.JsonFileOperations;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -30,17 +23,17 @@ import com.fagi.responses.UserOnline;
  * Contains and update information on users.
  */
 class Data {
-    private static final Map<String, OutputWorker> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
-    private static final Map<String, InputWorker> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
-    private static final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
-    private static final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
-    private static long nextConversationId = 0;
+    private final Map<String, OutputWorker> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
+    private final Map<String, InputWorker> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
+    private final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
+    private final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
+    private long nextConversationId = 0;
 
     /*
         TODO : Create new conversation, store and load conversation list
      */
 
-    public static synchronized Conversation createConversation(List<String> participants) {
+    public synchronized Conversation createConversation(List<String> participants) {
         ConversationType type = participants.size() > 2 ? ConversationType.Multi : ConversationType.Single;
 
         String name = participants.stream().reduce("", (a, b) -> a + ", " + b);
@@ -55,11 +48,11 @@ class Data {
         return con;
     }
 
-    public static void storeConversation(Conversation con) {
+    public void storeConversation(Conversation con) {
         JsonFileOperations.storeConversation(con);
     }
 
-    public static void loadConversations() {
+    public void loadConversations() {
         JsonFileOperations.loadAllConversations().forEach(c -> conversations.put(c.getId(), c));
 
         Set<Long> keys = conversations.keySet();
@@ -70,15 +63,15 @@ class Data {
         }
     }
 
-    public static Conversation getConversation(long id) {
+    public Conversation getConversation(long id) {
         return conversations.get(id);
     }
 
-    public static void setNextConversationId(long id) {
+    public void setNextConversationId(long id) {
         nextConversationId = id;
     }
 
-    public static synchronized Object createUser(String userName, String pass) {
+    public synchronized Object createUser(String userName, String pass) {
         if (registeredUsers.containsKey(userName)) {
             return new UserExists();
         }
@@ -92,54 +85,29 @@ class Data {
         return new AllIsWell();
     }
 
-    public static Response storeUser(User user) {
-        try {
-            Gson gson = new Gson();
-
-            String json = gson.toJson(user);
-
-            File file = new File("users/" + user.getUserName());
-            File folder = new File("users/");
-            if (!folder.exists() && !folder.mkdir()) {
-                System.err.println("Couldn't create folder");
-            }
-            if (!file.exists() && !file.createNewFile()) {
-                System.err.println("Can't create file");
-            }
-
-            PrintWriter out = new PrintWriter(new FileWriter(file, false));
-            out.println(json);
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Response storeUser(User user) {
+        JsonFileOperations.storeObjectToFile(user, JsonFileOperations.USERS_FOLDER, user.getUserName());
         return new AllIsWell();
     }
 
-    public static void loadUsers() {
-        File folder = new File("users/");
-        if (!folder.exists()) return;
+    public void loadUsers() {
+        List<User> users = JsonFileOperations.loadAllObjectsInFolder(JsonFileOperations.USERS_FOLDER, User.class);
 
-        File[] files = folder.listFiles();
-        if (files == null) return;
-
-        for (File file : files) {
-            User user = JsonFileOperations.loadObjectFromFile(file.getPath(), User.class);
+        for (User user : users) {
             //TODO Display exception to user concerning invalid userIndex file.
             registeredUsers.put(user.getUserName(), user);
         }
     }
 
-    public static synchronized InviteCodeContainer loadInviteCodes() {
+    public synchronized InviteCodeContainer loadInviteCodes() {
         return JsonFileOperations.loadObjectFromFile(JsonFileOperations.INVITE_CODES_FILE_PATH, InviteCodeContainer.class);
     }
 
-    public static synchronized void storeInviteCodes(InviteCodeContainer codes) {
+    public synchronized void storeInviteCodes(InviteCodeContainer codes) {
         JsonFileOperations.storeObjectToFile(codes, JsonFileOperations.CONFIG_FOLDER_PATH, JsonFileOperations.INVITE_CODES_FILE);
     }
 
-    public static Response userLogin(String userName, String pass, OutputWorker worker,
+    public Response userLogin(String userName, String pass, OutputWorker worker,
                                      InputWorker inputWorker) {
         if (OUTPUT_WORKER_MAP.containsKey(userName)) {
             return new UserOnline();
@@ -156,7 +124,7 @@ class Data {
         return new AllIsWell();
     }
 
-    public static void userLogout(String userName) {
+    public void userLogout(String userName) {
         if (userName == null) {
             return;
         }
@@ -168,11 +136,11 @@ class Data {
         }
     }
 
-    public static boolean isUserOnline(String userName) {
+    public boolean isUserOnline(String userName) {
         return OUTPUT_WORKER_MAP.containsKey(userName);
     }
 
-    public static void makeFriends(User first, User second) {
+    public void makeFriends(User first, User second) {
         first.addFriend(second);
         second.addFriend(first);
 
@@ -180,22 +148,22 @@ class Data {
         storeUser(second);
     }
 
-    public static User getUser(String name) {
+    public User getUser(String name) {
         if (name == null) {
             return null;
         }
         return registeredUsers.get(name);
     }
 
-    public static InputWorker getInputWorker(String username) {
+    public InputWorker getInputWorker(String username) {
         return INPUT_WORKER_MAP.get(username);
     }
 
-    public static OutputWorker getOutputWorker(String userName) {
+    public OutputWorker getOutputWorker(String userName) {
         return OUTPUT_WORKER_MAP.get(userName);
     }
 
-    public static List<String> getUserNames() {
+    public List<String> getUserNames() {
         return registeredUsers.values().stream().map(User::getUserName).collect(Collectors.toCollection(ArrayList::new));
     }
 }
