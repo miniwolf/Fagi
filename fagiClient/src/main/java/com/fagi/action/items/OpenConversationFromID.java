@@ -2,6 +2,7 @@ package com.fagi.action.items;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
+import com.fagi.controller.contentList.ContentItemController;
 import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
@@ -13,22 +14,20 @@ import java.util.Optional;
 /**
  * @author miniwolf
  */
-public class OpenConversationFromID implements Action {
+public class OpenConversationFromID implements Action<Long> {
     private final MainScreen mainScreen;
-    private final long id;
 
-    public OpenConversationFromID(MainScreen mainScreen, long id) {
+    public OpenConversationFromID(MainScreen mainScreen) {
         this.mainScreen = mainScreen;
-        this.id = id;
     }
 
     @Override
-    public void execute() {
+    public void execute(Long id) {
         Optional<Conversation> optional = mainScreen.getConversations().stream()
                                                     .filter(con -> con.getId() == id).findFirst();
 
-        if (!optional.isPresent()) {
-            errorHandling();
+        if (optional.isEmpty()) {
+            errorHandling(id);
             return; // NOTE: This is never reached
         }
 
@@ -64,7 +63,7 @@ public class OpenConversationFromID implements Action {
         mainScreen.addController(controller);
     }
 
-    private void errorHandling() {
+    private void errorHandling(long id) {
         System.err.println("OpenConversationFromID: Couldn't find conversation on ID <" + id + ">");
         throw new RuntimeException();
     }
