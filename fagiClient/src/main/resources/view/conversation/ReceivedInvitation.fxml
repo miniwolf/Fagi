@@ -45,7 +45,7 @@
                     <styleClass>
                         <String fx:value="zbg" />
                         <String fx:value="cmx6we" />
-                        <String fx:value="TTnd8c" />
+                        <String fx:value="ignoreButton" />
                     </styleClass>
                 </Button>
             </VBox>
@@ -54,7 +54,7 @@
                     <styleClass>
                         <String fx:value="zbg" />
                         <String fx:value="cmx6we" />
-                        <String fx:value="Wxsg2c" />
+                        <String fx:value="acceptButton" />
                     </styleClass>
                 </Button>
             </VBox>

@@ -3,7 +3,7 @@ package com.fagi.helpers;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.InputHandler;
 import javafx.scene.Node;
-import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Assertions;
 import org.testfx.api.FxRobot;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -21,7 +21,7 @@ public class WaitForFXEventsTestHelper {
     }
 
     public static void clickOn(FxRobot robot, String query) {
-        Assumptions.assumeTrue(robot.lookup(query).tryQuery().isPresent());
+        Assertions.assertTrue(robot.lookup(query).tryQuery().isPresent(), "Could not find: " + query);
         robot.clickOn(query);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -32,7 +32,7 @@ public class WaitForFXEventsTestHelper {
     }
 
     public static void clickOnAndWrite(FxRobot robot, String query, String message) {
-        Assumptions.assumeTrue(robot.lookup(query).tryQuery().isPresent());
+        Assertions.assertTrue(robot.lookup(query).tryQuery().isPresent(), "Could not find: " + query);
         robot.clickOn(query).write(message);
         WaitForAsyncUtils.waitForFxEvents();
     }
