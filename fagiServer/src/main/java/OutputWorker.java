@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 /**
  * @author miniwolf
@@ -27,15 +26,16 @@ import java.util.stream.Collectors;
 public class OutputWorker extends Worker {
     private final Queue<InGoingMessages> messages = new ConcurrentLinkedQueue<>();
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
+    private final Data data;
     private ObjectOutputStream objOut;
     private EncryptionAlgorithm<AESKey> aes;
 
     private String myUserName = null;
-    private ListAccess<String> currentFriends = new DefaultListAccess<>(new ArrayList<>());
     private ListAccess<FriendRequest> currentRequests = new DefaultListAccess<>(new ArrayList<>());
 
-    public OutputWorker(Socket socket) throws IOException {
+    public OutputWorker(Socket socket, Data data) throws IOException {
         objOut = new ObjectOutputStream(socket.getOutputStream());
+        this.data = data;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class OutputWorker extends Worker {
                 running = false;
                 System.out.println(ioe.toString());
                 System.out.println("Logging out user " + myUserName);
-                Data.userLogout(myUserName);
+                data.userLogout(myUserName);
             }
         }
         if (!respondObjects.isEmpty()) {
@@ -102,14 +102,8 @@ public class OutputWorker extends Worker {
         objOut.flush();
     }
 
-    private DefaultListAccess<String> getOnlineFriends() {
-        User me = Data.getUser(myUserName);
-        return new DefaultListAccess<>(me.getFriends().stream().filter(Data::isUserOnline)
-                .collect(Collectors.toList()));
-    }
-
     private DefaultListAccess<FriendRequest> getFriendRequests() {
-        User me = Data.getUser(myUserName);
+        User me = data.getUser(myUserName);
         return new DefaultListAccess<>(me.getFriendReq());
     }
 
@@ -134,8 +128,7 @@ public class OutputWorker extends Worker {
             return true;
         }
 
-        if ((one == null && two != null) || one != null && two == null
-            || one.size() != two.size()) {
+        if (one == null || one != null && two == null || one.size() != two.size()) {
             return false;
         }
 

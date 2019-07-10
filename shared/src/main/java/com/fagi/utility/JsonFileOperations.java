@@ -16,6 +16,7 @@ public class JsonFileOperations {
     public static final String CONVERSATION_FOLDER_PATH = "conversations/";
     public static final String INVITE_CODES_FILE = "codes";
     public static final String INVITE_CODES_FILE_PATH = CONFIG_FOLDER_PATH + INVITE_CODES_FILE + FAGI_EXTENSION;
+    public static final String USERS_FOLDER = "users/";
 
     public static <T extends Serializable> void storeObjectToFile(T object, String folderPath, String fileName) {
         try {

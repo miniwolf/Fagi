@@ -54,25 +54,25 @@ public class User implements Serializable {
         friends.add(friend.getUserName());
     }
 
-    public Response requestFriend(FriendRequest arg) {
+    public Response requestFriend(Data data, FriendRequest arg) {
         String otherUser = arg.getFriendUsername();
         if ( friends.contains(otherUser) ) {
             return new UserExists();
         }
-        User other = Data.getUser(otherUser);
+        User other = data.getUser(otherUser);
         if ( other == null ) {
             return new NoSuchUser();
         }
 
         if (incFriendReq.stream().anyMatch(x -> x.getFriendUsername().equals(userName))) {
-            Data.makeFriends(this, other);
-            other.removeFriendRequest(userName);
-            return removeFriendRequest(otherUser);
+            data.makeFriends(this, other);
+            other.removeFriendRequest(data, userName);
+            return removeFriendRequest(data, otherUser);
         }
-        return other.addFriendReq(arg);
+        return other.addFriendReq(data, arg);
     }
 
-    public Response removeFriendRequest(String userName) {
+    public Response removeFriendRequest(Data data, String userName) {
         Optional<FriendRequest> opt = incFriendReq.stream().filter(x -> x.getMessage().getMessageInfo().getSender().equals(userName)).findFirst();
 
         if (opt.isEmpty()) {
@@ -85,23 +85,23 @@ public class User implements Serializable {
             return new UserExists();
         }
         incFriendReq.remove(request);
-        return Data.storeUser(this);
+        return data.storeUser(this);
     }
 
-    private Response addFriendReq(FriendRequest request) {
+    private Response addFriendReq(Data data, FriendRequest request) {
         if ( incFriendReq.contains(userName) ) {
             return new UserExists();
         }
         incFriendReq.add(request);
-        return Data.storeUser(this);
+        return data.storeUser(this);
     }
 
-    public Response removeFriend(String otherUser) {
+    public Response removeFriend(Data data, String otherUser) {
         if ( !friends.contains(otherUser)) {
             return new UserExists();
         }
         friends.remove(otherUser);
-        return Data.storeUser(this);
+        return data.storeUser(this);
     }
 
     public void addConversationID(long id) {

@@ -7,7 +7,12 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by Marcus on 04-07-2016.
  */
 public class ConversationHandler implements Runnable {
+    private final Data data;
     private LinkedBlockingQueue<TextMessage> queue = new LinkedBlockingQueue<>();
+
+    public ConversationHandler(Data data) {
+        this.data = data;
+    }
 
     @Override
     public void run() {
@@ -15,13 +20,13 @@ public class ConversationHandler implements Runnable {
             try {
                 TextMessage message = queue.take();
                 Conversation conversation =
-                    Data.getConversation(message.getMessageInfo().getConversationID());
-                conversation.getParticipants().stream().filter(Data::isUserOnline)
+                        data.getConversation(message.getMessageInfo().getConversationID());
+                conversation.getParticipants().stream().filter(data::isUserOnline)
                             .forEach(
-                                participant -> Data.getOutputWorker(participant).addMessage(message));
+                                participant -> data.getOutputWorker(participant).addMessage(message));
 
                 conversation.addMessage(message);
-                Data.storeConversation(conversation);
+                data.storeConversation(conversation);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
