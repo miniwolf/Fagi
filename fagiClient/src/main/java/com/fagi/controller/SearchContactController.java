@@ -1,53 +1,42 @@
 package com.fagi.controller;
 
-import com.fagi.action.Actionable;
-import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.Action;
 import com.fagi.action.items.OpenConversation;
 import com.fagi.action.items.OpenInvitation;
+import com.fagi.controller.contentList.ContentItemController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author miniwolf and zargess
  */
-public class SearchContactController extends HBox {
-    @FXML private Label userName;
-    @FXML private ImageView image;
+public class SearchContactController extends ContentItemController {
+    private static final String fxmlResource = "/view/content/SearchContact.fxml";
+    private final Action<String> action;
 
-    private final boolean isFriend;
-    private final MainScreen mainScreen;
-    private final Actionable actionable = new ActionableImpl();
+    public SearchContactController(
+            boolean isFriend,
+            MainScreen mainScreen,
+            String contactUsername) {
+        super(
+                mainScreen.getUsername(),
+                new Date(),
+                new ArrayList<>() {{ add(contactUsername); }},
+                fxmlResource
+        );
+        action = isFriend
+                ? new OpenConversation(mainScreen)
+                : new OpenInvitation(mainScreen);
+    }
 
-    public SearchContactController(boolean isFriend, MainScreen mainScreen,
-                                   String username) {
-        this.isFriend = isFriend;
-        this.mainScreen = mainScreen;
-
-        new LoadFXML(this, "/view/content/SearchContact.fxml").execute();
-        var image = new Image(
-                "/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
-                32,
-                32,
-                true,
-                true);
-        this.image.setImage(image);
-        userName.setText(username);
-        actionable.assign(
-                isFriend
-                ? new OpenConversation(mainScreen, userName)
-                : new OpenInvitation(mainScreen, userName.getText()));
+    @Override
+    protected void timerCallback() {
     }
 
     @FXML
-    private void initialize() {
-    }
-
-    @FXML
-    private void openConversation() {
-        actionable.execute();
+    protected void openConversation() {
+        action.execute(getUserName().getText());
     }
 }
