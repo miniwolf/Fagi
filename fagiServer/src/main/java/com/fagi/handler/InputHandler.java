@@ -246,7 +246,7 @@ public class InputHandler {
             data.storeUser(user);
             if (!user.getUserName().equals(inputAgent.getUsername()) && data
                     .isUserOnline(user.getUserName())) {
-                data.getOutputWorker(user.getUserName()).addResponse(con);
+                data.getOutputAgent(user.getUserName()).addResponse(con);
             }
         }
 
@@ -277,7 +277,7 @@ public class InputHandler {
         con.addUser(user.getUserName());
         user.addConversationID(con.getId());
 
-        data.getOutputWorker(user.getUserName()).addResponse(con);
+        data.getOutputAgent(user.getUserName()).addResponse(con);
 
         data.storeConversation(con);
         data.storeUser(user);
@@ -331,7 +331,7 @@ public class InputHandler {
         inputAgent.setUsername(arg.getUsername());
         for (String user : data.getUser(inputAgent.getUsername()).getFriends()) {
             if (data.isUserOnline(user)) {
-                data.getOutputWorker(user).addMessage(new UserLoggedIn(inputAgent.getUsername()));
+                data.getOutputAgent(user).addMessage(new UserLoggedIn(inputAgent.getUsername()));
             }
         }
 
@@ -345,7 +345,7 @@ public class InputHandler {
 
         for (String user : data.getUser(inputAgent.getUsername()).getFriends()) {
             if (data.isUserOnline(user)) {
-                data.getOutputWorker(user).addMessage(new UserLoggedOut(inputAgent.getUsername()));
+                data.getOutputAgent(user).addMessage(new UserLoggedOut(inputAgent.getUsername()));
             }
         }
 
@@ -378,7 +378,7 @@ public class InputHandler {
         }
 
         if (data.isUserOnline(arg.getFriendUsername())) {
-            data.getInputWorker(arg.getFriendUsername())
+            data.getInputAgent(arg.getFriendUsername())
                     .getInputHandler().handleInput(new GetFriendListRequest(arg.getFriendUsername()));
         }
         return getFriendList();

@@ -25,8 +25,8 @@ import com.fagi.worker.OutputAgent;
  * Contains and update information on users.
  */
 public class Data {
-    private final Map<String, OutputAgent> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
-    private final Map<String, InputAgent> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
+    private final Map<String, OutputAgent> OUTPUT_AGENT_MAP = new ConcurrentHashMap<>();
+    private final Map<String, InputAgent> INPUT_AGENT_MAP = new ConcurrentHashMap<>();
     private final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
     private final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
     private long nextConversationId = 0;
@@ -109,20 +109,20 @@ public class Data {
         JsonFileOperations.storeObjectToFile(codes, JsonFileOperations.CONFIG_FOLDER_PATH, JsonFileOperations.INVITE_CODES_FILE);
     }
 
-    public Response userLogin(String userName, String pass, OutputAgent worker,
-                                     InputAgent inputWorker) {
-        if (OUTPUT_WORKER_MAP.containsKey(userName)) {
+    public Response userLogin(String userName, String pass, OutputAgent outputAgent,
+                                     InputAgent inputAgent) {
+        if (isUserOnline(userName)) {
             return new UserOnline();
         }
-        User user = registeredUsers.get(userName);
+        User user = getUser(userName);
         if (user == null) {
             return new NoSuchUser();
         }
         if (!user.getPass().equals(pass)) {
             return new PasswordError();
         }
-        OUTPUT_WORKER_MAP.put(userName, worker);
-        INPUT_WORKER_MAP.put(userName, inputWorker);
+        OUTPUT_AGENT_MAP.put(userName, outputAgent);
+        INPUT_AGENT_MAP.put(userName, inputAgent);
         return new AllIsWell();
     }
 
@@ -130,16 +130,16 @@ public class Data {
         if (userName == null) {
             return;
         }
-        if (OUTPUT_WORKER_MAP.containsKey(userName)) {
-            OUTPUT_WORKER_MAP.remove(userName);
-            INPUT_WORKER_MAP.remove(userName);
+        if (OUTPUT_AGENT_MAP.containsKey(userName)) {
+            OUTPUT_AGENT_MAP.remove(userName);
+            INPUT_AGENT_MAP.remove(userName);
         } else {
             System.out.println("Couldn't log " + userName + " out");
         }
     }
 
     public boolean isUserOnline(String userName) {
-        return OUTPUT_WORKER_MAP.containsKey(userName);
+        return OUTPUT_AGENT_MAP.containsKey(userName);
     }
 
     public void makeFriends(User first, User second) {
@@ -157,12 +157,12 @@ public class Data {
         return registeredUsers.get(name);
     }
 
-    public InputAgent getInputWorker(String username) {
-        return INPUT_WORKER_MAP.get(username);
+    public InputAgent getInputAgent(String username) {
+        return INPUT_AGENT_MAP.get(username);
     }
 
-    public OutputAgent getOutputWorker(String userName) {
-        return OUTPUT_WORKER_MAP.get(userName);
+    public OutputAgent getOutputAgent(String userName) {
+        return OUTPUT_AGENT_MAP.get(userName);
     }
 
     public List<String> getUserNames() {

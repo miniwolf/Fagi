@@ -1,7 +1,7 @@
+package com.fagi.handler;
+
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
@@ -34,7 +34,7 @@ class TextMessageTests {
         conversationHandler = new ConversationHandler(data);
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
 
-        when(data.getOutputWorker(Mockito.anyString())).thenReturn(outputAgent);
+        when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
 
         conversation = new Conversation(42, "Some conversation", ConversationType.Single);
         conversation.addUser("sender");
