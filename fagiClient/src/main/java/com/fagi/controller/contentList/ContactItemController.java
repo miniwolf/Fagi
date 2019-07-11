@@ -1,34 +1,37 @@
 package com.fagi.controller.contentList;
 
-import com.fagi.action.Actionable;
-import com.fagi.action.ActionableImpl;
-import com.fagi.action.items.LoadFXML;
+import com.fagi.action.Action;
+import com.fagi.model.Friend;
+import com.fagi.util.DateTimeUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author miniwolf and zargess
  */
-public class ContactItemController extends HBox {
-    @FXML private Label userName;
-    @FXML private Label date;
-    @FXML private Label lastMessage;
+public class ContactItemController extends TimedContentItemController<String> {
     @FXML private Pane status;
-    @FXML private ImageView image;
 
-    private final Actionable actionable = new ActionableImpl();
+    private static final String fxmlResource = "/view/content/Contact.fxml";
 
-    public ContactItemController() {
-        new LoadFXML(this, "/view/content/Contact.fxml").execute();
-    }
-
-    @FXML
-    private void openConversation() {
-        actionable.execute();
+    public ContactItemController(
+            String myUsername,
+            Friend contact,
+            Action<String> action,
+            Date date) {
+        super(
+                myUsername,
+                date,
+                new ArrayList<>() {{
+                    add(contact.getUsername());
+                }},
+                fxmlResource,
+                action
+        );
+        toggleStatus(contact.isOnline());
     }
 
     public void toggleStatus(boolean online) {
@@ -39,22 +42,13 @@ public class ContactItemController extends HBox {
         }
     }
 
-    public void setUserName(String userName) {
-        this.userName.setText(userName);
-        Image image = new Image(
-                "/style/material-icons/" + Character.toUpperCase(userName.toCharArray()[0]) + ".png",
-                46,
-                46,
-                true,
-                true);
-        this.image.setImage(image);
+    @Override
+    public void timerCallback() {
+        date.setText(DateTimeUtils.convertDate(dateInstance));
     }
 
-    public Label getUserName() {
-        return userName;
-    }
-
-    public Actionable getActionable() {
-        return actionable;
+    @Override
+    protected String getData() {
+        return getUserName().getText();
     }
 }

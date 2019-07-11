@@ -1,9 +1,6 @@
 package com.fagi.controller.conversation;
 
 import com.fagi.action.Action;
-import com.fagi.action.ActionContainer;
-import com.fagi.action.Actionable;
-import com.fagi.action.ActionableImpl;
 import com.fagi.action.items.LoadFXML;
 import com.fagi.action.items.SendInvitation;
 import com.fagi.controller.MainScreen;
@@ -17,18 +14,19 @@ import javafx.scene.layout.BorderPane;
 /**
  * @author miniwolf
  */
-public class SendInvitationController extends BorderPane implements ActionContainer {
+public class SendInvitationController extends BorderPane {
     @FXML private Label description, header, name;
     @FXML private TextField message;
     @FXML private Button send;
 
     private MainScreen mainScreen;
-    private String username;
-    private Actionable actionable = new ActionableImpl();
+    private Action<TextMessage> action;
 
     public SendInvitationController(MainScreen mainScreen, String username) {
         this.mainScreen = mainScreen;
-        new LoadFXML(this, "/view/conversation/Invitation.fxml").execute();
+        this.action = new SendInvitation(mainScreen.getCommunication(), username);
+
+        new LoadFXML("/view/conversation/Invitation.fxml").execute(this);
         setUsername(username);
     }
 
@@ -38,7 +36,6 @@ public class SendInvitationController extends BorderPane implements ActionContai
      * username.
      */
     private void setUsername(String username) {
-        this.username = username;
         header.setText(header.getText().replace("$", username));
         if (name != null) {
             name.setText(username);
@@ -47,19 +44,15 @@ public class SendInvitationController extends BorderPane implements ActionContai
 
     @FXML
     private void sendMessage() {
-        Action action = new SendInvitation(mainScreen.getCommunication(), username,
-                                           new TextMessage(message.getText(),
-                                                           mainScreen.getUsername(), -1));
-        action.execute();
+        action.execute(new TextMessage(
+                message.getText(),
+                mainScreen.getUsername(),
+                -1));
         close();
     }
 
     @FXML
     private void close() {
         mainScreen.removeElement(this);
-    }
-
-    public Actionable getActionable() {
-        return actionable;
     }
 }

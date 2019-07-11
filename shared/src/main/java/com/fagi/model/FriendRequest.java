@@ -23,6 +23,10 @@ public class FriendRequest implements Serializable, Comparable<FriendRequest> {
         return friendUsername;
     }
 
+    public String getSender() {
+        return message.getMessageInfo().getSender();
+    }
+
     public TextMessage getMessage() {
         return message;
     }

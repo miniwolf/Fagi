@@ -21,7 +21,7 @@ public class CreateUserNameController extends DefaultLoginController {
 
     public CreateUserNameController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
-        new LoadFXML(this, "/view/login/CreateUserName.fxml").execute();
+        new LoadFXML("/view/login/CreateUserName.fxml").execute(this);
     }
 
     @FXML

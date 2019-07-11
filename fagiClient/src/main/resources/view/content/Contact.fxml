@@ -23,7 +23,8 @@
             <Circle fill="#ffffff00" layoutX="23.0" layoutY="26.0" radius="23.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="13.0" styleClass="circleHack" />
             <Pane fx:id="status" layoutX="33.0" layoutY="36.0" styleClass="flaeQ" />
         </Pane>
-        <Label fx:id="userName" styleClass="mu" />
+        <Label fx:id="usernameLabel" styleClass="mu" />
+        <Label fx:id="date" styleClass="date"/>
     </HBox>
     <Button visible="false" minWidth="0.0" mnemonicParsing="false" prefWidth="0.0" styleClass="uOlSBc" text="Button">
         <graphic>

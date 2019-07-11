@@ -19,7 +19,7 @@ public class CreatePasswordController extends DefaultLoginController {
 
     public CreatePasswordController(MasterLogin masterLogin) {
         this.masterLogin = masterLogin;
-        new LoadFXML(this, "/view/login/CreatePassword.fxml").execute();
+        new LoadFXML("/view/login/CreatePassword.fxml").execute(this);
     }
 
     @FXML
