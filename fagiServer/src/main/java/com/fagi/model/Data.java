@@ -1,6 +1,6 @@
-/*
+package com.fagi.model;/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * Data.java
+ * com.fagi.model.Data.java
  */
 
 import com.fagi.conversation.Conversation;
@@ -17,6 +17,8 @@ import com.fagi.responses.PasswordError;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserExists;
 import com.fagi.responses.UserOnline;
+import com.fagi.worker.InputAgent;
+import com.fagi.worker.OutputAgent;
 
 /**
  * TODO: Add description, maybe think about .fagi file ending

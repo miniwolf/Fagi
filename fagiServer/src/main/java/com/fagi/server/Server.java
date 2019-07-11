@@ -1,13 +1,19 @@
-/*
+package com.fagi.server;/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * Server.java
+ * com.fagi.server.Server.java
  *
  * Listening socket for incoming transmissions from clients.
  */
 
 import com.fagi.config.ServerConfig;
+import com.fagi.encryption.Encryption;
 import com.fagi.encryption.RSAKey;
+import com.fagi.handler.ConversationHandler;
+import com.fagi.model.Data;
+import com.fagi.model.InviteCodeContainer;
 import com.fagi.utility.JsonFileOperations;
+import com.fagi.worker.InputWorker;
+import com.fagi.worker.OutputWorker;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -16,7 +22,7 @@ import java.net.URL;
 import java.security.PublicKey;
 import java.util.ArrayList;
 
-class Server {
+public class Server {
     private final String configFile = "config/serverinfo.config";
     private final Data data;
     private boolean running = true;
@@ -43,7 +49,7 @@ class Server {
     }
 
     public void start() {
-        System.out.println("Starting Server");
+        System.out.println("Starting com.fagi.server.Server");
         ServerSocket ss = null;
         try {
             ss = new ServerSocket(port);
@@ -68,7 +74,7 @@ class Server {
 
         conversationHandlerThread.interrupt();
 
-        System.out.println("Stopping Server");
+        System.out.println("Stopping com.fagi.server.Server");
 
         if(ss != null) {
             try {

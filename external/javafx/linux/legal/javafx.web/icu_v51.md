@@ -40,15 +40,15 @@ this Software without prior written authorization of the copyright holder.
 Third-Party Software Licenses
 This section contains third-party software notices and/or additional terms for
 licensed third-party software components included within ICU libraries.
-1. Unicode Data Files and Software
+1. Unicode com.fagi.model.Data Files and Software
 
 EXHIBIT 1
  UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
 
 
-Unicode Data Files include all data files under the directories
+Unicode com.fagi.model.Data Files include all data files under the directories
 http://www.unicode.org/Public/, http://www.unicode.org/reports/, and
-http://www.unicode.org/cldr/data/. Unicode Data Files do not include PDF online
+http://www.unicode.org/cldr/data/. Unicode com.fagi.model.Data Files do not include PDF online
 code charts under the directory http://www.unicode.org/Public/. Software
 includes any source code published in the Unicode Standard or under the
 directories http://www.unicode.org/Public/, http://www.unicode.org/reports/, and
@@ -66,17 +66,17 @@ Copyright © 1991-2013 Unicode, Inc. All rights reserved. Distributed under the
 Terms of Use in http://www.unicode.org/copyright.html.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
-the Unicode data files and any associated documentation (the "Data Files") or
+the Unicode data files and any associated documentation (the "com.fagi.model.Data Files") or
 Unicode software and any associated documentation (the "Software") to deal in
-the Data Files or Software without restriction, including without limitation the
+the com.fagi.model.Data Files or Software without restriction, including without limitation the
 rights to use, copy, modify, merge, publish, distribute, and/or sell copies of
-the Data Files or Software, and to permit persons to whom the Data Files or
+the com.fagi.model.Data Files or Software, and to permit persons to whom the com.fagi.model.Data Files or
 Software are furnished to do so, provided that (a) the above copyright notice(s)
-and this permission notice appear with all copies of the Data Files or Software,
+and this permission notice appear with all copies of the com.fagi.model.Data Files or Software,
 (b) both the above copyright notice(s) and this permission notice appear in
-associated documentation, and (c) there is clear notice in each modified Data
+associated documentation, and (c) there is clear notice in each modified com.fagi.model.Data
 File or in the Software as well as in the documentation associated with the
-Data File(s) or Software that the data or software has been modified.
+com.fagi.model.Data File(s) or Software that the data or software has been modified.
 
 THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -90,7 +90,7 @@ SOFTWARE.
 
 Except as contained in this notice, the name of a copyright holder shall not be
 used in advertising or otherwise to promote the sale, use or other dealings in
-these Data Files or Software without prior written authorization of the
+these com.fagi.model.Data Files or Software without prior written authorization of the
 copyright holder.
 
 
@@ -98,7 +98,7 @@ Unicode and the Unicode logo are trademarks of Unicode, Inc. in the United
 States and other countries. All third party trademarks referenced herein are the
 property of their respective owners.
 
-2. Chinese/Japanese Word Break Dictionary Data (cjdict.txt)
+2. Chinese/Japanese Word Break Dictionary com.fagi.model.Data (cjdict.txt)
  # The Google Chrome software developed by Google is licensed under the BSD
  # license. Other software included in this distribution is provided under other
  # licenses, as set forth below.
@@ -246,14 +246,14 @@ property of their respective owners.
  # originate from ICOT Free Software. The following conditions for ICOT
  # Free Software applies to the current dictionary as well.
  #
- # Each User may also freely distribute the Program, whether in its
+ # Each com.fagi.model.User may also freely distribute the Program, whether in its
  # original form or modified, to any third party or parties, PROVIDED
  # that the provisions of Section 3 ("NO WARRANTY") will ALWAYS appear
  # on, or be attached to, the Program, which is distributed substantially
  # in the same form as set out herein and that such intended
  # distribution, if actually made, will neither violate or otherwise
  # contravene any of the laws and regulations of the countries having
- # jurisdiction over the User or the intended distribution itself.
+ # jurisdiction over the com.fagi.model.User or the intended distribution itself.
  #
  # NO WARRANTY
  #

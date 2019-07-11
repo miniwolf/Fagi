@@ -34,7 +34,7 @@
         <TextField fx:id="inviteCode" promptText="Enter invitecode"
                    styleClass="input, persistent-prompt"/>
         <Button fx:id="loginBtn" mnemonicParsing="false" onMousePressed="#next"
-                styleClass="input, rc-button, rc-button-submit" text="Create User"/>
+                styleClass="input, rc-button, rc-button-submit" text="Create com.fagi.model.User"/>
         <HBox prefHeight="22.0" prefWidth="254.0">
             <Label fx:id="messageLabel" prefHeight="19.0" prefWidth="250.0"/>
         </HBox>

@@ -2,7 +2,7 @@
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 
-package voice;
+package com.fagi.voice;
 
 /**
  * Created by miniwolf on 05-10-2014.

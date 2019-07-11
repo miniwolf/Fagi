@@ -1,11 +1,13 @@
-/*
+package com.fagi.worker;/*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.model.Data;
 import com.fagi.model.FriendRequest;
+import com.fagi.model.User;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendRequestList;
@@ -62,7 +64,7 @@ public class OutputWorker extends Worker implements OutputAgent {
         if (!respondObjects.isEmpty()) {
             try {
                 sendResponses();
-            } catch (IOException ignored) { // User logged off we didn't manage to send response
+            } catch (IOException ignored) { // com.fagi.model.User logged off we didn't manage to send response
             }
         }
         System.out.println("Closing output");

@@ -1,4 +1,7 @@
+package com.fagi.handler;
+
 import com.fagi.conversation.Conversation;
+import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.util.concurrent.LinkedBlockingQueue;
