@@ -1,19 +1,17 @@
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.model.messages.message.TextMessage;
-import com.fagi.responses.AllIsWell;
-import com.fagi.responses.NoSuchConversation;
-import com.fagi.responses.Unauthorized;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
-class TextMessageTests {
+public class TextMessageIntegrationTests {
     private OutputAgent outputAgent;
+    private ConversationHandler conversationHandler;
     private Data data;
 
     private InputHandler inputHandler;
@@ -25,7 +23,7 @@ class TextMessageTests {
         data = Mockito.mock(Data.class);
         InputAgent inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.spy(OutputAgent.class);
-        ConversationHandler conversationHandler = new ConversationHandler(data);
+        conversationHandler = new ConversationHandler(data);
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
 
         when(data.getOutputWorker(Mockito.anyString())).thenReturn(outputAgent);
@@ -38,36 +36,33 @@ class TextMessageTests {
     }
 
     @Test
-    void handlingATextMessage_ShouldGiveTheMessageATimeStamp() {
-        inputHandler.handleInput(message);
-
-        Assertions.assertNotNull(message.getMessageInfo().getTimestamp());
-    }
-
-    @Test
-    void dataNotContainingConversationWithId_ShouldResultInNoSuchConversation() {
-        inputHandler.handleInput(message);
-
-        var argumentCaptor = ArgumentCaptor.forClass(NoSuchConversation.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
-    }
-
-    @Test
-    void sendingAMessageToConversationThatYouAreNotAParticipantOf_ShouldResultInUnauthorized() {
+    void sendingAMessageToConversationWithOnlineParticipant_ShouldSendMessageToThatUser() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
-        inputHandler.handleInput(message);
+        when(data.isUserOnline("receiver")).thenReturn(true);
 
-        var argumentCaptor = ArgumentCaptor.forClass(Unauthorized.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        inputHandler.handleInput(message);
+        conversationHandler.tick();
+
+        Mockito.verify(outputAgent, times(1)).addMessage(message);
     }
 
     @Test
-    void sendingAMessageToConversation_ShouldResultInAllIsWell() {
+    void sendingAMessageToConversation_ShouldAddMessageToConversation() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
 
         inputHandler.handleInput(message);
+        conversationHandler.tick();
 
-        var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Assertions.assertEquals(1, conversation.getMessages().size());
+    }
+
+    @Test
+    void sendingAMessageToConversation_ShouldResultInConversationBeingStored() {
+        when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
+
+        inputHandler.handleInput(message);
+        conversationHandler.tick();
+
+        Mockito.verify(data, times(1)).storeConversation(conversation);
     }
 }
