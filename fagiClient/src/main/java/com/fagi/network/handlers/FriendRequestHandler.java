@@ -3,12 +3,14 @@ package com.fagi.network.handlers;
 import com.fagi.action.items.OpenReceivedFriendRequest;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.contentList.ContentController;
-import com.fagi.controller.contentList.MessageItemController;
+import com.fagi.controller.contentList.InviteItemController;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.FriendRequestList;
 import javafx.application.Platform;
+
+import java.util.Date;
 
 /**
  * Created by costa on 11-12-2016.
@@ -29,10 +31,13 @@ public class FriendRequestHandler implements Handler {
             new ContentController("/view/content/ContentList.fxml");
 
         for (FriendRequest request : friendRequestList.getAccess().getData()) {
-            MessageItemController messageItemController =
-                new MessageItemController(request.getFriendUsername(), request);
-            messageItemController.getActionable().assign(
-                new OpenReceivedFriendRequest(mainScreen, request));
+            InviteItemController messageItemController =
+                new InviteItemController(
+                        mainScreen.getUsername(),
+                        new OpenReceivedFriendRequest(mainScreen),
+                        new Date(),
+                        request
+                );
             contentController.addToContentList(messageItemController);
         }
 

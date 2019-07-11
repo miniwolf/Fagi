@@ -32,6 +32,6 @@
         <HBox.margin>
             <Insets top="18.0"/>
         </HBox.margin>
-        <Label fx:id="userName" styleClass="text" text="Marcus Haagh"/>
+        <Label fx:id="usernameLabel" styleClass="text" text="Marcus Haagh"/>
     </Pane>
 </fx:root>

@@ -1,5 +1,6 @@
 package com.fagi.handler;
 
+import com.fagi.action.Action;
 import com.fagi.action.items.contentlist.CreateSearchList;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.Friend;
@@ -17,15 +18,18 @@ import java.util.stream.Collectors;
  * @author miniwolf
  */
 public class Search {
-    private TextField searchBox;
-    private Pane searchHeader;
-    private MainScreen mainScreen;
+    private final TextField searchBox;
+    private final Pane searchHeader;
+    private final MainScreen mainScreen;
+    private final Action<List<String>> createSearchList;
+
     private boolean searchEnabled;
 
     public Search(TextField searchBox, Pane searchHeader, MainScreen mainScreen) {
         this.searchBox = searchBox;
         this.searchHeader = searchHeader;
         this.mainScreen = mainScreen;
+        this.createSearchList = new CreateSearchList(mainScreen,true);
         initialize();
     }
 
@@ -33,8 +37,8 @@ public class Search {
         searchEnabled = true;
         searchBox.textProperty()
                  .addListener((observable, oldValue, newValue) -> searchUser(newValue));
-        searchBox.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) ->
-                                                    toggleFocus(oldPropertyValue));
+        searchBox.focusedProperty()
+                 .addListener((observable, oldValue, newValue) -> toggleFocus(oldValue));
     }
 
     private void searchUser(String searchString) {
@@ -51,10 +55,8 @@ public class Search {
 
     private void defaultFriendList() {
         List<Friend> data = mainScreen.getFriendList().getAccess().getData();
-        new CreateSearchList(mainScreen,
-                             data.stream().map(Friend::getUsername).collect(Collectors.toList()),
-                             true)
-            .execute();
+        List<String> friendList = data.stream().map(Friend::getUsername).collect(Collectors.toList());
+        createSearchList.execute(friendList);
     }
 
     private void toggleFocus(Boolean focusValue) {

@@ -20,7 +20,7 @@
   ~ Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
   -->
 
-<fx:root styleClass="message" stylesheets="@../../style/conversation.css" type="BorderPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root xmlns:fx="http://javafx.com/fxml/1" fx:id="UniqueReceivedInvitation" styleClass="message" stylesheets="@../../style/conversation.css" type="BorderPane" xmlns="http://javafx.com/javafx/8.0.111">
     <top>
         <VBox>
             <HBox alignment="CENTER_LEFT" styleClass="message-title">
@@ -45,7 +45,7 @@
                     <styleClass>
                         <String fx:value="zbg" />
                         <String fx:value="cmx6we" />
-                        <String fx:value="TTnd8c" />
+                        <String fx:value="ignoreButton" />
                     </styleClass>
                 </Button>
             </VBox>
@@ -54,7 +54,7 @@
                     <styleClass>
                         <String fx:value="zbg" />
                         <String fx:value="cmx6we" />
-                        <String fx:value="Wxsg2c" />
+                        <String fx:value="acceptButton" />
                     </styleClass>
                 </Button>
             </VBox>

@@ -6,7 +6,7 @@ import javafx.scene.text.Text;
 /**
  * Created by miniwolf on 17-01-2017.
  */
-public class Utils {
+public class FontUtils {
     private static Text helper = new Text();
 
     public static double computeTextWidth(Font font, String text, double wrappingWidth) {

@@ -102,7 +102,7 @@ public class SearchUserTests {
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
 
         FxAssert.verifyThat(
-                "#userName",
+                "#usernameLabel",
                 LabeledMatchers.hasText(username)
         );
     }
@@ -118,7 +118,7 @@ public class SearchUserTests {
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
 
         FxAssert.verifyThat(
-                "#userName",
+                "#usernameLabel",
                 LabeledMatchers.hasText(username)
         );
 
@@ -180,8 +180,8 @@ public class SearchUserTests {
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), usernames.size());
 
         var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchContact").queryAll());
-        Label label1 = robot.from(contactNodes.get(0)).lookup("#userName").query();
-        Label label2 = robot.from(contactNodes.get(1)).lookup("#userName").query();
+        Label label1 = robot.from(contactNodes.get(0)).lookup("#usernameLabel").query();
+        Label label2 = robot.from(contactNodes.get(1)).lookup("#usernameLabel").query();
 
         Assertions.assertTrue(label1.isVisible());
         Assertions.assertTrue(label2.isVisible());
@@ -270,11 +270,11 @@ public class SearchUserTests {
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), usernames.size());
 
         var contactNodes = new ArrayList<Node>(robot.lookup("#UniqueSearchContact").queryAll());
-        Label label1 = robot.from(contactNodes.get(0)).lookup("#userName").query();
-        Label label2 = robot.from(contactNodes.get(1)).lookup("#userName").query();
-        Label label3 = robot.from(contactNodes.get(2)).lookup("#userName").query();
-        Label label4 = robot.from(contactNodes.get(3)).lookup("#userName").query();
-        Label label5 = robot.from(contactNodes.get(4)).lookup("#userName").query();
+        Label label1 = robot.from(contactNodes.get(0)).lookup("#usernameLabel").query();
+        Label label2 = robot.from(contactNodes.get(1)).lookup("#usernameLabel").query();
+        Label label3 = robot.from(contactNodes.get(2)).lookup("#usernameLabel").query();
+        Label label4 = robot.from(contactNodes.get(3)).lookup("#usernameLabel").query();
+        Label label5 = robot.from(contactNodes.get(4)).lookup("#usernameLabel").query();
 
         Assertions.assertAll(
                 () -> FxAssert.verifyThat(label1, LabeledMatchers.hasText(username1)),

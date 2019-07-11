@@ -6,7 +6,7 @@
   src: url('Roboto-Regular.ttf');
 }
 
-.dNoYdf {
+.inviteItem {
   -fx-font-family: 'rb';
   -fx-pref-width: 398px;
   -fx-pref-height: 72px;
@@ -28,7 +28,7 @@
   -fx-pref-width: 46px;
 }
 
-.dNoYdf .JSnFcc {
+.inviteItem .JSnFcc {
   -fx-pref-height: 28px;
   -fx-padding: 1px 0 0 0;
 }

@@ -66,7 +66,7 @@ public class FriendsTests {
                 robot.lookup("#UniqueContact").tryQuery().isPresent(),
                 "Cannot see friend item after switching the content list to contacts.");
 
-        Label nameLabel = robot.lookup("#userName").query();
+        Label nameLabel = robot.lookup("#usernameLabel").query();
         Assertions.assertEquals("Friend", nameLabel.getText());
         Set<ImageView> imageView = robot.lookup("#image").queryAll();
         MatcherAssert.assertThat(imageView, hasSize(1));
@@ -86,7 +86,7 @@ public class FriendsTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
         FxAssert.verifyThat(
-                "#userName",
+                "#usernameLabel",
                 LabeledMatchers.hasText("Friend")
         );
 
@@ -113,7 +113,7 @@ public class FriendsTests {
                 IsIterableWithSize.iterableWithSize(2)
         );
 
-        var collect = robot.lookup("#userName").queryAll().stream()
+        var collect = robot.lookup("#usernameLabel").queryAll().stream()
                                                   .map(node -> ((Label) node).getText())
                                                   .collect(Collectors.toList());
 
@@ -132,7 +132,7 @@ public class FriendsTests {
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
-        var collect = robot.lookup("#userName").queryAll().stream()
+        var collect = robot.lookup("#usernameLabel").queryAll().stream()
                                                   .map(node -> ((Label) node).getText())
                                                   .collect(Collectors.toList());
 

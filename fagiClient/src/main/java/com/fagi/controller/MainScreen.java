@@ -116,11 +116,11 @@ public class MainScreen extends Pane {
         this.usernameString = usernameString;
         this.communication = communication;
         this.draggable = new Draggable(primaryStage);
-        listContentMap = new HashMap<>();
+        this.listContentMap = new HashMap<>();
         this.primaryStage = primaryStage;
         this.friendMapWrapper = new FriendMapWrapper(this);
 
-        new LoadFXML(this, "/view/Main.fxml").execute();
+        new LoadFXML("/view/Main.fxml").execute(this);
     }
 
     /**
@@ -375,9 +375,12 @@ public class MainScreen extends Pane {
 
     public Pane createMessageItem(Conversation conversation) {
         MessageItemController messageItemController =
-                new MessageItemController(usernameString, conversation);
-        messageItemController.getActionable()
-                             .assign(new OpenConversationFromID(this, conversation.getId()));
+                new MessageItemController(
+                        usernameString,
+                        conversation,
+                        new OpenConversationFromID(this),
+                        conversation.getLastMessageDate()
+                );
         messageItems.add(messageItemController);
         return messageItemController;
     }

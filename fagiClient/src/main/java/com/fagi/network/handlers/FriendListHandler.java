@@ -10,6 +10,7 @@ import com.fagi.model.messages.lists.FriendList;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -39,9 +40,8 @@ public class FriendListHandler implements Handler {
 
         List<Parent> parents = new ArrayList<>();
         for (Friend friend : friends) {
-            ContactItemController contactItem = new ContactItemController();
+            ContactItemController contactItem = setupItemController(friend, mainScreen.getUsername());
 
-            setupItemController(friend, contactItem);
             parents.add(contactItem);
             mainScreen.getFriendMapWrapper().register(friend, contactItem, contactItem);
         }
@@ -53,11 +53,13 @@ public class FriendListHandler implements Handler {
             .setScrollPaneContent(MainScreen.PaneContent.Contacts, contentController));
     }
 
-    private void setupItemController(Friend friend, ContactItemController controller) {
-        controller.toggleStatus(friend.isOnline());
-        controller.setUserName(friend.getUsername());
-        controller.getActionable()
-                  .assign(new OpenConversation(mainScreen, controller.getUserName()));
+    private ContactItemController setupItemController(Friend friend, String username) {
+        return new ContactItemController(
+                username,
+                friend,
+                new OpenConversation(mainScreen),
+                new Date()
+            );
     }
 
     @Override

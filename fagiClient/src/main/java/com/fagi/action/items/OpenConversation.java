@@ -4,7 +4,6 @@ import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.conversation.CreateConversationRequest;
-import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,41 +12,36 @@ import java.util.Optional;
 /**
  * @author miniwolf
  */
-public class OpenConversation implements Action {
+public class OpenConversation implements Action<String> {
     private MainScreen mainScreen;
-    private Label username;
+    private Action<Long> openConversation;
 
-    public OpenConversation(MainScreen mainScreen, Label username) {
+    public OpenConversation(MainScreen mainScreen) {
         this.mainScreen = mainScreen;
-        this.username = username;
+        this.openConversation = new OpenConversationFromID(mainScreen);
     }
 
     @Override
-    public void execute() {
+    public void execute(String username) {
+        Optional<Conversation> optConversation = getFirstConversation(username);
+
         Conversation conversation;
-        Optional<Conversation> optConversation = mainScreen.getConversations().stream().filter(
-            con -> con.getParticipants().size() > 0 && con.getParticipants()
-                                                          .contains(username.getText()))
-                                                           .findFirst();
         if (optConversation.isPresent()) {
             conversation = optConversation.get();
         } else {
-            List<String> participants = new ArrayList<>();
-            participants.add(mainScreen.getUsername());
-            participants.add(username.getText());
+            List<String> participants = new ArrayList<>() {{
+                add(mainScreen.getUsername());
+                add(username);
+            }};
             mainScreen.getCommunication().sendObject(new CreateConversationRequest(participants));
-            conversation = waitForConversation();
+            conversation = waitForConversation(username);
         }
-        new OpenConversationFromID(mainScreen, conversation.getId()).execute();
+        openConversation.execute(conversation.getId());
     }
 
-    private Conversation waitForConversation() {
+    private Conversation waitForConversation(String username) {
         Optional<Conversation> optConversation;
-        while (!(optConversation = mainScreen.getConversations().stream()
-                                             .filter(con -> con.getParticipants().size() > 0
-                                                            && con.getParticipants()
-                                                                  .contains(username.getText()))
-                                             .findFirst()).isPresent()) {
+        while ((optConversation = getFirstConversation(username)).isEmpty()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ie) {
@@ -55,5 +49,16 @@ public class OpenConversation implements Action {
             }
         }
         return optConversation.get();
+    }
+
+    private Optional<Conversation> getFirstConversation(String username) {
+        return mainScreen.getConversations()
+                .stream()
+                .filter(con -> conversationContainsUsername(username, con))
+                .findFirst();
+    }
+
+    private boolean conversationContainsUsername(String username, Conversation con) {
+        return con.getParticipants().size() > 0 && con.getParticipants().contains(username);
     }
 }
