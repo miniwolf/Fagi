@@ -4,6 +4,13 @@ plugins {
 
 mainClassName = 'Main'
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     compile project(':shared')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.20.0'
 }

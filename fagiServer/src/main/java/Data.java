@@ -22,9 +22,9 @@ import com.fagi.responses.UserOnline;
  * TODO: Add description, maybe think about .fagi file ending
  * Contains and update information on users.
  */
-class Data {
-    private final Map<String, OutputWorker> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
-    private final Map<String, InputWorker> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
+public class Data {
+    private final Map<String, OutputAgent> OUTPUT_WORKER_MAP = new ConcurrentHashMap<>();
+    private final Map<String, InputAgent> INPUT_WORKER_MAP = new ConcurrentHashMap<>();
     private final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
     private final Map<Long, Conversation> conversations = new ConcurrentHashMap<>();
     private long nextConversationId = 0;
@@ -107,8 +107,8 @@ class Data {
         JsonFileOperations.storeObjectToFile(codes, JsonFileOperations.CONFIG_FOLDER_PATH, JsonFileOperations.INVITE_CODES_FILE);
     }
 
-    public Response userLogin(String userName, String pass, OutputWorker worker,
-                                     InputWorker inputWorker) {
+    public Response userLogin(String userName, String pass, OutputAgent worker,
+                                     InputAgent inputWorker) {
         if (OUTPUT_WORKER_MAP.containsKey(userName)) {
             return new UserOnline();
         }
@@ -155,11 +155,11 @@ class Data {
         return registeredUsers.get(name);
     }
 
-    public InputWorker getInputWorker(String username) {
+    public InputAgent getInputWorker(String username) {
         return INPUT_WORKER_MAP.get(username);
     }
 
-    public OutputWorker getOutputWorker(String userName) {
+    public OutputAgent getOutputWorker(String userName) {
         return OUTPUT_WORKER_MAP.get(userName);
     }
 
