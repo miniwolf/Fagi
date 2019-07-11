@@ -44,25 +44,6 @@ class DataTests {
     }
 
     @Test
-    void usernameIsNull_ShouldResultInNoSuchUserResponse() {
-        doReturn(false).when(data).isUserOnline(Mockito.any());
-
-        Response response = data.userLogin(null, "password", outputAgent, inputAgent);
-
-        Assertions.assertTrue(response instanceof NoSuchUser);
-    }
-
-    @Test
-    void passwordIsNull_ShouldResultInPasswordErrorResponse() {
-        doReturn(false).when(data).isUserOnline(Mockito.any());
-        when(data.getUser(Mockito.any())).thenReturn(user);
-
-        Response response = data.userLogin("username", null, outputAgent, inputAgent);
-
-        Assertions.assertTrue(response instanceof PasswordError);
-    }
-
-    @Test
     void wrongPassword_ShouldResultInPasswordErrorResponse() {
         doReturn(false).when(data).isUserOnline(Mockito.any());
         when(data.getUser(Mockito.any())).thenReturn(user);
