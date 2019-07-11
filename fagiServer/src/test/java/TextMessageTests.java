@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.sql.Timestamp;
+
 import static org.mockito.Mockito.*;
 
 class TextMessageTests {
@@ -22,6 +24,8 @@ class TextMessageTests {
 
     @BeforeEach
     void setup() {
+        message = new TextMessage("Hullo", "sender", 42);
+
         data = Mockito.mock(Data.class);
         InputAgent inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.spy(OutputAgent.class);
@@ -33,15 +37,15 @@ class TextMessageTests {
         conversation = new Conversation(42, "Some conversation", ConversationType.Single);
         conversation.addUser("sender");
         conversation.addUser("receiver");
-
-        message = new TextMessage("Hullo", "sender", 42);
     }
 
     @Test
     void handlingATextMessage_ShouldGiveTheMessageATimeStamp() {
+        Timestamp oldTimeStamp = message.getMessageInfo().getTimestamp();
+
         inputHandler.handleInput(message);
 
-        Assertions.assertNotNull(message.getMessageInfo().getTimestamp());
+        Assertions.assertTrue(oldTimeStamp.getTime() < message.getMessageInfo().getTimestamp().getTime());
     }
 
     @Test
