@@ -29,7 +29,7 @@ class DataTests {
     void userAlreadyOnline_ShouldResultInUserOnlineResponse() {
         doReturn(true).when(data).isUserOnline(Mockito.any());
 
-        Response response = data.userLogin("username", "password", outputAgent, inputAgent);
+        Response response = data.userLogin(user.getUserName(), user.getPass(), outputAgent, inputAgent);
 
         Assertions.assertTrue(response instanceof UserOnline);
     }
@@ -38,7 +38,7 @@ class DataTests {
     void userDoesNotExist_ShouldResultInNoSuchUserResponse() {
         doReturn(false).when(data).isUserOnline(Mockito.any());
 
-        Response response = data.userLogin("username", "password", outputAgent, inputAgent);
+        Response response = data.userLogin(user.getUserName(), user.getPass(), outputAgent, inputAgent);
 
         Assertions.assertTrue(response instanceof NoSuchUser);
     }
@@ -48,7 +48,7 @@ class DataTests {
         doReturn(false).when(data).isUserOnline(Mockito.any());
         when(data.getUser(Mockito.any())).thenReturn(user);
 
-        Response response = data.userLogin("username", "wrong password", outputAgent, inputAgent);
+        Response response = data.userLogin(user.getUserName(), "wrong password", outputAgent, inputAgent);
 
         Assertions.assertTrue(response instanceof PasswordError);
     }
@@ -58,28 +58,51 @@ class DataTests {
         doReturn(false).when(data).isUserOnline(Mockito.any());
         when(data.getUser(Mockito.any())).thenReturn(user);
 
-        Response response = data.userLogin("username", "password", outputAgent, inputAgent);
+        Response response = data.userLogin(user.getUserName(), user.getPass(), outputAgent, inputAgent);
 
         Assertions.assertTrue(response instanceof AllIsWell);
     }
 
     @Test
-    void correctLogin_ShouldResultInInputAgentRegistered() {
+    void correctLogin_ShouldResultInInputAgentAndOutputAgentRegistered() {
         doReturn(false).when(data).isUserOnline(Mockito.any());
         when(data.getUser(Mockito.any())).thenReturn(user);
 
-        data.userLogin("username", "password", outputAgent, inputAgent);
+        data.userLogin(user.getUserName(), user.getPass(), outputAgent, inputAgent);
 
-        Assertions.assertEquals(inputAgent, data.getInputAgent("username"));
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(inputAgent, data.getInputAgent(user.getUserName())),
+                () -> Assertions.assertEquals(outputAgent, data.getOutputAgent(user.getUserName()))
+        );
     }
 
     @Test
-    void correctLogin_ShouldResultInOutputAgentRegistered() {
+    void logoutWithNullAsUsername_ShouldNotLogoutTheUser() {
         doReturn(false).when(data).isUserOnline(Mockito.any());
         when(data.getUser(Mockito.any())).thenReturn(user);
 
-        data.userLogin("username", "password", outputAgent, inputAgent);
+        data.userLogin(user.getUserName(), user.getPass(), outputAgent, inputAgent);
 
-        Assertions.assertEquals(outputAgent, data.getOutputAgent("username"));
+        data.userLogout(null);
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(inputAgent, data.getInputAgent(user.getUserName())),
+                () -> Assertions.assertEquals(outputAgent, data.getOutputAgent(user.getUserName()))
+        );
+    }
+
+    @Test
+    void logoutWithLoggedInUser_ShouldRemoveInputAgentAndOutputAgentFromMaps() {
+        doReturn(false).when(data).isUserOnline(Mockito.any());
+        when(data.getUser(Mockito.any())).thenReturn(user);
+
+        data.userLogin(user.getUserName(), user.getPass(), outputAgent, inputAgent);
+
+        data.userLogout(user.getUserName());
+
+        Assertions.assertAll(
+                () -> Assertions.assertNull(data.getInputAgent(user.getUserName())),
+                () -> Assertions.assertNull(data.getOutputAgent(user.getUserName()))
+        );
     }
 }
