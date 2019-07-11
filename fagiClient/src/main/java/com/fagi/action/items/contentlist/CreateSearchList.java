@@ -6,37 +6,37 @@ package com.fagi.action.items.contentlist;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.SearchContactController;
+import com.fagi.controller.contentList.SearchContactController;
 import com.fagi.controller.contentList.ContentController;
+import javafx.application.Platform;
 
 import java.util.List;
-
-import javafx.application.Platform;
 
 /**
  * Creates the element and stores it in the mainscreen's current PaneContent element.
  *
  * @author miniwolf
  */
-public class CreateSearchList implements Action {
+public class CreateSearchList implements Action<List<String>> {
     private MainScreen mainScreen;
-    private List<String> usernames;
     private boolean isFriends;
 
-    public CreateSearchList(MainScreen mainScreen, List<String> usernames, boolean isFriends) {
+    public CreateSearchList(MainScreen mainScreen, boolean isFriends) {
         this.mainScreen = mainScreen;
-        this.usernames = usernames;
         this.isFriends = isFriends;
     }
 
     @Override
-    public void execute() {
+    public void execute(List<String> usernames) {
         ContentController contentController =
                 new ContentController("/view/content/SearchContent.fxml");
 
         usernames.forEach(username -> {
-            SearchContactController controller = new SearchContactController(isFriends, mainScreen,
-                                                                             username);
+            SearchContactController controller =
+                    new SearchContactController(
+                            isFriends,
+                            mainScreen,
+                            username);
             contentController.addToContentList(controller);
         });
 

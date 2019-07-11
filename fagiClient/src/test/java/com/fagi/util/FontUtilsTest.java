@@ -32,7 +32,7 @@ class DisableOnLinuxAndMacCondition implements ExecutionCondition {
  * @author miniwolf
  */
 @ExtendWith({JavaFXThreadingExtension.class, DisableOnLinuxAndMacCondition.class})
-public class UtilsTest {
+public class FontUtilsTest {
     private static final Font ROBOTO = new Font("Roboto-Regular", 13);
 
     @Test
@@ -40,7 +40,7 @@ public class UtilsTest {
         var message = "123456789 123456789 123456789 1234";
         Assertions.assertEquals(
                 18,
-                Utils.computeTextHeight(ROBOTO, message, 232),
+                FontUtils.computeTextHeight(ROBOTO, message, 232),
                 0.001,
                 "Should return one line");
     }
@@ -50,7 +50,7 @@ public class UtilsTest {
         var message = "123456789 123456789 123456789 12345";
         Assertions.assertEquals(
                 35,
-                Utils.computeTextHeight(ROBOTO, message, 232),
+                FontUtils.computeTextHeight(ROBOTO, message, 232),
                 0.001,
                 "Should return two lines");
     }
@@ -60,7 +60,7 @@ public class UtilsTest {
         var message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 1234";
         Assertions.assertEquals(
                 35,
-                Utils.computeTextHeight(ROBOTO, message, 232),
+                FontUtils.computeTextHeight(ROBOTO, message, 232),
                 0.001,
                 "Should return two lines");
     }
@@ -71,7 +71,7 @@ public class UtilsTest {
         var message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 12345";
         Assertions.assertEquals(
                 52,
-                Utils.computeTextHeight(ROBOTO, message, 232),
+                FontUtils.computeTextHeight(ROBOTO, message, 232),
                 0.001,
                 "Should return three lines");
     }
@@ -81,7 +81,7 @@ public class UtilsTest {
         var message = "123456789 123456789 123456789 1234";
         Assertions.assertEquals(
                 228,
-                Utils.computeTextWidth(ROBOTO, message, 232),
+                FontUtils.computeTextWidth(ROBOTO, message, 232),
                 0.001,
                 "Should return one line");
     }
@@ -91,7 +91,7 @@ public class UtilsTest {
         var message = "123456789 123456789 123456789 12345678";
         Assertions.assertEquals(
                 232,
-                Utils.computeTextWidth(ROBOTO, message, 232),
+                FontUtils.computeTextWidth(ROBOTO, message, 232),
                 0.001,
                 "Should return one line");
     }
