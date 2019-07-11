@@ -1,6 +1,6 @@
 package com.fagi.server;/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * com.fagi.server.Server.java
+ * Server.java
  *
  * Listening socket for incoming transmissions from clients.
  */
@@ -49,7 +49,7 @@ public class Server {
     }
 
     public void start() {
-        System.out.println("Starting com.fagi.server.Server");
+        System.out.println("Starting Server");
         ServerSocket ss = null;
         try {
             ss = new ServerSocket(port);
@@ -74,7 +74,7 @@ public class Server {
 
         conversationHandlerThread.interrupt();
 
-        System.out.println("Stopping com.fagi.server.Server");
+        System.out.println("Stopping Server");
 
         if(ss != null) {
             try {

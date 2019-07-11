@@ -1,6 +1,6 @@
 package com.fagi.model;/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * com.fagi.model.Data.java
+ * Data.java
  */
 
 import com.fagi.conversation.Conversation;

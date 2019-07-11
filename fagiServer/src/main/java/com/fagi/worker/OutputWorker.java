@@ -64,7 +64,7 @@ public class OutputWorker extends Worker implements OutputAgent {
         if (!respondObjects.isEmpty()) {
             try {
                 sendResponses();
-            } catch (IOException ignored) { // com.fagi.model.User logged off we didn't manage to send response
+            } catch (IOException ignored) { // User logged off we didn't manage to send response
             }
         }
         System.out.println("Closing output");

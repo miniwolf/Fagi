@@ -1,8 +1,8 @@
 package com.fagi.model;/*
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
- * com.fagi.model.User.java
+ * User.java
  *
- * com.fagi.model.User data object.
+ * User data object.
  */
 
 import com.fagi.responses.NoSuchUser;

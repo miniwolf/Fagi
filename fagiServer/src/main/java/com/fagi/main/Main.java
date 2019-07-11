@@ -1,6 +1,6 @@
 package com.fagi.main;/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
- * com.fagi.main.Main.java
+ * Main.java
  */
 
 import com.fagi.model.Data;
