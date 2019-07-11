@@ -6,7 +6,7 @@ package com.fagi.action.items.contentlist;
 
 import com.fagi.action.Action;
 import com.fagi.controller.MainScreen;
-import com.fagi.controller.SearchContactController;
+import com.fagi.controller.contentList.SearchContactController;
 import com.fagi.controller.contentList.ContentController;
 import javafx.application.Platform;
 

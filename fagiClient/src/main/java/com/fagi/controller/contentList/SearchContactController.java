@@ -1,10 +1,8 @@
-package com.fagi.controller;
+package com.fagi.controller.contentList;
 
-import com.fagi.action.Action;
 import com.fagi.action.items.OpenConversation;
 import com.fagi.action.items.OpenInvitation;
-import com.fagi.controller.contentList.ContentItemController;
-import javafx.fxml.FXML;
+import com.fagi.controller.MainScreen;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,9 +10,8 @@ import java.util.Date;
 /**
  * @author miniwolf and zargess
  */
-public class SearchContactController extends ContentItemController {
+public class SearchContactController extends ContentItemController<String> {
     private static final String fxmlResource = "/view/content/SearchContact.fxml";
-    private final Action<String> action;
 
     public SearchContactController(
             boolean isFriend,
@@ -24,19 +21,15 @@ public class SearchContactController extends ContentItemController {
                 mainScreen.getUsername(),
                 new Date(),
                 new ArrayList<>() {{ add(contactUsername); }},
-                fxmlResource
+                fxmlResource,
+                isFriend
+                        ? new OpenConversation(mainScreen)
+                        : new OpenInvitation(mainScreen)
         );
-        action = isFriend
-                ? new OpenConversation(mainScreen)
-                : new OpenInvitation(mainScreen);
     }
 
     @Override
-    protected void timerCallback() {
-    }
-
-    @FXML
-    protected void openConversation() {
-        action.execute(getUserName().getText());
+    protected String getData() {
+        return getUserName().getText();
     }
 }

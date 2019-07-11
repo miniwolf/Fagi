@@ -1,7 +1,7 @@
 package com.fagi.controller.contentList;
 
+import com.fagi.action.Action;
 import com.fagi.action.items.LoadFXML;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -10,40 +10,30 @@ import javafx.scene.layout.HBox;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
-public abstract class ContentItemController extends HBox {
-    protected final String username;
-    protected Date dateInstance;
+public abstract class ContentItemController<S> extends HBox {
     @FXML Label date;
     @FXML Label lastMessage;
     @FXML private Label usernameLabel;
     @FXML private ImageView image;
-    private Timer timer;
 
-    public ContentItemController(String username, Date date, List<String> usernames, String fxmlResource) {
+    protected final String username;
+    private final Action<S> action;
+    protected Date dateInstance;
+
+    public ContentItemController(
+            String username,
+            Date date,
+            List<String> usernames,
+            String fxmlResource,
+            Action<S> action) {
         this.username = username;
-        dateInstance = date;
+        this.dateInstance = date;
         new LoadFXML(fxmlResource).execute(this);
         setUsers(usernames);
+        this.action = action;
     }
-
-    @FXML
-    private void initialize() {
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    timerCallback();
-                });
-            }
-        }, 0, 1000);
-    }
-
-    protected abstract void timerCallback();
 
     protected void setUsers(List<String> usernames) {
         List<String> meExcludedList = usernames.stream()
@@ -59,10 +49,6 @@ public abstract class ContentItemController extends HBox {
         this.image.setImage(image);
     }
 
-    public void stopTimer() {
-        timer.cancel();
-    }
-
     public Label getUserName() {
         return usernameLabel;
     }
@@ -70,4 +56,11 @@ public abstract class ContentItemController extends HBox {
     public void setDate(Date date) {
         dateInstance = date;
     }
+
+    @FXML
+    protected void openConversation() {
+        action.execute(getData());
+    }
+
+    protected abstract S getData();
 }

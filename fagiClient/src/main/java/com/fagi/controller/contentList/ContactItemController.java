@@ -12,22 +12,25 @@ import java.util.Date;
 /**
  * @author miniwolf and zargess
  */
-public class ContactItemController extends ContentItemController {
+public class ContactItemController extends TimedContentItemController<String> {
     @FXML private Pane status;
 
     private static final String fxmlResource = "/view/content/Contact.fxml";
-
-    private final Action<String> action;
 
     public ContactItemController(
             String myUsername,
             Friend contact,
             Action<String> action,
             Date date) {
-        super(myUsername, date, new ArrayList<>() {{
-            add(contact.getUsername());
-        }}, fxmlResource);
-        this.action = action;
+        super(
+                myUsername,
+                date,
+                new ArrayList<>() {{
+                    add(contact.getUsername());
+                }},
+                fxmlResource,
+                action
+        );
         toggleStatus(contact.isOnline());
     }
 
@@ -40,12 +43,12 @@ public class ContactItemController extends ContentItemController {
     }
 
     @Override
-    protected void timerCallback() {
+    public void timerCallback() {
         date.setText(DateTimeUtils.convertDate(dateInstance));
     }
 
-    @FXML
-    protected void openConversation() {
-        action.execute(getUserName().getText());
+    @Override
+    protected String getData() {
+        return getUserName().getText();
     }
 }

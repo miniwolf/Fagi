@@ -3,38 +3,29 @@ package com.fagi.controller.contentList;
 import com.fagi.action.Action;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.messages.message.TextMessage;
-import com.fagi.controller.contentList.ContentItemController;
 import com.fagi.util.DateTimeUtils;
-import javafx.fxml.FXML;
 
 import java.util.Date;
 
 /**
  * @author miniwolf
  */
-public class MessageItemController extends ContentItemController {
+public class MessageItemController extends TimedContentItemController<Long> {
     private static final String fxmlResource = "/view/content/ConversationItem.fxml";
-    private final Action<Long> action;
-    private long ID;
+    private final long ID;
 
     public MessageItemController(
             String username,
             Conversation conversation,
             Action<Long> action,
             Date date) {
-        super(username, date, conversation.getParticipants(), fxmlResource);
+        super(username, date, conversation.getParticipants(), fxmlResource, action);
         this.ID = conversation.getId();
-        this.action = action;
         getStyleClass().add("contact");
 
         if (conversation.getLastMessage() != null) {
             setLastMessage(conversation.getLastMessage());
         }
-    }
-
-    @FXML
-    protected void openConversation() {
-        action.execute(ID);
     }
 
     public void setLastMessage(TextMessage message) {
@@ -52,14 +43,19 @@ public class MessageItemController extends ContentItemController {
         return data.substring(0, max) + "...";
     }
 
-    public long getID() {
-        return ID;
-    }
-
     @Override
-    protected void timerCallback() {
+    public void timerCallback() {
         date.setText(DateTimeUtils.convertDate(dateInstance));
         lastMessage.applyCss();
         lastMessage.layout();
+    }
+
+    @Override
+    protected Long getData() {
+        return getID();
+    }
+
+    public long getID() {
+        return ID;
     }
 }
