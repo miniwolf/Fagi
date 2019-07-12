@@ -73,7 +73,7 @@ public class Data {
         nextConversationId = id;
     }
 
-    public synchronized Object createUser(String userName, String pass) {
+    public synchronized Response createUser(String userName, String pass) {
         if (registeredUsers.containsKey(userName)) {
             return new UserExists();
         }

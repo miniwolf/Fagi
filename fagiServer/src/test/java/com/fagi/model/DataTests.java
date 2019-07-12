@@ -105,4 +105,23 @@ class DataTests {
                 () -> Assertions.assertNull(data.getOutputAgent(user.getUserName()))
         );
     }
+
+    @Test
+    void creatingAUserWithAnExistingUsername_ShouldResultInUserExistsResponse() {
+        doReturn(new AllIsWell()).when(data).storeUser(Mockito.any());
+
+        data.createUser(user.getUserName(), user.getPass());
+        Response response = data.createUser(user.getUserName(), user.getPass());
+
+        Assertions.assertTrue(response instanceof UserExists);
+    }
+
+    @Test
+    void creatingAUserWithAvailableUsername_ShouldResultInAllIsWellResponse() {
+        doReturn(new AllIsWell()).when(data).storeUser(Mockito.any());
+
+        Response response = data.createUser(user.getUserName(), user.getPass());
+
+        Assertions.assertTrue(response instanceof AllIsWell);
+    }
 }
