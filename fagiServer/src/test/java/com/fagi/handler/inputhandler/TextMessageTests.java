@@ -50,6 +50,12 @@ class TextMessageTests {
     void handlingATextMessage_ShouldGiveTheMessageATimeStamp() {
         Timestamp oldTimeStamp = message.getMessageInfo().getTimestamp();
 
+        try {
+            Thread.sleep(1); // wait to ensure we get different timestamps
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         inputHandler.handleInput(message);
 
         Assertions.assertTrue(oldTimeStamp.getTime() < message.getMessageInfo().getTimestamp().getTime());
