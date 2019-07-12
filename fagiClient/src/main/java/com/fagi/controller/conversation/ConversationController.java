@@ -50,7 +50,7 @@ public class ConversationController extends BorderPane {
         this.username = username;
         this.communication = mainScreen.getCommunication();
         this.primaryStage = mainScreen.getPrimaryStage();
-        new LoadFXML(this, "/view/conversation/Conversation.fxml").execute();
+        new LoadFXML("/view/conversation/Conversation.fxml").execute(this);
     }
 
     @FXML
@@ -147,8 +147,11 @@ public class ConversationController extends BorderPane {
     }
 
     private HBox getBox(String message, String username) {
-        return new MessageController(message, "/view/conversation/TheirMessage.fxml",
-                                     username);
+        return new MessageController(
+                message,
+                "/view/conversation/TheirMessage.fxml",
+                username
+        );
     }
 
     private HBox createMessageBox(TextMessage message) {

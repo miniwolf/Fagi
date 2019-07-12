@@ -1,28 +1,22 @@
-package com.fagi.handler.inputhandler;
-
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
-import com.fagi.responses.AllIsWell;
-import com.fagi.responses.NoSuchConversation;
-import com.fagi.responses.Unauthorized;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import java.sql.Timestamp;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
-import static org.mockito.Mockito.*;
-
-class TextMessageTests {
+public class TextMessageIntegrationTests {
     private OutputAgent outputAgent;
+    private ConversationHandler conversationHandler;
     private Data data;
 
     private InputHandler inputHandler;
@@ -31,12 +25,10 @@ class TextMessageTests {
 
     @BeforeEach
     void setup() {
-        message = new TextMessage("Hullo", "sender", 42);
-
         data = Mockito.mock(Data.class);
         InputAgent inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.spy(OutputAgent.class);
-        ConversationHandler conversationHandler = new ConversationHandler(data);
+        conversationHandler = new ConversationHandler(data);
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
 
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
@@ -44,41 +36,38 @@ class TextMessageTests {
         conversation = new Conversation(42, "Some conversation", ConversationType.Single);
         conversation.addUser("sender");
         conversation.addUser("receiver");
+
+        message = new TextMessage("Hullo", "sender", 42);
     }
 
     @Test
-    void handlingATextMessage_ShouldGiveTheMessageATimeStamp() {
-        Timestamp oldTimeStamp = message.getMessageInfo().getTimestamp();
-
-        inputHandler.handleInput(message);
-
-        Assertions.assertTrue(oldTimeStamp.getTime() < message.getMessageInfo().getTimestamp().getTime());
-    }
-
-    @Test
-    void dataNotContainingConversationWithId_ShouldResultInNoSuchConversation() {
-        inputHandler.handleInput(message);
-
-        var argumentCaptor = ArgumentCaptor.forClass(NoSuchConversation.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
-    }
-
-    @Test
-    void sendingAMessageToConversationThatYouAreNotAParticipantOf_ShouldResultInUnauthorized() {
+    void sendingAMessageToConversationWithOnlineParticipant_ShouldSendMessageToThatUser() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
-        inputHandler.handleInput(message);
+        when(data.isUserOnline("receiver")).thenReturn(true);
 
-        var argumentCaptor = ArgumentCaptor.forClass(Unauthorized.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        inputHandler.handleInput(message);
+        conversationHandler.tick();
+
+        Mockito.verify(outputAgent, times(1)).addMessage(message);
     }
 
     @Test
-    void sendingAMessageToConversation_ShouldResultInAllIsWell() {
+    void sendingAMessageToConversation_ShouldAddMessageToConversation() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
 
         inputHandler.handleInput(message);
+        conversationHandler.tick();
 
-        var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Assertions.assertEquals(1, conversation.getMessages().size());
+    }
+
+    @Test
+    void sendingAMessageToConversation_ShouldResultInConversationBeingStored() {
+        when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
+
+        inputHandler.handleInput(message);
+        conversationHandler.tick();
+
+        Mockito.verify(data, times(1)).storeConversation(conversation);
     }
 }

@@ -23,12 +23,12 @@ public class LoadFXMLTest {
         System.out.println("Starting LoadFXMLtests");
         var mainScreen = Mockito.mock(MainScreen.class);
         this.mock = new ConversationController(mainScreen, new Conversation(), "");
-        loadFXML = new LoadFXML(this.mock, "/view/conversation/Conversation.fxml");
+        loadFXML = new LoadFXML("/view/conversation/Conversation.fxml");
     }
 
     @Test
     public void test() {
-        loadFXML.execute();
+        loadFXML.execute(mock);
         Assertions.assertNotNull(mock.getCenter(), "Should contain center element");
     }
 }

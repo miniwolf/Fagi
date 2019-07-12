@@ -17,17 +17,15 @@ import java.io.IOException;
  *
  * @author miniwolf
  */
-public class LoadFXML implements Action {
-    private final Parent parent;
+public class LoadFXML implements Action<Parent> {
     private final String resourcePath;
 
-    public LoadFXML(Parent parent, String resourcePath) {
-        this.parent = parent;
+    public LoadFXML(String resourcePath) {
         this.resourcePath = resourcePath;
     }
 
     @Override
-    public void execute() {
+    public void execute(Parent parent) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
         loader.setController(parent);
         loader.setRoot(parent);

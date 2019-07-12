@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class ContentController extends VBox {
     public ContentController(String resource) {
-        new LoadFXML(this, resource).execute();
+        new LoadFXML(resource).execute(this);
     }
 
     public synchronized void addToContentList(Parent parent) {

@@ -30,7 +30,7 @@ public class ReceivedInvitationController extends BorderPane {
         this.communication = mainScreen.getCommunication();
         this.mainScreen = mainScreen;
 
-        new LoadFXML(this, "/view/conversation/ReceivedInvitation.fxml").execute();
+        new LoadFXML("/view/conversation/ReceivedInvitation.fxml").execute(this);
 
         char uChar = Character.toUpperCase(request.getMessage().getMessageInfo().getSender()
                                                   .toCharArray()[0]);
