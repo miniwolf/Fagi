@@ -15,36 +15,35 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 
 class LogoutServerTests {
     private Data data;
-    private User user;
     private InputHandler inputHandler;
     private OutputAgent outputAgent;
+    private InputAgent inputAgent;
 
     @BeforeEach
     void setup() {
-        var inputAgent = Mockito.mock(InputAgent.class);
+        inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.mock(OutputAgent.class);
         data = Mockito.mock(Data.class);
-
-        user = new User("username", "password");
-
-        doReturn(user).when(data).getUser(Mockito.anyString());
-        doReturn(user.getUserName()).when(inputAgent).getUsername();
 
         inputHandler = new InputHandler(inputAgent, outputAgent, new ConversationHandler(data), data);
     }
 
     @Test
     void whenUserLogout_UserOnlineFriendsGetsNotification() {
+        User user = new User("username", "password");
         var friend = new User("friend", "123");
         var otherFriend = new User("otherUser", "123");
         user.addFriend(friend);
         user.addFriend(otherFriend);
         var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
 
+        doReturn(user).when(data).getUser(Mockito.anyString());
+        doReturn(user.getUserName()).when(inputAgent).getUsername();
         doReturn(true).when(data).isUserOnline(friend.getUserName());
         doReturn(outputAgent).when(data).getOutputAgent(friend.getUserName());
         doReturn(otherFriendOutputAgent).when(data).getOutputAgent(otherFriend.getUserName());
@@ -57,7 +56,10 @@ class LogoutServerTests {
         var argumentCaptor = ArgumentCaptor.forClass(UserLoggedOut.class);
         Mockito.verify(outputAgent, times(1)).addMessage(argumentCaptor.capture());
 
-        Assertions.assertEquals(user.getUserName(), argumentCaptor.getValue().getUsername());
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(argumentCaptor.getValue() instanceof UserLoggedOut),
+                () -> Assertions.assertEquals(user.getUserName(), argumentCaptor.getValue().getUsername())
+        );
     }
 
     @Test
@@ -66,5 +68,7 @@ class LogoutServerTests {
 
         var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
     }
 }

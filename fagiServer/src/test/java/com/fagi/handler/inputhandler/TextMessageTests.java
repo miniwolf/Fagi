@@ -67,15 +67,19 @@ class TextMessageTests {
 
         var argumentCaptor = ArgumentCaptor.forClass(NoSuchConversation.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof NoSuchConversation);
     }
 
     @Test
     void sendingAMessageToConversationThatYouAreNotAParticipantOf_ShouldResultInUnauthorized() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
-        inputHandler.handleInput(message);
+        inputHandler.handleInput(new TextMessage("Hello", "Not a participant", 42));
 
         var argumentCaptor = ArgumentCaptor.forClass(Unauthorized.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof Unauthorized);
     }
 
     @Test
@@ -86,5 +90,7 @@ class TextMessageTests {
 
         var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
     }
 }

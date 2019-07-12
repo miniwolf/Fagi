@@ -7,4 +7,5 @@ package com.fagi.responses;
  */
 
 public class PasswordError implements Response {
+    private static final long serialVersionUID = 5L;
 }

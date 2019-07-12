@@ -11,4 +11,5 @@ package com.fagi.responses;
  * @author miniwolf
  */
 public class UserExists implements Response {
+    private static final long serialVersionUID = 7L;
 }
