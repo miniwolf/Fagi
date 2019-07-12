@@ -43,11 +43,16 @@ class LogoutServerTests {
         var otherFriend = new User("otherUser", "123");
         user.addFriend(friend);
         user.addFriend(otherFriend);
+        var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
 
         doReturn(true).when(data).isUserOnline(friend.getUserName());
-        doReturn(outputAgent).when(data).getOutputAgent(Mockito.any());
+        doReturn(outputAgent).when(data).getOutputAgent(friend.getUserName());
+        doReturn(otherFriendOutputAgent).when(data).getOutputAgent(otherFriend.getUserName());
 
         inputHandler.handleInput(new Logout());
+
+        var otherFriendArgumentCaptor = ArgumentCaptor.forClass(UserLoggedOut.class);
+        Mockito.verify(otherFriendOutputAgent, times(0)).addMessage(otherFriendArgumentCaptor.capture());
 
         var argumentCaptor = ArgumentCaptor.forClass(UserLoggedOut.class);
         Mockito.verify(outputAgent, times(1)).addMessage(argumentCaptor.capture());
