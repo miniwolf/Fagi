@@ -1,5 +1,8 @@
+package com.fagi.worker;
+
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.handler.InputHandler;
 
 public interface InputAgent {
     void setUsername(String username);

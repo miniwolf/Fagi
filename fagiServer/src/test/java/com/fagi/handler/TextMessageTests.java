@@ -1,9 +1,14 @@
+package com.fagi.handler;
+
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchConversation;
 import com.fagi.responses.Unauthorized;
+import com.fagi.worker.InputAgent;
+import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +37,7 @@ class TextMessageTests {
         ConversationHandler conversationHandler = new ConversationHandler(data);
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
 
-        when(data.getOutputWorker(Mockito.anyString())).thenReturn(outputAgent);
+        when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
 
         conversation = new Conversation(42, "Some conversation", ConversationType.Single);
         conversation.addUser("sender");
@@ -42,6 +47,12 @@ class TextMessageTests {
     @Test
     void handlingATextMessage_ShouldGiveTheMessageATimeStamp() {
         Timestamp oldTimeStamp = message.getMessageInfo().getTimestamp();
+
+        try {
+            Thread.sleep(1); // wait to ensure we get different timestamps
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         inputHandler.handleInput(message);
 

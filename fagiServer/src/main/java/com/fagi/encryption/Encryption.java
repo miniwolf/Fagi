@@ -1,5 +1,4 @@
-import com.fagi.encryption.KeyStorage;
-import com.fagi.encryption.RSA;
+package com.fagi.encryption;
 
 import java.io.File;
 import java.io.IOException;

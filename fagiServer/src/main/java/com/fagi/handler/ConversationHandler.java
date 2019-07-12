@@ -1,4 +1,7 @@
+package com.fagi.handler;
+
 import com.fagi.conversation.Conversation;
+import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +31,7 @@ public class ConversationHandler implements Runnable {
                     data.getConversation(message.getMessageInfo().getConversationID());
             conversation.getParticipants().stream().filter(data::isUserOnline)
                     .forEach(
-                            participant -> data.getOutputWorker(participant).addMessage(message));
+                            participant -> data.getOutputAgent(participant).addMessage(message));
 
             conversation.addMessage(message);
             data.storeConversation(conversation);

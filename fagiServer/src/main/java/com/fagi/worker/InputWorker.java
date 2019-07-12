@@ -1,10 +1,14 @@
-/*
+package com.fagi.worker;/*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
+import com.fagi.encryption.Encryption;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.handler.ConversationHandler;
+import com.fagi.handler.InputHandler;
+import com.fagi.model.Data;
 
 import java.io.EOFException;
 import java.io.IOException;

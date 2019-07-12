@@ -1,11 +1,10 @@
-/*
+package com.fagi.model;/*
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
  * User.java
  *
  * User data object.
  */
 
-import com.fagi.model.FriendRequest;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.Response;
 import com.fagi.responses.UserExists;

@@ -1,4 +1,4 @@
-package voice;/*
+package com.fagi.voice;/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
  */
 

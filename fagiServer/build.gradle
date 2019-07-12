@@ -2,7 +2,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'Main'
+mainClassName = 'com.fagi.main.Main'
 
 test {
     useJUnitPlatform()
