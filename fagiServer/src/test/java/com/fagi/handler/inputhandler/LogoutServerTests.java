@@ -22,28 +22,29 @@ class LogoutServerTests {
     private Data data;
     private InputHandler inputHandler;
     private OutputAgent outputAgent;
-    private InputAgent inputAgent;
+    private User user;
 
     @BeforeEach
     void setup() {
-        inputAgent = Mockito.mock(InputAgent.class);
+        InputAgent inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.mock(OutputAgent.class);
         data = Mockito.mock(Data.class);
 
         inputHandler = new InputHandler(inputAgent, outputAgent, new ConversationHandler(data), data);
+        user = new User("username", "password");
+
+        doReturn(user).when(data).getUser(Mockito.anyString());
+        doReturn(user.getUserName()).when(inputAgent).getUsername();
     }
 
     @Test
     void whenUserLogout_UserOnlineFriendsGetsNotification() {
-        User user = new User("username", "password");
         var friend = new User("friend", "123");
         var otherFriend = new User("otherUser", "123");
         user.addFriend(friend);
         user.addFriend(otherFriend);
         var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
 
-        doReturn(user).when(data).getUser(Mockito.anyString());
-        doReturn(user.getUserName()).when(inputAgent).getUsername();
         doReturn(true).when(data).isUserOnline(friend.getUserName());
         doReturn(outputAgent).when(data).getOutputAgent(friend.getUserName());
         doReturn(otherFriendOutputAgent).when(data).getOutputAgent(otherFriend.getUserName());

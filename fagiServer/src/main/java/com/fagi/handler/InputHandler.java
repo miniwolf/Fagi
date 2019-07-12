@@ -360,11 +360,14 @@ public class InputHandler {
         if (!inviteCodes.contains(inviteCode)) {
             return new IllegalInviteCode();
         }
-        inviteCodes.remove(inviteCode);
-        data.storeInviteCodes(inviteCodes);
 
         try {
-            return data.createUser(arg.getUsername(), arg.getPassword());
+            Response response = data.createUser(arg.getUsername(), arg.getPassword());
+            if (response instanceof AllIsWell) {
+                inviteCodes.remove(inviteCode);
+                data.storeInviteCodes(inviteCodes);
+            }
+            return response;
         } catch (Exception e) {
             return e;
         }
