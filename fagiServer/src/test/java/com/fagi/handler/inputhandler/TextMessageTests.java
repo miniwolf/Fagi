@@ -1,7 +1,9 @@
-package com.fagi.handler;
+package com.fagi.handler.inputhandler;
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.handler.ConversationHandler;
+import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
@@ -65,15 +67,19 @@ class TextMessageTests {
 
         var argumentCaptor = ArgumentCaptor.forClass(NoSuchConversation.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof NoSuchConversation);
     }
 
     @Test
     void sendingAMessageToConversationThatYouAreNotAParticipantOf_ShouldResultInUnauthorized() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
-        inputHandler.handleInput(message);
+        inputHandler.handleInput(new TextMessage("Hello", "Not a participant", 42));
 
         var argumentCaptor = ArgumentCaptor.forClass(Unauthorized.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof Unauthorized);
     }
 
     @Test
@@ -84,5 +90,7 @@ class TextMessageTests {
 
         var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
         Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+
+        Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
     }
 }

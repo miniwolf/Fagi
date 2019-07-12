@@ -7,4 +7,5 @@ package com.fagi.responses;
  */
 
 public class NoSuchUser implements Response {
+    private static final long serialVersionUID = 4L;
 }

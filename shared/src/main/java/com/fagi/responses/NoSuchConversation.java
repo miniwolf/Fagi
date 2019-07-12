@@ -7,4 +7,5 @@ package com.fagi.responses;
  * Created by Marcus on 07-07-2016.
  */
 public class NoSuchConversation implements Response {
+    private static final long serialVersionUID = 3L;
 }

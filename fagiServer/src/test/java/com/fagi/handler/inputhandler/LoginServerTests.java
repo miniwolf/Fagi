@@ -1,5 +1,7 @@
-package com.fagi.handler;
+package com.fagi.handler.inputhandler;
 
+import com.fagi.handler.ConversationHandler;
+import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.Login;
 import com.fagi.model.User;

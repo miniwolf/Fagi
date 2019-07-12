@@ -7,4 +7,5 @@ package com.fagi.responses;
  */
 
 public class UserOnline implements Response {
+    private static final long serialVersionUID = 8L;
 }

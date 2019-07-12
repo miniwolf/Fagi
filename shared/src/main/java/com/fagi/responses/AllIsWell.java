@@ -7,4 +7,5 @@ package com.fagi.responses;
  */
 
 public class AllIsWell implements Response {
+    private static final long serialVersionUID = 1L;
 }
