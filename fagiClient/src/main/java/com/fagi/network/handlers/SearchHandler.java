@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Marcus on 08-07-2016.
  */
-public class SearchHandler implements Handler {
+public class SearchHandler implements Handler<SearchUsersResult> {
     private Action<List<String>> createSearchList;
 
     public SearchHandler(MainScreen mainScreen) {
@@ -19,8 +19,7 @@ public class SearchHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        SearchUsersResult result = (SearchUsersResult) object;
+    public void handle(SearchUsersResult result) {
         createSearchList.execute(result.getData().getUsernames());
     }
 

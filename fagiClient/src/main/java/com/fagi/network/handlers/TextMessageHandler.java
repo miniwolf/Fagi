@@ -22,9 +22,9 @@ import java.util.Optional;
 /**
  * @author miniwolf
  */
-public class TextMessageHandler implements Handler {
-    private Container container = new DefaultContainer();
-    private DefaultThreadHandler runnable = new DefaultThreadHandler(container, this);
+public class TextMessageHandler implements Handler<TextMessage> {
+    private Container<TextMessage> container = new DefaultContainer<>();
+    private DefaultThreadHandler<TextMessage> runnable = new DefaultThreadHandler<>(container, this);
     private final MainScreen mainScreen;
 
     public TextMessageHandler(MainScreen mainScreen, InputDistributor inputDistributor) {
@@ -34,8 +34,7 @@ public class TextMessageHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages inMessage) {
-        TextMessage message = (TextMessage) inMessage;
+    public void handle(TextMessage message) {
         Optional<Conversation> first = mainScreen.getConversations().stream().filter(
             c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
         if (first.isEmpty()) {

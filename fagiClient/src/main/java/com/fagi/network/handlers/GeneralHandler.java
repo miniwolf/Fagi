@@ -1,16 +1,14 @@
 package com.fagi.network.handlers;
 
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.InputDistributor;
-import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
+import com.fagi.threads.ThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Marcus on 08-07-2016.
@@ -30,8 +28,8 @@ public class GeneralHandler<T> implements Handler<T> {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        Handler handler = GeneralHandler.handlers.get(object.getClass());
+    public void handle(T object) {
+        Handler<T> handler = handlers.get(object.getClass());
 
         if ( handler == null ) {
             System.err.println("Missing handler: " + object.getClass());
@@ -44,13 +42,13 @@ public class GeneralHandler<T> implements Handler<T> {
         }, "GeneralHandler: " + object.getClass());
     }
 
-    public static void registerHandler(Class clazz, Handler handler) {
+    public void registerHandler(Class clazz, Handler<T> handler) {
         handlers.put(clazz, handler);
         inputDistributor.register(clazz, container);
     }
 
     @Override
-    public DefaultThreadHandler getRunnable() {
+    public DefaultThreadHandler<T> getRunnable() {
         return runnable;
     }
 

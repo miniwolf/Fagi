@@ -9,7 +9,7 @@ import com.fagi.utility.JsonFileOperations;
 /**
  * @author miniwolf
  */
-public class ConversationHandler implements Handler {
+public class ConversationHandler implements Handler<Conversation> {
     private final MainScreen mainScreen;
 
     /**
@@ -21,8 +21,7 @@ public class ConversationHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        Conversation conversation = (Conversation) object;
+    public void handle(Conversation conversation) {
         if (conversation.getType() != ConversationType.Placeholder) {
             JsonFileOperations.storeConversation(conversation);
         }

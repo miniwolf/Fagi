@@ -13,7 +13,7 @@ import com.fagi.model.messages.InGoingMessages;
  *
  * @author miniwolf
  */
-public class TextMessage implements InGoingMessages, TextAccess, Comparable<TextMessage> {
+public class TextMessage implements InGoingMessages<String>, TextAccess, Comparable<TextMessage> {
     private DefaultMessageInfo message;
 
     /**
@@ -27,7 +27,7 @@ public class TextMessage implements InGoingMessages, TextAccess, Comparable<Text
     }
 
     @Override
-    public Access getAccess() {
+    public Access<String> getAccess() {
         return this;
     }
 

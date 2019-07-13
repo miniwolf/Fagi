@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Marcus on 08-07-2016.
  */
-public class SearchUsersResult implements Serializable, InGoingMessages, Access<SearchUsersResult> {
+public class SearchUsersResult implements Serializable, InGoingMessages<SearchUsersResult>, Access<SearchUsersResult> {
     private List<String> usernames;
     private List<String> friends;
 
@@ -31,7 +31,7 @@ public class SearchUsersResult implements Serializable, InGoingMessages, Access<
     }
 
     @Override
-    public Access getAccess() {
+    public Access<SearchUsersResult> getAccess() {
         return this;
     }
 }

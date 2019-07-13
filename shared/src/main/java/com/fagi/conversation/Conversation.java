@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class Conversation implements Serializable, InGoingMessages, Access<Conversation> {
+public class Conversation implements Serializable, InGoingMessages<Conversation>, Access<Conversation> {
     private List<String> participants = new ArrayList<>();
     private List<TextMessage> messages = new ArrayList<>();
     private long id;
@@ -103,7 +103,7 @@ public class Conversation implements Serializable, InGoingMessages, Access<Conve
     }
 
     @Override
-    public Access getAccess() {
+    public Access<Conversation> getAccess() {
         return this;
     }
 

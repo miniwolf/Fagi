@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by costa on 11-12-2016.
  */
-public class FriendRequestHandler implements Handler {
+public class FriendRequestHandler implements Handler<FriendRequestList> {
     private final MainScreen mainScreen;
 
     public FriendRequestHandler(MainScreen mainScreen) {
@@ -23,8 +23,7 @@ public class FriendRequestHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        FriendRequestList friendRequestList = (FriendRequestList) object;
+    public void handle(FriendRequestList friendRequestList) {
         mainScreen.setFriendRequestList(friendRequestList);
 
         ContentController contentController =

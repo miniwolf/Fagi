@@ -7,7 +7,7 @@ import com.fagi.model.messages.InGoingMessages;
 /**
  * Created by costa on 13-12-2016.
  */
-public class UserStatusUpdateHandler implements Handler {
+public class UserStatusUpdateHandler implements Handler<UserStatusUpdate> {
     private final MainScreen mainScreen;
 
     public UserStatusUpdateHandler(MainScreen mainScreen) {
@@ -15,8 +15,7 @@ public class UserStatusUpdateHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        UserStatusUpdate update = (UserStatusUpdate)object;
+    public void handle(UserStatusUpdate update) {
         mainScreen.getFriendMapWrapper().toggleUserStatus(update.getUsername());
     }
 

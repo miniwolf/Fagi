@@ -9,8 +9,8 @@ import com.fagi.model.messages.InGoingMessages;
 /**
  * @author miniwolf
  */
-public interface Handler {
-    void handle(InGoingMessages object);
+public interface Handler<T> {
+    void handle(T object);
 
     Runnable getRunnable();
 }

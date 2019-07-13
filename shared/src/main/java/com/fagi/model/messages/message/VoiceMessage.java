@@ -7,7 +7,7 @@ package com.fagi.model.messages.message;
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
 
-public class VoiceMessage implements InGoingMessages, VoiceAccess {
+public class VoiceMessage implements InGoingMessages<byte[]>, VoiceAccess {
     /**
      * Contains voice data.
      */
@@ -30,7 +30,7 @@ public class VoiceMessage implements InGoingMessages, VoiceAccess {
     }
 
     @Override
-    public Access getAccess() {
+    public Access<byte[]> getAccess() {
         return this;
     }
 }

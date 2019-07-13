@@ -11,12 +11,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author miniwolf
  */
-public class DefaultThreadHandler implements Runnable {
-    private Container container;
-    private Handler handler;
+public class DefaultThreadHandler<T> implements Runnable {
+    private Container<T> container;
+    private Handler<T> handler;
     private AtomicBoolean running = new AtomicBoolean(true);
 
-    public DefaultThreadHandler(Container container, Handler handler) {
+    public DefaultThreadHandler(Container<T> container, Handler<T> handler) {
         this.container = container;
         this.handler = handler;
     }
