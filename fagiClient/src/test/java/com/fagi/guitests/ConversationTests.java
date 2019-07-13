@@ -61,7 +61,6 @@ public class ConversationTests {
         deleteFolder("MyUsername/conversations");
         deleteFolder("MyUsername");
         deleteFolder("conversations");
-        threadPool.printThreads();
         threadPool.stopThreads();
     }
 
