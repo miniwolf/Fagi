@@ -17,8 +17,8 @@ test {
 }
 
 javafx {
-    version = "11"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    version = "12"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.graphics' ]
 }
 
 dependencies {
