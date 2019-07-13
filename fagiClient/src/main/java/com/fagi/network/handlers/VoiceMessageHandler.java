@@ -4,29 +4,28 @@
 
 package com.fagi.network.handlers;
 
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.VoiceMessage;
 import com.fagi.network.InputDistributor;
-import com.fagi.network.InputHandler;
 import com.fagi.network.VoiceReceiver;
+import com.fagi.network.VoiceRecorder;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
 
 /**
  * @author miniwolf
  */
-public class VoiceMessageHandler implements Handler {
-    private Container container = new DefaultContainer();
-    private Runnable runnable = new DefaultThreadHandler(container, this);
+public class VoiceMessageHandler implements Handler<VoiceMessage> {
+    private Container<VoiceMessage> container = new DefaultContainer<VoiceMessage>();
+    private Runnable runnable = new DefaultThreadHandler<>(container, this);
 
-    public VoiceMessageHandler() {
+    public VoiceMessageHandler(InputDistributor<VoiceMessage> inputDistributor) {
         container.setThread(runnable);
-        InputDistributor.register(VoiceMessage.class, container);
+        inputDistributor.register(VoiceMessage.class, container);
     }
 
     @Override
-    public void handle(InGoingMessages voiceMessage) {
-        VoiceReceiver.playAudio((VoiceMessage) voiceMessage);
+    public void handle(VoiceMessage voiceMessage) {
+        VoiceReceiver.playAudio(voiceMessage);
     }
 
     @Override

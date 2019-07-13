@@ -10,6 +10,7 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.threads.ThreadPool;
 import com.fagi.utility.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -27,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class FagiApp extends Application {
     private Stage primaryStage;
     private Scene scene;
+    private ThreadPool threadPool;
 
     /**
      * Main method, launches the application.
@@ -47,6 +49,7 @@ public class FagiApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        this.threadPool = new ThreadPool();
         this.primaryStage = primaryStage;
         primaryStage.initStyle(StageStyle.UNDECORATED);
         ChatManager.setApplication(this);
@@ -62,7 +65,7 @@ public class FagiApp extends Application {
     private void startCommunication(final MasterLogin masterLogin,
                                     final Communication communication) {
         // TODO: Let the user browse for the file path
-        Thread thread = new Thread(() -> {
+        Runnable runnable = () -> {
             AtomicBoolean successfulConnection = new AtomicBoolean(false);
             AES aes = new AES();
             aes.generateKey(128);
@@ -70,7 +73,7 @@ public class FagiApp extends Application {
             while (!successfulConnection.get()) {
                 Platform.runLater(() -> {
                     try {
-                        communication.connect(aes);
+                        communication.connect(aes, threadPool);
                         ChatManager.setCommunication(communication);
                         masterLogin
                                 .setMessageLabel("Connected to server: " + communication.getName());
@@ -89,9 +92,8 @@ public class FagiApp extends Application {
                     e.printStackTrace();
                 }
             }
-        });
-        thread.setDaemon(true);
-        thread.start();
+        };
+        threadPool.startThread(runnable, "Connection thread");
     }
 
     /**
@@ -133,7 +135,7 @@ public class FagiApp extends Application {
     public void showMainScreen(String username, Communication communication) {
         MainScreen controller = new MainScreen(username, communication, primaryStage);
         scene.setRoot(controller);
-        controller.initCommunication();
+        controller.initCommunication(threadPool);
         primaryStage.sizeToScene();
     }
 

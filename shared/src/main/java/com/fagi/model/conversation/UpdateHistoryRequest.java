@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Created by Marcus on 05-07-2016.
  */
-public class UpdateHistoryRequest implements Serializable, InGoingMessages, Access<UpdateHistoryRequest> {
+public class UpdateHistoryRequest implements Serializable, InGoingMessages<UpdateHistoryRequest>, Access<UpdateHistoryRequest> {
 
     private final Date dateLastMessageReceived;
     private String sender;
@@ -39,7 +39,7 @@ public class UpdateHistoryRequest implements Serializable, InGoingMessages, Acce
     }
 
     @Override
-    public Access getAccess() {
+    public Access<UpdateHistoryRequest> getAccess() {
         return this;
     }
 }

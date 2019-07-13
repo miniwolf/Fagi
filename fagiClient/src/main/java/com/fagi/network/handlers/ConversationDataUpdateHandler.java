@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * Created by Marcus on 13-11-2016.
  */
-public class ConversationDataUpdateHandler implements Handler {
+public class ConversationDataUpdateHandler implements Handler<ConversationDataUpdate> {
     private final MainScreen mainScreen;
 
     public ConversationDataUpdateHandler(MainScreen mainScreen) {
@@ -21,11 +21,10 @@ public class ConversationDataUpdateHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        ConversationDataUpdate response = (ConversationDataUpdate) object;
+    public void handle(ConversationDataUpdate response) {
         Optional<Conversation> con = mainScreen.getConversations().stream().filter(x -> x.getId() == response.getId()).findFirst();
 
-        if (!con.isPresent()) return;
+        if (con.isEmpty()) return;
         Conversation conversation = con.get();
 
         if (conversation.getMessages().isEmpty()) {

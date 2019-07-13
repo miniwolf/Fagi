@@ -1,35 +1,35 @@
 package com.fagi.network.handlers;
 
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.InputDistributor;
-import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
+import com.fagi.threads.ThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Marcus on 08-07-2016.
  */
-public class GeneralHandler implements Handler {
-    private static final Map<Class, Handler> handlers = new ConcurrentHashMap<>();
-    private static final Container container = new DefaultContainer();
-
-    private DefaultThreadHandler runnable = new DefaultThreadHandler(container, this);
+public class GeneralHandler<T> implements Handler<T> {
+    private final Map<Class, Handler<T>> handlers = new ConcurrentHashMap<>();
+    private final Container<T> container = new DefaultContainer<>();
+    private final InputDistributor<T> inputDistributor;
     private final List<Object> unhandledObjects = new ArrayList<>();
-    private final List<Thread> threads = new CopyOnWriteArrayList<>();
+    private final ThreadPool threadPool;
+    private DefaultThreadHandler<T> runnable = new DefaultThreadHandler<T>(container, this);
 
-    public GeneralHandler() {
-        GeneralHandler.container.setThread(runnable);
+    public GeneralHandler(InputDistributor<T> inputDistributor, ThreadPool threadPool) {
+        this.inputDistributor = inputDistributor;
+        this.threadPool = threadPool;
+        container.setThread(runnable);
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        Handler handler = GeneralHandler.handlers.get(object.getClass());
+    public void handle(T object) {
+        Handler<T> handler = handlers.get(object.getClass());
 
         if ( handler == null ) {
             System.err.println("Missing handler: " + object.getClass());
@@ -37,32 +37,25 @@ public class GeneralHandler implements Handler {
             return;
         }
 
-        Thread thread = new Thread(() -> {
+        threadPool.startThread(() -> {
             handler.handle(object);
-            threads.remove(this);
-        });
-
-        thread.start();
-
-        threads.add(thread);
+        }, "GeneralHandler: " + object.getClass());
     }
 
-    public static void registerHandler(Class clazz, Handler handler) {
+    public void registerHandler(Class clazz, Handler<T> handler) {
         handlers.put(clazz, handler);
-        InputDistributor.register(clazz, container);
+        inputDistributor.register(clazz, container);
     }
 
     @Override
-    public DefaultThreadHandler getRunnable() {
+    public DefaultThreadHandler<T> getRunnable() {
         return runnable;
     }
 
     public void stop() {
-        threads.forEach(Thread::interrupt);
         for (Class clazz : handlers.keySet()) {
             handlers.remove(clazz);
-            InputDistributor.unregister(clazz);
+            inputDistributor.unregister(clazz);
         }
-
     }
 }

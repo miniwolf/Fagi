@@ -10,10 +10,8 @@ import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.InputDistributor;
-import com.fagi.network.InputHandler;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
 import com.fagi.utility.JsonFileOperations;
@@ -24,23 +22,22 @@ import java.util.Optional;
 /**
  * @author miniwolf
  */
-public class TextMessageHandler implements Handler {
-    private Container container = new DefaultContainer();
-    private DefaultThreadHandler runnable = new DefaultThreadHandler(container, this);
+public class TextMessageHandler implements Handler<TextMessage> {
+    private Container<TextMessage> container = new DefaultContainer<>();
+    private DefaultThreadHandler<TextMessage> runnable = new DefaultThreadHandler<>(container, this);
     private final MainScreen mainScreen;
 
-    public TextMessageHandler(MainScreen mainScreen) {
+    public TextMessageHandler(MainScreen mainScreen, InputDistributor inputDistributor) {
         container.setThread(runnable);
-        InputDistributor.register(TextMessage.class, container);
+        inputDistributor.register(TextMessage.class, container);
         this.mainScreen = mainScreen;
     }
 
     @Override
-    public void handle(InGoingMessages inMessage) {
-        TextMessage message = (TextMessage) inMessage;
+    public void handle(TextMessage message) {
         Optional<Conversation> first = mainScreen.getConversations().stream().filter(
             c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
-        if (!first.isPresent()) {
+        if (first.isEmpty()) {
             System.err.println(
                 "Server sent a message before it sent the conversation of ID '" + message
                     .getMessageInfo().getConversationID() + "'to the profile.");
@@ -77,7 +74,7 @@ public class TextMessageHandler implements Handler {
     }
 
     @Override
-    public DefaultThreadHandler getRunnable() {
+    public DefaultThreadHandler<TextMessage> getRunnable() {
         return runnable;
     }
 }

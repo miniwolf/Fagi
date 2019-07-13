@@ -19,7 +19,7 @@ import javafx.scene.Parent;
 /**
  * Created by Marcus on 09-07-2016.
  */
-public class FriendListHandler implements Handler {
+public class FriendListHandler implements Handler<FriendList> {
     private MainScreen mainScreen;
 
     public FriendListHandler(MainScreen mainScreen) {
@@ -27,8 +27,7 @@ public class FriendListHandler implements Handler {
     }
 
     @Override
-    public void handle(InGoingMessages object) {
-        FriendList friendList = (FriendList) object;
+    public void handle(FriendList friendList) {
         mainScreen.setFriendList(friendList);
 
         // Required here to get the load inside the constructor

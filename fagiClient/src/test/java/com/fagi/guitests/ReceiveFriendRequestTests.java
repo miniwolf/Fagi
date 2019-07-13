@@ -13,6 +13,7 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
+import com.fagi.threads.ThreadPool;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -37,6 +38,7 @@ public class ReceiveFriendRequestTests {
     private static final String myUsername = "Test";
     private Communication communication;
     private InputHandler inputHandler;
+    private final ThreadPool threadPool = new ThreadPool();
 
     @Test
     void ReceivedRequestAppearsInChatHistory(FxRobot robot) {
@@ -203,8 +205,10 @@ public class ReceiveFriendRequestTests {
         inputHandler = Mockito.mock(InputHandler.class);
 
         Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor();
+        Mockito.doCallRealMethod().when(communication).getInputDistributor();
+        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
         Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
+        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
         Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp).showLoginScreen();
 
@@ -216,14 +220,14 @@ public class ReceiveFriendRequestTests {
         inputThread.start();
 
         communication.setInputHandler(inputHandler);
-        inputHandler.setupDistributor();
+        inputHandler.setupDistributor(threadPool);
 
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
         stage.setScene(new Scene(new AnchorPane()));
         MainScreen mainScreen = new MainScreen(myUsername, communication, stage);
-        mainScreen.initCommunication();
+        mainScreen.initCommunication(threadPool);
         stage.setScene(new Scene(mainScreen));
         stage.show();
     }

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Marcus on 05-07-2016.
  */
-public class HistoryUpdates implements Serializable, InGoingMessages, Access<HistoryUpdates> {
+public class HistoryUpdates implements Serializable, InGoingMessages<HistoryUpdates>, Access<HistoryUpdates> {
 
     private final List<TextMessage> updates;
     private final long id;
@@ -34,7 +34,7 @@ public class HistoryUpdates implements Serializable, InGoingMessages, Access<His
     }
 
     @Override
-    public Access getAccess() {
+    public Access<HistoryUpdates> getAccess() {
         return this;
     }
 }

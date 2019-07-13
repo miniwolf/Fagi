@@ -4,17 +4,15 @@
 
 package com.fagi.network.handlers.container;
 
-import com.fagi.model.messages.InGoingMessages;
-
 import java.util.Queue;
 
 /**
  * @author miniwolf
  */
-public interface Container {
-    void addObject(InGoingMessages object);
+public interface Container<T> {
+    void addObject(T object);
 
-    Queue<InGoingMessages> getQueue();
+    Queue<T> getQueue();
 
     void setThread(Runnable runnable);
 }

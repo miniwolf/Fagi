@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by costa on 11-12-2016.
  */
-public class UserLoggedIn implements Serializable, InGoingMessages, Access<UserLoggedIn>, UserStatusUpdate {
+public class UserLoggedIn implements Serializable, InGoingMessages<UserLoggedIn>, Access<UserLoggedIn>, UserStatusUpdate {
     private final String username;
 
     public UserLoggedIn(String username) {
@@ -16,7 +16,7 @@ public class UserLoggedIn implements Serializable, InGoingMessages, Access<UserL
     }
 
     @Override
-    public Access getAccess() {
+    public Access<UserLoggedIn> getAccess() {
         return this;
     }
 

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class RemoveParticipantRequest implements Serializable, InGoingMessages, Access<RemoveParticipantRequest> {
+public class RemoveParticipantRequest implements Serializable, InGoingMessages<RemoveParticipantRequest>, Access<RemoveParticipantRequest> {
     private String sender;
     private final String participant;
     private final long id;
@@ -37,7 +37,7 @@ public class RemoveParticipantRequest implements Serializable, InGoingMessages, 
     }
 
     @Override
-    public Access getAccess() {
+    public Access<RemoveParticipantRequest> getAccess() {
         return this;
     }
 }

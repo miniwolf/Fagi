@@ -27,6 +27,7 @@ import com.fagi.network.Communication;
 import com.fagi.network.handlers.GeneralHandler;
 import com.fagi.network.handlers.GeneralHandlerFactory;
 import com.fagi.network.handlers.TextMessageHandler;
+import com.fagi.threads.ThreadPool;
 import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.utility.Logger;
@@ -73,6 +74,7 @@ public class MainScreen extends Pane {
 
     private Parent emptyFocusElement;
     private boolean signOut;
+    private ThreadPool threadPool;
 
     public void addCurrentConversation(Conversation conversation) {
         currentConversations.add(conversation);
@@ -126,19 +128,18 @@ public class MainScreen extends Pane {
     /**
      * Initiate all communication and handlers needed to contact the server.
      */
-    public void initCommunication() {
+    public void initCommunication(ThreadPool threadPool) {
+        this.threadPool = threadPool;
         conversations = JsonFileOperations.loadAllClientConversations(usernameString);
         setupConversationList();
         setupFriendList();
         setupContactList();
-        messageHandler = new TextMessageHandler(this);
 
-        var messageThread = new Thread(messageHandler.getRunnable(), "MessageHandler");
-        messageThread.start();
+        messageHandler = new TextMessageHandler(this, communication.getInputDistributor());
+        threadPool.startThread(messageHandler.getRunnable(),  "MessageHandler");
 
-        generalHandler = new GeneralHandlerFactory().construct(this);
-        var generalHandlerThread = new Thread(generalHandler.getRunnable(), "GeneralHandler");
-        generalHandlerThread.start();
+        generalHandler = new GeneralHandlerFactory().construct(this, communication.getInputDistributor(), threadPool);
+        threadPool.startThread(generalHandler.getRunnable(),"GeneralHandler");
 
         updateConversationListFromServer(conversations);
     }
@@ -191,8 +192,7 @@ public class MainScreen extends Pane {
                     }
                 };
 
-                Thread t = new Thread(run);
-                t.start();
+                threadPool.startThread(run, "Search thread");
 
                 scene.widthProperty().removeListener(this);
             }
@@ -428,19 +428,5 @@ public class MainScreen extends Pane {
 
     public void setListContent(VBox listContent) {
         this.listContent.setContent(listContent);
-    }
-
-    private void instantiateSearchFunction() {
-        Runnable task = () -> {
-            while (getScene() == null) {
-                System.out.println(getScene());
-            }
-            windowLoaded();
-        };
-        new Thread(task).start();
-    }
-
-    public void windowLoaded() {
-        search = new Search(searchBox, searchHeader, this);
     }
 }

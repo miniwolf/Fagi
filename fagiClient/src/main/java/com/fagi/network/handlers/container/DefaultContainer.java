@@ -4,20 +4,18 @@
 
 package com.fagi.network.handlers.container;
 
-import com.fagi.model.messages.InGoingMessages;
-
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author miniwolf
  */
-public class DefaultContainer implements Container {
-    private Queue<InGoingMessages> queue = new LinkedBlockingQueue<>();
+public class DefaultContainer<T> implements Container<T> {
+    private Queue<T> queue = new LinkedBlockingQueue<>();
     private Runnable runnable;
 
     @Override
-    public void addObject(InGoingMessages object) {
+    public void addObject(T object) {
         queue.add(object);
         synchronized (runnable) {
             runnable.notify();
@@ -25,7 +23,7 @@ public class DefaultContainer implements Container {
     }
 
     @Override
-    public Queue<InGoingMessages> getQueue() {
+    public Queue<T> getQueue() {
         return queue;
     }
 
