@@ -7,8 +7,10 @@ import com.fagi.helpers.WaitForFXEventsTestHelper;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
+import com.fagi.network.InputHandler;
 import com.fagi.responses.AllIsWell;
 import com.fagi.testfxExtension.FagiNodeFinderImpl;
+import com.fagi.threads.ThreadPool;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -25,6 +27,8 @@ import org.testfx.matcher.base.NodeMatchers;
 
 @ExtendWith(ApplicationExtension.class)
 public class SignOutTests {
+    private final ThreadPool threadPool = new ThreadPool();
+
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting SignOutTests");
@@ -63,15 +67,25 @@ public class SignOutTests {
     @Start
     public void start(Stage stage) {
         var communication = Mockito.mock(Communication.class);
+        var inputHandler = Mockito.mock(InputHandler.class);
         Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
         var fagiApp = Mockito.mock(FagiApp.class);
+
+        Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
+        Mockito.doCallRealMethod().when(communication).getInputDistributor();
+        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
+        Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
+        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
+
+        communication.setInputHandler(inputHandler);
+        inputHandler.setupDistributor(threadPool);
 
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
         stage.setScene(new Scene(new AnchorPane()));
         var test = new MainScreen("Test", communication, stage);
-        test.initCommunication();
+        test.initCommunication(threadPool);
 
         var draggable = new Draggable(stage);
         var scene = new Scene(test);

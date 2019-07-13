@@ -13,6 +13,7 @@ import com.fagi.model.HistoryUpdates;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.Response;
+import com.fagi.threads.ThreadPool;
 import com.fagi.utility.Logger;
 
 import java.io.IOException;
@@ -48,13 +49,13 @@ public class Communication {
         this.serverKey = serverKey;
     }
 
-    public void connect(EncryptionAlgorithm encryption) throws IOException {
+    public void connect(EncryptionAlgorithm encryption, ThreadPool threadPool) throws IOException {
         this.encryption = encryption;
         try {
             socket = new Socket(host, port);
             out = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
-            setupInputHandler(encryption, inputStream);
+            setupInputHandler(encryption, inputStream, threadPool);
             createSession(encryption, serverKey);
         } catch (UnknownHostException Uhe) {
             System.err.println("c Uhe: " + Uhe);
@@ -65,12 +66,10 @@ public class Communication {
         }
     }
 
-    public void setupInputHandler(EncryptionAlgorithm encryption, ObjectInputStream in) {
+    public void setupInputHandler(EncryptionAlgorithm encryption, ObjectInputStream in, ThreadPool threadPool) {
         inputHandler = new InputHandler(in, encryption);
-        inputHandler.setupDistributor();
-        inputThread = new Thread(inputHandler);
-        inputThread.setDaemon(true);
-        inputThread.start();
+        inputHandler.setupDistributor(threadPool);
+        threadPool.startThread(inputHandler, "InputHandler");
     }
 
     private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey)
@@ -145,5 +144,9 @@ public class Communication {
 
     public String getName() {
         return name;
+    }
+
+    public InputDistributor getInputDistributor() {
+        return inputHandler.getDistributor();
     }
 }

@@ -1,6 +1,5 @@
 package com.fagi.network;
 
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.network.handlers.container.Container;
 
 import java.util.Map;
@@ -33,11 +32,11 @@ public class InputDistributor implements Runnable {
         }
     }
 
-    public static void register(Class clazz, Container handler) {
+    public void register(Class clazz, Container<T> handler) {
         containers.put(clazz, handler);
     }
 
-    public static void unregister(Class clazz) {
+    public void unregister(Class clazz) {
         containers.remove(clazz);
     }
 

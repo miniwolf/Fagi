@@ -15,16 +15,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Marcus on 08-07-2016.
  */
-public class GeneralHandler implements Handler {
-    private static final Map<Class, Handler> handlers = new ConcurrentHashMap<>();
-    private static final Container container = new DefaultContainer();
-
-    private DefaultThreadHandler runnable = new DefaultThreadHandler(container, this);
+public class GeneralHandler<T> implements Handler<T> {
+    private final Map<Class, Handler<T>> handlers = new ConcurrentHashMap<>();
+    private final Container<T> container = new DefaultContainer<>();
+    private final InputDistributor<T> inputDistributor;
     private final List<Object> unhandledObjects = new ArrayList<>();
-    private final List<Thread> threads = new CopyOnWriteArrayList<>();
+    private final ThreadPool threadPool;
+    private DefaultThreadHandler<T> runnable = new DefaultThreadHandler<T>(container, this);
 
-    public GeneralHandler() {
-        GeneralHandler.container.setThread(runnable);
+    public GeneralHandler(InputDistributor<T> inputDistributor, ThreadPool threadPool) {
+        this.inputDistributor = inputDistributor;
+        this.threadPool = threadPool;
+        container.setThread(runnable);
     }
 
     @Override
@@ -37,19 +39,14 @@ public class GeneralHandler implements Handler {
             return;
         }
 
-        Thread thread = new Thread(() -> {
+        threadPool.startThread(() -> {
             handler.handle(object);
-            threads.remove(this);
-        });
-
-        thread.start();
-
-        threads.add(thread);
+        }, "GeneralHandler: " + object.getClass());
     }
 
     public static void registerHandler(Class clazz, Handler handler) {
         handlers.put(clazz, handler);
-        InputDistributor.register(clazz, container);
+        inputDistributor.register(clazz, container);
     }
 
     @Override
@@ -58,11 +55,9 @@ public class GeneralHandler implements Handler {
     }
 
     public void stop() {
-        threads.forEach(Thread::interrupt);
         for (Class clazz : handlers.keySet()) {
             handlers.remove(clazz);
-            InputDistributor.unregister(clazz);
+            inputDistributor.unregister(clazz);
         }
-
     }
 }

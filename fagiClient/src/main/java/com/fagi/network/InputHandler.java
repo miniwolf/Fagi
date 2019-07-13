@@ -11,6 +11,7 @@ import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.model.HistoryUpdates;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.responses.Response;
+import com.fagi.threads.ThreadPool;
 import com.fagi.utility.Logger;
 import javafx.application.Platform;
 
@@ -27,7 +28,6 @@ public class InputHandler implements Runnable {
     private final Queue<Response> inputs = new LinkedBlockingQueue<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
-    private Thread distributorThread;
     private boolean running = true;
     private InputDistributor distributor;
 
@@ -36,10 +36,9 @@ public class InputHandler implements Runnable {
         this.encryption = encryption;
     }
 
-    public void setupDistributor() {
+    public void setupDistributor(ThreadPool threadPool) {
         distributor = new InputDistributor();
-        distributorThread = new Thread(distributor);
-        distributorThread.start();
+        threadPool.startThread(distributor, "InputDistributor");
     }
 
     @Override
@@ -106,7 +105,6 @@ public class InputHandler implements Runnable {
     public void close() {
         running = false;
         distributor.stop();
-        distributorThread.interrupt();
     }
 
     public Conversation containsConversation() {
@@ -135,5 +133,9 @@ public class InputHandler implements Runnable {
             return updates;
         }
         return null;
+    }
+
+    public InputDistributor getDistributor() {
+        return distributor;
     }
 }

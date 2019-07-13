@@ -16,6 +16,7 @@ import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.network.InputHandler;
 import com.fagi.testfxExtension.FagiNodeFinderImpl;
+import com.fagi.threads.ThreadPool;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -48,6 +49,7 @@ import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInpu
 public class SearchUserTests {
     private Communication communication;
     private InputHandler inputHandler;
+    private final ThreadPool threadPool = new ThreadPool();
 
     @BeforeAll
     public static void initialize() {
@@ -294,8 +296,10 @@ public class SearchUserTests {
         inputHandler = Mockito.mock(InputHandler.class);
 
         Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor();
+        Mockito.doCallRealMethod().when(communication).getInputDistributor();
+        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
         Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
+        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
         Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp).showLoginScreen();
 
@@ -307,14 +311,14 @@ public class SearchUserTests {
         inputThread.start();
 
         communication.setInputHandler(inputHandler);
-        inputHandler.setupDistributor();
+        inputHandler.setupDistributor(threadPool);
 
         ChatManager.setCommunication(communication);
         ChatManager.setApplication(fagiApp);
 
         stage.setScene(new Scene(new AnchorPane()));
         var screen = new MainScreen("Test", communication, stage);
-        screen.initCommunication();
+        screen.initCommunication(threadPool);
         stage.setScene(new Scene(screen));
         stage.show();
     }
