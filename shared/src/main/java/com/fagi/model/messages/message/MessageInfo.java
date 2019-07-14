@@ -2,7 +2,8 @@
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 
-package com.fagi.model.messages.message;/*
+package com.fagi.model.messages.message;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * MessageInfo.java
  *

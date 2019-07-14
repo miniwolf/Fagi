@@ -1,4 +1,5 @@
-package com.fagi.model;/*
+package com.fagi.model;
+/*
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
  * User.java
  *

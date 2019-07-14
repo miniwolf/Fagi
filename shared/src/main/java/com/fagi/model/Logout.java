@@ -1,4 +1,5 @@
-package com.fagi.model;/*
+package com.fagi.model;
+/*
  * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel.
  * Logout.java
  */

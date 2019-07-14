@@ -1,4 +1,5 @@
-package com.fagi.main;/*
+package com.fagi.main;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Main.java
  */

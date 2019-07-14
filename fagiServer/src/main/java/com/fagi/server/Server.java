@@ -1,4 +1,5 @@
-package com.fagi.server;/*
+package com.fagi.server;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Server.java
  *

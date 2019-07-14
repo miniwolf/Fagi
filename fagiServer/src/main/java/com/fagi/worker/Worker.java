@@ -1,4 +1,5 @@
-package com.fagi.worker;/*
+package com.fagi.worker;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Worker.java
  *

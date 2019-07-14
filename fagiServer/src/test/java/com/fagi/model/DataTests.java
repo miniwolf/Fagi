@@ -1,5 +1,6 @@
 package com.fagi.model;
 
+import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.*;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
