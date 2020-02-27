@@ -2,6 +2,11 @@ import groovy.time.TimeCategory
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
+wrapper {
+    description "Regenerates the Gradle Wrapper files"
+    gradleVersion = '6.2.1'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-bin.zip"
+}
 
 allprojects {
     group 'com.fagi'
