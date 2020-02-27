@@ -13,4 +13,5 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.20.0'
+    testCompile 'org.mockito:mockito-junit-jupiter:2.27.0'
 }
