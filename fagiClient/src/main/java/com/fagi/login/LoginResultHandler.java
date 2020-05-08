@@ -2,7 +2,11 @@ package com.fagi.login;
 
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
-import com.fagi.responses.*;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.PasswordError;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserOnline;
 import javafx.scene.control.Label;
 
 public class LoginResultHandler {

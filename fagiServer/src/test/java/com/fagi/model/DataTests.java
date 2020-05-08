@@ -1,7 +1,11 @@
 package com.fagi.model;
 
-import com.fagi.model.messages.message.TextMessage;
-import com.fagi.responses.*;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.PasswordError;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserExists;
+import com.fagi.responses.UserOnline;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;

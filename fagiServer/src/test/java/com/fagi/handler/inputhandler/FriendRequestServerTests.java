@@ -2,7 +2,10 @@ package com.fagi.handler.inputhandler;
 
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
-import com.fagi.model.*;
+import com.fagi.model.Data;
+import com.fagi.model.FriendRequest;
+import com.fagi.model.GetFriendListRequest;
+import com.fagi.model.User;
 import com.fagi.model.messages.lists.FriendList;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
@@ -13,25 +16,31 @@ import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class FriendRequestServerTests {
     private InputHandler inputHandler;
+    @Mock
     private OutputAgent outputAgent;
+    @Mock
     private InputAgent inputAgent;
+    @Mock
     private Data data;
     private User user;
 
     @BeforeEach
     void setup() {
-        data = Mockito.mock(Data.class);
-        inputAgent = Mockito.mock(InputAgent.class);
-        outputAgent = Mockito.mock(OutputAgent.class);
         var conversationHandler = new ConversationHandler(data);
 
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
@@ -56,7 +65,7 @@ class FriendRequestServerTests {
 
         Assertions.assertAll(
                 () -> Assertions.assertNotNull(argumentCaptor.getValue()),
-                () -> Assertions.assertFalse(argumentCaptor.getValue() instanceof AllIsWell)
+                () -> Assertions.assertTrue(argumentCaptor.getValue() instanceof NoSuchUser)
         );
     }
 

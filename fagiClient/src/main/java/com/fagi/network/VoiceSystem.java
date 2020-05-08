@@ -4,7 +4,8 @@
 
 package com.fagi.network;
 
-import javax.sound.sampled.*;
+
+import javax.sound.sampled.AudioFormat;
 
 /**
  * @author miniwolf
