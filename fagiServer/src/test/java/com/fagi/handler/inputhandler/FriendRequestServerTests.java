@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -48,7 +49,7 @@ class FriendRequestServerTests {
         var username = "bob";
 
         doReturn(username).when(user).getUserName();
-        doReturn(user).when(data).getUser(Mockito.any());
+        doReturn(user).when(data).getUser(any());
         doReturn(username).when(inputAgent).getUsername();
     }
 
@@ -56,7 +57,7 @@ class FriendRequestServerTests {
     void whenRequestFriendFails_ShouldResultInResponseNotBeingAFriendList() {
         var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
 
-        doReturn(new NoSuchUser()).when(user).requestFriend(Mockito.any(), Mockito.any());
+        doReturn(new NoSuchUser()).when(user).requestFriend(any(), any());
 
         inputHandler.handleInput(friendReq);
 

@@ -81,9 +81,6 @@ public class User implements Serializable {
 
         FriendRequest request = opt.get();
 
-        if ( !incFriendReq.contains(request) ) {
-            return new UserExists();
-        }
         incFriendReq.remove(request);
         return data.storeUser(this);
     }

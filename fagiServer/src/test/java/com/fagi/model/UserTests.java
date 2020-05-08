@@ -15,9 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -96,5 +98,21 @@ public class UserTests {
         Response response = user.removeFriendRequest(data, "non existing");
 
         Assertions.assertTrue(response instanceof NoSuchUser);
+    }
+
+    @Test
+    void removingFriendRequest_FriendRequestRemovedAndAllIsWellResponse() {
+        when(data.storeUser(any())).thenReturn(new AllIsWell());
+
+        var senderUsername = "potential friend";
+        var friendReq = new FriendRequest(user.getUserName(), new TextMessage("Hullo me friend", senderUsername, 42));
+        user.getFriendReq().add(friendReq);
+
+        Response response = user.removeFriendRequest(data, senderUsername);
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(user.getFriendReq().isEmpty()),
+                () -> Assertions.assertTrue(response instanceof AllIsWell)
+        );
     }
 }
