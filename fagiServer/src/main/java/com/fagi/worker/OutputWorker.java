@@ -1,4 +1,5 @@
-package com.fagi.worker;/*
+package com.fagi.worker;
+/*
  * Copyright (c) 2016. Nicklas 'MiNiWolF' Pingel and Marcus 'Zargess' Haagh.
  */
 

@@ -1,4 +1,5 @@
-package com.fagi.model;/*
+package com.fagi.model;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Login.java
  *

@@ -4,7 +4,7 @@ import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.util.concurrent.CountDownLatch;
 
 /**

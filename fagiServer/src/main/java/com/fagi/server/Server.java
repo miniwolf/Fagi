@@ -1,4 +1,5 @@
-package com.fagi.server;/*
+package com.fagi.server;
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * Server.java
  *
@@ -15,7 +16,10 @@ import com.fagi.utility.JsonFileOperations;
 import com.fagi.worker.InputWorker;
 import com.fagi.worker.OutputWorker;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;

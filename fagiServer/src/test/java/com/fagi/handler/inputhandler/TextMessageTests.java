@@ -19,7 +19,8 @@ import org.mockito.Mockito;
 
 import java.sql.Timestamp;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 class TextMessageTests {
     private OutputAgent outputAgent;

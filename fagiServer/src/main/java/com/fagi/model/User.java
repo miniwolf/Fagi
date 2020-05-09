@@ -1,4 +1,5 @@
-package com.fagi.model;/*
+package com.fagi.model;
+/*
  * COPYRIGHT © Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig 2011
  * User.java
  *
@@ -80,9 +81,6 @@ public class User implements Serializable {
 
         FriendRequest request = opt.get();
 
-        if ( !incFriendReq.contains(request) ) {
-            return new UserExists();
-        }
         incFriendReq.remove(request);
         return data.storeUser(this);
     }

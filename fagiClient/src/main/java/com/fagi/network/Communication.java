@@ -8,7 +8,11 @@
 package com.fagi.network;
 
 import com.fagi.conversation.Conversation;
-import com.fagi.encryption.*;
+import com.fagi.encryption.AESKey;
+import com.fagi.encryption.Conversion;
+import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.encryption.RSA;
+import com.fagi.encryption.RSAKey;
 import com.fagi.model.HistoryUpdates;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
