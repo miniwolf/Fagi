@@ -86,7 +86,7 @@ public class User implements Serializable {
     }
 
     private Response addFriendReq(Data data, FriendRequest request) {
-        if ( incFriendReq.contains(userName) ) {
+        if ( incFriendReq.contains(request) ) {
             return new UserExists();
         }
         incFriendReq.add(request);
