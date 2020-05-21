@@ -115,4 +115,15 @@ public class UserTests {
                 () -> Assertions.assertTrue(response instanceof AllIsWell)
         );
     }
+
+    @Test
+    void whenRequestingFriendTwice_ShouldResultInUserExistsResponse() {
+        var friendRequest = new FriendRequest(newFriend.getUserName(), new TextMessage("Hello", user.getUserName(), -1));
+
+        user.requestFriend(data, friendRequest);
+
+        Response response = user.requestFriend(data, friendRequest);
+
+        Assertions.assertTrue(response instanceof UserExists);
+    }
 }
