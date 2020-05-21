@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * FriendRequestList used as response object from server.
+ *
  * @author miniwolf
  */
 public class FriendRequestList implements InGoingMessages<List<FriendRequest>> {

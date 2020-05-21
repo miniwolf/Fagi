@@ -43,68 +43,95 @@ public class SendFriendRequestTests {
     @BeforeAll
     static void initialize() {
         System.out.println("Starting send friend request tests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
     void WhenClickingOnSearchContactThatIsNotAFriend_ANewFriendInvitationIsOpened(FxRobot robot) {
         var username = "a";
-        var usernames = new ArrayList<String>() {{ add(username); }};
+        var usernames = new ArrayList<String>() {{
+            add(username);
+        }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        FxAssert.verifyThat(
-                "#InvitationConversation",
-                NodeMatchers.isNotNull()
-        );
+        FxAssert.verifyThat("#InvitationConversation", NodeMatchers.isNotNull());
     }
 
     @Test
     void WhenOpeningANewFriendInvitation_SendInvitationContainsContactUserName(FxRobot robot) {
         var username = "a";
-        var usernames = new ArrayList<String>() {{ add(username); }};
+        var usernames = new ArrayList<String>() {{
+            add(username);
+        }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        Assumptions.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        Assumptions.assumeTrue(robot
+                                       .lookup("#InvitationConversation")
+                                       .tryQuery()
+                                       .isPresent());
 
-        FxAssert.verifyThat(
-                "#name",
-                LabeledMatchers.hasText(username));
+        FxAssert.verifyThat("#name", LabeledMatchers.hasText(username));
     }
 
     @Test
     void WhenClickingOnSendInvitationButton_FriendRequestIsSendToServer(FxRobot robot) {
         var username = "a";
-        var usernames = new ArrayList<String>() {{ add(username); }};
+        var usernames = new ArrayList<String>() {{
+            add(username);
+        }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        Assumptions.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        Assumptions.assumeTrue(robot
+                                       .lookup("#InvitationConversation")
+                                       .tryQuery()
+                                       .isPresent());
 
         WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
-        Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
+        Mockito
+                .verify(communication, Mockito.times(3))
+                .sendObject(argument.capture());
 
-        Assertions.assertEquals(argument.getAllValues().get(2).getFriendUsername(), username);
+        Assertions.assertEquals(argument
+                                        .getAllValues()
+                                        .get(2)
+                                        .getFriendUsername(), username);
     }
 
     @Test
     void WhenClickingOnSendInvitationButton_TheWrittenMessageIsIncluded(FxRobot robot) {
         var username = "a";
-        var usernames = new ArrayList<String>() {{ add(username); }};
+        var usernames = new ArrayList<String>() {{
+            add(username);
+        }};
         var message = "Do you want to build a snowman?";
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
-        Assumptions.assumeTrue(robot.lookup("#InvitationConversation").tryQuery().isPresent());
+        Assumptions.assumeTrue(robot
+                                       .lookup("#InvitationConversation")
+                                       .tryQuery()
+                                       .isPresent());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#message", message);
         WaitForFXEventsTestHelper.clickOn(robot, "#send");
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
-        Mockito.verify(communication, Mockito.times(3)).sendObject(argument.capture());
+        Mockito
+                .verify(communication, Mockito.times(3))
+                .sendObject(argument.capture());
 
-        Assertions.assertEquals(argument.getAllValues().get(2).getMessage().getData(), message);
+        Assertions.assertEquals(argument
+                                        .getAllValues()
+                                        .get(2)
+                                        .getMessage()
+                                        .getData(), message);
     }
 
     @Start
@@ -115,16 +142,36 @@ public class SendFriendRequestTests {
         communication = Mockito.mock(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
-        Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(communication).getInputDistributor();
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
-                .when(fagiApp).showLoginScreen();
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .setInputHandler(inputHandler);
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .getInputDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .setupDistributor(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .addIngoingMessage(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .getDistributor();
+        Mockito
+                .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
+                .when(fagiApp)
+                .showLoginScreen();
 
         var comspy = Mockito.spy(communication);
-        Mockito.doNothing().when(comspy).sendObject(Mockito.any());
+        Mockito
+                .doNothing()
+                .when(comspy)
+                .sendObject(Mockito.any());
 
         var inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);

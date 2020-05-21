@@ -38,12 +38,19 @@ class LoginServerTests {
     void alreadyOnlineUserLoginAgain_ShouldGetUserOnlineResponse() {
         var loginRequest = new Login("bob", "123");
 
-        when(data.userLogin(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(new UserOnline());
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
+        )).thenReturn(new UserOnline());
 
         inputhandler.handleInput(loginRequest);
 
         var argumentCaptor = ArgumentCaptor.forClass(UserOnline.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
     }
 
     @Test
@@ -51,14 +58,21 @@ class LoginServerTests {
         var loginRequest = new Login("bob", "123");
         var user = new User("bob", "123");
 
-        when(data.userLogin(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(new AllIsWell());
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
+        )).thenReturn(new AllIsWell());
         when(data.getUser(Mockito.anyString())).thenReturn(user);
         when(inputAgent.getUsername()).thenReturn("bob");
 
         inputhandler.handleInput(loginRequest);
 
         var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
     }
 
     @Test
@@ -71,7 +85,12 @@ class LoginServerTests {
         user.addFriend(otherFriend);
         var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
 
-        when(data.userLogin(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(new AllIsWell());
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
+        )).thenReturn(new AllIsWell());
         when(data.isUserOnline(friend.getUserName())).thenReturn(true);
         when(data.getUser(Mockito.anyString())).thenReturn(user);
         when(inputAgent.getUsername()).thenReturn(user.getUserName());
@@ -81,11 +100,20 @@ class LoginServerTests {
         inputhandler.handleInput(loginRequest);
 
         var otherFriendArgumentCaptor = ArgumentCaptor.forClass(UserLoggedIn.class);
-        Mockito.verify(otherFriendOutputAgent, times(0)).addMessage(otherFriendArgumentCaptor.capture());
+        Mockito
+                .verify(otherFriendOutputAgent, times(0))
+                .addMessage(otherFriendArgumentCaptor.capture());
 
         var argumentCaptor = ArgumentCaptor.forClass(UserLoggedIn.class);
-        Mockito.verify(outputAgent, times(1)).addMessage(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addMessage(argumentCaptor.capture());
 
-        Assertions.assertEquals(user.getUserName(), argumentCaptor.getValue().getUsername());
+        Assertions.assertEquals(
+                user.getUserName(),
+                argumentCaptor
+                        .getValue()
+                        .getUsername()
+        );
     }
 }

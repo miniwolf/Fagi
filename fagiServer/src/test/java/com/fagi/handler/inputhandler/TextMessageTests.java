@@ -49,7 +49,9 @@ class TextMessageTests {
 
     @Test
     void handlingATextMessage_ShouldGiveTheMessageATimeStamp() {
-        Timestamp oldTimeStamp = message.getMessageInfo().getTimestamp();
+        Timestamp oldTimeStamp = message
+                .getMessageInfo()
+                .getTimestamp();
 
         try {
             Thread.sleep(1); // wait to ensure we get different timestamps
@@ -59,7 +61,10 @@ class TextMessageTests {
 
         inputHandler.handleInput(message);
 
-        Assertions.assertTrue(oldTimeStamp.getTime() < message.getMessageInfo().getTimestamp().getTime());
+        Assertions.assertTrue(oldTimeStamp.getTime() < message
+                .getMessageInfo()
+                .getTimestamp()
+                .getTime());
     }
 
     @Test
@@ -67,7 +72,9 @@ class TextMessageTests {
         inputHandler.handleInput(message);
 
         var argumentCaptor = ArgumentCaptor.forClass(NoSuchConversation.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
 
         Assertions.assertTrue(argumentCaptor.getValue() instanceof NoSuchConversation);
     }
@@ -78,7 +85,9 @@ class TextMessageTests {
         inputHandler.handleInput(new TextMessage("Hello", "Not a participant", 42));
 
         var argumentCaptor = ArgumentCaptor.forClass(Unauthorized.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
 
         Assertions.assertTrue(argumentCaptor.getValue() instanceof Unauthorized);
     }
@@ -90,7 +99,9 @@ class TextMessageTests {
         inputHandler.handleInput(message);
 
         var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
 
         Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
     }

@@ -37,7 +37,11 @@ public class LoginTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting login tests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
@@ -46,54 +50,50 @@ public class LoginTests {
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", testText);
 
-        FxAssert.verifyThat(
-                "#username",
-                TextInputControlMatchers.hasText(testText));
+        FxAssert.verifyThat("#username", TextInputControlMatchers.hasText(testText));
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", testText);
 
-        FxAssert.verifyThat(
-                "#password",
-                TextInputControlMatchers.hasText(testText));
+        FxAssert.verifyThat("#password", TextInputControlMatchers.hasText(testText));
     }
 
     @Test
     public void WhenGivingWrongPassword_ErrorMessageShouldShowThis(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new PasswordError());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new PasswordError());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "dinMor");
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                LabeledMatchers.hasText("Wrong password"));
+        FxAssert.verifyThat("#messageLabel", LabeledMatchers.hasText("Wrong password"));
     }
 
     @Test
     public void WhenGivingWrongUsername_ErrorMessageShouldShowThis(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new NoSuchUser());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new NoSuchUser());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "dinMor");
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                LabeledMatchers.hasText("User doesn't exist"));
+        FxAssert.verifyThat("#messageLabel", LabeledMatchers.hasText("User doesn't exist"));
     }
 
     @Test
     public void WhenUserIsAlreadyOnline_ErrorMessageShouldShowThis(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new UserOnline());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new UserOnline());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "dinMor");
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "password");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                LabeledMatchers.hasText("You are already online"));
+        FxAssert.verifyThat("#messageLabel", LabeledMatchers.hasText("You are already online"));
     }
 
     @Test
@@ -101,9 +101,7 @@ public class LoginTests {
         masterLogin.setMessageLabel("Connection refused");
         WaitForAsyncUtils.waitForFxEvents();
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                LabeledMatchers.hasText("Connection refused"));
+        FxAssert.verifyThat("#messageLabel", LabeledMatchers.hasText("Connection refused"));
     }
 
     @Test
@@ -111,10 +109,9 @@ public class LoginTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#newAccount");
 
         Assumptions.assumeTrue(LoginState.USERNAME.equals(masterLogin.getState()));
-        FxAssert.verifyThat(
-                "#UniqueCreateUsernameView",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("Should switch to Create Username View.")
+        FxAssert.verifyThat("#UniqueCreateUsernameView",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("Should switch to Create Username View.")
         );
     }
 
@@ -132,7 +129,11 @@ public class LoginTests {
         masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
         masterLogin.showMasterLoginScreen();
 
-        stage.getScene().setRoot(masterLogin.getController().getParentNode());
+        stage
+                .getScene()
+                .setRoot(masterLogin
+                                 .getController()
+                                 .getParentNode());
         stage.show();
     }
 }

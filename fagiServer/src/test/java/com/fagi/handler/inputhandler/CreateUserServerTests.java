@@ -38,7 +38,9 @@ class CreateUserServerTests {
 
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
         inviteCodeContainer = new InviteCodeContainer(new ArrayList<>(Collections.singletonList(new InviteCode(42))));
-        doReturn(inviteCodeContainer).when(data).loadInviteCodes();
+        doReturn(inviteCodeContainer)
+                .when(data)
+                .loadInviteCodes();
     }
 
     @Test
@@ -49,18 +51,24 @@ class CreateUserServerTests {
         inputHandler.handleInput(createUser);
 
         var argumentCaptor = ArgumentCaptor.forClass(IllegalInviteCode.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
 
         Assertions.assertTrue(argumentCaptor.getValue() instanceof IllegalInviteCode);
     }
 
     @Test
     void creatingUserFails_ShouldResultInInviteCodeNotBeingDeleted() {
-        var inviteCode = inviteCodeContainer.getCodes().get(0);
+        var inviteCode = inviteCodeContainer
+                .getCodes()
+                .get(0);
         var createUser = new CreateUser("bob", "123");
         createUser.setInviteCode(inviteCode);
 
-        doReturn(new UserExists()).when(data).createUser(createUser.getUsername(), createUser.getPassword());
+        doReturn(new UserExists())
+                .when(data)
+                .createUser(createUser.getUsername(), createUser.getPassword());
 
         inputHandler.handleInput(createUser);
 
@@ -69,11 +77,15 @@ class CreateUserServerTests {
 
     @Test
     void createUserSucceeds_ShouldDeleteInviteCode() {
-        var inviteCode = inviteCodeContainer.getCodes().get(0);
+        var inviteCode = inviteCodeContainer
+                .getCodes()
+                .get(0);
         var createUser = new CreateUser("bob", "123");
         createUser.setInviteCode(inviteCode);
 
-        doReturn(new AllIsWell()).when(data).createUser(createUser.getUsername(), createUser.getPassword());
+        doReturn(new AllIsWell())
+                .when(data)
+                .createUser(createUser.getUsername(), createUser.getPassword());
 
         inputHandler.handleInput(createUser);
 
@@ -82,16 +94,22 @@ class CreateUserServerTests {
 
     @Test
     void createUserSucceeds_ShouldResultInAllIsWellResponse() {
-        var inviteCode = inviteCodeContainer.getCodes().get(0);
+        var inviteCode = inviteCodeContainer
+                .getCodes()
+                .get(0);
         var createUser = new CreateUser("bob", "123");
         createUser.setInviteCode(inviteCode);
 
-        doReturn(new AllIsWell()).when(data).createUser(createUser.getUsername(), createUser.getPassword());
+        doReturn(new AllIsWell())
+                .when(data)
+                .createUser(createUser.getUsername(), createUser.getPassword());
 
         inputHandler.handleInput(createUser);
 
         var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        Mockito
+                .verify(outputAgent, times(1))
+                .addResponse(argumentCaptor.capture());
 
         Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
     }

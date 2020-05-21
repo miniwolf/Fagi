@@ -16,9 +16,14 @@ public class LoginResultHandler {
         this.communication = communication;
     }
 
-    public void handle(Response response, String username, Label messageLabel) {
+    public void handle(
+            Response response,
+            String username,
+            Label messageLabel) {
         if (response instanceof AllIsWell) {
-            ChatManager.getApplication().showMainScreen(username, communication);
+            ChatManager
+                    .getApplication()
+                    .showMainScreen(username, communication);
         } else if (response instanceof FieldEmpty) {
             messageLabel.setText("Fields cannot be empty");
         } else if (response instanceof NoSuchUser) {

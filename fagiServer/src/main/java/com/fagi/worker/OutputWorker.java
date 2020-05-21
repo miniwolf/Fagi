@@ -36,7 +36,9 @@ public class OutputWorker extends Worker implements OutputAgent {
     private String myUserName = null;
     private ListAccess<FriendRequest> currentRequests = new DefaultListAccess<>(new ArrayList<>());
 
-    public OutputWorker(Socket socket, Data data) throws IOException {
+    public OutputWorker(
+            Socket socket,
+            Data data) throws IOException {
         objOut = new ObjectOutputStream(socket.getOutputStream());
         this.data = data;
     }
@@ -76,7 +78,9 @@ public class OutputWorker extends Worker implements OutputAgent {
         checkList(new FriendRequestList(friendRequests), currentRequests);
     }
 
-    private <T extends Comparable> void checkList(InGoingMessages<List<T>> responseObj, ListAccess<T> currentList) throws IOException {
+    private <T extends Comparable> void checkList(
+            InGoingMessages<List<T>> responseObj,
+            ListAccess<T> currentList) throws IOException {
         ListAccess<T> responseList = (ListAccess<T>) responseObj.getAccess();
 
         if (equalLists(responseList.getData(), currentList.getData())) {
@@ -135,7 +139,9 @@ public class OutputWorker extends Worker implements OutputAgent {
         this.running = running;
     }
 
-    private <T extends Comparable> boolean equalLists(List<T> one, List<T> two) {
+    private <T extends Comparable> boolean equalLists(
+            List<T> one,
+            List<T> two) {
         if (one == null && two == null) {
             return true;
         }

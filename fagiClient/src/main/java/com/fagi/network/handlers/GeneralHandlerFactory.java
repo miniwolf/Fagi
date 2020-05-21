@@ -15,7 +15,10 @@ import com.fagi.threads.ThreadPool;
  * Created by Marcus on 08-07-2016.
  */
 public class GeneralHandlerFactory {
-    public GeneralHandler construct(MainScreen mainScreen, InputDistributor inputDistributor, ThreadPool threadPool) {
+    public GeneralHandler construct(
+            MainScreen mainScreen,
+            InputDistributor inputDistributor,
+            ThreadPool threadPool) {
         GeneralHandler handler = new GeneralHandler(inputDistributor, threadPool);
 
         handler.registerHandler(SearchUsersResult.class, new SearchHandler(mainScreen));

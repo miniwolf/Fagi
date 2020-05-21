@@ -2,7 +2,6 @@ package com.fagi.encryption;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -19,7 +18,9 @@ public class Encryption {
         File f = new File(KeyStorage.PUBLICKEYFILE);
         if (!f.exists()) {
             this.rsa = new RSA();
-            KeyPair key = (KeyPair) rsa.getKey().getKey();
+            KeyPair key = (KeyPair) rsa
+                    .getKey()
+                    .getKey();
             try {
                 KeyStorage.SaveKeyPair(key);
             } catch (IOException e) {

@@ -46,14 +46,20 @@ public class Communication {
     public Communication() {
     }
 
-    public Communication(String name, String host, int port, PublicKey serverKey) {
+    public Communication(
+            String name,
+            String host,
+            int port,
+            PublicKey serverKey) {
         this.name = name;
         this.host = host;
         this.port = port;
         this.serverKey = serverKey;
     }
 
-    public void connect(EncryptionAlgorithm encryption, ThreadPool threadPool) throws IOException {
+    public void connect(
+            EncryptionAlgorithm encryption,
+            ThreadPool threadPool) throws IOException {
         this.encryption = encryption;
         try {
             socket = new Socket(host, port);
@@ -70,18 +76,21 @@ public class Communication {
         }
     }
 
-    public void setupInputHandler(EncryptionAlgorithm encryption, ObjectInputStream in, ThreadPool threadPool) {
+    public void setupInputHandler(
+            EncryptionAlgorithm encryption,
+            ObjectInputStream in,
+            ThreadPool threadPool) {
         inputHandler = new InputHandler(in, encryption);
         inputHandler.setupDistributor(threadPool);
         threadPool.startThread(inputHandler, "InputHandler");
     }
 
-    private void createSession(EncryptionAlgorithm encryption, PublicKey serverKey)
-            throws IOException {
+    private void createSession(
+            EncryptionAlgorithm encryption,
+            PublicKey serverKey) throws IOException {
         RSA rsa = new RSA();
         rsa.setEncryptionKey(new RSAKey(new KeyPair(serverKey, null)));
-        out.writeObject(
-                rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
+        out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
         out.flush();
 
         Response obj;

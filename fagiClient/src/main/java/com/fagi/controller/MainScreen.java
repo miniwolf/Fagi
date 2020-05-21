@@ -81,7 +81,8 @@ public class MainScreen extends Pane {
     }
 
     public enum PaneContent {
-        Contacts, Messages
+        Contacts,
+        Messages
     }
 
     private List<MessageItemController> messageItems = new CopyOnWriteArrayList<>();
@@ -114,7 +115,10 @@ public class MainScreen extends Pane {
      * @param usernameString which is used all around the class for knowing who the user is
      * @param primaryStage   primary stage used to create a draggable.
      */
-    public MainScreen(String usernameString, Communication communication, Stage primaryStage) {
+    public MainScreen(
+            String usernameString,
+            Communication communication,
+            Stage primaryStage) {
         this.usernameString = usernameString;
         this.communication = communication;
         this.draggable = new Draggable(primaryStage);
@@ -136,10 +140,10 @@ public class MainScreen extends Pane {
         setupContactList();
 
         messageHandler = new TextMessageHandler(this, communication.getInputDistributor());
-        threadPool.startThread(messageHandler.getRunnable(),  "MessageHandler");
+        threadPool.startThread(messageHandler.getRunnable(), "MessageHandler");
 
         generalHandler = new GeneralHandlerFactory().construct(this, communication.getInputDistributor(), threadPool);
-        threadPool.startThread(generalHandler.getRunnable(),"GeneralHandler");
+        threadPool.startThread(generalHandler.getRunnable(), "GeneralHandler");
 
         updateConversationListFromServer(conversations);
     }
@@ -157,46 +161,42 @@ public class MainScreen extends Pane {
         emptyFocusElement = messages;
         username.setText(usernameString);
         char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
-        Image tiny = new Image(
-                "/style/material-icons/" + cUpper + ".png",
-                40,
-                40,
-                true,
-                true);
+        Image tiny = new Image("/style/material-icons/" + cUpper + ".png", 40, 40, true, true);
         this.tinyIcon.setImage(tiny);
-        Image large = new Image(
-                "/style/material-icons/" + cUpper + ".png",
-                96,
-                96,
-                true,
-                true);
+        Image large = new Image("/style/material-icons/" + cUpper + ".png", 96, 96, true, true);
         this.largeIcon.setImage(large);
         this.requestFocus();
 
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
         Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
-        scene.widthProperty().addListener(new ChangeListener<>() {
-            // TODO: Fix this, it seems we want initialization to happen before we can do the search.
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue,
-                                Number oldSceneWidth, Number newSceneWidth) {
-                Runnable run = () -> {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        Logger.logStackTrace(e);
-                    } finally {
-                        Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
+        scene
+                .widthProperty()
+                .addListener(new ChangeListener<>() {
+                    // TODO: Fix this, it seems we want initialization to happen before we can do the search.
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends Number> observableValue,
+                            Number oldSceneWidth,
+                            Number newSceneWidth) {
+                        Runnable run = () -> {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                Logger.logStackTrace(e);
+                            } finally {
+                                Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
+                            }
+                        };
+
+                        threadPool.startThread(run, "Search thread");
+
+                        scene
+                                .widthProperty()
+                                .removeListener(this);
                     }
-                };
-
-                threadPool.startThread(run, "Search thread");
-
-                scene.widthProperty().removeListener(this);
-            }
-        });
+                });
     }
 
     @FXML
@@ -220,10 +220,14 @@ public class MainScreen extends Pane {
 
     @FXML
     private void logoutRequest() {
-        messageHandler.getRunnable().stop();
+        messageHandler
+                .getRunnable()
+                .stop();
         //interrupt(voiceThread);
         generalHandler.stop();
-        generalHandler.getRunnable().stop();
+        generalHandler
+                .getRunnable()
+                .stop();
 
         ChatManager.handleLogout(new Logout());
 
@@ -242,12 +246,16 @@ public class MainScreen extends Pane {
     }
 
     public boolean hasCurrentOpenConversation(Conversation conversation) {
-        return currentConversations.parallelStream().anyMatch(con -> con.equals(conversation));
+        return currentConversations
+                .parallelStream()
+                .anyMatch(con -> con.equals(conversation));
     }
 
     public ConversationController getControllerFromConversation(Conversation conversation) {
         for (ConversationController conversationController : conversationControllers) {
-            if (conversationController.getConversation().equals(conversation)) {
+            if (conversationController
+                    .getConversation()
+                    .equals(conversation)) {
                 return conversationController;
             }
         }
@@ -266,7 +274,9 @@ public class MainScreen extends Pane {
         draggable.mouseDragged(mouseEvent);
     }
 
-    public void setScrollPaneContent(PaneContent content, Parent parent) {
+    public void setScrollPaneContent(
+            PaneContent content,
+            Parent parent) {
         if (currentPaneContent == content) {
             Platform.runLater(() -> listContent.setContent(parent));
         }
@@ -291,8 +301,12 @@ public class MainScreen extends Pane {
     }
 
     public void changeMenuStyle(String menu) {
-        currentPane.getStyleClass().removeAll("chosen");
-        currentPane.getStyleClass().add("button-shape");
+        currentPane
+                .getStyleClass()
+                .removeAll("chosen");
+        currentPane
+                .getStyleClass()
+                .add("button-shape");
 
         switch (menu) {
             case "Contacts":
@@ -309,8 +323,12 @@ public class MainScreen extends Pane {
         }
 
         listContent.setContent(listContentMap.get(currentPaneContent));
-        currentPane.getStyleClass().removeAll("button-shape");
-        currentPane.getStyleClass().add("chosen");
+        currentPane
+                .getStyleClass()
+                .removeAll("button-shape");
+        currentPane
+                .getStyleClass()
+                .add("chosen");
     }
 
     public void addConversation(Conversation conversation) {
@@ -343,10 +361,10 @@ public class MainScreen extends Pane {
     }
 
     private void updateConversationListFromServer(List<Conversation> conversations) {
-        List<ConversationFilter> filters =
-                conversations.stream()
-                             .map(x -> new ConversationFilter(x.getId(), x.getLastMessageDate()))
-                             .collect(Collectors.toList());
+        List<ConversationFilter> filters = conversations
+                .stream()
+                .map(x -> new ConversationFilter(x.getId(), x.getLastMessageDate()))
+                .collect(Collectors.toList());
 
         communication.sendObject(new GetConversationsRequest(usernameString, filters));
     }
@@ -356,14 +374,12 @@ public class MainScreen extends Pane {
     }
 
     private void setupContactList() {
-        ContentController contactContentController =
-                new ContentController("/view/content/ContentList.fxml");
+        ContentController contactContentController = new ContentController("/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Contacts, contactContentController);
     }
 
     private synchronized void setupConversationList() {
-        conversationContentController =
-                new ContentController("/view/content/ContentList.fxml");
+        conversationContentController = new ContentController("/view/content/ContentList.fxml");
         setScrollPaneContent(PaneContent.Messages, conversationContentController);
 
         messageItems.forEach(MessageItemController::stopTimer);
@@ -374,13 +390,11 @@ public class MainScreen extends Pane {
     }
 
     public Pane createMessageItem(Conversation conversation) {
-        MessageItemController messageItemController =
-                new MessageItemController(
-                        usernameString,
-                        conversation,
-                        new OpenConversationFromID(this),
-                        conversation.getLastMessageDate()
-                );
+        MessageItemController messageItemController = new MessageItemController(usernameString,
+                                                                                conversation,
+                                                                                new OpenConversationFromID(this),
+                                                                                conversation.getLastMessageDate()
+        );
         messageItems.add(messageItemController);
         return messageItemController;
     }
@@ -390,11 +404,15 @@ public class MainScreen extends Pane {
     }
 
     public void addElement(Node node) {
-        conversationHolder.getChildren().add(node);
+        conversationHolder
+                .getChildren()
+                .add(node);
     }
 
     public void removeElement(Node node) {
-        conversationHolder.getChildren().remove(node);
+        conversationHolder
+                .getChildren()
+                .remove(node);
         emptyFocusElement.requestFocus();
     }
 

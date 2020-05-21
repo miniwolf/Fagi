@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 
 /**
  * Default implementation of LoginController.
- *
+ * <p>
  * The thing left is the next, which should be declared by each specific implementation
  * in order to validate data before send on to the ChatManager.
  *

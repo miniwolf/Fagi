@@ -10,7 +10,9 @@ public class FriendListItem {
     private final ContactItemController controller;
     private final Pane pane;
 
-    public FriendListItem(ContactItemController controller, Pane pane) {
+    public FriendListItem(
+            ContactItemController controller,
+            Pane pane) {
         this.controller = controller;
         this.pane = pane;
     }

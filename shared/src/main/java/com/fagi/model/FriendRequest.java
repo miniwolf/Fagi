@@ -15,7 +15,9 @@ public class FriendRequest implements Serializable, Comparable<FriendRequest> {
     private final String friendUsername;
     private final TextMessage message;
 
-    public FriendRequest(String friendUsername, TextMessage message) {
+    public FriendRequest(
+            String friendUsername,
+            TextMessage message) {
         this.friendUsername = friendUsername;
         this.message = message;
     }
@@ -25,7 +27,9 @@ public class FriendRequest implements Serializable, Comparable<FriendRequest> {
     }
 
     public String getSender() {
-        return message.getMessageInfo().getSender();
+        return message
+                .getMessageInfo()
+                .getSender();
     }
 
     public TextMessage getMessage() {
@@ -34,11 +38,14 @@ public class FriendRequest implements Serializable, Comparable<FriendRequest> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         FriendRequest that = (FriendRequest) o;
-        return Objects.equals(friendUsername, that.friendUsername) &&
-                Objects.equals(message, that.message);
+        return Objects.equals(friendUsername, that.friendUsername) && Objects.equals(message, that.message);
     }
 
     @Override

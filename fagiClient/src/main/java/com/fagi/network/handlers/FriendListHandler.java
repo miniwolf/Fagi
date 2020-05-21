@@ -5,16 +5,14 @@ import com.fagi.controller.MainScreen;
 import com.fagi.controller.contentList.ContactItemController;
 import com.fagi.controller.contentList.ContentController;
 import com.fagi.model.Friend;
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.FriendList;
+import javafx.application.Platform;
+import javafx.scene.Parent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import javafx.application.Platform;
-import javafx.scene.Parent;
 
 /**
  * Created by Marcus on 09-07-2016.
@@ -31,10 +29,11 @@ public class FriendListHandler implements Handler<FriendList> {
         mainScreen.setFriendList(friendList);
 
         // Required here to get the load inside the constructor
-        ContentController contentController =
-            new ContentController("/view/content/ContentList.fxml");
+        ContentController contentController = new ContentController("/view/content/ContentList.fxml");
 
-        List<Friend> friends = friendList.getAccess().getData();
+        List<Friend> friends = friendList
+                .getAccess()
+                .getData();
         Collections.sort(friends);
 
         List<Parent> parents = new ArrayList<>();
@@ -42,23 +41,21 @@ public class FriendListHandler implements Handler<FriendList> {
             ContactItemController contactItem = setupItemController(friend, mainScreen.getUsername());
 
             parents.add(contactItem);
-            mainScreen.getFriendMapWrapper().register(friend, contactItem, contactItem);
+            mainScreen
+                    .getFriendMapWrapper()
+                    .register(friend, contactItem, contactItem);
         }
 
         contentController.addAllToContentList(parents);
         mainScreen.setContactContentController(contentController);
 
-        Platform.runLater(() -> mainScreen
-            .setScrollPaneContent(MainScreen.PaneContent.Contacts, contentController));
+        Platform.runLater(() -> mainScreen.setScrollPaneContent(MainScreen.PaneContent.Contacts, contentController));
     }
 
-    private ContactItemController setupItemController(Friend friend, String username) {
-        return new ContactItemController(
-                username,
-                friend,
-                new OpenConversation(mainScreen),
-                new Date()
-            );
+    private ContactItemController setupItemController(
+            Friend friend,
+            String username) {
+        return new ContactItemController(username, friend, new OpenConversation(mainScreen), new Date());
     }
 
     @Override

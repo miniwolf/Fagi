@@ -5,7 +5,7 @@ import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.conversation.CreateConversationRequest;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,11 +29,10 @@ public class OpenConversation implements Action<String> {
         if (optConversation.isPresent()) {
             conversation = optConversation.get();
         } else {
-            List<String> participants = new ArrayList<>() {{
-                add(mainScreen.getUsername());
-                add(username);
-            }};
-            mainScreen.getCommunication().sendObject(new CreateConversationRequest(participants));
+            List<String> participants = Arrays.asList(mainScreen.getUsername(), username);
+            mainScreen
+                    .getCommunication()
+                    .sendObject(new CreateConversationRequest(participants));
             conversation = waitForConversation(username);
         }
         openConversation.execute(conversation.getId());
@@ -52,13 +51,20 @@ public class OpenConversation implements Action<String> {
     }
 
     private Optional<Conversation> getFirstConversation(String username) {
-        return mainScreen.getConversations()
+        return mainScreen
+                .getConversations()
                 .stream()
                 .filter(con -> conversationContainsUsername(username, con))
                 .findFirst();
     }
 
-    private boolean conversationContainsUsername(String username, Conversation con) {
-        return con.getParticipants().size() > 0 && con.getParticipants().contains(username);
+    private boolean conversationContainsUsername(
+            String username,
+            Conversation con) {
+        return con
+                .getParticipants()
+                .size() > 0 && con
+                .getParticipants()
+                .contains(username);
     }
 }

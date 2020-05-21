@@ -9,7 +9,9 @@ public class Friend implements Serializable, Comparable<Friend> {
     private final String username;
     private boolean online;
 
-    public Friend(String username, boolean online) {
+    public Friend(
+            String username,
+            boolean online) {
         this.username = username;
         this.online = online;
     }
@@ -28,8 +30,12 @@ public class Friend implements Serializable, Comparable<Friend> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Friend)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Friend)) {
+            return false;
+        }
 
         Friend friend = (Friend) o;
 
@@ -44,7 +50,9 @@ public class Friend implements Serializable, Comparable<Friend> {
     @Override
     public int compareTo(Friend o) {
         int res = Boolean.compare(o.isOnline(), online);
-        if (res == 0) return username.compareTo(o.getUsername());
+        if (res == 0) {
+            return username.compareTo(o.getUsername());
+        }
         return res;
     }
 }

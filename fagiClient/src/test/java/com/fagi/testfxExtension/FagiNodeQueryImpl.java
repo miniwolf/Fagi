@@ -11,8 +11,8 @@ public class FagiNodeQueryImpl extends NodeQueryImpl {
             return super.query();
         } catch (EmptyNodeQueryException e) {
             var message = toString();
-            throw new AssertionError("Could not find element: " +
-                    message.substring(message.indexOf("lookup by selector: ") + "lookup by selector: ".length()));
+            throw new AssertionError("Could not find element: " + message.substring(message.indexOf(
+                    "lookup by selector: ") + "lookup by selector: ".length()));
         }
     }
 }

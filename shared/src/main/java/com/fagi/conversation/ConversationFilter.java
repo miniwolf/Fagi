@@ -10,7 +10,9 @@ public class ConversationFilter implements Serializable {
     private final long id;
     private final Date lastMessageDate;
 
-    public ConversationFilter(long id, Date lastMessageDate) {
+    public ConversationFilter(
+            long id,
+            Date lastMessageDate) {
         this.id = id;
         this.lastMessageDate = lastMessageDate;
     }

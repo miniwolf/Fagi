@@ -22,7 +22,9 @@ public class SendInvitationController extends BorderPane {
     private MainScreen mainScreen;
     private Action<TextMessage> action;
 
-    public SendInvitationController(MainScreen mainScreen, String username) {
+    public SendInvitationController(
+            MainScreen mainScreen,
+            String username) {
         this.mainScreen = mainScreen;
         this.action = new SendInvitation(mainScreen.getCommunication(), username);
 
@@ -36,7 +38,9 @@ public class SendInvitationController extends BorderPane {
      * username.
      */
     private void setUsername(String username) {
-        header.setText(header.getText().replace("$", username));
+        header.setText(header
+                               .getText()
+                               .replace("$", username));
         if (name != null) {
             name.setText(username);
         }
@@ -44,10 +48,7 @@ public class SendInvitationController extends BorderPane {
 
     @FXML
     private void sendMessage() {
-        action.execute(new TextMessage(
-                message.getText(),
-                mainScreen.getUsername(),
-                -1));
+        action.execute(new TextMessage(message.getText(), mainScreen.getUsername(), -1));
         close();
     }
 

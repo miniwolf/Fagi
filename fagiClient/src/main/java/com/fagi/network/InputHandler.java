@@ -31,7 +31,9 @@ public class InputHandler implements Runnable {
     private boolean running = true;
     private InputDistributor distributor;
 
-    public InputHandler(ObjectInputStream in, EncryptionAlgorithm encryption) {
+    public InputHandler(
+            ObjectInputStream in,
+            EncryptionAlgorithm encryption) {
         this.in = in;
         this.encryption = encryption;
     }
@@ -44,20 +46,22 @@ public class InputHandler implements Runnable {
     @Override
     public void run() {
         byte[] input = null;
-        while ( running ) {
-            while ( input == null && running ) {
+        while (running) {
+            while (input == null && running) {
                 try {
-                    input = (byte[])in.readObject();
+                    input = (byte[]) in.readObject();
                     handleInput(Conversion.convertFromBytes(encryption.decrypt(input)));
                 } catch (IOException ioe) {
-                    if ( running ) {
+                    if (running) {
                         System.err.println("inputhandler ioe: " + ioe.toString());
                         ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
                         Logger.logStackTrace(ioe);
                     }
                     running = false;
                     ChatManager.closeCommunication();
-                    Platform.runLater(() -> ChatManager.getApplication().showLoginScreen());
+                    Platform.runLater(() -> ChatManager
+                            .getApplication()
+                            .showLoginScreen());
                 } catch (ClassNotFoundException cnfe) {
                     // Shared files are not the same on both side of the server
                     System.err.println(cnfe.getMessage());
@@ -71,7 +75,7 @@ public class InputHandler implements Runnable {
     }
 
     private void handleInput(Object input) {
-        if ( input instanceof Response ) {
+        if (input instanceof Response) {
             inputs.add((Response) input);
             return;
         }
@@ -90,8 +94,8 @@ public class InputHandler implements Runnable {
      */
     public Response containsResponse() {
         Response response;
-        for ( Object object : inputs ) {
-            if ( !(object instanceof Response ) ) {
+        for (Object object : inputs) {
+            if (!(object instanceof Response)) {
                 continue;
             }
 
@@ -110,7 +114,7 @@ public class InputHandler implements Runnable {
     public Conversation containsConversation() {
         Conversation con;
         for (Object object : inputs) {
-            if ( !(object instanceof Conversation )) {
+            if (!(object instanceof Conversation)) {
                 continue;
             }
 
@@ -124,7 +128,7 @@ public class InputHandler implements Runnable {
     public HistoryUpdates containsHistoryUpdates() {
         HistoryUpdates updates;
         for (Object object : inputs) {
-            if ( !(object instanceof HistoryUpdates )) {
+            if (!(object instanceof HistoryUpdates)) {
                 continue;
             }
 

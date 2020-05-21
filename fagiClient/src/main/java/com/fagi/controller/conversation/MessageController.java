@@ -19,19 +19,25 @@ public class MessageController extends HBox {
     private final String stringMessage;
     private static final Font ROBOTO = new Font("Roboto-Regular", 13);
 
-    public MessageController(String stringMessage, String resource) {
+    public MessageController(
+            String stringMessage,
+            String resource) {
         this.stringMessage = stringMessage;
         new LoadFXML(resource).execute(this);
     }
 
-    public MessageController(String stringMessage, String resource, String username) {
+    public MessageController(
+            String stringMessage,
+            String resource,
+            String username) {
         this(stringMessage, resource);
         var image = new Image(
                 "/style/material-icons/" + Character.toUpperCase(username.toCharArray()[0]) + ".png",
                 32,
                 32,
                 true,
-                true);
+                true
+        );
         this.image.setImage(image);
     }
 

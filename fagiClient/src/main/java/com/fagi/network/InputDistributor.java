@@ -21,18 +21,20 @@ public class InputDistributor<T> implements Runnable {
             while (running) {
                 T input = messages.take();
                 Container<T> container = containers.get(input.getClass());
-                if ( container == null ) {
+                if (container == null) {
                     messages.put(input);
                     continue;
                 }
                 container.addObject(input);
             }
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             running = false;
         }
     }
 
-    public void register(Class clazz, Container<T> handler) {
+    public void register(
+            Class clazz,
+            Container<T> handler) {
         containers.put(clazz, handler);
     }
 
@@ -44,5 +46,7 @@ public class InputDistributor<T> implements Runnable {
         messages.add(msg);
     }
 
-    public void stop() { this.running = false; }
+    public void stop() {
+        this.running = false;
+    }
 }

@@ -21,7 +21,9 @@ public class GeneralHandler<T> implements Handler<T> {
     private final ThreadPool threadPool;
     private DefaultThreadHandler<T> runnable = new DefaultThreadHandler<T>(container, this);
 
-    public GeneralHandler(InputDistributor<T> inputDistributor, ThreadPool threadPool) {
+    public GeneralHandler(
+            InputDistributor<T> inputDistributor,
+            ThreadPool threadPool) {
         this.inputDistributor = inputDistributor;
         this.threadPool = threadPool;
         container.setThread(runnable);
@@ -31,7 +33,7 @@ public class GeneralHandler<T> implements Handler<T> {
     public void handle(T object) {
         Handler<T> handler = handlers.get(object.getClass());
 
-        if ( handler == null ) {
+        if (handler == null) {
             System.err.println("Missing handler: " + object.getClass());
             unhandledObjects.add(object);
             return;
@@ -42,7 +44,9 @@ public class GeneralHandler<T> implements Handler<T> {
         }, "GeneralHandler: " + object.getClass());
     }
 
-    public void registerHandler(Class clazz, Handler<T> handler) {
+    public void registerHandler(
+            Class clazz,
+            Handler<T> handler) {
         handlers.put(clazz, handler);
         inputDistributor.register(clazz, container);
     }

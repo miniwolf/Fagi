@@ -11,13 +11,18 @@ import java.util.List;
 /**
  * Created by Marcus on 13-11-2016.
  */
-public class ConversationDataUpdate implements Serializable, InGoingMessages<ConversationDataUpdate>, Access<ConversationDataUpdate> {
+public class ConversationDataUpdate
+        implements Serializable, InGoingMessages<ConversationDataUpdate>, Access<ConversationDataUpdate> {
     private final List<TextMessage> data;
     private Timestamp lastMessageDate;
     private final TextMessage lastMessage;
     private final long id;
 
-    public ConversationDataUpdate(long id, List<TextMessage> data, Timestamp lastMessageDate, TextMessage lastMessage) {
+    public ConversationDataUpdate(
+            long id,
+            List<TextMessage> data,
+            Timestamp lastMessageDate,
+            TextMessage lastMessage) {
         this.id = id;
         this.data = data;
         this.lastMessageDate = lastMessageDate;

@@ -10,7 +10,9 @@ public class SearchUsersRequest implements Serializable {
     private String sender;
     private String searchString;
 
-    public SearchUsersRequest(String sender, String searchString) {
+    public SearchUsersRequest(
+            String sender,
+            String searchString) {
         this.sender = sender;
 
         this.searchString = searchString;
