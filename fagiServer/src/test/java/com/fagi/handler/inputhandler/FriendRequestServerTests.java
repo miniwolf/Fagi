@@ -3,6 +3,7 @@ package com.fagi.handler.inputhandler;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
+import com.fagi.model.Friend;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.User;
@@ -23,10 +24,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,7 +70,7 @@ class FriendRequestServerTests {
         inputHandler.handleInput(friendReq);
 
         var argumentCaptor = ArgumentCaptor.forClass(Response.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
 
         Assertions.assertAll(
                 () -> Assertions.assertNotNull(argumentCaptor.getValue()),
@@ -98,14 +101,17 @@ class FriendRequestServerTests {
         inputHandler.handleInput(friendReq);
 
         var argumentCaptor = ArgumentCaptor.forClass(GetFriendListRequest.class);
-        Mockito.verify(friendInputHandler, times(1)).handleInput(argumentCaptor.capture());
+        verify(friendInputHandler, times(1)).handleInput(argumentCaptor.capture());
 
-        Assertions.assertEquals(friendReq.getFriendUsername(), argumentCaptor.getValue().getSender());
+        String senderUsername = argumentCaptor
+                .getValue()
+                .getSender();
+        Assertions.assertEquals(friendReq.getFriendUsername(), senderUsername);
     }
 
     @Test
     void whenRequestFriendSucceeds_ShouldResultInTheUsersFriendListAsResponse() {
-        var friend = new User("friend", "123");
+        var expectedFriend = new User("friend", "123");
         var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
 
         doReturn(false)
@@ -113,16 +119,24 @@ class FriendRequestServerTests {
                 .isUserOnline(friendReq.getFriendUsername());
 
         when(user.requestFriend(data, friendReq)).thenReturn(new AllIsWell());
-        doReturn(Collections.singletonList(friend.getUserName())).when(user).getFriends();
+
+        doReturn(Collections.singletonList(expectedFriend.getUserName()))
+                .when(user)
+                .getFriends();
 
         inputHandler.handleInput(friendReq);
 
         var argumentCaptor = ArgumentCaptor.forClass(FriendList.class);
-        Mockito.verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
 
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(1, argumentCaptor.getValue().getAccess().getData().size()),
-                () -> Assertions.assertEquals(friend.getUserName(), argumentCaptor.getValue().getAccess().getData().get(0).getUsername())
-        );
+        List<Friend> friendList = argumentCaptor
+                .getValue()
+                .getAccess()
+                .getData();
+
+        Assertions.assertEquals(1, friendList.size());
+
+        Friend firstFriend = friendList.get(0);
+        Assertions.assertEquals(expectedFriend.getUserName(), firstFriend.getUsername());
     }
 }
