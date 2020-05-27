@@ -50,10 +50,10 @@ public class ReceiveFriendRequestTests {
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
 
-        FxAssert.verifyThat(
-                "#UniqueInviteItem",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("Received request should be in chat history."));
+        FxAssert.verifyThat("#UniqueInviteItem",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("Received request should be in chat history.")
+        );
     }
 
     @Test
@@ -67,10 +67,10 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, ".inviteItem");
 
-        FxAssert.verifyThat(
-                "#UniqueReceivedInvitation",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("Clicking on invitation should open invitation window."));
+        FxAssert.verifyThat("#UniqueReceivedInvitation",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("Clicking on invitation should open invitation window.")
+        );
     }
 
     @Test
@@ -85,7 +85,9 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".inviteItem");
         WaitForFXEventsTestHelper.clickOn(robot, ".ignoreButton");
 
-        Mockito.verify(communication, Mockito.atLeastOnce()).sendObject(Mockito.any(DeleteFriendRequest.class));
+        Mockito
+                .verify(communication, Mockito.atLeastOnce())
+                .sendObject(Mockito.any(DeleteFriendRequest.class));
     }
 
     @Test
@@ -100,10 +102,10 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".inviteItem");
         WaitForFXEventsTestHelper.clickOn(robot, ".ignoreButton");
 
-        FxAssert.verifyThatIter(
-                "#UniqueReceivedInvitation",
-                IsIterableWithSize.iterableWithSize(0),
-                builder -> builder.append("Clicking on ignore button should close invitation window."));
+        FxAssert.verifyThatIter("#UniqueReceivedInvitation",
+                                IsIterableWithSize.iterableWithSize(0),
+                                builder -> builder.append("Clicking on ignore button should close invitation window.")
+        );
     }
 
     @Test
@@ -117,12 +119,15 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, ".inviteItem");
         WaitForFXEventsTestHelper.clickOn(robot, ".ignoreButton");
-        addIngoingMessageToInputHandler(inputHandler, new FriendRequestList(new DefaultListAccess<>(new ArrayList<>())));
+        addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendRequestList(new DefaultListAccess<>(new ArrayList<>()))
+        );
 
-        FxAssert.verifyThatIter(
-                "#UniqueInviteItem",
-                IsIterableWithSize.iterableWithSize(0),
-                builder -> builder.append("Received request should be removed from chat history."));
+        FxAssert.verifyThatIter("#UniqueInviteItem",
+                                IsIterableWithSize.iterableWithSize(0),
+                                builder -> builder.append("Received request should be removed from chat history.")
+        );
     }
 
     @Test
@@ -138,7 +143,9 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".ignoreButton");
 
         var deleteFriendRequestCaptor = ArgumentCaptor.forClass(DeleteFriendRequest.class);
-        Mockito.verify(communication, Mockito.atLeastOnce()).sendObject(deleteFriendRequestCaptor.capture());
+        Mockito
+                .verify(communication, Mockito.atLeastOnce())
+                .sendObject(deleteFriendRequestCaptor.capture());
 
         var deleteFriendRequest = deleteFriendRequestCaptor.getValue();
         Assertions.assertEquals(username, deleteFriendRequest.getFriendUsername());
@@ -156,7 +163,9 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".inviteItem");
         WaitForFXEventsTestHelper.clickOn(robot, ".acceptButton");
 
-        Mockito.verify(communication, Mockito.atLeastOnce()).sendObject(Mockito.any(FriendRequest.class));
+        Mockito
+                .verify(communication, Mockito.atLeastOnce())
+                .sendObject(Mockito.any(FriendRequest.class));
     }
 
     @Test
@@ -171,10 +180,10 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".inviteItem");
         WaitForFXEventsTestHelper.clickOn(robot, ".acceptButton");
 
-        FxAssert.verifyThatIter(
-                "#UniqueReceivedInvitation",
-                IsIterableWithSize.iterableWithSize(0),
-                builder -> builder.append("Clicking on accept button should close invitation window."));
+        FxAssert.verifyThatIter("#UniqueReceivedInvitation",
+                                IsIterableWithSize.iterableWithSize(0),
+                                builder -> builder.append("Clicking on accept button should close invitation window.")
+        );
     }
 
     @Test
@@ -190,7 +199,9 @@ public class ReceiveFriendRequestTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".acceptButton");
 
         var friendRequestCaptor = ArgumentCaptor.forClass(FriendRequest.class);
-        Mockito.verify(communication, Mockito.atLeastOnce()).sendObject(friendRequestCaptor.capture());
+        Mockito
+                .verify(communication, Mockito.atLeastOnce())
+                .sendObject(friendRequestCaptor.capture());
 
         var friendRequest = friendRequestCaptor.getValue();
         Assertions.assertEquals(username, friendRequest.getFriendUsername());
@@ -204,16 +215,36 @@ public class ReceiveFriendRequestTests {
         communication = Mockito.mock(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
-        Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(communication).getInputDistributor();
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
-                .when(fagiApp).showLoginScreen();
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .setInputHandler(inputHandler);
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .getInputDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .setupDistributor(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .addIngoingMessage(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .getDistributor();
+        Mockito
+                .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
+                .when(fagiApp)
+                .showLoginScreen();
 
         var comspy = Mockito.spy(communication);
-        Mockito.doNothing().when(comspy).sendObject(Mockito.any());
+        Mockito
+                .doNothing()
+                .when(comspy)
+                .sendObject(Mockito.any());
 
         var inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);

@@ -1,8 +1,8 @@
 package com.fagi.network;
-        /*
-         * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
-         * ChatManager.java
-         */
+/*
+ * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
+ * ChatManager.java
+ */
 
 import com.fagi.main.FagiApp;
 import com.fagi.model.CreateUser;
@@ -30,7 +30,9 @@ public class ChatManager {
 
     public void test() {
         communicationLoader = ServiceLoader.load(Communication.class);
-        communicationLoader.iterator().next();
+        communicationLoader
+                .iterator()
+                .next();
     }
 
     /**
@@ -43,8 +45,7 @@ public class ChatManager {
         communication.sendObject(logout);
         Response response = communication.getNextResponse();
         if (!(response instanceof AllIsWell)) {
-            System.err.println("Could not log out properly. "
-                    + "Shut down and let server handle the response");
+            System.err.println("Could not log out properly. " + "Shut down and let server handle the response");
         }
         communication.close();
         application.showLoginScreen();
@@ -67,8 +68,11 @@ public class ChatManager {
      * @param labelMessage Label for writing status Messages to the user.
      * @param inviteCode   Invite code to verify that the user is admitted to the server
      */
-    public static boolean handleCreateUser(String username, String password,
-                                           Label labelMessage, String inviteCode) {
+    public static boolean handleCreateUser(
+            String username,
+            String password,
+            Label labelMessage,
+            String inviteCode) {
         if (isEmpty(username) || isEmpty(password) || isEmpty(inviteCode)) {
             labelMessage.setText("Fields can't be empty");
             return false;

@@ -25,35 +25,35 @@ public class ReceivedInvitationController extends BorderPane {
     private final MainScreen mainScreen;
     private final Communication communication;
 
-    public ReceivedInvitationController(FriendRequest request, MainScreen mainScreen) {
+    public ReceivedInvitationController(
+            FriendRequest request,
+            MainScreen mainScreen) {
         this.request = request;
         this.communication = mainScreen.getCommunication();
         this.mainScreen = mainScreen;
 
         new LoadFXML("/view/conversation/ReceivedInvitation.fxml").execute(this);
 
-        char uChar = Character.toUpperCase(request.getMessage().getMessageInfo().getSender()
-                                                  .toCharArray()[0]);
-        var smallImage = new Image(
-                "/style/material-icons/" + uChar + ".png",
-                32,
-                32,
-                true,
-                true);
-        var bigImage = new Image(
-                "/style/material-icons/" + uChar + ".png",
-                64,
-                64,
-                true,
-                true);
+        char uChar = Character.toUpperCase(request
+                                                   .getMessage()
+                                                   .getMessageInfo()
+                                                   .getSender()
+                                                   .toCharArray()[0]);
+        var smallImage = new Image("/style/material-icons/" + uChar + ".png", 32, 32, true, true);
+        var bigImage = new Image("/style/material-icons/" + uChar + ".png", 64, 64, true, true);
         this.topPicture.setImage(bigImage);
         this.messagePicture.setImage(smallImage);
     }
 
     @FXML
     private void initialize() {
-        message.setText(request.getMessage().getData());
-        username.setText(request.getMessage().getMessageInfo().getSender());
+        message.setText(request
+                                .getMessage()
+                                .getData());
+        username.setText(request
+                                 .getMessage()
+                                 .getMessageInfo()
+                                 .getSender());
     }
 
     @FXML
@@ -64,9 +64,12 @@ public class ReceivedInvitationController extends BorderPane {
 
     @FXML
     private void accept() {
-        communication.sendObject(
-            new FriendRequest(request.getMessage().getMessageInfo().getSender(),
-                              new TextMessage("Yosh plz!", mainScreen.getUsername(), -1)));
+        communication.sendObject(new FriendRequest(request
+                                                           .getMessage()
+                                                           .getMessageInfo()
+                                                           .getSender(),
+                                                   new TextMessage("Yosh plz!", mainScreen.getUsername(), -1)
+        ));
         close();
     }
 

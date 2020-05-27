@@ -9,7 +9,9 @@ public class GetAllConversationDataRequest implements Serializable {
     private final String sender;
     private final long id;
 
-    public GetAllConversationDataRequest(String sender, long id) {
+    public GetAllConversationDataRequest(
+            String sender,
+            long id) {
         this.sender = sender;
         this.id = id;
     }

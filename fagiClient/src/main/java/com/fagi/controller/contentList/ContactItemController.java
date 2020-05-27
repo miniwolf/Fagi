@@ -22,23 +22,23 @@ public class ContactItemController extends TimedContentItemController<String> {
             Friend contact,
             Action<String> action,
             Date date) {
-        super(
-                myUsername,
-                date,
-                new ArrayList<>() {{
-                    add(contact.getUsername());
-                }},
-                fxmlResource,
-                action
-        );
+        super(myUsername, date, new ArrayList<>() {{
+            add(contact.getUsername());
+        }}, fxmlResource, action);
         toggleStatus(contact.isOnline());
     }
 
     public void toggleStatus(boolean online) {
-        if (online && !status.getStyleClass().contains("pD")) {
-            status.getStyleClass().add("pD");
+        if (online && !status
+                .getStyleClass()
+                .contains("pD")) {
+            status
+                    .getStyleClass()
+                    .add("pD");
         } else {
-            status.getStyleClass().remove("pD");
+            status
+                    .getStyleClass()
+                    .remove("pD");
         }
     }
 

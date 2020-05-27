@@ -20,7 +20,9 @@ class DisableOnLinuxAndMacCondition implements ExecutionCondition {
     }
 
     private boolean isWindows() {
-        return System.getProperty("os.name").startsWith("Windows");
+        return System
+                .getProperty("os.name")
+                .startsWith("Windows");
     }
 }
 
@@ -38,61 +40,49 @@ public class FontUtilsTest {
     @Test
     public void thirtyFourCharactersReturnsOneLine() {
         var message = "123456789 123456789 123456789 1234";
-        Assertions.assertEquals(
-                18,
-                FontUtils.computeTextHeight(ROBOTO, message, 232),
-                0.001,
-                "Should return one line");
+        Assertions.assertEquals(18, FontUtils.computeTextHeight(ROBOTO, message, 232), 0.001, "Should return one line");
     }
 
     @Test
     public void thirtyFiveCharactersReturnsTwoLines() {
         var message = "123456789 123456789 123456789 12345";
-        Assertions.assertEquals(
-                35,
-                FontUtils.computeTextHeight(ROBOTO, message, 232),
-                0.001,
-                "Should return two lines");
+        Assertions.assertEquals(35,
+                                FontUtils.computeTextHeight(ROBOTO, message, 232),
+                                0.001,
+                                "Should return two lines"
+        );
     }
 
     @Test
     public void sixtyEightCharactersReturnsTwoLines() {
         var message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 1234";
-        Assertions.assertEquals(
-                35,
-                FontUtils.computeTextHeight(ROBOTO, message, 232),
-                0.001,
-                "Should return two lines");
+        Assertions.assertEquals(35,
+                                FontUtils.computeTextHeight(ROBOTO, message, 232),
+                                0.001,
+                                "Should return two lines"
+        );
     }
 
     @Test
 
     public void sixtyNineCharactersReturnsTwoLine() {
         var message = "123456789 123456789 123456789 1234 123456789 123456789 123456789 12345";
-        Assertions.assertEquals(
-                52,
-                FontUtils.computeTextHeight(ROBOTO, message, 232),
-                0.001,
-                "Should return three lines");
+        Assertions.assertEquals(52,
+                                FontUtils.computeTextHeight(ROBOTO, message, 232),
+                                0.001,
+                                "Should return three lines"
+        );
     }
 
     @Test
     public void computeTextHeight() {
         var message = "123456789 123456789 123456789 1234";
-        Assertions.assertEquals(
-                228,
-                FontUtils.computeTextWidth(ROBOTO, message, 232),
-                0.001,
-                "Should return one line");
+        Assertions.assertEquals(228, FontUtils.computeTextWidth(ROBOTO, message, 232), 0.001, "Should return one line");
     }
 
     @Test
     public void computeTextHeightOverflow() {
         var message = "123456789 123456789 123456789 12345678";
-        Assertions.assertEquals(
-                232,
-                FontUtils.computeTextWidth(ROBOTO, message, 232),
-                0.001,
-                "Should return one line");
+        Assertions.assertEquals(232, FontUtils.computeTextWidth(ROBOTO, message, 232), 0.001, "Should return one line");
     }
 }

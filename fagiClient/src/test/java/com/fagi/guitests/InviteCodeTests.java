@@ -33,21 +33,28 @@ public class InviteCodeTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting InviteCodeTests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
     public void GivenInvalidInviteCode_MessageLabelShouldInformUserOfThis(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new IllegalInviteCode());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new IllegalInviteCode());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#inviteCode", "41");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label messageLabel) -> messageLabel.getText().equals("Error: Illegal invite code. Contact host")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label messageLabel) -> messageLabel
+                                    .getText()
+                                    .equals("Error: Illegal invite code. Contact host")
         );
     }
 
@@ -55,23 +62,27 @@ public class InviteCodeTests {
     public void InviteCodeMustHaveAValue_MessageLabelShouldInformOtherwise(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label messageLabel) -> messageLabel.getText().equals("Invite code cannot be empty")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label messageLabel) -> messageLabel
+                                    .getText()
+                                    .equals("Invite code cannot be empty")
         );
     }
 
     @Test
     public void GivenAValidInviteCode_TheLoginScreenShouldBeShown(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new AllIsWell());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#inviteCode", "42");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.LOGIN, masterLogin.getState());
-        Assertions.assertTrue(
-                robot.lookup("#UniqueLoginScreen").tryQuery().isPresent(),
-                "The screen should return to login screen.");
+        Assertions.assertTrue(robot
+                                      .lookup("#UniqueLoginScreen")
+                                      .tryQuery()
+                                      .isPresent(), "The screen should return to login screen.");
     }
 
     @Start
@@ -93,7 +104,11 @@ public class InviteCodeTests {
         masterLogin.setUsername("ThisIsAUsername");
         masterLogin.setPassword("ThisIsAPassword");
 
-        stage.getScene().setRoot(masterLogin.getController().getParentNode());
+        stage
+                .getScene()
+                .setRoot(masterLogin
+                                 .getController()
+                                 .getParentNode());
         stage.show();
     }
 }

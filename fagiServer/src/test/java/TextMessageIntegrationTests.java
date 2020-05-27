@@ -48,7 +48,9 @@ public class TextMessageIntegrationTests {
         inputHandler.handleInput(message);
         conversationHandler.tick();
 
-        Mockito.verify(outputAgent, times(1)).addMessage(message);
+        Mockito
+                .verify(outputAgent, times(1))
+                .addMessage(message);
     }
 
     @Test
@@ -58,7 +60,11 @@ public class TextMessageIntegrationTests {
         inputHandler.handleInput(message);
         conversationHandler.tick();
 
-        Assertions.assertEquals(1, conversation.getMessages().size());
+        Assertions.assertEquals(1,
+                                conversation
+                                        .getMessages()
+                                        .size()
+        );
     }
 
     @Test
@@ -68,6 +74,8 @@ public class TextMessageIntegrationTests {
         inputHandler.handleInput(message);
         conversationHandler.tick();
 
-        Mockito.verify(data, times(1)).storeConversation(conversation);
+        Mockito
+                .verify(data, times(1))
+                .storeConversation(conversation);
     }
 }

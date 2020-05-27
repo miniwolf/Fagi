@@ -30,8 +30,11 @@ public class InputWorker extends Worker implements InputAgent {
     private EncryptionAlgorithm<AESKey> aes;
     private boolean sessionCreated = false;
 
-    public InputWorker(Socket socket, OutputWorker out, ConversationHandler handler, Data data)
-            throws IOException {
+    public InputWorker(
+            Socket socket,
+            OutputWorker out,
+            ConversationHandler handler,
+            Data data) throws IOException {
         this.data = data;
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
@@ -67,8 +70,12 @@ public class InputWorker extends Worker implements InputAgent {
     }
 
     private Object decryptAndConvertToObject(byte[] input) {
-        input = sessionCreated ? aes.decrypt(input) :
-                Encryption.getInstance().getRSA().decrypt(input);
+        input = sessionCreated
+                ? aes.decrypt(input)
+                : Encryption
+                        .getInstance()
+                        .getRSA()
+                        .decrypt(input);
         try {
             return Conversion.convertFromBytes(input);
         } catch (IOException | ClassNotFoundException e) {

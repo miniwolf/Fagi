@@ -28,7 +28,9 @@ public class CreateUserNameController extends DefaultLoginController {
     private void initialize() {
         username.setText(masterLogin.getUsername());
         masterLogin.initialize(username);
-        Platform.runLater(() -> username.getParent().requestFocus());
+        Platform.runLater(() -> username
+                .getParent()
+                .requestFocus());
     }
 
     @Override

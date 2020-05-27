@@ -27,7 +27,9 @@ public class TextMessageHandler implements Handler<TextMessage> {
     private DefaultThreadHandler<TextMessage> runnable = new DefaultThreadHandler<>(container, this);
     private final MainScreen mainScreen;
 
-    public TextMessageHandler(MainScreen mainScreen, InputDistributor inputDistributor) {
+    public TextMessageHandler(
+            MainScreen mainScreen,
+            InputDistributor inputDistributor) {
         container.setThread(runnable);
         inputDistributor.register(TextMessage.class, container);
         this.mainScreen = mainScreen;
@@ -35,23 +37,30 @@ public class TextMessageHandler implements Handler<TextMessage> {
 
     @Override
     public void handle(TextMessage message) {
-        Optional<Conversation> first = mainScreen.getConversations().stream().filter(
-            c -> c.getId() == message.getMessageInfo().getConversationID()).findFirst();
+        Optional<Conversation> first = mainScreen
+                .getConversations()
+                .stream()
+                .filter(c -> c.getId() == message
+                        .getMessageInfo()
+                        .getConversationID())
+                .findFirst();
         if (first.isEmpty()) {
-            System.err.println(
-                "Server sent a message before it sent the conversation of ID '" + message
-                    .getMessageInfo().getConversationID() + "'to the profile.");
+            System.err.println("Server sent a message before it sent the conversation of ID '" + message
+                    .getMessageInfo()
+                    .getConversationID() + "'to the profile.");
             return;
         }
         Conversation conversation = first.get();
 
         if (conversation.getType() == ConversationType.Placeholder) {
-            ConversationType type = conversation.getParticipants().size() > 2
-                                    ? ConversationType.Multi : ConversationType.Single;
+            ConversationType type = conversation
+                    .getParticipants()
+                    .size() > 2 ? ConversationType.Multi : ConversationType.Single;
 
             conversation.setType(type);
-            mainScreen.getCommunication().sendObject(
-                new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
+            mainScreen
+                    .getCommunication()
+                    .sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
         }
 
         if (mainScreen.hasCurrentOpenConversation(conversation)) {
@@ -59,12 +68,17 @@ public class TextMessageHandler implements Handler<TextMessage> {
             controller.addMessage(message);
 
         }
-        conversation.getData().addMessage(message);
+        conversation
+                .getData()
+                .addMessage(message);
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
 
-        MessageItemController messageItemController =
-            mainScreen.getMessageItems().stream()
-                      .filter(x -> x.getID() == conversation.getId()).findFirst().get();
+        MessageItemController messageItemController = mainScreen
+                .getMessageItems()
+                .stream()
+                .filter(x -> x.getID() == conversation.getId())
+                .findFirst()
+                .get();
         Platform.runLater(() -> {
             messageItemController.setDate(conversation.getLastMessageDate());
             messageItemController.setLastMessage(message);

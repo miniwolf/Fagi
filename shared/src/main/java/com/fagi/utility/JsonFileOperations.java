@@ -24,7 +24,10 @@ public class JsonFileOperations {
     public static final String INVITE_CODES_FILE_PATH = CONFIG_FOLDER_PATH + INVITE_CODES_FILE + FAGI_EXTENSION;
     public static final String USERS_FOLDER = "users/";
 
-    public static <T extends Serializable> void storeObjectToFile(T object, String folderPath, String fileName) {
+    public static <T extends Serializable> void storeObjectToFile(
+            T object,
+            String folderPath,
+            String fileName) {
         try {
             File folder = new File(folderPath);
             File file = new File(folderPath + fileName + FAGI_EXTENSION);
@@ -47,7 +50,9 @@ public class JsonFileOperations {
         }
     }
 
-    public static <T extends Serializable> T loadObjectFromFile(String fileName, Class<T> clazz) {
+    public static <T extends Serializable> T loadObjectFromFile(
+            String fileName,
+            Class<T> clazz) {
         T res = null;
         try {
             File file = new File(fileName);
@@ -57,7 +62,7 @@ public class JsonFileOperations {
 
             StringBuilder json = new StringBuilder();
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            while ( reader.ready() ) {
+            while (reader.ready()) {
                 json.append(reader.readLine());
             }
 
@@ -71,7 +76,9 @@ public class JsonFileOperations {
         return res;
     }
 
-    public static <T extends Serializable> List<T> loadAllObjectsInFolder(String folderName, Class<T> clazz) {
+    public static <T extends Serializable> List<T> loadAllObjectsInFolder(
+            String folderName,
+            Class<T> clazz) {
         List<T> res = new CopyOnWriteArrayList<>();
 
         File folder = new File(folderName);
@@ -100,7 +107,9 @@ public class JsonFileOperations {
         storeObjectToFile(c, CONVERSATION_FOLDER_PATH, c.getId() + "");
     }
 
-    public static void storeClientConversation(Conversation c, String username) {
+    public static void storeClientConversation(
+            Conversation c,
+            String username) {
         File clientFolder = new File(username + "/");
         if (!clientFolder.exists()) {
             clientFolder.mkdir();

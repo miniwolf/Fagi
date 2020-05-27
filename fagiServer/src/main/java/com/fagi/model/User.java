@@ -26,7 +26,9 @@ public class User implements Serializable {
     private List<Long> conversationIDs;
     private volatile List<FriendRequest> incFriendReq;
 
-    public User(String name, String pass) {
+    public User(
+            String name,
+            String pass) {
         this.pass = pass;
         this.userName = name;
         conversationIDs = new ArrayList<>();
@@ -54,17 +56,23 @@ public class User implements Serializable {
         friends.add(friend.getUserName());
     }
 
-    public Response requestFriend(Data data, FriendRequest arg) {
+    public Response requestFriend(
+            Data data,
+            FriendRequest arg) {
         String otherUser = arg.getFriendUsername();
-        if ( friends.contains(otherUser) ) {
+        if (friends.contains(otherUser)) {
             return new UserExists();
         }
         User other = data.getUser(otherUser);
-        if ( other == null ) {
+        if (other == null) {
             return new NoSuchUser();
         }
 
-        if (incFriendReq.stream().anyMatch(x -> x.getFriendUsername().equals(userName))) {
+        if (incFriendReq
+                .stream()
+                .anyMatch(x -> x
+                        .getFriendUsername()
+                        .equals(userName))) {
             data.makeFriends(this, other);
             other.removeFriendRequest(data, userName);
             return removeFriendRequest(data, otherUser);
@@ -72,8 +80,17 @@ public class User implements Serializable {
         return other.addFriendReq(data, arg);
     }
 
-    public Response removeFriendRequest(Data data, String userName) {
-        Optional<FriendRequest> opt = incFriendReq.stream().filter(x -> x.getMessage().getMessageInfo().getSender().equals(userName)).findFirst();
+    public Response removeFriendRequest(
+            Data data,
+            String userName) {
+        Optional<FriendRequest> opt = incFriendReq
+                .stream()
+                .filter(x -> x
+                        .getMessage()
+                        .getMessageInfo()
+                        .getSender()
+                        .equals(userName))
+                .findFirst();
 
         if (opt.isEmpty()) {
             return new NoSuchUser();
@@ -85,16 +102,20 @@ public class User implements Serializable {
         return data.storeUser(this);
     }
 
-    private Response addFriendReq(Data data, FriendRequest request) {
-        if ( incFriendReq.contains(request) ) {
+    private Response addFriendReq(
+            Data data,
+            FriendRequest request) {
+        if (incFriendReq.contains(request)) {
             return new UserExists();
         }
         incFriendReq.add(request);
         return data.storeUser(this);
     }
 
-    public Response removeFriend(Data data, String otherUser) {
-        if ( !friends.contains(otherUser)) {
+    public Response removeFriend(
+            Data data,
+            String otherUser) {
+        if (!friends.contains(otherUser)) {
             return new UserExists();
         }
         friends.remove(otherUser);

@@ -12,7 +12,9 @@ public class GetConversationsRequest implements Serializable {
     private final String userName;
     private final List<ConversationFilter> filters;
 
-    public GetConversationsRequest(String userName, List<ConversationFilter> filters) {
+    public GetConversationsRequest(
+            String userName,
+            List<ConversationFilter> filters) {
         this.userName = userName;
         this.filters = filters;
     }

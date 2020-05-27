@@ -3,7 +3,6 @@ package com.fagi.network.handlers;
 import com.fagi.controller.MainScreen;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.utility.JsonFileOperations;
 
 /**
@@ -14,6 +13,7 @@ public class ConversationHandler implements Handler<Conversation> {
 
     /**
      * Constructor.
+     *
      * @param mainScreen handle to the mainscreen. Used for adding the conversation.
      */
     public ConversationHandler(MainScreen mainScreen) {
@@ -30,6 +30,7 @@ public class ConversationHandler implements Handler<Conversation> {
 
     @Override
     public Runnable getRunnable() {
-        return () -> { };
+        return () -> {
+        };
     }
 }

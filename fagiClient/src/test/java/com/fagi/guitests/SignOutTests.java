@@ -32,24 +32,22 @@ public class SignOutTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting SignOutTests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
     public void clickOnToggleSignOut_WillChangeVisibilityOnDropdownId(FxRobot robot) {
-        FxAssert.verifyThat(
-                "#dropdown",
-                NodeMatchers.isInvisible());
+        FxAssert.verifyThat("#dropdown", NodeMatchers.isInvisible());
 
         WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
-        FxAssert.verifyThat(
-                "#dropdown",
-                NodeMatchers.isVisible());
+        FxAssert.verifyThat("#dropdown", NodeMatchers.isVisible());
 
         WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
-        FxAssert.verifyThat(
-                "#dropdown",
-                NodeMatchers.isInvisible());
+        FxAssert.verifyThat("#dropdown", NodeMatchers.isInvisible());
     }
 
     @Test
@@ -57,10 +55,9 @@ public class SignOutTests {
         WaitForFXEventsTestHelper.clickOn(robot, ".gb_b");
         WaitForFXEventsTestHelper.clickOn(robot, ".gb_Fa");
 
-        FxAssert.verifyThat(
-                "#UniqueLoginScreen",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("Should got to the login screen view.")
+        FxAssert.verifyThat("#UniqueLoginScreen",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("Should got to the login screen view.")
         );
     }
 
@@ -68,14 +65,31 @@ public class SignOutTests {
     public void start(Stage stage) {
         var communication = Mockito.mock(Communication.class);
         var inputHandler = Mockito.mock(InputHandler.class);
-        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new AllIsWell());
         var fagiApp = Mockito.mock(FagiApp.class);
 
-        Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(communication).getInputDistributor();
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .setInputHandler(inputHandler);
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .getInputDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .setupDistributor(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .addIngoingMessage(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .getDistributor();
 
         communication.setInputHandler(inputHandler);
         inputHandler.setupDistributor(threadPool);
@@ -89,13 +103,16 @@ public class SignOutTests {
 
         var draggable = new Draggable(stage);
         var scene = new Scene(test);
-        Mockito.doAnswer(invocationOnMock -> {
-            stage.setScene(scene);
-            var masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
-            masterLogin.showMasterLoginScreen();
-            stage.show();
-            return masterLogin;
-        }).when(fagiApp).showLoginScreen();
+        Mockito
+                .doAnswer(invocationOnMock -> {
+                    stage.setScene(scene);
+                    var masterLogin = new MasterLogin(fagiApp, communication, stage, draggable);
+                    masterLogin.showMasterLoginScreen();
+                    stage.show();
+                    return masterLogin;
+                })
+                .when(fagiApp)
+                .showLoginScreen();
         stage.setScene(scene);
         stage.show();
     }

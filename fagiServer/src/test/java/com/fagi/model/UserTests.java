@@ -24,8 +24,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UserTests {
-    @Mock
-    private Data data;
+    @Mock private Data data;
     private User user;
     private User newFriend;
 
@@ -33,9 +32,15 @@ public class UserTests {
     void setup() {
         user = new User("username", "password");
         newFriend = new User("new friend", "123");
-        doReturn(user).when(data).getUser(user.getUserName());
-        doReturn(newFriend).when(data).getUser(newFriend.getUserName());
-        doReturn(new AllIsWell()).when(data).storeUser(Mockito.any());
+        doReturn(user)
+                .when(data)
+                .getUser(user.getUserName());
+        doReturn(newFriend)
+                .when(data)
+                .getUser(newFriend.getUserName());
+        doReturn(new AllIsWell())
+                .when(data)
+                .storeUser(Mockito.any());
     }
 
     @Test
@@ -63,28 +68,48 @@ public class UserTests {
 
         user.requestFriend(data, friendReq);
 
-        Assertions.assertEquals(friendReq, newFriend.getFriendReq().get(0));
+        Assertions.assertEquals(
+                friendReq,
+                newFriend
+                        .getFriendReq()
+                        .get(0)
+        );
     }
 
     @Test
     void sendingFriendRequestToUserInFriendRequestList_ShouldResultInRemovalOfBothRequests() {
-        var firstFriendRequest = new FriendRequest(user.getUserName(), new TextMessage("Hello", newFriend.getUserName(), -1));
-        var secondFriendReq = new FriendRequest(newFriend.getUserName(), new TextMessage("Hello", user.getUserName(), -1));
+        var firstFriendRequest = new FriendRequest(
+                user.getUserName(),
+                new TextMessage("Hello", newFriend.getUserName(), -1)
+        );
+        var secondFriendReq = new FriendRequest(
+                newFriend.getUserName(),
+                new TextMessage("Hello", user.getUserName(), -1)
+        );
 
         newFriend.requestFriend(data, firstFriendRequest);
 
         user.requestFriend(data, secondFriendReq);
 
-        Assertions.assertAll(
-                () -> Assertions.assertFalse(user.getFriendReq().contains(firstFriendRequest)),
-                () -> Assertions.assertFalse(newFriend.getFriendReq().contains(secondFriendReq))
+        Assertions.assertAll(() -> Assertions.assertFalse(user
+                                                                  .getFriendReq()
+                                                                  .contains(firstFriendRequest)),
+                             () -> Assertions.assertFalse(newFriend
+                                                                  .getFriendReq()
+                                                                  .contains(secondFriendReq))
         );
     }
 
     @Test
     void sendingFriendRequestToUserInFriendRequestList_ShouldResultInUsersBecomingFriends() {
-        var firstFriendRequest = new FriendRequest(user.getUserName(), new TextMessage("Hello", newFriend.getUserName(), -1));
-        var secondFriendReq = new FriendRequest(newFriend.getUserName(), new TextMessage("Hello", user.getUserName(), -1));
+        var firstFriendRequest = new FriendRequest(
+                user.getUserName(),
+                new TextMessage("Hello", newFriend.getUserName(), -1)
+        );
+        var secondFriendReq = new FriendRequest(
+                newFriend.getUserName(),
+                new TextMessage("Hello", user.getUserName(), -1)
+        );
 
         newFriend.requestFriend(data, firstFriendRequest);
 
@@ -106,19 +131,25 @@ public class UserTests {
 
         var senderUsername = "potential friend";
         var friendReq = new FriendRequest(user.getUserName(), new TextMessage("Hullo me friend", senderUsername, 42));
-        user.getFriendReq().add(friendReq);
+        user
+                .getFriendReq()
+                .add(friendReq);
 
         Response response = user.removeFriendRequest(data, senderUsername);
 
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(user.getFriendReq().isEmpty()),
-                () -> Assertions.assertTrue(response instanceof AllIsWell)
+        Assertions.assertAll(() -> Assertions.assertTrue(user
+                                                                 .getFriendReq()
+                                                                 .isEmpty()),
+                             () -> Assertions.assertTrue(response instanceof AllIsWell)
         );
     }
 
     @Test
     void whenRequestingFriendTwice_ShouldResultInUserExistsResponse() {
-        var friendRequest = new FriendRequest(newFriend.getUserName(), new TextMessage("Hello", user.getUserName(), -1));
+        var friendRequest = new FriendRequest(
+                newFriend.getUserName(),
+                new TextMessage("Hello", user.getUserName(), -1)
+        );
 
         user.requestFriend(data, friendRequest);
 

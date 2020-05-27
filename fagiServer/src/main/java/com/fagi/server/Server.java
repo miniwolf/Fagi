@@ -33,14 +33,21 @@ public class Server {
     private final int port;
     private final ConversationHandler handler;
 
-    public Server(int port, Data data) {
+    public Server(
+            int port,
+            Data data) {
         this.port = port;
         this.data = data;
         handler = new ConversationHandler(data);
         try {
             String name = "test";
             String ip = "127.0.0.1"; //getExternalIP();
-            PublicKey pk = ((RSAKey) Encryption.getInstance().getRSA().getKey()).getKey().getPublic();
+            PublicKey pk = ((RSAKey) Encryption
+                    .getInstance()
+                    .getRSA()
+                    .getKey())
+                    .getKey()
+                    .getPublic();
             ServerConfig config = new ServerConfig(name, ip, port, pk);
             config.saveToPath(configFile);
             File inviteCodesFile = new File(JsonFileOperations.INVITE_CODES_FILE_PATH);
@@ -67,7 +74,7 @@ public class Server {
         conversationHandlerThread.start();
         data.loadConversations();
 
-        while ( running ) {
+        while (running) {
             try {
                 workerCreation(ss);
             } catch (IOException e) {
@@ -80,7 +87,7 @@ public class Server {
 
         System.out.println("Stopping Server");
 
-        if(ss != null) {
+        if (ss != null) {
             try {
                 ss.close();
             } catch (IOException e) {
@@ -103,8 +110,7 @@ public class Server {
 
         try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    whatismyip.openStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
             ip = in.readLine();
         } catch (IOException e) {
             e.printStackTrace();

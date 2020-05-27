@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
  */
 public class CommunicationTest {
     private Communication communication;
+
     @BeforeEach
     public void init() {
         System.out.println("Starting communicationTests");
@@ -27,15 +28,26 @@ public class CommunicationTest {
         var bytes = Conversion.convertToBytes(objectToBeSend);
 
         var out = Mockito.spy(ObjectOutputStream.class);
-        Mockito.doNothing().when(out).writeObject(Mockito.any());
-        Mockito.doNothing().when(out).flush();
+        Mockito
+                .doNothing()
+                .when(out)
+                .writeObject(Mockito.any());
+        Mockito
+                .doNothing()
+                .when(out)
+                .flush();
 
         var encryptionAlgorithm = Mockito.mock(EncryptionAlgorithm.class);
-        Mockito.doReturn(bytes).when(encryptionAlgorithm).encrypt(Mockito.any());
+        Mockito
+                .doReturn(bytes)
+                .when(encryptionAlgorithm)
+                .encrypt(Mockito.any());
         communication.setOut(out);
         communication.setEncryption(encryptionAlgorithm);
 
         communication.sendObject(objectToBeSend);
-        Mockito.verify(out, Mockito.times(1)).writeObject(bytes);
+        Mockito
+                .verify(out, Mockito.times(1))
+                .writeObject(bytes);
     }
 }

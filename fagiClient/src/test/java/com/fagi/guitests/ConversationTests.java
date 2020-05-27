@@ -53,7 +53,11 @@ public class ConversationTests {
     @BeforeAll
     public static void intialize() {
         System.out.println("Starting conversation tests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @AfterEach
@@ -80,14 +84,18 @@ public class ConversationTests {
             add(new Friend("Friend", true));
         }};
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
 
-        FxAssert.verifyThatIter(
-                "#UniqueConversationItem",
-                IsEmptyIterable.emptyIterableOf(Node.class),
-                builder -> builder.append("Conversation list should not contain any conversation elements."));
+        FxAssert.verifyThatIter("#UniqueConversationItem",
+                                IsEmptyIterable.emptyIterableOf(Node.class),
+                                builder -> builder.append(
+                                        "Conversation list should not contain any conversation elements.")
+        );
     }
 
     @Test
@@ -98,16 +106,19 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueContact");
 
-        FxAssert.verifyThat(
-                "#UniqueConversation",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("Conversation should open when clicking on the contact item."));
+        FxAssert.verifyThat("#UniqueConversation",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("Conversation should open when clicking on the contact item.")
+        );
     }
 
     @Test
@@ -118,16 +129,19 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        FxAssert.verifyThat(
-                "#UniqueConversation",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("Conversation should open when clicking on the contact item."));
+        FxAssert.verifyThat("#UniqueConversation",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("Conversation should open when clicking on the contact item.")
+        );
     }
 
     @Test
@@ -138,7 +152,10 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
@@ -146,10 +163,10 @@ public class ConversationTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueContact");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueContact");
 
-        FxAssert.verifyThatIter(
-                "#UniqueConversation",
-                IsIterableWithSize.iterableWithSize(1),
-                builder -> builder.append("Only one conversation when clicking on the contact item."));
+        FxAssert.verifyThatIter("#UniqueConversation",
+                                IsIterableWithSize.iterableWithSize(1),
+                                builder -> builder.append("Only one conversation when clicking on the contact item.")
+        );
     }
 
     @Test
@@ -160,7 +177,10 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
@@ -168,10 +188,10 @@ public class ConversationTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        FxAssert.verifyThatIter(
-                "#UniqueConversation",
-                IsIterableWithSize.iterableWithSize(1),
-                builder -> builder.append("Only one conversation when clicking on the contact item."));
+        FxAssert.verifyThatIter("#UniqueConversation",
+                                IsIterableWithSize.iterableWithSize(1),
+                                builder -> builder.append("Only one conversation when clicking on the contact item.")
+        );
     }
 
     @Test
@@ -182,23 +202,30 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.ENTER);
+        robot
+                .clickOn("#conversationTextarea")
+                .write("Hello")
+                .press(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         var textMessageCaptor = ArgumentCaptor.forClass(TextMessage.class);
-        Mockito.verify(communication, Mockito.times(4)).sendObject(textMessageCaptor.capture());
+        Mockito
+                .verify(communication, Mockito.times(4))
+                .sendObject(textMessageCaptor.capture());
 
-        var message = textMessageCaptor.getAllValues().get(3);
-        Assertions.assertEquals(
-                "Hello\n",
-                message.getData(),
-                "Message should be send to server");
+        var message = textMessageCaptor
+                .getAllValues()
+                .get(3);
+        Assertions.assertEquals("Hello\n", message.getData(), "Message should be send to server");
     }
 
     @Test
@@ -209,19 +236,24 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.ENTER);
+        robot
+                .clickOn("#conversationTextarea")
+                .write("Hello")
+                .press(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
-        FxAssert.verifyThat(
-                "#conversationTextarea",
-                TextInputControlMatchers.hasText(""),
-                builder -> builder.append("Field should be emptied after sending the message")
+        FxAssert.verifyThat("#conversationTextarea",
+                            TextInputControlMatchers.hasText(""),
+                            builder -> builder.append("Field should be emptied after sending the message")
         );
     }
 
@@ -233,19 +265,25 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.SHIFT, KeyCode.ENTER).write("Dimmer");
+        robot
+                .clickOn("#conversationTextarea")
+                .write("Hello")
+                .press(KeyCode.SHIFT, KeyCode.ENTER)
+                .write("Dimmer");
         WaitForAsyncUtils.waitForFxEvents();
 
-        FxAssert.verifyThat(
-                "#conversationTextarea",
-                TextInputControlMatchers.hasText("Hello\nDimmer"),
-                builder -> builder.append("Field should add new line with shift enter.")
+        FxAssert.verifyThat("#conversationTextarea",
+                            TextInputControlMatchers.hasText("Hello\nDimmer"),
+                            builder -> builder.append("Field should add new line with shift enter.")
         );
     }
 
@@ -257,32 +295,45 @@ public class ConversationTests {
         var conversation = new Conversation(1, "test", ConversationType.Placeholder);
         conversation.addUser("Friend");
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".message-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueConversationItem");
 
-        robot.clickOn("#conversationTextarea").write("Hello").press(KeyCode.ENTER);
+        robot
+                .clickOn("#conversationTextarea")
+                .write("Hello")
+                .press(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         var textMessageCaptor = ArgumentCaptor.forClass(TextMessage.class);
-        Mockito.verify(communication, Mockito.times(4)).sendObject(textMessageCaptor.capture());
+        Mockito
+                .verify(communication, Mockito.times(4))
+                .sendObject(textMessageCaptor.capture());
 
-        var message = textMessageCaptor.getAllValues().get(3);
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(
-                        "Hello\n",
-                        message.getData(),
-                        "Message should be send to server"),
-                () -> Assertions.assertEquals(
-                        "MyUsername",
-                        message.getMessageInfo().getSender(),
-                        "Wrong sender"),
-                () -> Assertions.assertEquals(
-                        1,
-                        message.getMessageInfo().getConversationID(),
-                        "Wrong conversation ID")
+        var message = textMessageCaptor
+                .getAllValues()
+                .get(3);
+        Assertions.assertAll(() -> Assertions.assertEquals("Hello\n",
+                                                           message.getData(),
+                                                           "Message should be send to server"
+                             ),
+                             () -> Assertions.assertEquals("MyUsername",
+                                                           message
+                                                                   .getMessageInfo()
+                                                                   .getSender(),
+                                                           "Wrong sender"
+                             ),
+                             () -> Assertions.assertEquals(1,
+                                                           message
+                                                                   .getMessageInfo()
+                                                                   .getConversationID(),
+                                                           "Wrong conversation ID"
+                             )
         );
     }
 
@@ -295,17 +346,19 @@ public class ConversationTests {
         conversation.addUser("Friend");
         var textMessage = new TextMessage("Hello there.", "test", 1);
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, textMessage);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueContact");
 
-        FxAssert.verifyThat(
-                "#UniqueTheirMessage",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("The message should be present as a their message")
+        FxAssert.verifyThat("#UniqueTheirMessage",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("The message should be present as a their message")
         );
     }
 
@@ -318,17 +371,19 @@ public class ConversationTests {
         conversation.addUser("Friend");
         var textMessage = new TextMessage("Hello there.", "MyUsername", 1);
 
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, conversation);
         WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, textMessage);
 
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueContact");
 
-        FxAssert.verifyThat(
-                "#UniqueMyMessage",
-                NodeMatchers.isNotNull(),
-                builder -> builder.append("The message should be present as a their message")
+        FxAssert.verifyThat("#UniqueMyMessage",
+                            NodeMatchers.isNotNull(),
+                            builder -> builder.append("The message should be present as a their message")
         );
     }
 
@@ -340,18 +395,44 @@ public class ConversationTests {
         communication = Mockito.mock(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
-        Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(communication).getInputDistributor();
-        Mockito.doCallRealMethod().when(communication).close();
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
-        Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).close();
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
-                .when(fagiApp).showLoginScreen();
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .setInputHandler(inputHandler);
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .getInputDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .close();
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .setupDistributor(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .getDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .addIngoingMessage(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .close();
+        Mockito
+                .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
+                .when(fagiApp)
+                .showLoginScreen();
 
         var comspy = Mockito.spy(communication);
-        Mockito.doNothing().when(comspy).sendObject(Mockito.any());
+        Mockito
+                .doNothing()
+                .when(comspy)
+                .sendObject(Mockito.any());
 
         threadPool.startThread(inputHandler, "InputHandler - ConversationTests");
 

@@ -43,8 +43,10 @@ public class ConversationController extends BorderPane {
     private boolean isUserScrolling = false;
     private boolean isInternalScroll = false;
 
-    public ConversationController(MainScreen mainScreen, Conversation conversation,
-                                  String username) {
+    public ConversationController(
+            MainScreen mainScreen,
+            Conversation conversation,
+            String username) {
         this.conversation = conversation;
         this.mainScreen = mainScreen;
         this.username = username;
@@ -55,9 +57,11 @@ public class ConversationController extends BorderPane {
 
     @FXML
     private void initialize() {
-        String titleNames = conversation.getParticipants().stream()
-                                        .filter(s -> !s.equals(username))
-                                        .collect(Collectors.joining(", "));
+        String titleNames = conversation
+                .getParticipants()
+                .stream()
+                .filter(s -> !s.equals(username))
+                .collect(Collectors.joining(", "));
         name.setText(titleNames);
 
         String dateString = dateToString(conversation.getLastMessageDate());
@@ -70,9 +74,9 @@ public class ConversationController extends BorderPane {
 
         fillChat();
 
-        scroller.vvalueProperty().addListener(
-                observable -> this.isUserScrolling = scroller.getVvalue() != 1.0
-                                                     && !isInternalScroll);
+        scroller
+                .vvalueProperty()
+                .addListener(observable -> this.isUserScrolling = scroller.getVvalue() != 1.0 && !isInternalScroll);
     }
 
     private void handleEnterBehaviour(KeyEvent event) {
@@ -85,16 +89,15 @@ public class ConversationController extends BorderPane {
             conversationTextarea.setText("");
         } else {
             conversationTextarea.setText(conversationTextarea.getText() + "\n");
-            conversationTextarea.positionCaret(conversationTextarea.getText().length());
+            conversationTextarea.positionCaret(conversationTextarea
+                                                       .getText()
+                                                       .length());
         }
         event.consume();
     }
 
     private void sendMessage() {
-        TextMessage textMessage = new TextMessage(
-                conversationTextarea.getText(),
-                username,
-                conversation.getId());
+        TextMessage textMessage = new TextMessage(conversationTextarea.getText(), username, conversation.getId());
         communication.sendObject(textMessage);
     }
 
@@ -126,7 +129,9 @@ public class ConversationController extends BorderPane {
                 isInternalScroll = true;
             }
 
-            chat.getChildren().add(createMessageBox(message));
+            chat
+                    .getChildren()
+                    .add(createMessageBox(message));
             primaryStage.sizeToScene();
 
             if (!isUserScrolling) {
@@ -138,7 +143,9 @@ public class ConversationController extends BorderPane {
     }
 
     public void redrawMessages() {
-        chat.getChildren().clear();
+        chat
+                .getChildren()
+                .clear();
         fillChat();
     }
 
@@ -146,18 +153,22 @@ public class ConversationController extends BorderPane {
         return new MessageController(message, "/view/conversation/MyMessage.fxml");
     }
 
-    private HBox getBox(String message, String username) {
-        return new MessageController(
-                message,
-                "/view/conversation/TheirMessage.fxml",
-                username
-        );
+    private HBox getBox(
+            String message,
+            String username) {
+        return new MessageController(message, "/view/conversation/TheirMessage.fxml", username);
     }
 
     private HBox createMessageBox(TextMessage message) {
-        return message.getMessageInfo().getSender().equals(username)
-               ? getBox(message.getData())
-               : getBox(message.getData(), message.getMessageInfo().getSender());
+        return message
+                .getMessageInfo()
+                .getSender()
+                .equals(username) ? getBox(message.getData()) : getBox(
+                message.getData(),
+                message
+                        .getMessageInfo()
+                        .getSender()
+        );
     }
 
     @FXML

@@ -15,13 +15,16 @@ public class DefaultMessageInfo implements MessageInfo {
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     private long currentTime;
 
-    public DefaultMessageInfo(String sender, long conversationID) {
+    public DefaultMessageInfo(
+            String sender,
+            long conversationID) {
         this.sender = sender;
         this.conversationID = conversationID;
         currentTime = System.currentTimeMillis();
     }
 
-    public DefaultMessageInfo() {}
+    public DefaultMessageInfo() {
+    }
 
     @Override
     public String getSender() {
@@ -54,8 +57,7 @@ public class DefaultMessageInfo implements MessageInfo {
 
         DefaultMessageInfo that = (DefaultMessageInfo) o;
 
-        return conversationID == that.conversationID && sender.equals(that.sender)
-               && that.currentTime == currentTime;
+        return conversationID == that.conversationID && sender.equals(that.sender) && that.currentTime == currentTime;
 
     }
 

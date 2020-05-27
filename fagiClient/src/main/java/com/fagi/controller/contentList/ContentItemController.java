@@ -36,16 +36,15 @@ public abstract class ContentItemController<S> extends HBox {
     }
 
     protected void setUsers(List<String> usernames) {
-        List<String> meExcludedList = usernames.stream()
+        List<String> meExcludedList = usernames
+                .stream()
                 .filter(name -> !name.equals(username))
                 .collect(Collectors.toList());
         this.usernameLabel.setText(String.join(", ", meExcludedList));
-        Image image = new Image(
-                "/style/material-icons/" + Character.toUpperCase(meExcludedList.get(0).toCharArray()[0]) + ".png",
-                46,
-                46,
-                true,
-                true);
+        String stylePath = "/style/material-icons/" + Character.toUpperCase(meExcludedList
+                                                                                    .get(0)
+                                                                                    .toCharArray()[0]) + ".png";
+        Image image = new Image(stylePath, 46, 46, true, true);
         this.image.setImage(image);
     }
 

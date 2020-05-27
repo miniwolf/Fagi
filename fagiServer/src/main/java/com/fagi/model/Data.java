@@ -6,7 +6,15 @@ package com.fagi.model;
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.responses.AllIsWell;
+import com.fagi.responses.NoSuchUser;
+import com.fagi.responses.PasswordError;
+import com.fagi.responses.Response;
+import com.fagi.responses.UserExists;
+import com.fagi.responses.UserOnline;
 import com.fagi.utility.JsonFileOperations;
+import com.fagi.worker.InputAgent;
+import com.fagi.worker.OutputAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,15 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import com.fagi.responses.AllIsWell;
-import com.fagi.responses.NoSuchUser;
-import com.fagi.responses.PasswordError;
-import com.fagi.responses.Response;
-import com.fagi.responses.UserExists;
-import com.fagi.responses.UserOnline;
-import com.fagi.worker.InputAgent;
-import com.fagi.worker.OutputAgent;
 
 /**
  * TODO: Add description, maybe think about .fagi file ending
@@ -43,7 +42,9 @@ public class Data {
     public synchronized Conversation createConversation(List<String> participants) {
         ConversationType type = participants.size() > 2 ? ConversationType.Multi : ConversationType.Single;
 
-        String name = participants.stream().reduce("", (a, b) -> a + ", " + b);
+        String name = participants
+            .stream()
+            .reduce("", (a, b) -> a + ", " + b);
 
         Conversation con = new Conversation(nextConversationId, name, type);
         nextConversationId++;
@@ -60,7 +61,9 @@ public class Data {
     }
 
     public void loadConversations() {
-        JsonFileOperations.loadAllConversations().forEach(c -> conversations.put(c.getId(), c));
+        JsonFileOperations
+            .loadAllConversations()
+            .forEach(c -> conversations.put(c.getId(), c));
 
         Set<Long> keys = conversations.keySet();
         if (keys.size() > 0) {
@@ -107,15 +110,21 @@ public class Data {
     }
 
     public synchronized InviteCodeContainer loadInviteCodes() {
-        return JsonFileOperations.loadObjectFromFile(JsonFileOperations.INVITE_CODES_FILE_PATH, InviteCodeContainer.class);
+        return JsonFileOperations.loadObjectFromFile(
+            JsonFileOperations.INVITE_CODES_FILE_PATH,
+            InviteCodeContainer.class
+        );
     }
 
     public synchronized void storeInviteCodes(InviteCodeContainer codes) {
-        JsonFileOperations.storeObjectToFile(codes, JsonFileOperations.CONFIG_FOLDER_PATH, JsonFileOperations.INVITE_CODES_FILE);
+        JsonFileOperations.storeObjectToFile(
+            codes,
+            JsonFileOperations.CONFIG_FOLDER_PATH,
+            JsonFileOperations.INVITE_CODES_FILE
+        );
     }
 
-    public Response userLogin(String userName, String pass, OutputAgent outputAgent,
-                                     InputAgent inputAgent) {
+    public Response userLogin(String userName, String pass, OutputAgent outputAgent, InputAgent inputAgent) {
         if (isUserOnline(userName)) {
             return new UserOnline();
         }
@@ -123,7 +132,9 @@ public class Data {
         if (user == null) {
             return new NoSuchUser();
         }
-        if (!user.getPass().equals(pass)) {
+        if (!user
+            .getPass()
+            .equals(pass)) {
             return new PasswordError();
         }
         OUTPUT_AGENT_MAP.put(userName, outputAgent);
@@ -171,6 +182,10 @@ public class Data {
     }
 
     public List<String> getUserNames() {
-        return registeredUsers.values().stream().map(User::getUserName).collect(Collectors.toCollection(ArrayList::new));
+        return registeredUsers
+            .values()
+            .stream()
+            .map(User::getUserName)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 }

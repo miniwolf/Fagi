@@ -33,7 +33,7 @@ public class VoiceRecorder implements VoiceSystem, Runnable {
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
-        while ( running ) {
+        while (running) {
             byte[] buffer = new byte[blockSize * 2];
             line_in.read(buffer, 0, blockSize);
             communication.sendObject(new VoiceMessage(buffer, "test", 0));

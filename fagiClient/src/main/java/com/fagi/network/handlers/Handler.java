@@ -4,8 +4,6 @@
 
 package com.fagi.network.handlers;
 
-import com.fagi.model.messages.InGoingMessages;
-
 /**
  * @author miniwolf
  */

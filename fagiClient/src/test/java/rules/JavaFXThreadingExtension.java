@@ -35,7 +35,6 @@ public class JavaFXThreadingExtension implements BeforeAllCallback {
 
         System.out.println("javafx initialising...");
         latch.await();
-        System.out.println("javafx is initialised in "
-                + (System.currentTimeMillis() - timeMillis) + "ms");
+        System.out.println("javafx is initialised in " + (System.currentTimeMillis() - timeMillis) + "ms");
     }
 }

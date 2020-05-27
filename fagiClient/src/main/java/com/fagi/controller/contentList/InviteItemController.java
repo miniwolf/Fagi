@@ -16,14 +16,9 @@ public class InviteItemController extends TimedContentItemController<FriendReque
             Action<FriendRequest> action,
             Date date,
             FriendRequest request) {
-        super(
-                username,
-                date,
-                new ArrayList<>() {{
-                    add(request.getSender());
-                }},
-                fxmlResource,
-                action);
+        super(username, date, new ArrayList<>() {{
+            add(request.getSender());
+        }}, fxmlResource, action);
         this.request = request;
     }
 
