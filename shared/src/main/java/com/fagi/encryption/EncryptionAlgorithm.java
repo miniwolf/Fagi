@@ -5,8 +5,12 @@ package com.fagi.encryption;
  */
 public interface EncryptionAlgorithm<K> {
     byte[] encrypt(byte[] msg);
+
     byte[] decrypt(byte[] cipherText);
+
     void generateKey(int keyLength);
+
     Key getKey();
+
     void setEncryptionKey(K key);
 }

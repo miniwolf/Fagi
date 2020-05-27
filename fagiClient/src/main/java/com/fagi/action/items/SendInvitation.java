@@ -1,7 +1,6 @@
 package com.fagi.action.items;
 
 import com.fagi.action.Action;
-import com.fagi.controller.conversation.SendInvitationController;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.network.Communication;
@@ -13,7 +12,9 @@ public class SendInvitation implements Action<TextMessage> {
     private final Communication communication;
     private final String username;
 
-    public SendInvitation(Communication communication, String username) {
+    public SendInvitation(
+            Communication communication,
+            String username) {
         this.communication = communication;
         this.username = username;
     }

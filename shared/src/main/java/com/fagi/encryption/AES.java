@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by Marcus on 04-06-2016.
  */
 public class AES implements EncryptionAlgorithm<AESKey> {
-    byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     IvParameterSpec ivspec = new IvParameterSpec(iv);
     private AESKey key;
 

@@ -7,7 +7,6 @@ package com.fagi.network.handlers;
 import com.fagi.model.messages.message.VoiceMessage;
 import com.fagi.network.InputDistributor;
 import com.fagi.network.VoiceReceiver;
-import com.fagi.network.VoiceRecorder;
 import com.fagi.network.handlers.container.Container;
 import com.fagi.network.handlers.container.DefaultContainer;
 

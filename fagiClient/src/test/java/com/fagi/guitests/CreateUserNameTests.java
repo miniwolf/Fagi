@@ -35,29 +35,37 @@ public class CreateUserNameTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting CreateUserNameTests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
     public void ThereMustBeAValueInTheUsernameField_TheMessageLabelShouldInformOtherwise(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label messageLabel) -> messageLabel.getText().equals("Username cannot be empty")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label messageLabel) -> messageLabel
+                                    .getText()
+                                    .equals("Username cannot be empty")
         );
     }
 
     @Test
     public void WhenUserExistsOnServerCreatingANewUser_InformNewUser(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new UserExists());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new UserExists());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "DinMor");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label messageLabel) -> messageLabel.getText().equals("Username is not available")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label messageLabel) -> messageLabel
+                                    .getText()
+                                    .equals("Username is not available")
         );
     }
 
@@ -66,24 +74,24 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "Din Mor");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label messageLabel) -> messageLabel.getText().equals("Username may not contain special symbols")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label messageLabel) -> messageLabel
+                                    .getText()
+                                    .equals("Username may not contain special symbols")
         );
     }
 
     @Test
     public void UsernameIsValidAndAvailable_ShowsCreatePasswordScreen(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new AllIsWell());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.PASSWORD, masterLogin.getState());
-        FxAssert.verifyThat(
-                "#passwordRepeat",
-                NodeMatchers.isNotNull()
-        );
+        FxAssert.verifyThat("#passwordRepeat", NodeMatchers.isNotNull());
     }
 
     @Test
@@ -91,10 +99,7 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
         WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
 
-        FxAssert.verifyThat(
-                "#UniqueLoginScreen",
-                NodeMatchers.isNotNull()
-        );
+        FxAssert.verifyThat("#UniqueLoginScreen", NodeMatchers.isNotNull());
     }
 
     @Test
@@ -103,24 +108,20 @@ public class CreateUserNameTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
         WaitForFXEventsTestHelper.clickOn(robot, "#newAccount");
 
-        FxAssert.verifyThat(
-                "#username",
-                (TextField usernameTextField) -> usernameTextField.getText() == null
-        );
+        FxAssert.verifyThat("#username", (TextField usernameTextField) -> usernameTextField.getText() == null);
     }
 
     @Test
     public void GoingBackFromCreatePassword_ShouldKeepUsername(FxRobot robot) {
-        Mockito.when(communication.getNextResponse()).thenReturn(new AllIsWell());
+        Mockito
+                .when(communication.getNextResponse())
+                .thenReturn(new AllIsWell());
 
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#username", "username");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
         WaitForFXEventsTestHelper.clickOn(robot, "#backBtn");
 
-        FxAssert.verifyThat(
-                "#username",
-                (TextField usernameTextField) -> usernameTextField.getText() != null
-        );
+        FxAssert.verifyThat("#username", (TextField usernameTextField) -> usernameTextField.getText() != null);
     }
 
     @Start
@@ -138,7 +139,11 @@ public class CreateUserNameTests {
         masterLogin.setState(LoginState.USERNAME);
         masterLogin.showMasterLoginScreen();
 
-        stage.getScene().setRoot(masterLogin.getController().getParentNode());
+        stage
+                .getScene()
+                .setRoot(masterLogin
+                                 .getController()
+                                 .getParentNode());
         stage.show();
     }
 }

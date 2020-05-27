@@ -2,7 +2,6 @@ package com.fagi.network.handlers;
 
 import com.fagi.controller.MainScreen;
 import com.fagi.model.UserStatusUpdate;
-import com.fagi.model.messages.InGoingMessages;
 
 /**
  * Created by costa on 13-12-2016.
@@ -16,11 +15,14 @@ public class UserStatusUpdateHandler implements Handler<UserStatusUpdate> {
 
     @Override
     public void handle(UserStatusUpdate update) {
-        mainScreen.getFriendMapWrapper().toggleUserStatus(update.getUsername());
+        mainScreen
+                .getFriendMapWrapper()
+                .toggleUserStatus(update.getUsername());
     }
 
     @Override
     public Runnable getRunnable() {
-        return () -> {};
+        return () -> {
+        };
     }
 }

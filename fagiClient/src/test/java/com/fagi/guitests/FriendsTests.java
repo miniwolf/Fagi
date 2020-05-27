@@ -50,52 +50,74 @@ public class FriendsTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting FriendsTests tests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
     public void receivingFriendListFromServer_FriendIsVisibleOnContent(FxRobot robot) {
-        List<Friend> friends = new ArrayList<>() {{ add(new Friend("Friend", true)); }};
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
-        Assertions.assertFalse(
-                robot.lookup("#UniqueContact").tryQuery().isPresent(),
-                "Should not find friend item before changing the content list to contacts");
+        List<Friend> friends = new ArrayList<>() {{
+            add(new Friend("Friend", true));
+        }};
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
+        Assertions.assertFalse(robot
+                                       .lookup("#UniqueContact")
+                                       .tryQuery()
+                                       .isPresent(),
+                               "Should not find friend item before changing the content list to contacts"
+        );
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
-        Assertions.assertTrue(
-                robot.lookup("#UniqueContact").tryQuery().isPresent(),
-                "Cannot see friend item after switching the content list to contacts.");
+        Assertions.assertTrue(robot
+                                      .lookup("#UniqueContact")
+                                      .tryQuery()
+                                      .isPresent(),
+                              "Cannot see friend item after switching the content list to contacts."
+        );
 
-        Label nameLabel = robot.lookup("#usernameLabel").query();
+        Label nameLabel = robot
+                .lookup("#usernameLabel")
+                .query();
         Assertions.assertEquals("Friend", nameLabel.getText());
-        Set<ImageView> imageView = robot.lookup("#image").queryAll();
+        Set<ImageView> imageView = robot
+                .lookup("#image")
+                .queryAll();
         MatcherAssert.assertThat(imageView, hasSize(1));
 
         var image = ((ImageView) imageView.toArray()[0]).getImage();
-        Assertions.assertTrue(image.getUrl().contains("F.png"));
+        Assertions.assertTrue(image
+                                      .getUrl()
+                                      .contains("F.png"));
 
-        var status = robot.lookup("#status").query();
+        var status = robot
+                .lookup("#status")
+                .query();
         MatcherAssert.assertThat(status.getStyleClass(), containsInAnyOrder("pD", "flaeQ"));
     }
 
     @Test
     public void receivingFriendListFromServer_OfflineFriendGuiSetup(FxRobot robot) {
-        List<Friend> friends = new ArrayList<>() {{ add(new Friend("Friend", false)); }};
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)));
+        List<Friend> friends = new ArrayList<>() {{
+            add(new Friend("Friend", false));
+        }};
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends))
+        );
 
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
-        FxAssert.verifyThat(
-                "#usernameLabel",
-                LabeledMatchers.hasText("Friend")
-        );
+        FxAssert.verifyThat("#usernameLabel", LabeledMatchers.hasText("Friend"));
 
-        FxAssert.verifyThat(
-                "#status",
-                StyleableMatchers.doesntContainsClass("pD")
-        );
+        FxAssert.verifyThat("#status", StyleableMatchers.doesntContainsClass("pD"));
     }
 
     @Test
@@ -104,20 +126,24 @@ public class FriendsTests {
             add(new Friend("Friend", true));
             add(new Friend("Friend2", true));
         }};
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends)),
+                friends.size()
+        );
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
-        FxAssert.verifyThatIter(
-                "#UniqueContact",
-                IsIterableWithSize.iterableWithSize(2)
-        );
+        FxAssert.verifyThatIter("#UniqueContact", IsIterableWithSize.iterableWithSize(2));
 
-        var collect = robot.lookup("#usernameLabel").queryAll().stream()
-                                                  .map(node -> ((Label) node).getText())
-                                                  .collect(Collectors.toList());
+        var collect = robot
+                .lookup("#usernameLabel")
+                .queryAll()
+                .stream()
+                .map(node -> ((Label) node).getText())
+                .collect(Collectors.toList());
 
         MatcherAssert.assertThat(collect, containsInAnyOrder("Friend", "Friend2"));
     }
@@ -129,14 +155,21 @@ public class FriendsTests {
             add(new Friend("CFriend", true));
             add(new Friend("BFriend", true));
         }};
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends)),
+                friends.size()
+        );
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
-        var collect = robot.lookup("#usernameLabel").queryAll().stream()
-                                                  .map(node -> ((Label) node).getText())
-                                                  .collect(Collectors.toList());
+        var collect = robot
+                .lookup("#usernameLabel")
+                .queryAll()
+                .stream()
+                .map(node -> ((Label) node).getText())
+                .collect(Collectors.toList());
 
         // Contains will check the order, containsInAnyOrder for other test
         MatcherAssert.assertThat(collect, contains("AFriend", "BFriend", "CFriend"));
@@ -148,16 +181,17 @@ public class FriendsTests {
             add(new Friend("Friend", true));
             add(new Friend("Friend2", false));
         }};
-        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(inputHandler, new FriendList(new DefaultListAccess<>(friends)), friends.size());
+        WaitForFXEventsTestHelper.addIngoingMessageToInputHandler(
+                inputHandler,
+                new FriendList(new DefaultListAccess<>(friends)),
+                friends.size()
+        );
 
         // Make sure that we are on the contact list.
         // This might be default, be we cannot verify this as a feature
         WaitForFXEventsTestHelper.clickOn(robot, ".contact-button");
 
-        FxAssert.verifyThatIter(
-                "#UniqueContact",
-                IsIterableWithSize.iterableWithSize(2)
-        );
+        FxAssert.verifyThatIter("#UniqueContact", IsIterableWithSize.iterableWithSize(2));
     }
 
     @Start
@@ -167,13 +201,30 @@ public class FriendsTests {
         var communication = Mockito.mock(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
         var fagiApp = Mockito.mock(FagiApp.class);
-        Mockito.doCallRealMethod().when(communication).setInputHandler(inputHandler);
-        Mockito.doCallRealMethod().when(communication).getInputDistributor();
-        Mockito.doCallRealMethod().when(inputHandler).setupDistributor(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).addIngoingMessage(Mockito.any());
-        Mockito.doCallRealMethod().when(inputHandler).getDistributor();
-        Mockito.doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
-               .when(fagiApp).showLoginScreen();
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .setInputHandler(inputHandler);
+        Mockito
+                .doCallRealMethod()
+                .when(communication)
+                .getInputDistributor();
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .setupDistributor(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .addIngoingMessage(Mockito.any());
+        Mockito
+                .doCallRealMethod()
+                .when(inputHandler)
+                .getDistributor();
+        Mockito
+                .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
+                .when(fagiApp)
+                .showLoginScreen();
 
         var inputThread = new Thread(inputHandler);
         inputThread.setDaemon(true);

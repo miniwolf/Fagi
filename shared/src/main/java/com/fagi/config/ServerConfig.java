@@ -19,7 +19,11 @@ public class ServerConfig implements Serializable {
     private PublicKey serverKey;
     private int port;
 
-    public ServerConfig(String name, String ip, int port, PublicKey serverKey) {
+    public ServerConfig(
+            String name,
+            String ip,
+            int port,
+            PublicKey serverKey) {
         this.ip = ip;
         this.name = name;
         this.serverKey = serverKey;
@@ -44,7 +48,9 @@ public class ServerConfig implements Serializable {
 
     public void saveToPath(String path) throws IOException {
         byte[] config = Conversion.convertToBytes(this);
-        Path savePath = Paths.get(path).toAbsolutePath();
+        Path savePath = Paths
+                .get(path)
+                .toAbsolutePath();
         if (Files.exists(savePath)) {
             Files.delete(savePath);
         }
@@ -59,10 +65,10 @@ public class ServerConfig implements Serializable {
 
         Object o = Conversion.convertFromBytes(data);
 
-        if(!(o instanceof ServerConfig)) {
+        if (!(o instanceof ServerConfig)) {
             throw new InvalidClassException(path + " does not contain a ServerConfig object.");
         }
 
-        return (ServerConfig)o;
+        return (ServerConfig) o;
     }
 }

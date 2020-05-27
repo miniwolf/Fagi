@@ -17,15 +17,9 @@ public class SearchContactController extends ContentItemController<String> {
             boolean isFriend,
             MainScreen mainScreen,
             String contactUsername) {
-        super(
-                mainScreen.getUsername(),
-                new Date(),
-                new ArrayList<>() {{ add(contactUsername); }},
-                fxmlResource,
-                isFriend
-                        ? new OpenConversation(mainScreen)
-                        : new OpenInvitation(mainScreen)
-        );
+        super(mainScreen.getUsername(), new Date(), new ArrayList<>() {{
+            add(contactUsername);
+        }}, fxmlResource, isFriend ? new OpenConversation(mainScreen) : new OpenInvitation(mainScreen));
     }
 
     @Override

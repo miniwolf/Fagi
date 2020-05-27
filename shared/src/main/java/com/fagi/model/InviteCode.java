@@ -18,10 +18,14 @@ public class InviteCode implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof InviteCode)) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof InviteCode)) {
+            return false;
+        }
 
-        InviteCode other = (InviteCode)obj;
+        InviteCode other = (InviteCode) obj;
 
         return other.getValue() == this.value;
     }

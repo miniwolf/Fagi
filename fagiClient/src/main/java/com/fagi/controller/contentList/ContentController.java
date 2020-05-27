@@ -8,6 +8,7 @@ import com.fagi.action.items.LoadFXML;
 import com.fagi.uimodel.FriendListItem;
 import javafx.application.Platform;
 import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -29,12 +30,15 @@ public class ContentController extends VBox {
         getChildren().addAll(parents);
     }
 
+
     public void updateAndRedraw(List<FriendListItem> sortedFriendItems) {
         Platform.runLater(() -> {
             getChildren().clear();
-            getChildren().addAll(sortedFriendItems.stream()
-                                                  .map(FriendListItem::getPane)
-                                                  .collect(Collectors.toList()));
+            List<Pane> friendListPanes = sortedFriendItems
+                    .stream()
+                    .map(FriendListItem::getPane)
+                    .collect(Collectors.toList());
+            getChildren().addAll(friendListPanes);
         });
     }
 }

@@ -15,8 +15,9 @@ public class DateTimeUtils {
 
         long diffDays = diff / (24 * 60 * 60 * 1000);
         if (diffDays != 0) {
-            SimpleDateFormat format = new SimpleDateFormat(
-                    diffDays > 365 ? "MM/dd/yyyy" : diffDays < 7 ? "EEE" : "MMM d");
+            SimpleDateFormat format = new SimpleDateFormat(diffDays > 365
+                                                                   ? "MM/dd/yyyy"
+                                                                   : diffDays < 7 ? "EEE" : "MMM d");
             return format.format(date);
         }
 

@@ -11,10 +11,9 @@ import java.util.List;
 /**
  * Handle response list access.
  *
+ * @author miniwolf
  * @see FriendList
  * @see FriendRequestList
- *
- * @author miniwolf
  */
 public interface ListAccess<T> extends Access<List<T>> {
     @Override

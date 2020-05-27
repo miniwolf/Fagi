@@ -31,16 +31,21 @@ public class CreatePasswordTests {
     @BeforeAll
     public static void initialize() {
         System.out.println("Starting CreatePasswordTests");
-        FxAssert.assertContext().setNodeFinder(new FagiNodeFinderImpl(FxService.serviceContext().getWindowFinder()));
+        FxAssert
+                .assertContext()
+                .setNodeFinder(new FagiNodeFinderImpl(FxService
+                                                              .serviceContext()
+                                                              .getWindowFinder()));
     }
 
     @Test
     public void PasswordFieldMustHaveAValue_MessageShouldIndicateOtherwise(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label label) -> label.getText().equals("Password field must not be empty")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label label) -> label
+                                    .getText()
+                                    .equals("Password field must not be empty")
         );
     }
 
@@ -49,9 +54,10 @@ public class CreatePasswordTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#password", "thisisapassword");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label label) -> label.getText().equals("Repeat password field must not be empty")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label label) -> label
+                                    .getText()
+                                    .equals("Repeat password field must not be empty")
         );
     }
 
@@ -61,9 +67,10 @@ public class CreatePasswordTests {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#passwordRepeat", "thisisadiffrentpassword");
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
-        FxAssert.verifyThat(
-                "#messageLabel",
-                (Label label) -> label.getText().equals("Passwords does not match")
+        FxAssert.verifyThat("#messageLabel",
+                            (Label label) -> label
+                                    .getText()
+                                    .equals("Passwords does not match")
         );
     }
 
@@ -76,10 +83,7 @@ public class CreatePasswordTests {
         WaitForFXEventsTestHelper.clickOn(robot, "#loginBtn");
 
         Assertions.assertEquals(LoginState.INVITE_CODE, masterLogin.getState());
-        FxAssert.verifyThat(
-                "#UniqueInviteCode",
-                NodeMatchers.isNotNull()
-        );
+        FxAssert.verifyThat("#UniqueInviteCode", NodeMatchers.isNotNull());
     }
 
     @Start
@@ -97,7 +101,11 @@ public class CreatePasswordTests {
         masterLogin.setState(LoginState.PASSWORD);
         masterLogin.showMasterLoginScreen();
 
-        stage.getScene().setRoot(masterLogin.getController().getParentNode());
+        stage
+                .getScene()
+                .setRoot(masterLogin
+                                 .getController()
+                                 .getParentNode());
         stage.show();
     }
 }

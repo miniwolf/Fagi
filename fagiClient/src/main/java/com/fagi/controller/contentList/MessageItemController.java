@@ -29,13 +29,17 @@ public class MessageItemController extends TimedContentItemController<Long> {
     }
 
     public void setLastMessage(TextMessage message) {
-        String sender = message.getMessageInfo().getSender();
+        String sender = message
+                .getMessageInfo()
+                .getSender();
         boolean isMyMessage = sender.equals(username);
         String senderString = (isMyMessage ? "You" : sender);
         lastMessage.setText(senderString + ": " + cropMessage(message.getData(), isMyMessage));
     }
 
-    private String cropMessage(String data, boolean isMyMessage) {
+    private String cropMessage(
+            String data,
+            boolean isMyMessage) {
         int max = isMyMessage ? 35 : 35 - username.length();
         if (data.length() < max) {
             return data;

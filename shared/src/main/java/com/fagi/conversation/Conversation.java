@@ -35,7 +35,10 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
         this.name = con.getName();
     }
 
-    public Conversation(long id, String name, ConversationType type) {
+    public Conversation(
+            long id,
+            String name,
+            ConversationType type) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -54,7 +57,9 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
         participants.remove(username);
     }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
     public synchronized void addMessage(TextMessage message) {
         addMessageNoDate(message);
@@ -71,7 +76,7 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
     }
 
     public synchronized void addMessagesNoDate(List<TextMessage> messages) {
-        for(TextMessage message : messages) {
+        for (TextMessage message : messages) {
             if (!this.messages.contains(message)) {
                 this.messages.add(message);
             }
@@ -79,7 +84,9 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
         Collections.sort(this.messages);
     }
 
-    public synchronized List<TextMessage> getMessages() { return messages; }
+    public synchronized List<TextMessage> getMessages() {
+        return messages;
+    }
 
     public List<String> getParticipants() {
         return participants;
@@ -112,11 +119,16 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
     }
 
     public List<TextMessage> getMessagesFromDate(Timestamp time) {
-            return messages
-                    .stream()
-                    .filter(x -> x.getMessageInfo().getTimestamp().compareTo(time) > 0)
-                    .sorted(Comparator.comparing(e -> e.getMessageInfo().getTimestamp()))
-                    .collect(Collectors.toList());
+        return messages
+                .stream()
+                .filter(x -> x
+                        .getMessageInfo()
+                        .getTimestamp()
+                        .compareTo(time) > 0)
+                .sorted(Comparator.comparing(e -> e
+                        .getMessageInfo()
+                        .getTimestamp()))
+                .collect(Collectors.toList());
     }
 
     public void setType(ConversationType type) {

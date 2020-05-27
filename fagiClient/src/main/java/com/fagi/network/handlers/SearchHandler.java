@@ -4,7 +4,6 @@ import com.fagi.action.Action;
 import com.fagi.action.items.contentlist.CreateSearchList;
 import com.fagi.controller.MainScreen;
 import com.fagi.model.SearchUsersResult;
-import com.fagi.model.messages.InGoingMessages;
 
 import java.util.List;
 
@@ -20,11 +19,14 @@ public class SearchHandler implements Handler<SearchUsersResult> {
 
     @Override
     public void handle(SearchUsersResult result) {
-        createSearchList.execute(result.getData().getUsernames());
+        createSearchList.execute(result
+                                         .getData()
+                                         .getUsernames());
     }
 
     @Override
     public Runnable getRunnable() {
-        return () -> { };
+        return () -> {
+        };
     }
 }

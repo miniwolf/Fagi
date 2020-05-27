@@ -1,8 +1,8 @@
 package com.fagi.model;
 
-import com.fagi.model.messages.message.TextMessage;
 import com.fagi.model.messages.Access;
 import com.fagi.model.messages.InGoingMessages;
+import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +15,9 @@ public class HistoryUpdates implements Serializable, InGoingMessages<HistoryUpda
     private final List<TextMessage> updates;
     private final long id;
 
-    public HistoryUpdates(List<TextMessage> updates, long id) {
+    public HistoryUpdates(
+            List<TextMessage> updates,
+            long id) {
         this.updates = updates;
         this.id = id;
     }

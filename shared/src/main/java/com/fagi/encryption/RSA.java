@@ -44,7 +44,9 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
         this.key = new RSAKey(key);
     }
 
-    public RSA(RSAKey key) { this.key = key; }
+    public RSA(RSAKey key) {
+        this.key = key;
+    }
 
     @Override
     public byte[] encrypt(byte[] msg) {
@@ -63,7 +65,11 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
     public byte[] decrypt(byte[] cipherText) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key.getKey().getPrivate());
+            cipher.init(Cipher.DECRYPT_MODE,
+                        key
+                                .getKey()
+                                .getPrivate()
+            );
             return cipher.doFinal(cipherText);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
             e.printStackTrace();
@@ -91,6 +97,8 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
 
     @Override
     public void setEncryptionKey(RSAKey key) {
-        this.encryptionKey = key.getKey().getPublic();
+        this.encryptionKey = key
+                .getKey()
+                .getPublic();
     }
 }

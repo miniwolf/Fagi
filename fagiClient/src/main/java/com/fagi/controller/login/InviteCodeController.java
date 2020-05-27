@@ -26,6 +26,7 @@ public class InviteCodeController extends DefaultLoginController {
     private void initialize() {
         masterLogin.initialize(inviteCode);
     }
+
     @Override
     public void next() {
         if ("".equals(inviteCode.getText())) {
@@ -39,7 +40,10 @@ public class InviteCodeController extends DefaultLoginController {
     }
 
     private boolean createUser() {
-        return ChatManager.handleCreateUser(masterLogin.getUsername(), masterLogin.getPassword(),
-                                            messageLabel, inviteCode.getText());
+        return ChatManager.handleCreateUser(masterLogin.getUsername(),
+                                            masterLogin.getPassword(),
+                                            messageLabel,
+                                            inviteCode.getText()
+        );
     }
 }

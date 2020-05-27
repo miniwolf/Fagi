@@ -6,7 +6,6 @@ import com.fagi.controller.contentList.ContentController;
 import com.fagi.controller.contentList.InviteItemController;
 import com.fagi.conversation.Conversation;
 import com.fagi.model.FriendRequest;
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.model.messages.lists.FriendRequestList;
 import javafx.application.Platform;
 
@@ -26,17 +25,17 @@ public class FriendRequestHandler implements Handler<FriendRequestList> {
     public void handle(FriendRequestList friendRequestList) {
         mainScreen.setFriendRequestList(friendRequestList);
 
-        ContentController contentController =
-            new ContentController("/view/content/ContentList.fxml");
+        ContentController contentController = new ContentController("/view/content/ContentList.fxml");
 
-        for (FriendRequest request : friendRequestList.getAccess().getData()) {
-            InviteItemController messageItemController =
-                new InviteItemController(
-                        mainScreen.getUsername(),
-                        new OpenReceivedFriendRequest(mainScreen),
-                        new Date(),
-                        request
-                );
+        for (FriendRequest request : friendRequestList
+                .getAccess()
+                .getData()) {
+            InviteItemController messageItemController = new InviteItemController(mainScreen.getUsername(),
+                                                                                  new OpenReceivedFriendRequest(
+                                                                                          mainScreen),
+                                                                                  new Date(),
+                                                                                  request
+            );
             contentController.addToContentList(messageItemController);
         }
 
@@ -45,8 +44,7 @@ public class FriendRequestHandler implements Handler<FriendRequestList> {
         }
 
         mainScreen.setConversationContentController(contentController);
-        Platform.runLater(() -> mainScreen.setScrollPaneContent(MainScreen.PaneContent.Messages,
-                                                                contentController));
+        Platform.runLater(() -> mainScreen.setScrollPaneContent(MainScreen.PaneContent.Messages, contentController));
     }
 
     @Override

@@ -37,7 +37,11 @@ public class MasterLogin {
      * @param fagiApp   FagiApp used to login
      * @param draggable Passes the draggable from the stage
      */
-    public MasterLogin(FagiApp fagiApp, Communication communication, Stage stage, Draggable draggable) {
+    public MasterLogin(
+            FagiApp fagiApp,
+            Communication communication,
+            Stage stage,
+            Draggable draggable) {
         this.fagiApp = fagiApp;
         this.communication = communication;
         this.draggable = draggable;
@@ -133,7 +137,9 @@ public class MasterLogin {
     }
 
     public void updateRoot() {
-        stage.getScene().setRoot(controller.getParentNode());
+        stage
+                .getScene()
+                .setRoot(controller.getParentNode());
     }
 
     private boolean setupController(LoginState screen) {

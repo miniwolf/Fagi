@@ -1,7 +1,7 @@
 package com.fagi.main;
-        /*
-         * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
-         */
+/*
+ * Copyright (c) 2014. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig.
+ */
 
 import com.fagi.config.ServerConfig;
 import com.fagi.controller.MainScreen;
@@ -62,8 +62,9 @@ public class FagiApp extends Application {
         primaryStage.show();
     }
 
-    private void startCommunication(final MasterLogin masterLogin,
-                                    final Communication communication) {
+    private void startCommunication(
+            final MasterLogin masterLogin,
+            final Communication communication) {
         // TODO: Let the user browse for the file path
         Runnable runnable = () -> {
             AtomicBoolean successfulConnection = new AtomicBoolean(false);
@@ -75,12 +76,10 @@ public class FagiApp extends Application {
                     try {
                         communication.connect(aes, threadPool);
                         ChatManager.setCommunication(communication);
-                        masterLogin
-                                .setMessageLabel("Connected to server: " + communication.getName());
+                        masterLogin.setMessageLabel("Connected to server: " + communication.getName());
                         successfulConnection.set(true);
                     } catch (IOException e) {
-                        Platform.runLater(
-                                () -> masterLogin.setMessageLabel("Connection refused"));
+                        Platform.runLater(() -> masterLogin.setMessageLabel("Connection refused"));
                         e.printStackTrace();
                         Logger.logStackTrace(e);
                     }
@@ -122,17 +121,18 @@ public class FagiApp extends Application {
             e.printStackTrace();
             return null;
         }
-        return new Communication(config.getName(), config.getIp(), config.getPort(),
-                config.getServerKey());
+        return new Communication(config.getName(), config.getIp(), config.getPort(), config.getServerKey());
     }
 
     /**
      * Opens the com.fagi.main window with all user interface for chatting.
      * Switching com.fagi.controller to MainScreen.
      *
-     * @param username      Username logged in.
+     * @param username Username logged in.
      */
-    public void showMainScreen(String username, Communication communication) {
+    public void showMainScreen(
+            String username,
+            Communication communication) {
         MainScreen controller = new MainScreen(username, communication, primaryStage);
         scene.setRoot(controller);
         controller.initCommunication(threadPool);

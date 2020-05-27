@@ -1,5 +1,5 @@
 package com.fagi.model;
-        /*
+/*
  * Copyright (c) 2011. Nicklas 'MiNiWolF' Pingel and Jonas 'Jonne' Hartwig
  * CreateUser.java
  *
@@ -13,7 +13,9 @@ public class CreateUser implements Serializable {
     private final String password;
     private InviteCode inviteCode;
 
-    public CreateUser(String username, String password) {
+    public CreateUser(
+            String username,
+            String password) {
         this.username = username;
         this.password = password;
     }

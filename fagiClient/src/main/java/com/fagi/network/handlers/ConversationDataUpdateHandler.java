@@ -4,7 +4,6 @@ import com.fagi.controller.MainScreen;
 import com.fagi.controller.contentList.MessageItemController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationDataUpdate;
-import com.fagi.model.messages.InGoingMessages;
 import com.fagi.utility.JsonFileOperations;
 import javafx.application.Platform;
 
@@ -22,13 +21,23 @@ public class ConversationDataUpdateHandler implements Handler<ConversationDataUp
 
     @Override
     public void handle(ConversationDataUpdate response) {
-        Optional<Conversation> con = mainScreen.getConversations().stream().filter(x -> x.getId() == response.getId()).findFirst();
+        Optional<Conversation> con = mainScreen
+                .getConversations()
+                .stream()
+                .filter(x -> x.getId() == response.getId())
+                .findFirst();
 
-        if (con.isEmpty()) return;
+        if (con.isEmpty()) {
+            return;
+        }
         Conversation conversation = con.get();
 
-        if (conversation.getMessages().isEmpty()) {
-            response.getConversationData().forEach(conversation::addMessage);
+        if (conversation
+                .getMessages()
+                .isEmpty()) {
+            response
+                    .getConversationData()
+                    .forEach(conversation::addMessage);
         } else {
             conversation.addMessagesNoDate(response.getConversationData());
         }
@@ -36,14 +45,17 @@ public class ConversationDataUpdateHandler implements Handler<ConversationDataUp
         JsonFileOperations.storeConversation(conversation);
 
         if (mainScreen.hasCurrentOpenConversation(conversation)) {
-            Platform.runLater(() ->
-                    mainScreen.getControllerFromConversation(conversation)
-                              .redrawMessages());
+            Platform.runLater(() -> mainScreen
+                    .getControllerFromConversation(conversation)
+                    .redrawMessages());
         }
 
-        MessageItemController messageItemController =
-                mainScreen.getMessageItems().stream()
-                          .filter(x -> x.getID() == conversation.getId()).findFirst().get();
+        MessageItemController messageItemController = mainScreen
+                .getMessageItems()
+                .stream()
+                .filter(x -> x.getID() == conversation.getId())
+                .findFirst()
+                .get();
         Platform.runLater(() -> {
             if (conversation.getLastMessage() != null) {
                 messageItemController.setLastMessage(response.getLastMessage());
@@ -57,6 +69,7 @@ public class ConversationDataUpdateHandler implements Handler<ConversationDataUp
 
     @Override
     public Runnable getRunnable() {
-        return () -> {};
+        return () -> {
+        };
     }
 }

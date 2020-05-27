@@ -35,12 +35,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FriendRequestServerTests {
     private InputHandler inputHandler;
-    @Mock
-    private OutputAgent outputAgent;
-    @Mock
-    private InputAgent inputAgent;
-    @Mock
-    private Data data;
+    @Mock private OutputAgent outputAgent;
+    @Mock private InputAgent inputAgent;
+    @Mock private Data data;
     private User user;
 
     @BeforeEach
@@ -51,16 +48,24 @@ class FriendRequestServerTests {
         user = Mockito.mock(User.class);
         var username = "bob";
 
-        doReturn(username).when(user).getUserName();
-        doReturn(user).when(data).getUser(any());
-        doReturn(username).when(inputAgent).getUsername();
+        doReturn(username)
+                .when(user)
+                .getUserName();
+        doReturn(user)
+                .when(data)
+                .getUser(any());
+        doReturn(username)
+                .when(inputAgent)
+                .getUsername();
     }
 
     @Test
     void whenRequestFriendFails_ShouldResultInResponseNotBeingAFriendList() {
         var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
 
-        doReturn(new NoSuchUser()).when(user).requestFriend(any(), any());
+        doReturn(new NoSuchUser())
+                .when(user)
+                .requestFriend(any(), any());
 
         inputHandler.handleInput(friendReq);
 
@@ -79,10 +84,19 @@ class FriendRequestServerTests {
         var friendInputAgent = Mockito.mock(InputAgent.class);
         var friendInputHandler = Mockito.mock(InputHandler.class);
 
-        doReturn(friendInputAgent).when(data).getInputAgent(friendReq.getFriendUsername());
-        doReturn(friendInputHandler).when(friendInputAgent).getInputHandler();
+        doReturn(friendInputAgent)
+                .when(data)
+                .getInputAgent(friendReq.getFriendUsername());
+
+        doReturn(friendInputHandler)
+                .when(friendInputAgent)
+                .getInputHandler();
+
         when(user.requestFriend(data, friendReq)).thenReturn(new AllIsWell());
-        doReturn(true).when(data).isUserOnline(friendReq.getFriendUsername());
+
+        doReturn(true)
+                .when(data)
+                .isUserOnline(friendReq.getFriendUsername());
 
         inputHandler.handleInput(friendReq);
 
@@ -100,7 +114,10 @@ class FriendRequestServerTests {
         var expectedFriend = new User("friend", "123");
         var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
 
-        doReturn(false).when(data).isUserOnline(friendReq.getFriendUsername());
+        doReturn(false)
+                .when(data)
+                .isUserOnline(friendReq.getFriendUsername());
+
         when(user.requestFriend(data, friendReq)).thenReturn(new AllIsWell());
 
         doReturn(Collections.singletonList(expectedFriend.getUserName()))

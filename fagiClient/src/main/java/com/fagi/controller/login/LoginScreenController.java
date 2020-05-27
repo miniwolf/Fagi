@@ -35,7 +35,9 @@ public class LoginScreenController extends Pane implements LoginController {
     private MasterLogin masterLogin;
     private final Communication communication;
 
-    public LoginScreenController(MasterLogin masterLogin, Communication communication) {
+    public LoginScreenController(
+            MasterLogin masterLogin,
+            Communication communication) {
         this.masterLogin = masterLogin;
         this.communication = communication;
         new LoadFXML("/view/login/LoginScreen.fxml").execute(this);

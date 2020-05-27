@@ -9,13 +9,17 @@ import java.util.Date;
 /**
  * Created by Marcus on 05-07-2016.
  */
-public class UpdateHistoryRequest implements Serializable, InGoingMessages<UpdateHistoryRequest>, Access<UpdateHistoryRequest> {
+public class UpdateHistoryRequest
+        implements Serializable, InGoingMessages<UpdateHistoryRequest>, Access<UpdateHistoryRequest> {
 
     private final Date dateLastMessageReceived;
     private String sender;
     private final long conversationID;
 
-    public UpdateHistoryRequest(String sender, long conversationID, Date dateLastMessageReceived) {
+    public UpdateHistoryRequest(
+            String sender,
+            long conversationID,
+            Date dateLastMessageReceived) {
         this.sender = sender;
         this.conversationID = conversationID;
         this.dateLastMessageReceived = dateLastMessageReceived;

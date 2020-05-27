@@ -16,7 +16,9 @@ public class DefaultThreadHandler<T> implements Runnable {
     private Handler<T> handler;
     private AtomicBoolean running = new AtomicBoolean(true);
 
-    public DefaultThreadHandler(Container<T> container, Handler<T> handler) {
+    public DefaultThreadHandler(
+            Container<T> container,
+            Handler<T> handler) {
         this.container = container;
         this.handler = handler;
     }
@@ -24,8 +26,12 @@ public class DefaultThreadHandler<T> implements Runnable {
     @Override
     public void run() {
         while (running.get()) {
-            while (!container.getQueue().isEmpty()) {
-                handler.handle(container.getQueue().remove());
+            while (!container
+                    .getQueue()
+                    .isEmpty()) {
+                handler.handle(container
+                                       .getQueue()
+                                       .remove());
             }
             try {
                 synchronized (this) {

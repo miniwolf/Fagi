@@ -21,7 +21,10 @@ public class TextMessage implements InGoingMessages<String>, TextAccess, Compara
      */
     private String data;
 
-    public TextMessage(String data, String sender, long conversationID) {
+    public TextMessage(
+            String data,
+            String sender,
+            long conversationID) {
         this.data = data;
         message = new DefaultMessageInfo(sender, conversationID);
     }
@@ -43,10 +46,10 @@ public class TextMessage implements InGoingMessages<String>, TextAccess, Compara
 
     @Override
     public boolean equals(Object other) {
-        if ( this == other ) {
+        if (this == other) {
             return true;
         }
-        if ( !(other instanceof TextMessage) ) {
+        if (!(other instanceof TextMessage)) {
             return false;
         }
 
@@ -64,6 +67,10 @@ public class TextMessage implements InGoingMessages<String>, TextAccess, Compara
 
     @Override
     public int compareTo(TextMessage other) {
-        return message.getTimestamp().compareTo(other.getMessageInfo().getTimestamp());
+        return message
+                .getTimestamp()
+                .compareTo(other
+                                   .getMessageInfo()
+                                   .getTimestamp());
     }
 }

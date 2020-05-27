@@ -13,7 +13,9 @@ public class SearchUsersResult implements Serializable, InGoingMessages<SearchUs
     private List<String> usernames;
     private List<String> friends;
 
-    public SearchUsersResult(List<String> usernames, List<String> friends) {
+    public SearchUsersResult(
+            List<String> usernames,
+            List<String> friends) {
         this.usernames = usernames;
     }
 
