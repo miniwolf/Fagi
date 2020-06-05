@@ -30,6 +30,7 @@ import com.fagi.model.conversation.RemoveParticipantRequest;
 import com.fagi.model.conversation.UpdateHistoryRequest;
 import com.fagi.model.messages.lists.DefaultListAccess;
 import com.fagi.model.messages.lists.FriendList;
+import com.fagi.model.messages.message.MessageInfo;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
@@ -43,7 +44,9 @@ import com.fagi.worker.OutputAgent;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InputHandler {
@@ -66,9 +69,8 @@ public class InputHandler {
     public void handleInput(Object input) {
         if (input instanceof TextMessage) {
             TextMessage arg = (TextMessage) input;
-            arg
-                    .getMessageInfo()
-                    .setTimestamp(new Timestamp(System.currentTimeMillis()));
+            MessageInfo messageInfo = arg.getMessageInfo();
+            messageInfo.setTimestamp(new Timestamp(System.currentTimeMillis()));
             out.addResponse(handleTextMessage(arg));
         } else if (input instanceof Login) {
             Login arg = (Login) input;
@@ -195,15 +197,13 @@ public class InputHandler {
     private Object handleGetAllConversationDataRequest(GetAllConversationDataRequest request) {
         User user = data.getUser(request.getSender());
 
-        if (!user
-                .getConversationIDs()
-                .contains(request.getId())) {
+        List<Long> conversationIDs = user.getConversationIDs();
+        if (!conversationIDs.contains(request.getId())) {
             return new Unauthorized();
         }
         Conversation conversation = data.getConversation(request.getId());
-        Timestamp lastMessageReceived = new Timestamp(conversation
-                                                              .getLastMessageDate()
-                                                              .getTime());
+        Date lastMessageDate = conversation.getLastMessageDate();
+        Timestamp lastMessageReceived = new Timestamp(lastMessageDate.getTime());
         return new ConversationDataUpdate(request.getId(),
                                           conversation.getMessages(),
                                           lastMessageReceived,
@@ -212,10 +212,11 @@ public class InputHandler {
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
-        User user = data.getUser(request.getUserName());
+        List<Long> conversationIDs = data
+                .getUser(request.getUserName())
+                .getConversationIDs();
 
-        user
-                .getConversationIDs()
+        conversationIDs
                 .stream()
                 .filter(x -> request
                         .getFilters()
@@ -228,9 +229,7 @@ public class InputHandler {
         request
                 .getFilters()
                 .stream()
-                .filter(x -> user
-                        .getConversationIDs()
-                        .contains(x.getId()))
+                .filter(x -> conversationIDs.contains(x.getId()))
                 .forEach(x -> {
                     Conversation conversation = data.getConversation(x.getId());
                     Timestamp time = new Timestamp(x
@@ -239,11 +238,10 @@ public class InputHandler {
                     Timestamp lastMessageReceived = new Timestamp(conversation
                                                                           .getLastMessageDate()
                                                                           .getTime());
-                    ConversationDataUpdate res = new ConversationDataUpdate(
-                            x.getId(),
-                            conversation.getMessagesFromDate(time),
-                            lastMessageReceived,
-                            conversation.getLastMessage()
+                    ConversationDataUpdate res = new ConversationDataUpdate(x.getId(),
+                                                                            conversation.getMessagesFromDate(time),
+                                                                            lastMessageReceived,
+                                                                            conversation.getLastMessage()
                     );
 
                     out.addResponse(res);
@@ -312,12 +310,10 @@ public class InputHandler {
         for (User user : users) {
             user.addConversationID(con.getId());
             data.storeUser(user);
-            if (!user
-                    .getUserName()
-                    .equals(inputAgent.getUsername()) && data.isUserOnline(user.getUserName())) {
-                data
-                        .getOutputAgent(user.getUserName())
-                        .addResponse(con);
+            boolean notCurrentUser = !Objects.equals(user.getUserName(), inputAgent.getUsername());
+            if (notCurrentUser && data.isUserOnline(user.getUserName())) {
+                OutputAgent outputAgent = data.getOutputAgent(user.getUserName());
+                outputAgent.addResponse(con);
             }
         }
 
@@ -332,15 +328,12 @@ public class InputHandler {
             return new NoSuchConversation();
         }
 
-        if (!con
-                .getParticipants()
-                .contains(request.getSender())) {
+        List<String> conversationPariticipants = con.getParticipants();
+        if (!conversationPariticipants.contains(request.getSender())) {
             return new Unauthorized();
         }
 
-        if (con
-                .getParticipants()
-                .contains(request.getParticipant())) {
+        if (conversationPariticipants.contains(request.getParticipant())) {
             return new UserExists();
         }
 
@@ -352,9 +345,8 @@ public class InputHandler {
         con.addUser(user.getUserName());
         user.addConversationID(con.getId());
 
-        data
-                .getOutputAgent(user.getUserName())
-                .addResponse(con);
+        OutputAgent outputAgent = data.getOutputAgent(user.getUserName());
+        outputAgent.addResponse(con);
 
         data.storeConversation(con);
         data.storeUser(user);
@@ -385,18 +377,14 @@ public class InputHandler {
     }
 
     private Object handleTextMessage(TextMessage arg) {
-        Conversation con = data.getConversation(arg
-                                                        .getMessageInfo()
-                                                        .getConversationID());
+        MessageInfo messageInfo = arg.getMessageInfo();
+        Conversation con = data.getConversation(messageInfo.getConversationID());
         if (con == null) {
             return new NoSuchConversation();
         }
 
-        if (!con
-                .getParticipants()
-                .contains(arg
-                                  .getMessageInfo()
-                                  .getSender())) {
+        List<String> conversationParticipants = con.getParticipants();
+        if (!conversationParticipants.contains(messageInfo.getSender())) {
             return new Unauthorized();
         }
 
@@ -416,13 +404,13 @@ public class InputHandler {
 
         out.setUserName(arg.getUsername());
         inputAgent.setUsername(arg.getUsername());
-        for (String user : data
+        List<String> friends = data
                 .getUser(inputAgent.getUsername())
-                .getFriends()) {
+                .getFriends();
+        for (String user : friends) {
             if (data.isUserOnline(user)) {
-                data
-                        .getOutputAgent(user)
-                        .addMessage(new UserLoggedIn(inputAgent.getUsername()));
+                OutputAgent outputAgent = data.getOutputAgent(user);
+                outputAgent.addMessage(new UserLoggedIn(inputAgent.getUsername()));
             }
         }
 
@@ -434,13 +422,13 @@ public class InputHandler {
         data.userLogout(inputAgent.getUsername());
         inputAgent.setRunning(false);
 
-        for (String user : data
+        List<String> friends = data
                 .getUser(inputAgent.getUsername())
-                .getFriends()) {
+                .getFriends();
+        for (String user : friends) {
             if (data.isUserOnline(user)) {
-                data
-                        .getOutputAgent(user)
-                        .addMessage(new UserLoggedOut(inputAgent.getUsername()));
+                OutputAgent outputAgent = data.getOutputAgent(user);
+                outputAgent.addMessage(new UserLoggedOut(inputAgent.getUsername()));
             }
         }
 
@@ -470,18 +458,17 @@ public class InputHandler {
 
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
-        Response response = data
-                .getUser(inputAgent.getUsername())
-                .requestFriend(data, arg);
+        User user = data.getUser(inputAgent.getUsername());
+        Response response = user.requestFriend(data, arg);
         if (!(response instanceof AllIsWell)) {
             return response;
         }
 
         if (data.isUserOnline(arg.getFriendUsername())) {
-            data
+            InputHandler inputHandler = data
                     .getInputAgent(arg.getFriendUsername())
-                    .getInputHandler()
-                    .handleInput(new GetFriendListRequest(arg.getFriendUsername()));
+                    .getInputHandler();
+            inputHandler.handleInput(new GetFriendListRequest(arg.getFriendUsername()));
         }
         return getFriendList();
     }
