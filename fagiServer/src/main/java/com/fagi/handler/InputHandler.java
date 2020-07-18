@@ -85,8 +85,7 @@ public class InputHandler {
             FriendRequest arg = (FriendRequest) input;
             out.addResponse(handleFriendRequest(arg));
         } else if (input instanceof GetFriendListRequest) {
-            GetFriendListRequest arg = (GetFriendListRequest) input;
-            out.addResponse(handleGetFriendRequest(arg));
+            out.addResponse(handleGetFriendRequest());
         } else if (input instanceof DeleteFriendRequest) {
             DeleteFriendRequest arg = (DeleteFriendRequest) input;
             out.addResponse(handleDeleteFriendRequest(arg));
@@ -142,7 +141,7 @@ public class InputHandler {
         }
     }
 
-    private Object handleGetFriendRequest(GetFriendListRequest arg) {
+    private Object handleGetFriendRequest() {
         return getFriendList();
     }
 

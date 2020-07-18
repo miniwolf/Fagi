@@ -22,8 +22,8 @@ import java.util.Optional;
 public class User implements Serializable {
     private final String pass;
     private final String userName;
-    private List<String> friends;
-    private List<Long> conversationIDs;
+    private final List<String> friends;
+    private final List<Long> conversationIDs;
     private volatile List<FriendRequest> incFriendReq;
 
     public User(
