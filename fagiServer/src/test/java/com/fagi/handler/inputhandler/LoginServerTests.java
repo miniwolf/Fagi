@@ -16,7 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class LoginServerTests {
@@ -38,19 +40,15 @@ class LoginServerTests {
     void alreadyOnlineUserLoginAgain_ShouldGetUserOnlineResponse() {
         var loginRequest = new Login("bob", "123");
 
-        when(data.userLogin(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.any(),
-                Mockito.any()
+        when(data.userLogin(Mockito.anyString(),
+                            Mockito.anyString(),
+                            Mockito.any(),
+                            Mockito.any()
         )).thenReturn(new UserOnline());
 
         inputhandler.handleInput(loginRequest);
 
-        var argumentCaptor = ArgumentCaptor.forClass(UserOnline.class);
-        Mockito
-                .verify(outputAgent, times(1))
-                .addResponse(argumentCaptor.capture());
+        verify(outputAgent, times(1)).addResponse(any(UserOnline.class));
     }
 
     @Test
@@ -58,21 +56,17 @@ class LoginServerTests {
         var loginRequest = new Login("bob", "123");
         var user = new User("bob", "123");
 
-        when(data.userLogin(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.any(),
-                Mockito.any()
+        when(data.userLogin(Mockito.anyString(),
+                            Mockito.anyString(),
+                            Mockito.any(),
+                            Mockito.any()
         )).thenReturn(new AllIsWell());
         when(data.getUser(Mockito.anyString())).thenReturn(user);
         when(inputAgent.getUsername()).thenReturn("bob");
 
         inputhandler.handleInput(loginRequest);
 
-        var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito
-                .verify(outputAgent, times(1))
-                .addResponse(argumentCaptor.capture());
+        verify(outputAgent, times(1)).addResponse(any(AllIsWell.class));
     }
 
     @Test
@@ -85,11 +79,10 @@ class LoginServerTests {
         user.addFriend(otherFriend);
         var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
 
-        when(data.userLogin(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.any(),
-                Mockito.any()
+        when(data.userLogin(Mockito.anyString(),
+                            Mockito.anyString(),
+                            Mockito.any(),
+                            Mockito.any()
         )).thenReturn(new AllIsWell());
         when(data.isUserOnline(friend.getUserName())).thenReturn(true);
         when(data.getUser(Mockito.anyString())).thenReturn(user);
@@ -100,20 +93,15 @@ class LoginServerTests {
         inputhandler.handleInput(loginRequest);
 
         var otherFriendArgumentCaptor = ArgumentCaptor.forClass(UserLoggedIn.class);
-        Mockito
-                .verify(otherFriendOutputAgent, times(0))
-                .addMessage(otherFriendArgumentCaptor.capture());
+        verify(otherFriendOutputAgent, times(0)).addMessage(otherFriendArgumentCaptor.capture());
 
         var argumentCaptor = ArgumentCaptor.forClass(UserLoggedIn.class);
-        Mockito
-                .verify(outputAgent, times(1))
-                .addMessage(argumentCaptor.capture());
+        verify(outputAgent, times(1)).addMessage(argumentCaptor.capture());
 
-        Assertions.assertEquals(
-                user.getUserName(),
-                argumentCaptor
-                        .getValue()
-                        .getUsername()
+        Assertions.assertEquals(user.getUserName(),
+                                argumentCaptor
+                                        .getValue()
+                                        .getUsername()
         );
     }
 }

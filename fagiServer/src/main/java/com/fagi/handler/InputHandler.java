@@ -344,8 +344,10 @@ public class InputHandler {
         con.addUser(user.getUserName());
         user.addConversationID(con.getId());
 
-        OutputAgent outputAgent = data.getOutputAgent(user.getUserName());
-        outputAgent.addResponse(con);
+        if(data.isUserOnline(user.getUserName())) {
+            OutputAgent outputAgent = data.getOutputAgent(user.getUserName());
+            outputAgent.addResponse(con);
+        }
 
         data.storeConversation(con);
         data.storeUser(user);

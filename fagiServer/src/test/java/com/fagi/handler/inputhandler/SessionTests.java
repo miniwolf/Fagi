@@ -7,7 +7,6 @@ import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
-import com.fagi.responses.Response;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -76,13 +76,9 @@ public class SessionTests {
     }
 
     @Test
-    void whenReceivingASession_ShouldReturnAllIsWellResponse() throws Exception {
+    void whenReceivingASession_ShouldReturnAllIsWellResponse() {
         inputHandler.handleInput(session);
 
-        var argumentCaptor = ArgumentCaptor.forClass(Response.class);
-        verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
-
-        assertNotNull(argumentCaptor.getValue());
-        assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
+        verify(outputAgent, times(1)).addResponse(any(AllIsWell.class));
     }
 }
