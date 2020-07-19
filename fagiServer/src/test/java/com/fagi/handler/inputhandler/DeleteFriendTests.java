@@ -30,7 +30,6 @@ public class DeleteFriendTests {
     @Mock private Data data;
     @Mock private User user;
 
-
     @BeforeEach
     void setup() {
         var conversationHandler = new ConversationHandler(data);
