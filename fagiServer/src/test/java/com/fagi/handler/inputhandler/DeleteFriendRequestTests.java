@@ -3,7 +3,7 @@ package com.fagi.handler.inputhandler;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
-import com.fagi.model.DeleteFriend;
+import com.fagi.model.DeleteFriendRequest;
 import com.fagi.model.User;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class DeleteFriendTests {
+public class DeleteFriendRequestTests {
     private InputHandler inputHandler;
     @Mock private OutputAgent outputAgent;
     @Mock private InputAgent inputAgent;
@@ -55,9 +55,9 @@ public class DeleteFriendTests {
                 .getUsername();
 
         String otherUsername = "otherUsername";
-        inputHandler.handleInput(new DeleteFriend(otherUsername));
+        inputHandler.handleInput(new DeleteFriendRequest(otherUsername));
 
-        verify(otherUser, never()).removeFriend(eq(data), anyString());
-        verify(user, times(1)).removeFriend(data, otherUsername);
+        verify(otherUser, never()).removeFriendRequest(eq(data), anyString());
+        verify(user, times(1)).removeFriendRequest(data, otherUsername);
     }
 }
