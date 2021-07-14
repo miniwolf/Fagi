@@ -38,14 +38,13 @@ class FriendRequestServerTests {
     @Mock private OutputAgent outputAgent;
     @Mock private InputAgent inputAgent;
     @Mock private Data data;
-    private User user;
+    @Mock private User user;
 
     @BeforeEach
     void setup() {
         var conversationHandler = new ConversationHandler(data);
 
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
-        user = Mockito.mock(User.class);
         var username = "bob";
 
         doReturn(username)
