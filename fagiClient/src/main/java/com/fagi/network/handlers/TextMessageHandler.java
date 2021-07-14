@@ -69,7 +69,7 @@ public class TextMessageHandler implements Handler<TextMessage> {
 
         }
         conversation
-                .getData()
+                .data()
                 .addMessage(message);
         JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
 

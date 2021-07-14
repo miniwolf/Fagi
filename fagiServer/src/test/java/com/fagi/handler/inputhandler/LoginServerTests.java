@@ -101,7 +101,7 @@ class LoginServerTests {
         Assertions.assertEquals(user.getUserName(),
                                 argumentCaptor
                                         .getValue()
-                                        .getUsername()
+                                        .username()
         );
     }
 }

@@ -63,7 +63,7 @@ public class LoginScreenController extends Pane implements LoginController {
     private void handleLogin() {
         Login data = new Login(username.getText(), password.getText());
         Response loginResponse = new LoginSystem(communication).login(data);
-        new LoginResultHandler(communication).handle(loginResponse, data.getUsername(), messageLabel);
+        new LoginResultHandler(communication).handle(loginResponse, data.username(), messageLabel);
     }
 
     @Override

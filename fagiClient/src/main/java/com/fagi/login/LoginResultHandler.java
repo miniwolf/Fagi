@@ -9,13 +9,7 @@ import com.fagi.responses.Response;
 import com.fagi.responses.UserOnline;
 import javafx.scene.control.Label;
 
-public class LoginResultHandler {
-    private final Communication communication;
-
-    public LoginResultHandler(Communication communication) {
-        this.communication = communication;
-    }
-
+public record LoginResultHandler(Communication communication) {
     public void handle(
             Response response,
             String username,

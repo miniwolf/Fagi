@@ -20,7 +20,7 @@ public class Encryption {
             this.rsa = new RSA();
             KeyPair key = (KeyPair) rsa
                     .getKey()
-                    .getKey();
+                    .key();
             try {
                 KeyStorage.SaveKeyPair(key);
             } catch (IOException e) {

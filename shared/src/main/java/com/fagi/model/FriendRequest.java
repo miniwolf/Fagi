@@ -9,48 +9,14 @@ package com.fagi.model;
 import com.fagi.model.messages.message.TextMessage;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-public class FriendRequest implements Serializable, Comparable<FriendRequest> {
-    private final String friendUsername;
-    private final TextMessage message;
-
-    public FriendRequest(
-            String friendUsername,
-            TextMessage message) {
-        this.friendUsername = friendUsername;
-        this.message = message;
-    }
-
-    public String getFriendUsername() {
-        return friendUsername;
-    }
+public record FriendRequest(String friendUsername, TextMessage message)
+        implements Serializable, Comparable<FriendRequest> {
 
     public String getSender() {
         return message
                 .getMessageInfo()
                 .getSender();
-    }
-
-    public TextMessage getMessage() {
-        return message;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        FriendRequest that = (FriendRequest) o;
-        return Objects.equals(friendUsername, that.friendUsername) && Objects.equals(message, that.message);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(friendUsername, message);
     }
 
     @Override

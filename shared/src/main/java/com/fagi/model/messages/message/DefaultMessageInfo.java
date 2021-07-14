@@ -51,14 +51,11 @@ public class DefaultMessageInfo implements MessageInfo {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DefaultMessageInfo)) {
+        if (!(o instanceof DefaultMessageInfo that)) {
             return false;
         }
 
-        DefaultMessageInfo that = (DefaultMessageInfo) o;
-
         return conversationID == that.conversationID && sender.equals(that.sender) && that.currentTime == currentTime;
-
     }
 
     @Override

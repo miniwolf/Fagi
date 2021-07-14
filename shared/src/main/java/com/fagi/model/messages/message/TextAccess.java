@@ -11,7 +11,7 @@ import com.fagi.model.messages.Access;
  */
 public interface TextAccess extends Access<String> {
     @Override
-    String getData();
+    String data();
 
     MessageInfo getMessageInfo();
 }

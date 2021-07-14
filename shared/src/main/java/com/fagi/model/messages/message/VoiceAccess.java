@@ -11,7 +11,7 @@ import com.fagi.model.messages.Access;
  */
 public interface VoiceAccess extends Access<byte[]> {
     @Override
-    byte[] getData();
+    byte[] data();
 
     MessageInfo getMessageInfo();
 }

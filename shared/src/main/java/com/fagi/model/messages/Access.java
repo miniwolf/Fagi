@@ -12,5 +12,5 @@ import java.io.Serializable;
  * @author miniwolf
  */
 public interface Access<T> extends Serializable {
-    T getData();
+    T data();
 }

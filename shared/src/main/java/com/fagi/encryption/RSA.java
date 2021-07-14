@@ -67,7 +67,7 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE,
                         key
-                                .getKey()
+                                .key()
                                 .getPrivate()
             );
             return cipher.doFinal(cipherText);
@@ -98,7 +98,7 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
     @Override
     public void setEncryptionKey(RSAKey key) {
         this.encryptionKey = key
-                .getKey()
+                .key()
                 .getPublic();
     }
 }

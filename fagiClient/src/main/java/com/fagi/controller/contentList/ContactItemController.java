@@ -23,9 +23,9 @@ public class ContactItemController extends TimedContentItemController<String> {
             Action<String> action,
             Date date) {
         super(myUsername, date, new ArrayList<>() {{
-            add(contact.getUsername());
+            add(contact.username());
         }}, fxmlResource, action);
-        toggleStatus(contact.isOnline());
+        toggleStatus(contact.online());
     }
 
     public void toggleStatus(boolean online) {

@@ -50,7 +50,7 @@ public class SessionTests {
 
         AES argument = argumentCaptor.getValue();
         assertNotNull(argument);
-        assertEquals(session.getKey(), argument.getKey());
+        assertEquals(session.key(), argument.getKey());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class SessionTests {
 
         AES argument = argumentCaptor.getValue();
         assertNotNull(argument);
-        assertEquals(session.getKey(), argument.getKey());
+        assertEquals(session.key(), argument.getKey());
     }
 
     @Test

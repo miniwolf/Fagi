@@ -14,12 +14,12 @@ import com.fagi.model.messages.InGoingMessages;
  * @author miniwolf
  */
 public class TextMessage implements InGoingMessages<String>, TextAccess, Comparable<TextMessage> {
-    private DefaultMessageInfo message;
+    private final DefaultMessageInfo message;
 
     /**
      * Contains text message.
      */
-    private String data;
+    private final String data;
 
     public TextMessage(
             String data,
@@ -30,7 +30,7 @@ public class TextMessage implements InGoingMessages<String>, TextAccess, Compara
     }
 
     @Override
-    public Access<String> getAccess() {
+    public Access<String> access() {
         return this;
     }
 
@@ -40,7 +40,7 @@ public class TextMessage implements InGoingMessages<String>, TextAccess, Compara
     }
 
     @Override
-    public String getData() {
+    public String data() {
         return data;
     }
 
@@ -49,11 +49,9 @@ public class TextMessage implements InGoingMessages<String>, TextAccess, Compara
         if (this == other) {
             return true;
         }
-        if (!(other instanceof TextMessage)) {
+        if (!(other instanceof TextMessage message1)) {
             return false;
         }
-
-        TextMessage message1 = (TextMessage) other;
 
         return message.equals(message1.message) && data.equals(message1.data);
     }

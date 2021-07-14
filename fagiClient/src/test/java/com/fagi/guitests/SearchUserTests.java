@@ -82,24 +82,24 @@ public class SearchUserTests {
                 argument
                         .getAllValues()
                         .get(2)
-                        .getSearchString()
+                        .searchString()
                              ),
                              () -> Assertions.assertEquals(
                                      "ab",
                                      argument
                                              .getAllValues()
                                              .get(3)
-                                             .getSearchString()
+                                             .searchString()
                              ),
                              () -> Assertions.assertNotEquals(
                                      argument
                                              .getAllValues()
                                              .get(2)
-                                             .getSearchString(),
+                                             .searchString(),
                                      argument
                                              .getAllValues()
                                              .get(3)
-                                             .getSearchString()
+                                             .searchString()
                              )
         );
     }
@@ -119,24 +119,24 @@ public class SearchUserTests {
                 argument
                         .getAllValues()
                         .get(3)
-                        .getSearchString()
+                        .searchString()
                              ),
                              () -> Assertions.assertEquals(
                                      "a",
                                      argument
                                              .getAllValues()
                                              .get(4)
-                                             .getSearchString()
+                                             .searchString()
                              ),
                              () -> Assertions.assertNotEquals(
                                      argument
                                              .getAllValues()
                                              .get(3)
-                                             .getSearchString(),
+                                             .searchString(),
                                      argument
                                              .getAllValues()
                                              .get(4)
-                                             .getSearchString()
+                                             .searchString()
                              )
         );
     }
@@ -148,7 +148,7 @@ public class SearchUserTests {
             add(username);
         }};
 
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         FxAssert.verifyThat("#usernameLabel", LabeledMatchers.hasText(username));
     }
@@ -165,7 +165,7 @@ public class SearchUserTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         FxAssert.verifyThat("#usernameLabel", LabeledMatchers.hasText(username));
 
@@ -195,7 +195,7 @@ public class SearchUserTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         robot.press(KeyCode.BACK_SPACE);
 
@@ -206,7 +206,7 @@ public class SearchUserTests {
     public void UnsuccessfulSearch_ResultsInAnEmptyView(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#searchBox", "a");
 
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(new ArrayList<>(), new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(new ArrayList<>()));
 
         FxAssert.verifyThatIter("#UniqueSearchContact", IsIterableWithSize.iterableWithSize(0));
     }
@@ -221,7 +221,7 @@ public class SearchUserTests {
         }};
         addIngoingMessageToInputHandler(
                 inputHandler,
-                new SearchUsersResult(usernames, new ArrayList<>()),
+                new SearchUsersResult(usernames),
                 usernames.size()
         );
 
@@ -249,7 +249,7 @@ public class SearchUserTests {
             add("a");
             add("ab");
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames), 2);
 
         var contactNodes = new ArrayList<Node>(robot
                                                        .lookup("#UniqueSearchContact")
@@ -284,7 +284,7 @@ public class SearchUserTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#stopSearchingBtn");
 
@@ -308,7 +308,7 @@ public class SearchUserTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#stopSearchingBtn");
 
@@ -332,7 +332,7 @@ public class SearchUserTests {
 
         addIngoingMessageToInputHandler(
                 inputHandler,
-                new SearchUsersResult(usernames, new ArrayList<>()),
+                new SearchUsersResult(usernames),
                 usernames.size()
         );
 

@@ -12,19 +12,13 @@ import java.util.Optional;
 /**
  * Created by Marcus on 13-11-2016.
  */
-public class ConversationDataUpdateHandler implements Handler<ConversationDataUpdate> {
-    private final MainScreen mainScreen;
-
-    public ConversationDataUpdateHandler(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
-
+public record ConversationDataUpdateHandler(MainScreen mainScreen) implements Handler<ConversationDataUpdate> {
     @Override
     public void handle(ConversationDataUpdate response) {
         Optional<Conversation> con = mainScreen
                 .getConversations()
                 .stream()
-                .filter(x -> x.getId() == response.getId())
+                .filter(x -> x.getId() == response.id())
                 .findFirst();
 
         if (con.isEmpty()) {
@@ -36,10 +30,10 @@ public class ConversationDataUpdateHandler implements Handler<ConversationDataUp
                 .getMessages()
                 .isEmpty()) {
             response
-                    .getConversationData()
+                    .conversationData()
                     .forEach(conversation::addMessage);
         } else {
-            conversation.addMessagesNoDate(response.getConversationData());
+            conversation.addMessagesNoDate(response.conversationData());
         }
 
         JsonFileOperations.storeConversation(conversation);
@@ -58,7 +52,7 @@ public class ConversationDataUpdateHandler implements Handler<ConversationDataUp
                 .get();
         Platform.runLater(() -> {
             if (conversation.getLastMessage() != null) {
-                messageItemController.setLastMessage(response.getLastMessage());
+                messageItemController.setLastMessage(response.lastMessage());
             }
 
             if (conversation.getLastMessageDate() != null) {

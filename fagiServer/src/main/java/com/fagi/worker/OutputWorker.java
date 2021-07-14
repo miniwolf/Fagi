@@ -30,11 +30,11 @@ public class OutputWorker extends Worker implements OutputAgent {
     private final Queue<InGoingMessages> messages = new ConcurrentLinkedQueue<>();
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
     private final Data data;
-    private ObjectOutputStream objOut;
+    private final ObjectOutputStream objOut;
     private EncryptionAlgorithm<AESKey> aes;
 
     private String myUserName = null;
-    private ListAccess<FriendRequest> currentRequests = new DefaultListAccess<>(new ArrayList<>());
+    private final ListAccess<FriendRequest> currentRequests = new DefaultListAccess<>(new ArrayList<>());
 
     public OutputWorker(
             Socket socket,
@@ -81,13 +81,13 @@ public class OutputWorker extends Worker implements OutputAgent {
     private <T extends Comparable> void checkList(
             InGoingMessages<List<T>> responseObj,
             ListAccess<T> currentList) throws IOException {
-        ListAccess<T> responseList = (ListAccess<T>) responseObj.getAccess();
+        ListAccess<T> responseList = (ListAccess<T>) responseObj.access();
 
-        if (equalLists(responseList.getData(), currentList.getData())) {
+        if (equalLists(responseList.data(), currentList.data())) {
             return;
         }
 
-        currentList.updateData(responseList.getData());
+        currentList.updateData(responseList.data());
         send(responseObj);
     }
 

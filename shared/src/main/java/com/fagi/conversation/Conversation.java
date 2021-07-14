@@ -20,7 +20,7 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
     private List<String> participants = new ArrayList<>();
     private List<TextMessage> messages = new ArrayList<>();
     private long id;
-    private Date lastMessageDate = null;
+    private Date lastMessageDate;
     private ConversationType type;
     private TextMessage lastMessage;
     private String name;
@@ -105,12 +105,12 @@ public class Conversation implements Serializable, InGoingMessages<Conversation>
     }
 
     @Override
-    public Conversation getData() {
+    public Conversation data() {
         return this;
     }
 
     @Override
-    public Access<Conversation> getAccess() {
+    public Access<Conversation> access() {
         return this;
     }
 

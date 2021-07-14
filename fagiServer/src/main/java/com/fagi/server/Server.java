@@ -46,7 +46,7 @@ public class Server {
                     .getInstance()
                     .getRSA()
                     .getKey())
-                    .getKey()
+                    .key()
                     .getPublic();
             ServerConfig config = new ServerConfig(name, ip, port, pk);
             config.saveToPath(configFile);

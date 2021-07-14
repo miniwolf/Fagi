@@ -8,17 +8,7 @@ import com.fagi.network.Communication;
 /**
  * Created by costa on 11-12-2016.
  */
-public class SendInvitation implements Action<TextMessage> {
-    private final Communication communication;
-    private final String username;
-
-    public SendInvitation(
-            Communication communication,
-            String username) {
-        this.communication = communication;
-        this.username = username;
-    }
-
+public record SendInvitation(Communication communication, String username) implements Action<TextMessage> {
     @Override
     public void execute(TextMessage textMessage) {
         communication.sendObject(new FriendRequest(username, textMessage));

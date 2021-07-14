@@ -6,22 +6,12 @@ import java.util.List;
 /**
  * Created by costa on 31-03-2017.
  */
-public class InviteCodeContainer implements Serializable {
-    private final List<InviteCode> codes;
-
-    public InviteCodeContainer(List<InviteCode> codes) {
-        this.codes = codes;
-    }
-
-    public List<InviteCode> getCodes() {
-        return codes;
-    }
-
-    public boolean contains(InviteCode inviteCode) {
+public record InviteCodeContainer(List<Integer> codes) implements Serializable {
+    public boolean contains(int inviteCode) {
         return codes.contains(inviteCode);
     }
 
-    public void remove(InviteCode inviteCode) {
+    public void remove(int inviteCode) {
         codes.remove(inviteCode);
     }
 }

@@ -19,7 +19,7 @@ public class GeneralHandler<T> implements Handler<T> {
     private final InputDistributor<T> inputDistributor;
     private final List<Object> unhandledObjects = new ArrayList<>();
     private final ThreadPool threadPool;
-    private DefaultThreadHandler<T> runnable = new DefaultThreadHandler<T>(container, this);
+    private DefaultThreadHandler<T> runnable = new DefaultThreadHandler<>(container, this);
 
     public GeneralHandler(
             InputDistributor<T> inputDistributor,
@@ -39,9 +39,7 @@ public class GeneralHandler<T> implements Handler<T> {
             return;
         }
 
-        threadPool.startThread(() -> {
-            handler.handle(object);
-        }, "GeneralHandler: " + object.getClass());
+        threadPool.startThread(() -> handler.handle(object), "GeneralHandler: " + object.getClass());
     }
 
     public void registerHandler(

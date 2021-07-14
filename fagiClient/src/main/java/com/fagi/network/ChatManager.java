@@ -6,7 +6,6 @@ package com.fagi.network;
 
 import com.fagi.main.FagiApp;
 import com.fagi.model.CreateUser;
-import com.fagi.model.InviteCode;
 import com.fagi.model.Logout;
 import com.fagi.model.UserNameAvailableRequest;
 import com.fagi.responses.AllIsWell;
@@ -84,8 +83,7 @@ public class ChatManager {
             return false;
         }
 
-        CreateUser createUser = new CreateUser(username, password);
-        createUser.setInviteCode(new InviteCode(toInteger(inviteCode)));
+        CreateUser createUser = new CreateUser(username, password, toInteger(inviteCode));
         communication.sendObject(createUser);
 
         Response response = communication.getNextResponse();
@@ -102,7 +100,7 @@ public class ChatManager {
     }
 
     private static int toInteger(String inviteCode) {
-        return Integer.valueOf(inviteCode);
+        return Integer.parseInt(inviteCode);
     }
 
     /**

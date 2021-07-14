@@ -31,9 +31,7 @@ public class FriendListHandler implements Handler<FriendList> {
         // Required here to get the load inside the constructor
         ContentController contentController = new ContentController("/view/content/ContentList.fxml");
 
-        List<Friend> friends = friendList
-                .getAccess()
-                .getData();
+        List<Friend> friends = friendList.access().data();
         Collections.sort(friends);
 
         List<Parent> parents = new ArrayList<>();

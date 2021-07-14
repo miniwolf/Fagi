@@ -8,25 +8,14 @@ import java.io.Serializable;
 /**
  * Created by costa on 11-12-2016.
  */
-public class UserLoggedOut
-        implements Serializable, InGoingMessages<UserLoggedOut>, Access<UserLoggedOut>, UserStatusUpdate {
-    private final String username;
-
-    public UserLoggedOut(String username) {
-        this.username = username;
-    }
-
+public record UserLoggedOut(String username) implements Serializable, InGoingMessages<UserLoggedOut>, Access<UserLoggedOut>, UserStatusUpdate {
     @Override
-    public Access<UserLoggedOut> getAccess() {
+    public Access<UserLoggedOut> access() {
         return this;
     }
 
     @Override
-    public UserLoggedOut getData() {
+    public UserLoggedOut data() {
         return this;
-    }
-
-    public String getUsername() {
-        return username;
     }
 }

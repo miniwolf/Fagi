@@ -10,5 +10,5 @@ import java.io.Serializable;
  * @author miniwolf
  */
 public interface InGoingMessages<T> extends Serializable {
-    Access<T> getAccess();
+    Access<T> access();
 }

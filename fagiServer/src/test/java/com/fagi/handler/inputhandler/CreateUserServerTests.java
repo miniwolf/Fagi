@@ -4,7 +4,6 @@ import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
 import com.fagi.model.CreateUser;
 import com.fagi.model.Data;
-import com.fagi.model.InviteCode;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
@@ -37,7 +36,7 @@ class CreateUserServerTests {
         ConversationHandler conversationHandler = new ConversationHandler(data);
 
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
-        inviteCodeContainer = new InviteCodeContainer(new ArrayList<>(Collections.singletonList(new InviteCode(42))));
+        inviteCodeContainer = new InviteCodeContainer(new ArrayList<>(Collections.singletonList(42)));
         doReturn(inviteCodeContainer)
                 .when(data)
                 .loadInviteCodes();
@@ -45,8 +44,7 @@ class CreateUserServerTests {
 
     @Test
     void creatingUserWithIllegalInviteCode_ShouldResultInIllegalInviteCodeResponse() {
-        var createUser = new CreateUser("bob", "123");
-        createUser.setInviteCode(new InviteCode(23));
+        var createUser = new CreateUser("bob", "123", 23);
 
         inputHandler.handleInput(createUser);
 
@@ -55,20 +53,19 @@ class CreateUserServerTests {
                 .verify(outputAgent, times(1))
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertTrue(argumentCaptor.getValue() instanceof IllegalInviteCode);
+        Assertions.assertNotNull(argumentCaptor.getValue());
     }
 
     @Test
     void creatingUserFails_ShouldResultInInviteCodeNotBeingDeleted() {
         var inviteCode = inviteCodeContainer
-                .getCodes()
+                .codes()
                 .get(0);
-        var createUser = new CreateUser("bob", "123");
-        createUser.setInviteCode(inviteCode);
+        var createUser = new CreateUser("bob", "123", inviteCode);
 
         doReturn(new UserExists())
                 .when(data)
-                .createUser(createUser.getUsername(), createUser.getPassword());
+                .createUser(createUser.username(), createUser.password());
 
         inputHandler.handleInput(createUser);
 
@@ -78,14 +75,13 @@ class CreateUserServerTests {
     @Test
     void createUserSucceeds_ShouldDeleteInviteCode() {
         var inviteCode = inviteCodeContainer
-                .getCodes()
+                .codes()
                 .get(0);
-        var createUser = new CreateUser("bob", "123");
-        createUser.setInviteCode(inviteCode);
+        var createUser = new CreateUser("bob", "123", inviteCode);
 
         doReturn(new AllIsWell())
                 .when(data)
-                .createUser(createUser.getUsername(), createUser.getPassword());
+                .createUser(createUser.username(), createUser.password());
 
         inputHandler.handleInput(createUser);
 
@@ -95,14 +91,13 @@ class CreateUserServerTests {
     @Test
     void createUserSucceeds_ShouldResultInAllIsWellResponse() {
         var inviteCode = inviteCodeContainer
-                .getCodes()
+                .codes()
                 .get(0);
-        var createUser = new CreateUser("bob", "123");
-        createUser.setInviteCode(inviteCode);
+        var createUser = new CreateUser("bob", "123", inviteCode);
 
         doReturn(new AllIsWell())
                 .when(data)
-                .createUser(createUser.getUsername(), createUser.getPassword());
+                .createUser(createUser.username(), createUser.password());
 
         inputHandler.handleInput(createUser);
 
@@ -111,6 +106,6 @@ class CreateUserServerTests {
                 .verify(outputAgent, times(1))
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
+        Assertions.assertNotNull(argumentCaptor.getValue());
     }
 }

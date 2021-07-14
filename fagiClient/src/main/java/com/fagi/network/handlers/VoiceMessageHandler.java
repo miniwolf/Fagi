@@ -14,7 +14,7 @@ import com.fagi.network.handlers.container.DefaultContainer;
  * @author miniwolf
  */
 public class VoiceMessageHandler implements Handler<VoiceMessage> {
-    private Container<VoiceMessage> container = new DefaultContainer<VoiceMessage>();
+    private Container<VoiceMessage> container = new DefaultContainer<>();
     private Runnable runnable = new DefaultThreadHandler<>(container, this);
 
     public VoiceMessageHandler(InputDistributor<VoiceMessage> inputDistributor) {

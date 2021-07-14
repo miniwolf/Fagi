@@ -34,7 +34,7 @@ public class MessageItemController extends TimedContentItemController<Long> {
                 .getSender();
         boolean isMyMessage = sender.equals(username);
         String senderString = (isMyMessage ? "You" : sender);
-        lastMessage.setText(senderString + ": " + cropMessage(message.getData(), isMyMessage));
+        lastMessage.setText(senderString + ": " + cropMessage(message.data(), isMyMessage));
     }
 
     private String cropMessage(

@@ -1,6 +1,6 @@
 language: java
 install: true
-jdk: openjdk12
+jdk: openjdk16
 
 matrix:
   include:

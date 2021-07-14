@@ -6,6 +6,9 @@ package com.fagi.responses;
  * Object for handling user already logged in.
  */
 
+import java.io.Serial;
+
 public class UserOnline implements Response {
+    @Serial
     private static final long serialVersionUID = 8L;
 }

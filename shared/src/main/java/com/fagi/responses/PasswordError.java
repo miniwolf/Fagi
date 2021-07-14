@@ -6,6 +6,9 @@ package com.fagi.responses;
  * Object for handling password errors.
  */
 
+import java.io.Serial;
+
 public class PasswordError implements Response {
+    @Serial
     private static final long serialVersionUID = 5L;
 }

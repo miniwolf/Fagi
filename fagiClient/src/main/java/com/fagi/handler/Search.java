@@ -63,11 +63,11 @@ public class Search {
     private void defaultFriendList() {
         List<Friend> data = mainScreen
                 .getFriendList()
-                .getAccess()
-                .getData();
+                .access()
+                .data();
         List<String> friendList = data
                 .stream()
-                .map(Friend::getUsername)
+                .map(Friend::username)
                 .collect(Collectors.toList());
         createSearchList.execute(friendList);
     }

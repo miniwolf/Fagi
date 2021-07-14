@@ -85,7 +85,7 @@ class FriendRequestServerTests {
 
         doReturn(friendInputAgent)
                 .when(data)
-                .getInputAgent(friendReq.getFriendUsername());
+                .getInputAgent(friendReq.friendUsername());
 
         doReturn(friendInputHandler)
                 .when(friendInputAgent)
@@ -95,7 +95,7 @@ class FriendRequestServerTests {
 
         doReturn(true)
                 .when(data)
-                .isUserOnline(friendReq.getFriendUsername());
+                .isUserOnline(friendReq.friendUsername());
 
         inputHandler.handleInput(friendReq);
 
@@ -104,8 +104,8 @@ class FriendRequestServerTests {
 
         String senderUsername = argumentCaptor
                 .getValue()
-                .getSender();
-        Assertions.assertEquals(friendReq.getFriendUsername(), senderUsername);
+                .sender();
+        Assertions.assertEquals(friendReq.friendUsername(), senderUsername);
     }
 
     @Test
@@ -115,7 +115,7 @@ class FriendRequestServerTests {
 
         doReturn(false)
                 .when(data)
-                .isUserOnline(friendReq.getFriendUsername());
+                .isUserOnline(friendReq.friendUsername());
 
         when(user.requestFriend(data, friendReq)).thenReturn(new AllIsWell());
 
@@ -130,12 +130,12 @@ class FriendRequestServerTests {
 
         List<Friend> friendList = argumentCaptor
                 .getValue()
-                .getAccess()
-                .getData();
+                .access()
+                .data();
 
         Assertions.assertEquals(1, friendList.size());
 
         Friend firstFriend = friendList.get(0);
-        Assertions.assertEquals(expectedFriend.getUserName(), firstFriend.getUsername());
+        Assertions.assertEquals(expectedFriend.getUserName(), firstFriend.username());
     }
 }

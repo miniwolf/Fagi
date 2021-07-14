@@ -5,7 +5,6 @@ import com.fagi.controller.contentList.ContactItemController;
 import com.fagi.model.Friend;
 import javafx.scene.layout.Pane;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,22 +33,23 @@ public class FriendMapWrapper {
                 .keySet()
                 .stream()
                 .filter(x -> x
-                        .getUsername()
+                        .username()
                         .equals(username))
                 .findFirst()
                 .get();
         FriendListItem item = map.get(f);
-
-        f.setOnline(!f.isOnline());
+        var newFriend = new Friend(f.username(), !f.online());
+        map.remove(f);
+        map.put(newFriend, item);
 
         item
-                .getController()
-                .toggleStatus(f.isOnline());
+                .controller()
+                .toggleStatus(f.online());
 
         List<FriendListItem> sortedFriendItems = map
                 .entrySet()
                 .stream()
-                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .sorted(Map.Entry.comparingByKey())
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
 

@@ -163,8 +163,8 @@ public class ConversationController extends BorderPane {
         return message
                 .getMessageInfo()
                 .getSender()
-                .equals(username) ? getBox(message.getData()) : getBox(
-                message.getData(),
+                .equals(username) ? getBox(message.data()) : getBox(
+                message.data(),
                 message
                         .getMessageInfo()
                         .getSender()
