@@ -12,7 +12,6 @@ import com.fagi.model.Friend;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.HistoryUpdates;
-import com.fagi.model.InviteCode;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.model.Login;
 import com.fagi.model.Logout;
@@ -49,67 +48,41 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class InputHandler {
-    private InputAgent inputAgent;
-    private OutputAgent out;
-    private ConversationHandler conversationHandler;
-    private Data data;
-
-    public InputHandler(
-            InputAgent inputAgent,
-            OutputAgent out,
-            ConversationHandler conversationHandler,
-            Data data) {
-        this.inputAgent = inputAgent;
-        this.out = out;
-        this.conversationHandler = conversationHandler;
-        this.data = data;
-    }
-
+public record InputHandler(InputAgent inputAgent, OutputAgent out,
+                           ConversationHandler conversationHandler, Data data) {
     public void handleInput(Object input) {
-        if (input instanceof TextMessage) {
-            TextMessage arg = (TextMessage) input;
+        if (input instanceof TextMessage arg) {
             MessageInfo messageInfo = arg.getMessageInfo();
             messageInfo.setTimestamp(new Timestamp(System.currentTimeMillis()));
             out.addResponse(handleTextMessage(arg));
-        } else if (input instanceof Login) {
-            Login arg = (Login) input;
+        } else if (input instanceof Login arg) {
             out.addResponse(handleLogin(arg));
         } else if (input instanceof Logout) {
             out.addResponse(handleLogout());
             out.setRunning(false);
-        } else if (input instanceof CreateUser) {
-            CreateUser arg = (CreateUser) input;
+        } else if (input instanceof CreateUser arg) {
             out.addResponse(handleCreateUser(arg));
-        } else if (input instanceof FriendRequest) {
-            FriendRequest arg = (FriendRequest) input;
+        } else if (input instanceof FriendRequest arg) {
             out.addResponse(handleFriendRequest(arg));
         } else if (input instanceof GetFriendListRequest) {
             out.addResponse(handleGetFriendRequest());
-        } else if (input instanceof DeleteFriendRequest) {
-            DeleteFriendRequest arg = (DeleteFriendRequest) input;
+        } else if (input instanceof DeleteFriendRequest arg) {
             out.addResponse(handleDeleteFriendRequest(arg));
-        } else if (input instanceof DeleteFriend) {
-            DeleteFriend arg = (DeleteFriend) input;
+        } else if (input instanceof DeleteFriend arg) {
             out.addResponse(handleDeleteFriend(arg));
-        } else if (input instanceof Session) {
-            Session arg = (Session) input;
+        } else if (input instanceof Session arg) {
             out.addResponse(handleSession(arg));
-        } else if (input instanceof AddParticipantRequest) {
-            AddParticipantRequest request = (AddParticipantRequest) input;
+        } else if (input instanceof AddParticipantRequest request) {
             out.addResponse(handleAddParticipant(request));
-        } else if (input instanceof CreateConversationRequest) {
-            CreateConversationRequest request = (CreateConversationRequest) input;
+        } else if (input instanceof CreateConversationRequest request) {
             Object response = handleCreateConversation(request);
             if (!(response instanceof NoSuchUser)) {
                 out.addResponse(new AllIsWell());
             }
             out.addResponse(response);
-        } else if (input instanceof RemoveParticipantRequest) {
-            RemoveParticipantRequest request = (RemoveParticipantRequest) input;
+        } else if (input instanceof RemoveParticipantRequest request) {
             out.addResponse(handleRemoveParticipant(request));
-        } else if (input instanceof UpdateHistoryRequest) {
-            UpdateHistoryRequest request = (UpdateHistoryRequest) input;
+        } else if (input instanceof UpdateHistoryRequest request) {
 
             Object response = handleUpdateHistory(request);
 
@@ -117,22 +90,18 @@ public class InputHandler {
                 out.addResponse(new AllIsWell());
             }
             out.addResponse(response);
-        } else if (input instanceof GetConversationsRequest) {
-            GetConversationsRequest request = (GetConversationsRequest) input;
+        } else if (input instanceof GetConversationsRequest request) {
 
             handleGetConversations(request);
-        } else if (input instanceof GetAllConversationDataRequest) {
-            GetAllConversationDataRequest request = (GetAllConversationDataRequest) input;
+        } else if (input instanceof GetAllConversationDataRequest request) {
 
             Object result = handleGetAllConversationDataRequest(request);
 
             out.addResponse(result);
-        } else if (input instanceof SearchUsersRequest) {
-            SearchUsersRequest request = (SearchUsersRequest) input;
+        } else if (input instanceof SearchUsersRequest request) {
 
             out.addResponse(handleSearchUsersRequest(request));
-        } else if (input instanceof UserNameAvailableRequest) {
-            UserNameAvailableRequest request = (UserNameAvailableRequest) input;
+        } else if (input instanceof UserNameAvailableRequest request) {
             out.addResponse(handleUserNameAvailableRequest(request));
         } else {
             System.out.println("Unknown handle: " + input
@@ -158,7 +127,7 @@ public class InputHandler {
     }
 
     private Object handleUserNameAvailableRequest(UserNameAvailableRequest request) {
-        if (data.getUser(request.getUsername()) == null) {
+        if (data.getUser(request.username()) == null) {
             return new AllIsWell();
         } else {
             return new UserExists();
@@ -172,8 +141,8 @@ public class InputHandler {
         List<String> usernames = data
                 .getUserNames()
                 .stream()
-                .filter(username -> username.startsWith(request.getSearchString()))
-                .filter(username -> !username.equals(request.getSender()))
+                .filter(username -> username.startsWith(request.searchString()))
+                .filter(username -> !username.equals(request.sender()))
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -190,57 +159,57 @@ public class InputHandler {
                 .filter(username -> !friends.contains(username))
                 .collect(Collectors.toList());
 
-        return new SearchUsersResult(nonFriends, friends);
+        return new SearchUsersResult(nonFriends);
     }
 
     private Object handleGetAllConversationDataRequest(GetAllConversationDataRequest request) {
-        User user = data.getUser(request.getSender());
+        User user = data.getUser(request.sender());
 
         List<Long> conversationIDs = user.getConversationIDs();
-        if (!conversationIDs.contains(request.getId())) {
+        if (!conversationIDs.contains(request.id())) {
             return new Unauthorized();
         }
-        Conversation conversation = data.getConversation(request.getId());
+        Conversation conversation = data.getConversation(request.id());
         Date lastMessageDate = conversation.getLastMessageDate();
         Timestamp lastMessageReceived = new Timestamp(lastMessageDate.getTime());
-        return new ConversationDataUpdate(request.getId(),
-                                          conversation.getMessages(),
-                                          lastMessageReceived,
-                                          conversation.getLastMessage()
+        return new ConversationDataUpdate(request.id(),
+                conversation.getMessages(),
+                lastMessageReceived,
+                conversation.getLastMessage()
         );
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
         List<Long> conversationIDs = data
-                .getUser(request.getUserName())
+                .getUser(request.userName())
                 .getConversationIDs();
 
         conversationIDs
                 .stream()
                 .filter(x -> request
-                        .getFilters()
+                        .filters()
                         .stream()
-                        .noneMatch(y -> y.getId() == x))
+                        .noneMatch(y -> y.id() == x))
                 .forEach(x -> out.addResponse(data
-                                                      .getConversation(x)
-                                                      .getPlaceholder()));
+                        .getConversation(x)
+                        .getPlaceholder()));
 
         request
-                .getFilters()
+                .filters()
                 .stream()
-                .filter(x -> conversationIDs.contains(x.getId()))
+                .filter(x -> conversationIDs.contains(x.id()))
                 .forEach(x -> {
-                    Conversation conversation = data.getConversation(x.getId());
+                    Conversation conversation = data.getConversation(x.id());
                     Timestamp time = new Timestamp(x
-                                                           .getLastMessageDate()
-                                                           .getTime());
+                            .lastMessageDate()
+                            .getTime());
                     Timestamp lastMessageReceived = new Timestamp(conversation
-                                                                          .getLastMessageDate()
-                                                                          .getTime());
-                    ConversationDataUpdate res = new ConversationDataUpdate(x.getId(),
-                                                                            conversation.getMessagesFromDate(time),
-                                                                            lastMessageReceived,
-                                                                            conversation.getLastMessage()
+                            .getLastMessageDate()
+                            .getTime());
+                    ConversationDataUpdate res = new ConversationDataUpdate(x.id(),
+                            conversation.getMessagesFromDate(time),
+                            lastMessageReceived,
+                            conversation.getLastMessage()
                     );
 
                     out.addResponse(res);
@@ -248,45 +217,45 @@ public class InputHandler {
     }
 
     private Object handleUpdateHistory(UpdateHistoryRequest request) {
-        User user = data.getUser(request.getSender());
+        User user = data.getUser(request.sender());
 
         if (!user
                 .getConversationIDs()
-                .contains(request.getId())) {
+                .contains(request.conversationID())) {
             return new Unauthorized();
         }
 
-        Conversation con = data.getConversation(request.getId());
+        Conversation con = data.getConversation(request.conversationID());
         if (con == null) {
             return new NoSuchConversation();
         }
 
         List<TextMessage> res = con.getMessagesFromDate(new Timestamp(request
-                                                                              .getDateLastMessageReceived()
-                                                                              .getTime()));
+                .dateLastMessageReceived()
+                .getTime()));
 
-        return new HistoryUpdates(res, request.getId());
+        return new HistoryUpdates(res, request.conversationID());
     }
 
     private Object handleRemoveParticipant(RemoveParticipantRequest request) {
-        Conversation con = data.getConversation(request.getId());
+        Conversation con = data.getConversation(request.id());
         if (con == null) {
             return new NoSuchConversation();
         }
 
         if (!con
                 .getParticipants()
-                .contains(request.getSender())) {
+                .contains(request.sender())) {
             return new Unauthorized();
         }
 
-        User user = data.getUser(request.getParticipant());
+        User user = data.getUser(request.participant());
         if (user == null) {
             return new NoSuchUser();
         }
 
-        user.removeConversationID(request.getId());
-        con.removeUser(request.getParticipant());
+        user.removeConversationID(request.id());
+        con.removeUser(request.participant());
         data.storeConversation(con);
         data.storeUser(user);
 
@@ -295,7 +264,7 @@ public class InputHandler {
 
     private Object handleCreateConversation(CreateConversationRequest request) {
         List<User> users = new ArrayList<>();
-        for (String username : request.getParticipants()) {
+        for (String username : request.participants()) {
             User u = data.getUser(username);
             if (u == null) {
                 return new NoSuchUser();
@@ -304,7 +273,7 @@ public class InputHandler {
             users.add(u);
         }
 
-        Conversation con = data.createConversation(request.getParticipants());
+        Conversation con = data.createConversation(request.participants());
 
         for (User user : users) {
             user.addConversationID(con.getId());
@@ -322,21 +291,21 @@ public class InputHandler {
     }
 
     private Object handleAddParticipant(AddParticipantRequest request) {
-        Conversation con = data.getConversation(request.getId());
+        Conversation con = data.getConversation(request.id());
         if (con == null) {
             return new NoSuchConversation();
         }
 
         List<String> conversationPariticipants = con.getParticipants();
-        if (!conversationPariticipants.contains(request.getSender())) {
+        if (!conversationPariticipants.contains(request.sender())) {
             return new Unauthorized();
         }
 
-        if (conversationPariticipants.contains(request.getParticipant())) {
+        if (conversationPariticipants.contains(request.participant())) {
             return new UserExists();
         }
 
-        User user = data.getUser(request.getParticipant());
+        User user = data.getUser(request.participant());
         if (user == null) {
             return new NoSuchUser();
         }
@@ -344,7 +313,7 @@ public class InputHandler {
         con.addUser(user.getUserName());
         user.addConversationID(con.getId());
 
-        if(data.isUserOnline(user.getUserName())) {
+        if (data.isUserOnline(user.getUserName())) {
             OutputAgent outputAgent = data.getOutputAgent(user.getUserName());
             outputAgent.addResponse(con);
         }
@@ -356,7 +325,7 @@ public class InputHandler {
     }
 
     private Object handleSession(Session arg) {
-        AES aes = new AES(arg.getKey());
+        AES aes = new AES(arg.key());
         inputAgent.setAes(aes);
         out.setAes(aes);
         inputAgent.setSessionCreated(true);
@@ -367,14 +336,14 @@ public class InputHandler {
         System.out.println("Delete Friend");
         return data
                 .getUser(inputAgent.getUsername())
-                .removeFriend(data, arg.getFriendUsername());
+                .removeFriend(data, arg.friendUsername());
     }
 
     private Object handleDeleteFriendRequest(DeleteFriendRequest arg) {
         System.out.println("DeleteFriendRequest");
         return data
                 .getUser(inputAgent.getUsername())
-                .removeFriendRequest(data, arg.getFriendUsername());
+                .removeFriendRequest(data, arg.friendUsername());
     }
 
     private Object handleTextMessage(TextMessage arg) {
@@ -397,14 +366,14 @@ public class InputHandler {
     private Object handleLogin(Login arg) {
         System.out.println("Login");
 
-        Response response = data.userLogin(arg.getUsername(), arg.getPassword(), out, inputAgent);
+        Response response = data.userLogin(arg.username(), arg.password(), out, inputAgent);
 
         if (!(response instanceof AllIsWell)) {
             return response;
         }
 
-        out.setUserName(arg.getUsername());
-        inputAgent.setUsername(arg.getUsername());
+        out.setUserName(arg.username());
+        inputAgent.setUsername(arg.username());
         List<String> friends = data
                 .getUser(inputAgent.getUsername())
                 .getFriends();
@@ -440,13 +409,13 @@ public class InputHandler {
         System.out.println("CreateUser");
 
         InviteCodeContainer inviteCodes = data.loadInviteCodes();
-        InviteCode inviteCode = arg.getInviteCode();
+        int inviteCode = arg.inviteCode();
         if (!inviteCodes.contains(inviteCode)) {
             return new IllegalInviteCode();
         }
 
         try {
-            Response response = data.createUser(arg.getUsername(), arg.getPassword());
+            Response response = data.createUser(arg.username(), arg.password());
             if (response instanceof AllIsWell) {
                 inviteCodes.remove(inviteCode);
                 data.storeInviteCodes(inviteCodes);
@@ -465,11 +434,11 @@ public class InputHandler {
             return response;
         }
 
-        if (data.isUserOnline(arg.getFriendUsername())) {
+        if (data.isUserOnline(arg.friendUsername())) {
             InputHandler inputHandler = data
-                    .getInputAgent(arg.getFriendUsername())
+                    .getInputAgent(arg.friendUsername())
                     .getInputHandler();
-            inputHandler.handleInput(new GetFriendListRequest(arg.getFriendUsername()));
+            inputHandler.handleInput(new GetFriendListRequest(arg.friendUsername()));
         }
         return getFriendList();
     }

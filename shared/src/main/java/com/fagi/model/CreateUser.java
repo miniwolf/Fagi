@@ -8,31 +8,5 @@ package com.fagi.model;
 
 import java.io.Serializable;
 
-public class CreateUser implements Serializable {
-    private final String username;
-    private final String password;
-    private InviteCode inviteCode;
-
-    public CreateUser(
-            String username,
-            String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public InviteCode getInviteCode() {
-        return inviteCode;
-    }
-
-    public void setInviteCode(InviteCode inviteCode) {
-        this.inviteCode = inviteCode;
-    }
+public record CreateUser(String username, String password, int inviteCode) implements Serializable {
 }

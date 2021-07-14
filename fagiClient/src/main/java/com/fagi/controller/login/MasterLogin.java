@@ -85,21 +85,14 @@ public class MasterLogin {
      */
     public void next() {
         switch (state) {
-            case LOGIN:
-                state = LoginState.USERNAME;
-                break;
-            case USERNAME:
-                state = LoginState.PASSWORD;
-                break;
-            case PASSWORD:
-                state = LoginState.INVITE_CODE;
-                break;
-            case INVITE_CODE:
-                state = LoginState.LOGIN;
-                break;
-            default:
+            case LOGIN -> state = LoginState.USERNAME;
+            case USERNAME -> state = LoginState.PASSWORD;
+            case PASSWORD -> state = LoginState.INVITE_CODE;
+            case INVITE_CODE -> state = LoginState.LOGIN;
+            default -> {
                 System.out.println(state + " is not known");
                 throw new UnsupportedOperationException();
+            }
         }
         showScreen(state);
     }

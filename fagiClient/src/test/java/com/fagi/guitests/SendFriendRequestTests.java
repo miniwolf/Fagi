@@ -56,7 +56,7 @@ public class SendFriendRequestTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         FxAssert.verifyThat("#InvitationConversation", NodeMatchers.isNotNull());
     }
@@ -67,7 +67,7 @@ public class SendFriendRequestTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()), 2);
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames), 2);
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         Assumptions.assumeTrue(robot
                                        .lookup("#InvitationConversation")
@@ -83,7 +83,7 @@ public class SendFriendRequestTests {
         var usernames = new ArrayList<String>() {{
             add(username);
         }};
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         Assumptions.assumeTrue(robot
@@ -101,7 +101,7 @@ public class SendFriendRequestTests {
         Assertions.assertEquals(argument
                                         .getAllValues()
                                         .get(2)
-                                        .getFriendUsername(), username);
+                                        .friendUsername(), username);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class SendFriendRequestTests {
             add(username);
         }};
         var message = "Do you want to build a snowman?";
-        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames, new ArrayList<>()));
+        addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
         WaitForFXEventsTestHelper.clickOn(robot, "#UniqueSearchContact");
         Assumptions.assumeTrue(robot
@@ -130,8 +130,8 @@ public class SendFriendRequestTests {
         Assertions.assertEquals(argument
                                         .getAllValues()
                                         .get(2)
-                                        .getMessage()
-                                        .getData(), message);
+                                        .message()
+                                        .data(), message);
     }
 
     @Start

@@ -309,17 +309,18 @@ public class MainScreen extends Pane {
                 .add("button-shape");
 
         switch (menu) {
-            case "Contacts":
+            case "Contacts" -> {
                 currentPaneContent = PaneContent.Contacts;
                 currentPane = contacts;
-                break;
-            case "Messages":
+            }
+            case "Messages" -> {
                 currentPaneContent = PaneContent.Messages;
                 currentPane = messages;
-                break;
-            default:
+            }
+            default -> {
                 System.err.println("Mainscreen, changeMenuStyle: " + menu);
                 throw new UnsupportedOperationException();
+            }
         }
 
         listContent.setContent(listContentMap.get(currentPaneContent));

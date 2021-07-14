@@ -8,25 +8,14 @@ import java.io.Serializable;
 /**
  * Created by costa on 11-12-2016.
  */
-public class UserLoggedIn
-        implements Serializable, InGoingMessages<UserLoggedIn>, Access<UserLoggedIn>, UserStatusUpdate {
-    private final String username;
-
-    public UserLoggedIn(String username) {
-        this.username = username;
-    }
-
+public record UserLoggedIn(String username) implements Serializable, InGoingMessages<UserLoggedIn>, Access<UserLoggedIn>, UserStatusUpdate {
     @Override
-    public Access<UserLoggedIn> getAccess() {
+    public Access<UserLoggedIn> access() {
         return this;
     }
 
     @Override
-    public UserLoggedIn getData() {
+    public UserLoggedIn data() {
         return this;
-    }
-
-    public String getUsername() {
-        return username;
     }
 }

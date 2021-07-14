@@ -148,7 +148,7 @@ public class ReceiveFriendRequestTests {
                 .sendObject(deleteFriendRequestCaptor.capture());
 
         var deleteFriendRequest = deleteFriendRequestCaptor.getValue();
-        Assertions.assertEquals(username, deleteFriendRequest.getFriendUsername());
+        Assertions.assertEquals(username, deleteFriendRequest.friendUsername());
     }
 
     @Test
@@ -204,7 +204,7 @@ public class ReceiveFriendRequestTests {
                 .sendObject(friendRequestCaptor.capture());
 
         var friendRequest = friendRequestCaptor.getValue();
-        Assertions.assertEquals(username, friendRequest.getFriendUsername());
+        Assertions.assertEquals(username, friendRequest.friendUsername());
     }
 
     @Start

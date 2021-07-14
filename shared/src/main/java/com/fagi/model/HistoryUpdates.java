@@ -10,33 +10,15 @@ import java.util.List;
 /**
  * Created by Marcus on 05-07-2016.
  */
-public class HistoryUpdates implements Serializable, InGoingMessages<HistoryUpdates>, Access<HistoryUpdates> {
-
-    private final List<TextMessage> updates;
-    private final long id;
-
-    public HistoryUpdates(
-            List<TextMessage> updates,
-            long id) {
-        this.updates = updates;
-        this.id = id;
-    }
-
-    public List<TextMessage> getUpdates() {
-        return updates;
-    }
-
-    public long getId() {
-        return id;
-    }
-
+public record HistoryUpdates(List<TextMessage> updates, long id)
+        implements Serializable, InGoingMessages<HistoryUpdates>, Access<HistoryUpdates> {
     @Override
-    public HistoryUpdates getData() {
+    public HistoryUpdates data() {
         return this;
     }
 
     @Override
-    public Access<HistoryUpdates> getAccess() {
+    public Access<HistoryUpdates> access() {
         return this;
     }
 }

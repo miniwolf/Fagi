@@ -17,12 +17,7 @@ import java.io.IOException;
  *
  * @author miniwolf
  */
-public class LoadFXML implements Action<Parent> {
-    private final String resourcePath;
-
-    public LoadFXML(String resourcePath) {
-        this.resourcePath = resourcePath;
-    }
+public record LoadFXML(String resourcePath) implements Action<Parent> {
 
     @Override
     public void execute(Parent parent) {

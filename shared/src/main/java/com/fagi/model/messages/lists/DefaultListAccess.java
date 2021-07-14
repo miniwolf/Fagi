@@ -9,18 +9,7 @@ import java.util.List;
 /**
  * @author miniwolf
  */
-public class DefaultListAccess<T> implements ListAccess<T> {
-    private List<T> data;
-
-    public DefaultListAccess(List<T> data) {
-        this.data = data;
-    }
-
-    @Override
-    public List<T> getData() {
-        return data;
-    }
-
+public record DefaultListAccess<T>(List<T> data) implements ListAccess<T> {
     @Override
     public void updateData(List<T> data) {
         this.data.clear();

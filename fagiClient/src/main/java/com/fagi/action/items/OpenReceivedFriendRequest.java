@@ -8,13 +8,7 @@ import com.fagi.model.FriendRequest;
 /**
  * Created by costa on 11-12-2016.
  */
-public class OpenReceivedFriendRequest implements Action<FriendRequest> {
-    private final MainScreen mainScreen;
-
-    public OpenReceivedFriendRequest(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
-
+public record OpenReceivedFriendRequest(MainScreen mainScreen) implements Action<FriendRequest> {
     @Override
     public void execute(FriendRequest request) {
         mainScreen.addElement(new ReceivedInvitationController(request, mainScreen));

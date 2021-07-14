@@ -30,13 +30,12 @@ public class ContentController extends VBox {
         getChildren().addAll(parents);
     }
 
-
     public void updateAndRedraw(List<FriendListItem> sortedFriendItems) {
         Platform.runLater(() -> {
             getChildren().clear();
             List<Pane> friendListPanes = sortedFriendItems
                     .stream()
-                    .map(FriendListItem::getPane)
+                    .map(FriendListItem::pane)
                     .collect(Collectors.toList());
             getChildren().addAll(friendListPanes);
         });

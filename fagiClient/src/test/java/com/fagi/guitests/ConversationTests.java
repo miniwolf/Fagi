@@ -225,7 +225,7 @@ public class ConversationTests {
         var message = textMessageCaptor
                 .getAllValues()
                 .get(3);
-        Assertions.assertEquals("Hello\n", message.getData(), "Message should be send to server");
+        Assertions.assertEquals("Hello\n", message.data(), "Message should be send to server");
     }
 
     @Test
@@ -319,7 +319,7 @@ public class ConversationTests {
                 .getAllValues()
                 .get(3);
         Assertions.assertAll(() -> Assertions.assertEquals("Hello\n",
-                                                           message.getData(),
+                                                           message.data(),
                                                            "Message should be send to server"
                              ),
                              () -> Assertions.assertEquals("MyUsername",

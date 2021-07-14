@@ -27,7 +27,7 @@ public class LoginSystem {
      * @param loginData contains the login object.
      */
     public Response login(Login loginData) {
-        if (isEmpty(loginData.getUsername()) || isEmpty(loginData.getPassword())) {
+        if (isEmpty(loginData.username()) || isEmpty(loginData.password())) {
             return new FieldEmpty();
         }
 

@@ -14,12 +14,7 @@ import java.util.Date;
 /**
  * Created by costa on 11-12-2016.
  */
-public class FriendRequestHandler implements Handler<FriendRequestList> {
-    private final MainScreen mainScreen;
-
-    public FriendRequestHandler(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
+public record FriendRequestHandler(MainScreen mainScreen) implements Handler<FriendRequestList> {
 
     @Override
     public void handle(FriendRequestList friendRequestList) {
@@ -28,13 +23,13 @@ public class FriendRequestHandler implements Handler<FriendRequestList> {
         ContentController contentController = new ContentController("/view/content/ContentList.fxml");
 
         for (FriendRequest request : friendRequestList
-                .getAccess()
-                .getData()) {
+                .access()
+                .data()) {
             InviteItemController messageItemController = new InviteItemController(mainScreen.getUsername(),
-                                                                                  new OpenReceivedFriendRequest(
-                                                                                          mainScreen),
-                                                                                  new Date(),
-                                                                                  request
+                    new OpenReceivedFriendRequest(
+                            mainScreen),
+                    new Date(),
+                    request
             );
             contentController.addToContentList(messageItemController);
         }

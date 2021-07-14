@@ -59,7 +59,7 @@ public class User implements Serializable {
     public Response requestFriend(
             Data data,
             FriendRequest arg) {
-        String otherUser = arg.getFriendUsername();
+        String otherUser = arg.friendUsername();
         if (friends.contains(otherUser)) {
             return new UserExists();
         }
@@ -71,7 +71,7 @@ public class User implements Serializable {
         if (incFriendReq
                 .stream()
                 .anyMatch(x -> x
-                        .getFriendUsername()
+                        .friendUsername()
                         .equals(userName))) {
             data.makeFriends(this, other);
             other.removeFriendRequest(data, userName);
@@ -86,7 +86,7 @@ public class User implements Serializable {
         Optional<FriendRequest> opt = incFriendReq
                 .stream()
                 .filter(x -> x
-                        .getMessage()
+                        .message()
                         .getMessageInfo()
                         .getSender()
                         .equals(userName))

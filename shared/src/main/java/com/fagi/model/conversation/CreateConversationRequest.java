@@ -6,14 +6,5 @@ import java.util.List;
 /**
  * Created by Marcus on 04-07-2016.
  */
-public class CreateConversationRequest implements Serializable {
-    private final List<String> participants;
-
-    public CreateConversationRequest(List<String> participants) {
-        this.participants = participants;
-    }
-
-    public List<String> getParticipants() {
-        return participants;
-    }
+public record CreateConversationRequest(List<String> participants) implements Serializable {
 }

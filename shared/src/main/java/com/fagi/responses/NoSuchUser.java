@@ -6,6 +6,9 @@ package com.fagi.responses;
  * Object for handling user not found.
  */
 
+import java.io.Serial;
+
 public class NoSuchUser implements Response {
+    @Serial
     private static final long serialVersionUID = 4L;
 }

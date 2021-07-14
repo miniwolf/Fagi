@@ -29,6 +29,6 @@ public class VoiceReceiver implements VoiceSystem {
     }
 
     public static void playAudio(VoiceMessage message) {
-        line_out.write(message.getData(), 0, blockSize);
+        line_out.write(message.data(), 0, blockSize);
     }
 }

@@ -5,39 +5,15 @@ import java.io.Serializable;
 /**
  * Created by costa on 11-12-2016.
  */
-public class Friend implements Serializable, Comparable<Friend> {
-    private final String username;
-    private boolean online;
-
-    public Friend(
-            String username,
-            boolean online) {
-        this.username = username;
-        this.online = online;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setOnline(boolean online) {
-        this.online = online;
-    }
-
-    public boolean isOnline() {
-        return online;
-    }
-
+public record Friend(String username, boolean online) implements Serializable, Comparable<Friend> {
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Friend)) {
+        if (!(o instanceof Friend friend)) {
             return false;
         }
-
-        Friend friend = (Friend) o;
 
         return username.equals(friend.username);
     }
@@ -49,9 +25,9 @@ public class Friend implements Serializable, Comparable<Friend> {
 
     @Override
     public int compareTo(Friend o) {
-        int res = Boolean.compare(o.isOnline(), online);
+        int res = Boolean.compare(o.online(), online);
         if (res == 0) {
-            return username.compareTo(o.getUsername());
+            return username.compareTo(o.username());
         }
         return res;
     }

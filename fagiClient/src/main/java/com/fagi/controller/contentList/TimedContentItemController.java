@@ -25,9 +25,7 @@ public abstract class TimedContentItemController<S> extends ContentItemControlle
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
-                    timerCallback();
-                });
+                Platform.runLater(() -> timerCallback());
             }
         }, 0, 1000);
     }

@@ -12,14 +12,5 @@ import java.io.Serializable;
  *
  * @author miniwolf
  */
-public class DeleteFriendRequest implements Serializable {
-    private final String friendUsername;
-
-    public DeleteFriendRequest(String friendUsername) {
-        this.friendUsername = friendUsername;
-    }
-
-    public String getFriendUsername() {
-        return friendUsername;
-    }
+public record DeleteFriendRequest(String friendUsername) implements Serializable {
 }

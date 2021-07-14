@@ -13,13 +13,7 @@ import java.util.Optional;
 /**
  * @author miniwolf
  */
-public class OpenConversationFromID implements Action<Long> {
-    private final MainScreen mainScreen;
-
-    public OpenConversationFromID(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
-
+public record OpenConversationFromID(MainScreen mainScreen) implements Action<Long> {
     @Override
     public void execute(Long id) {
         Optional<Conversation> optional = mainScreen

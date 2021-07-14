@@ -15,7 +15,7 @@ subprojects {
         mavenCentral()
     }
 
-    sourceCompatibility = 1.12
+    sourceCompatibility = 1.16
 }
 
 ext.testsResults = [] // Container for tests summaries

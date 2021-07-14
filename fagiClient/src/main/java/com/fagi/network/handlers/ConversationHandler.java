@@ -8,16 +8,13 @@ import com.fagi.utility.JsonFileOperations;
 /**
  * @author miniwolf
  */
-public class ConversationHandler implements Handler<Conversation> {
-    private final MainScreen mainScreen;
-
+public record ConversationHandler(MainScreen mainScreen) implements Handler<Conversation> {
     /**
      * Constructor.
      *
      * @param mainScreen handle to the mainscreen. Used for adding the conversation.
      */
-    public ConversationHandler(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
+    public ConversationHandler {
     }
 
     @Override

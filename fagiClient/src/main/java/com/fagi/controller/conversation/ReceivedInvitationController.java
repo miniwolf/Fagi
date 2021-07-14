@@ -35,7 +35,7 @@ public class ReceivedInvitationController extends BorderPane {
         new LoadFXML("/view/conversation/ReceivedInvitation.fxml").execute(this);
 
         char uChar = Character.toUpperCase(request
-                                                   .getMessage()
+                                                   .message()
                                                    .getMessageInfo()
                                                    .getSender()
                                                    .toCharArray()[0]);
@@ -48,24 +48,24 @@ public class ReceivedInvitationController extends BorderPane {
     @FXML
     private void initialize() {
         message.setText(request
-                                .getMessage()
-                                .getData());
+                                .message()
+                                .data());
         username.setText(request
-                                 .getMessage()
+                                 .message()
                                  .getMessageInfo()
                                  .getSender());
     }
 
     @FXML
     private void ignore() {
-        communication.sendObject(new DeleteFriendRequest(request.getFriendUsername()));
+        communication.sendObject(new DeleteFriendRequest(request.friendUsername()));
         close();
     }
 
     @FXML
     private void accept() {
         communication.sendObject(new FriendRequest(request
-                                                           .getMessage()
+                                                           .message()
                                                            .getMessageInfo()
                                                            .getSender(),
                                                    new TextMessage("Yosh plz!", mainScreen.getUsername(), -1)

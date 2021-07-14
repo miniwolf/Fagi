@@ -11,13 +11,7 @@ import com.fagi.controller.conversation.SendInvitationController;
 /**
  * @author miniwolf
  */
-public class OpenInvitation implements Action<String> {
-    private final MainScreen mainScreen;
-
-    public OpenInvitation(MainScreen mainScreen) {
-        this.mainScreen = mainScreen;
-    }
-
+public record OpenInvitation(MainScreen mainScreen) implements Action<String> {
     @Override
     public void execute(String username) {
         SendInvitationController invitationController = new SendInvitationController(mainScreen, username);

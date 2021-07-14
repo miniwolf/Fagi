@@ -41,7 +41,7 @@ public class AES implements EncryptionAlgorithm<AESKey> {
     public byte[] encrypt(byte[] msg) {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key.getKey(), ivspec);
+            cipher.init(Cipher.ENCRYPT_MODE, key.key(), ivspec);
             return cipher.doFinal(msg);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
@@ -54,7 +54,7 @@ public class AES implements EncryptionAlgorithm<AESKey> {
     public byte[] decrypt(byte[] cipherText) {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key.getKey(), ivspec);
+            cipher.init(Cipher.DECRYPT_MODE, key.key(), ivspec);
             return cipher.doFinal(cipherText);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException e) {
             e.printStackTrace();

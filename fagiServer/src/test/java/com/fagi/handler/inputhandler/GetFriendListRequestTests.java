@@ -110,7 +110,7 @@ class GetFriendListRequestTests {
         assumeTrue(getFriendListData(friendList).size() == 1);
         assertTrue(getFriendListData(friendList)
                            .get(0)
-                           .isOnline());
+                           .online());
     }
 
     @Test
@@ -128,13 +128,11 @@ class GetFriendListRequestTests {
         assumeTrue(getFriendListData(friendList).size() == 1);
         assertFalse(getFriendListData(friendList)
                             .get(0)
-                            .isOnline());
+                            .online());
     }
 
     private static List<Friend> getFriendListData(FriendList friendList) {
-        return friendList
-                .getAccess()
-                .getData();
+        return friendList.access().data();
     }
 
     private void setUserOnline(

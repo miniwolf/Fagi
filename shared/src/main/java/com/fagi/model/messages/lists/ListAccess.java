@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface ListAccess<T> extends Access<List<T>> {
     @Override
-    List<T> getData();
+    List<T> data();
 
     void updateData(List<T> data);
 }

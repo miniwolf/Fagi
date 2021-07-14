@@ -11,9 +11,9 @@ public class VoiceMessage implements InGoingMessages<byte[]>, VoiceAccess {
     /**
      * Contains voice data.
      */
-    private byte[] data;
+    private final byte[] data;
 
-    private MessageInfo messageInfo;
+    private final MessageInfo messageInfo;
 
     public VoiceMessage(
             byte[] data,
@@ -24,7 +24,7 @@ public class VoiceMessage implements InGoingMessages<byte[]>, VoiceAccess {
     }
 
     @Override
-    public byte[] getData() {
+    public byte[] data() {
         return data;
     }
 
@@ -33,7 +33,7 @@ public class VoiceMessage implements InGoingMessages<byte[]>, VoiceAccess {
     }
 
     @Override
-    public Access<byte[]> getAccess() {
+    public Access<byte[]> access() {
         return this;
     }
 }

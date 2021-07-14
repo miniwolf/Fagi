@@ -72,12 +72,12 @@ class LogoutServerTests {
                 .addMessage(argumentCaptor.capture());
 
         Assertions.assertAll(
-                () -> Assertions.assertTrue(argumentCaptor.getValue() instanceof UserLoggedOut),
+                () -> Assertions.assertNotNull(argumentCaptor.getValue()),
                 () -> Assertions.assertEquals(
                         user.getUserName(),
                         argumentCaptor
                                 .getValue()
-                                .getUsername()
+                                .username()
                 )
         );
     }
@@ -91,6 +91,6 @@ class LogoutServerTests {
                 .verify(outputAgent, times(1))
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertTrue(argumentCaptor.getValue() instanceof AllIsWell);
+        Assertions.assertNotNull(argumentCaptor.getValue());
     }
 }
