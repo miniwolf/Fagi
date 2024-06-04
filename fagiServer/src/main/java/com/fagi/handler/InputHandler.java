@@ -12,6 +12,7 @@ import com.fagi.model.Friend;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.HistoryUpdates;
+import com.fagi.model.InviteCode;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.model.Login;
 import com.fagi.model.Logout;
@@ -412,7 +413,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         System.out.println("CreateUser");
 
         InviteCodeContainer inviteCodes = data.loadInviteCodes();
-        int inviteCode = arg.inviteCode();
+        InviteCode inviteCode = arg.inviteCode();
         if (!inviteCodes.contains(inviteCode)) {
             return new IllegalInviteCode();
         }

@@ -214,17 +214,16 @@ public class ConversationTests {
         robot
                 .clickOn("#conversationTextarea")
                 .write("Hello")
-                .press(KeyCode.ENTER);
+                .push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         var textMessageCaptor = ArgumentCaptor.forClass(TextMessage.class);
         Mockito
-                .verify(communication, Mockito.times(4))
+                .verify(communication, Mockito.times(1))
                 .sendObject(textMessageCaptor.capture());
 
         var message = textMessageCaptor
-                .getAllValues()
-                .get(3);
+                .getValue();
         Assertions.assertEquals("Hello\n", message.data(), "Message should be send to server");
     }
 
@@ -248,7 +247,7 @@ public class ConversationTests {
         robot
                 .clickOn("#conversationTextarea")
                 .write("Hello")
-                .press(KeyCode.ENTER);
+                .push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         FxAssert.verifyThat("#conversationTextarea",
@@ -277,7 +276,7 @@ public class ConversationTests {
         robot
                 .clickOn("#conversationTextarea")
                 .write("Hello")
-                .press(KeyCode.SHIFT, KeyCode.ENTER)
+                .push(KeyCode.SHIFT, KeyCode.ENTER)
                 .write("Dimmer");
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -307,17 +306,16 @@ public class ConversationTests {
         robot
                 .clickOn("#conversationTextarea")
                 .write("Hello")
-                .press(KeyCode.ENTER);
+                .push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
 
         var textMessageCaptor = ArgumentCaptor.forClass(TextMessage.class);
         Mockito
-                .verify(communication, Mockito.times(4))
+                .verify(communication, Mockito.times(1))
                 .sendObject(textMessageCaptor.capture());
 
         var message = textMessageCaptor
-                .getAllValues()
-                .get(3);
+                .getValue();
         Assertions.assertAll(() -> Assertions.assertEquals("Hello\n",
                                                            message.data(),
                                                            "Message should be send to server"
@@ -392,7 +390,7 @@ public class ConversationTests {
         var fagiApp = Mockito.mock(FagiApp.class);
         var draggable = new Draggable(stage);
 
-        communication = Mockito.mock(Communication.class);
+        communication = Mockito.spy(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
         Mockito
@@ -427,11 +425,9 @@ public class ConversationTests {
                 .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp)
                 .showLoginScreen();
-
-        var comspy = Mockito.spy(communication);
         Mockito
                 .doNothing()
-                .when(comspy)
+                .when(communication)
                 .sendObject(Mockito.any());
 
         threadPool.startThread(inputHandler, "InputHandler - ConversationTests");

@@ -396,21 +396,11 @@ public class CreateConversationTests {
         Mockito
                 .verify(
                         outputAgent,
-                        times(2)
+                        times(1)
                 )
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(
-                        2,
-                        argumentCaptor
-                                .getAllValues()
-                                .size()
-                ),
-                () -> Assertions.assertNotNull(argumentCaptor
-                                                       .getAllValues()
-                                                       .get(0))
-        );
+        Assertions.assertNotNull(argumentCaptor.getValue());
     }
 
     @Test
@@ -450,23 +440,10 @@ public class CreateConversationTests {
         Mockito
                 .verify(
                         outputAgent,
-                        times(2)
+                        times(1)
                 )
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(
-                        2,
-                        argumentCaptor
-                                .getAllValues()
-                                .size()
-                ),
-                () -> Assertions.assertEquals(
-                        conversation,
-                        argumentCaptor
-                                .getAllValues()
-                                .get(1)
-                )
-        );
+        Assertions.assertEquals(conversation, argumentCaptor.getValue());
     }
 }

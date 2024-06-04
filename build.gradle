@@ -15,7 +15,7 @@ subprojects {
         mavenCentral()
     }
 
-    sourceCompatibility = 1.16
+    sourceCompatibility = 1.21
 }
 
 ext.testsResults = [] // Container for tests summaries
@@ -35,7 +35,7 @@ allprojects { project ->
             showStackTraces true
         }
 
-        ignoreFailures = true // Always try to run all tests for all modules
+        //ignoreFailures = true // Always try to run all tests for all modules
 
         afterSuite { desc, result ->
 

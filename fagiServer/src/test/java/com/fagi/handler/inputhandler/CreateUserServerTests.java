@@ -4,6 +4,7 @@ import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
 import com.fagi.model.CreateUser;
 import com.fagi.model.Data;
+import com.fagi.model.InviteCode;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
@@ -36,7 +37,7 @@ class CreateUserServerTests {
         ConversationHandler conversationHandler = new ConversationHandler(data);
 
         inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
-        inviteCodeContainer = new InviteCodeContainer(new ArrayList<>(Collections.singletonList(42)));
+        inviteCodeContainer = new InviteCodeContainer(new ArrayList<>(Collections.singletonList(new InviteCode("42"))));
         doReturn(inviteCodeContainer)
                 .when(data)
                 .loadInviteCodes();
@@ -44,7 +45,7 @@ class CreateUserServerTests {
 
     @Test
     void creatingUserWithIllegalInviteCode_ShouldResultInIllegalInviteCodeResponse() {
-        var createUser = new CreateUser("bob", "123", 23);
+        var createUser = new CreateUser("bob", "123", new InviteCode("23"));
 
         inputHandler.handleInput(createUser);
 
