@@ -10,3 +10,4 @@ users
 *.fagi
 .gradle/*
 */build/*
+buildSrc/.gradle
