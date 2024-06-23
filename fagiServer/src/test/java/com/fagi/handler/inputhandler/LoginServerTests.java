@@ -8,6 +8,7 @@ import com.fagi.model.User;
 import com.fagi.model.UserLoggedIn;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserOnline;
+import com.fagi.util.OutputAgentTestUtil;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
@@ -33,56 +34,91 @@ class LoginServerTests {
         inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.mock(OutputAgent.class);
         var conversationHandler = new ConversationHandler(data);
-        inputhandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
+        inputhandler = new InputHandler(
+                inputAgent,
+                outputAgent,
+                conversationHandler,
+                data
+        );
     }
 
     @Test
     void alreadyOnlineUserLoginAgain_ShouldGetUserOnlineResponse() {
-        var loginRequest = new Login("bob", "123");
+        var loginRequest = new Login(
+                "bob",
+                "123"
+        );
 
-        when(data.userLogin(Mockito.anyString(),
-                            Mockito.anyString(),
-                            Mockito.any(),
-                            Mockito.any()
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
         )).thenReturn(new UserOnline());
 
         inputhandler.handleInput(loginRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(UserOnline.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(UserOnline.class));
     }
 
     @Test
     void loginAttemptForNotOnlineUser_ShouldGetAllIsWellResponse() {
-        var loginRequest = new Login("bob", "123");
-        var user = new User("bob", "123");
+        var loginRequest = new Login(
+                "bob",
+                "123"
+        );
+        var user = new User(
+                "bob",
+                "123"
+        );
 
-        when(data.userLogin(Mockito.anyString(),
-                            Mockito.anyString(),
-                            Mockito.any(),
-                            Mockito.any()
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
         )).thenReturn(new AllIsWell());
         when(data.getUser(Mockito.anyString())).thenReturn(user);
         when(inputAgent.getUsername()).thenReturn("bob");
 
         inputhandler.handleInput(loginRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(AllIsWell.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(AllIsWell.class));
     }
 
     @Test
     void userThatLoginHasOneOnlineFriend_ShouldResultInFriendGettingNotification() {
-        var loginRequest = new Login("bob", "123");
-        var user = new User("bob", "123");
-        var friend = new User("friend", "123");
-        var otherFriend = new User("otherFriend", "123");
+        var loginRequest = new Login(
+                "bob",
+                "123"
+        );
+        var user = new User(
+                "bob",
+                "123"
+        );
+        var friend = new User(
+                "friend",
+                "123"
+        );
+        var otherFriend = new User(
+                "otherFriend",
+                "123"
+        );
         user.addFriend(friend);
         user.addFriend(otherFriend);
         var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
 
-        when(data.userLogin(Mockito.anyString(),
-                            Mockito.anyString(),
-                            Mockito.any(),
-                            Mockito.any()
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
         )).thenReturn(new AllIsWell());
         when(data.isUserOnline(friend.getUserName())).thenReturn(true);
         when(data.getUser(Mockito.anyString())).thenReturn(user);
@@ -93,15 +129,79 @@ class LoginServerTests {
         inputhandler.handleInput(loginRequest);
 
         var otherFriendArgumentCaptor = ArgumentCaptor.forClass(UserLoggedIn.class);
-        verify(otherFriendOutputAgent, times(0)).addMessage(otherFriendArgumentCaptor.capture());
+        verify(
+                otherFriendOutputAgent,
+                times(0)
+        ).addMessage(otherFriendArgumentCaptor.capture());
 
         var argumentCaptor = ArgumentCaptor.forClass(UserLoggedIn.class);
-        verify(outputAgent, times(1)).addMessage(argumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addMessage(argumentCaptor.capture());
 
-        Assertions.assertEquals(user.getUserName(),
-                                argumentCaptor
-                                        .getValue()
-                                        .username()
+        Assertions.assertEquals(
+                user.getUserName(),
+                argumentCaptor
+                        .getValue()
+                        .username()
+        );
+    }
+
+    @Test
+    void whenUserLogin_ShouldSetUserNameInInputAndOutputAgents() {
+        var loginRequest = new Login(
+                "bob",
+                "123"
+        );
+
+        var user = new User(
+                "bob",
+                "123"
+        );
+
+        when(data.userLogin(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(),
+                Mockito.any()
+        )).thenReturn(new AllIsWell());
+        when(data.getUser(loginRequest.username())).thenReturn(user);
+        when(inputAgent.getUsername()).thenReturn(user.getUserName());
+
+        inputhandler.handleInput(loginRequest);
+
+        var outputAgentArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito
+                .verify(
+                        outputAgent,
+                        times(1)
+                )
+                .setUserName(outputAgentArgumentCaptor.capture());
+        var outputAgentUserName = outputAgentArgumentCaptor.getValue();
+
+        var inputAgentArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito
+                .verify(
+                        inputAgent,
+                        times(1)
+                )
+                .setUsername(inputAgentArgumentCaptor.capture());
+        var inputAgentUserName = inputAgentArgumentCaptor.getValue();
+
+        Assertions.assertAll(
+                () -> OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                        outputAgent,
+                        AllIsWell.class
+                ),
+                () -> Assertions.assertEquals(
+                        loginRequest.username(),
+                        outputAgentUserName
+                ),
+                () -> Assertions.assertEquals(
+                        loginRequest.username(),
+                        inputAgentUserName
+                )
         );
     }
 }

@@ -7,6 +7,7 @@ import com.fagi.model.Logout;
 import com.fagi.model.User;
 import com.fagi.model.UserLoggedOut;
 import com.fagi.responses.AllIsWell;
+import com.fagi.util.OutputAgentTestUtil;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
@@ -17,16 +18,18 @@ import org.mockito.Mockito;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 class LogoutServerTests {
     private Data data;
     private InputHandler inputHandler;
     private OutputAgent outputAgent;
     private User user;
+    private InputAgent inputAgent;
 
     @BeforeEach
     void setup() {
-        InputAgent inputAgent = Mockito.mock(InputAgent.class);
+        inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.mock(OutputAgent.class);
         data = Mockito.mock(Data.class);
 
@@ -86,11 +89,54 @@ class LogoutServerTests {
     void handlingLogoutRequest_ShouldResultInAllIsWellResponse() {
         inputHandler.handleInput(new Logout());
 
-        var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+    }
+
+    @Test
+    void handlingLogoutRequest_ShouldResultInOutputWorkerNotRunning() {
+        inputHandler.handleInput(new Logout());
+
+        var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
         Mockito
                 .verify(outputAgent, times(1))
-                .addResponse(argumentCaptor.capture());
+                .setRunning(argumentCaptor.capture());
 
-        Assertions.assertNotNull(argumentCaptor.getValue());
+        Boolean isRunning = argumentCaptor.getValue();
+        Assertions.assertAll(
+                () -> Assertions.assertNotNull(isRunning),
+                () -> Assertions.assertFalse(isRunning)
+        );
+    }
+
+    @Test
+    void handlingLogoutRequest_ShouldResultInInputAgentNotRunning() {
+        inputHandler.handleInput(new Logout());
+
+        var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
+        Mockito
+                .verify(inputAgent, times(1))
+                .setRunning(argumentCaptor.capture());
+
+        Boolean isRunning = argumentCaptor.getValue();
+        Assertions.assertAll(
+                () -> Assertions.assertNotNull(isRunning),
+                () -> Assertions.assertFalse(isRunning)
+        );
+    }
+
+    @Test
+    void handlingLogoutRequest_ShouldResultInCallingLogoutOnDataWithUsername() {
+        var username = "bob";
+
+        when(inputAgent.getUsername()).thenReturn(username);
+
+        inputHandler.handleInput(new Logout());
+
+        var argumentCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito
+                .verify(data, times(1))
+                .userLogout(argumentCaptor.capture());
+
+        Assertions.assertEquals(username, argumentCaptor.getValue());
     }
 }

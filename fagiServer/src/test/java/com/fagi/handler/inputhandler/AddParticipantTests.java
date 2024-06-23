@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class AddParticipantTests {
     private static final String SENDER_USERNAME = "sender username";
-    private static final User NEW_PARTICIPANT = new User("new participant username", "some password");
+    private static User newParticipant;
     private static final long CONVERSATION_ID = 42;
     private InputHandler inputHandler;
     private AddParticipantRequest addParticipantRequest;
@@ -41,12 +41,23 @@ public class AddParticipantTests {
 
     @BeforeEach
     void setup() {
+        newParticipant = new User(
+                "new participant username",
+                "some password"
+        );
+
         var conversationHandler = new ConversationHandler(data);
 
-        inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
-        addParticipantRequest = new AddParticipantRequest(SENDER_USERNAME,
-                                                          NEW_PARTICIPANT.getUserName(),
-                                                          CONVERSATION_ID
+        inputHandler = new InputHandler(
+                inputAgent,
+                outputAgent,
+                conversationHandler,
+                data
+        );
+        addParticipantRequest = new AddParticipantRequest(
+                SENDER_USERNAME,
+                newParticipant.getUserName(),
+                CONVERSATION_ID
         );
     }
 
@@ -58,7 +69,10 @@ public class AddParticipantTests {
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(NoSuchConversation.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(NoSuchConversation.class));
     }
 
     @Test
@@ -67,99 +81,180 @@ public class AddParticipantTests {
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(Unauthorized.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(Unauthorized.class));
     }
 
     @Test
     void whenNewParticipantIsAlreadyInConversation_ShouldResultInUserExistsResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME, NEW_PARTICIPANT.getUserName());
+        ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME,
+                newParticipant.getUserName()
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(UserExists.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(UserExists.class));
     }
 
     @Test
     void whenNewParticipantUsernameIsNotAnExistingUser_ShouldResultInNoSuchUserResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
+        ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(NoSuchUser.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(NoSuchUser.class));
     }
 
     @Test
     void whenAddingUserToConversation_ShouldResultInNewParticipantBeingInConversationParticipantList() {
-        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, false);
+        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        UserMocks.mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                false
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
         assertTrue(conversation
                            .getParticipants()
-                           .contains(NEW_PARTICIPANT.getUserName()));
+                           .contains(newParticipant.getUserName()));
     }
 
     @Test
     void whenAddingUserToConversation_ShouldResultInConversationAddedToTheUsersConversationList() {
-        ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, false);
+        ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        UserMocks.mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                false
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        assertTrue(NEW_PARTICIPANT
+        assertTrue(newParticipant
                            .getConversationIDs()
                            .contains(CONVERSATION_ID));
     }
 
     @Test
     void whenAddingOnlineUserToConversation_ShouldResultInSendingConversationToThatUser() {
-        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        OutputAgent outputAgent = UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, true).orElseThrow(() -> new AssertionError(
-                "Mocking new participant should return the OutputAgent"));
+        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        OutputAgent outputAgent = UserMocks
+                .mockOnlineStatusOfUser(
+                        data,
+                        newParticipant,
+                        true
+                )
+                .orElseThrow(() -> new AssertionError("Mocking new participant should return the OutputAgent"));
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(conversation);
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(conversation);
     }
 
     @Test
     void whenAddingUserToConversation_ShouldResultInConversationBeingStored() {
-        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, false);
+        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        UserMocks.mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                false
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(data, times(1)).storeConversation(conversation);
+        verify(
+                data,
+                times(1)
+        ).storeConversation(conversation);
     }
 
     @Test
     void whenAddingUserToConversation_ShouldResultInNewParticipantBeingStored() {
-        ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, false);
+        ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        UserMocks.mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                false
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(data, times(1)).storeUser(NEW_PARTICIPANT);
+        verify(
+                data,
+                times(1)
+        ).storeUser(newParticipant);
     }
 
     @Test
     void whenAddingOfflineUserToConversation_ShouldResultInAllIsWellResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, false);
+        ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        UserMocks.mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                false
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(AllIsWell.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(AllIsWell.class));
     }
 
     @Test
     void whenAddingOnlineUserToConversation_ShouldResultInAllIsWellResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(data, SENDER_USERNAME);
-        UserMocks.mockOnlineStatusOfUser(data, NEW_PARTICIPANT, true);
+        ConversationMocks.mockConversationAndRegisterInData(
+                data,
+                SENDER_USERNAME
+        );
+        UserMocks.mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                true
+        );
 
         inputHandler.handleInput(addParticipantRequest);
 
-        verify(outputAgent, times(1)).addResponse(any(AllIsWell.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(AllIsWell.class));
     }
 }

@@ -42,7 +42,7 @@ public class RemoveParticipantTests {
     void removingParticipantFromNonExistentConversation_ShouldReturnNoSuchConversation() {
         var notExistingConversationId = 12;
         inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", notExistingConversationId));
-        OutputAgentTestUtil.verifyOutputAgentResponseClass(outputAgent, NoSuchConversation.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchConversation.class);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class RemoveParticipantTests {
         testConversation.addUser("Random person");
         when(data.getConversation(Mockito.anyLong())).thenReturn(testConversation);
         inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", 42));
-        OutputAgentTestUtil.verifyOutputAgentResponseClass(outputAgent, Unauthorized.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, Unauthorized.class);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class RemoveParticipantTests {
         testConversation.addUser("Participant");
         when(data.getConversation(Mockito.anyLong())).thenReturn(testConversation);
         inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", 42));
-        OutputAgentTestUtil.verifyOutputAgentResponseClass(outputAgent, NoSuchUser.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchUser.class);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class RemoveParticipantTests {
                 ),
                 () -> Assertions.assertEquals(
                         41,
-                        storedUser.getConversationIDs().get(0)
+                        storedUser.getConversationIDs().getFirst()
                 ),
                 () -> Assertions.assertEquals(
                         1,
@@ -94,10 +94,10 @@ public class RemoveParticipantTests {
                 ),
                 () -> Assertions.assertEquals(
                         "Sender",
-                        storedConversation.getParticipants().get(0)
+                        storedConversation.getParticipants().getFirst()
                 )
         );
 
-        OutputAgentTestUtil.verifyOutputAgentResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
     }
 }
