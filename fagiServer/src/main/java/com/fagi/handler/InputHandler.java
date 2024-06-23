@@ -219,6 +219,10 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
     private Object handleUpdateHistory(UpdateHistoryRequest request) {
         User user = data.getUser(request.sender());
 
+        if (Objects.isNull(user)) {
+            return new NoSuchUser();
+        }
+
         if (!user
                 .getConversationIDs()
                 .contains(request.conversationID())) {
