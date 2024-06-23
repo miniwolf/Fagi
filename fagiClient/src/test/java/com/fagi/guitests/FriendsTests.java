@@ -4,6 +4,7 @@ import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.helpers.WaitForFXEventsTestHelper;
+import com.fagi.helpers.matchers.HasStyleClassMatcher;
 import com.fagi.main.FagiApp;
 import com.fagi.model.Friend;
 import com.fagi.model.messages.lists.DefaultListAccess;
@@ -19,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsIterableWithSize;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +32,6 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxService;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.StyleableMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class FriendsTests {
 
         FxAssert.verifyThat("#usernameLabel", LabeledMatchers.hasText("Friend"));
 
-        FxAssert.verifyThat("#status", StyleableMatchers.doesntContainsClass("pD"));
+        FxAssert.verifyThat("#status", Matchers.not(HasStyleClassMatcher.hasStyleClass("pD")));
     }
 
     @Test

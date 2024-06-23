@@ -74,31 +74,31 @@ public class SearchUserTests {
 
         var argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
         Mockito
-                .verify(communication, Mockito.times(4))
+                .verify(communication, Mockito.times(2))
                 .sendObject(argument.capture());
 
         Assertions.assertAll(() -> Assertions.assertEquals(
                 "a",
                 argument
                         .getAllValues()
-                        .get(2)
+                        .getFirst()
                         .searchString()
                              ),
                              () -> Assertions.assertEquals(
                                      "ab",
                                      argument
                                              .getAllValues()
-                                             .get(3)
+                                             .get(1)
                                              .searchString()
                              ),
                              () -> Assertions.assertNotEquals(
                                      argument
                                              .getAllValues()
-                                             .get(2)
+                                             .getFirst()
                                              .searchString(),
                                      argument
                                              .getAllValues()
-                                             .get(3)
+                                             .get(1)
                                              .searchString()
                              )
         );
@@ -107,35 +107,35 @@ public class SearchUserTests {
     @Test
     public void WhenDeletingACharacterInSearchBox_ANewSearchRequestIsGenerated(FxRobot robot) {
         WaitForFXEventsTestHelper.clickOnAndWrite(robot, "#searchBox", "ab");
-        robot.press(KeyCode.BACK_SPACE);
+        robot.push(KeyCode.BACK_SPACE);
 
         var argument = ArgumentCaptor.forClass(SearchUsersRequest.class);
         Mockito
-                .verify(communication, Mockito.times(5))
+                .verify(communication, Mockito.times(3))
                 .sendObject(argument.capture());
 
         Assertions.assertAll(() -> Assertions.assertEquals(
                 "ab",
                 argument
                         .getAllValues()
-                        .get(3)
+                        .get(1)
                         .searchString()
                              ),
                              () -> Assertions.assertEquals(
                                      "a",
                                      argument
                                              .getAllValues()
-                                             .get(4)
+                                             .get(2)
                                              .searchString()
                              ),
                              () -> Assertions.assertNotEquals(
                                      argument
                                              .getAllValues()
-                                             .get(3)
+                                             .get(1)
                                              .searchString(),
                                      argument
                                              .getAllValues()
-                                             .get(4)
+                                             .get(2)
                                              .searchString()
                              )
         );
@@ -171,7 +171,7 @@ public class SearchUserTests {
 
         robot
                 .clickOn(field)
-                .press(KeyCode.BACK_SPACE);
+                .push(KeyCode.BACK_SPACE);
 
         FxAssert.verifyThatIter("#UniqueSearchContact", IsIterableWithSize.iterableWithSize(0));
     }
@@ -197,7 +197,7 @@ public class SearchUserTests {
         }};
         addIngoingMessageToInputHandler(inputHandler, new SearchUsersResult(usernames));
 
-        robot.press(KeyCode.BACK_SPACE);
+        robot.push(KeyCode.BACK_SPACE);
 
         FxAssert.verifyThatIter("#UniqueSearchContact", IsIterableWithSize.iterableWithSize(2));
     }
@@ -373,7 +373,7 @@ public class SearchUserTests {
         var fagiApp = Mockito.mock(FagiApp.class);
         var draggable = new Draggable(stage);
 
-        communication = Mockito.mock(Communication.class);
+        communication = Mockito.spy(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
         Mockito
@@ -400,11 +400,9 @@ public class SearchUserTests {
                 .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp)
                 .showLoginScreen();
-
-        var comspy = Mockito.spy(communication);
         Mockito
                 .doNothing()
-                .when(comspy)
+                .when(communication)
                 .sendObject(Mockito.any());
 
         var inputThread = new Thread(inputHandler);

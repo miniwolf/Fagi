@@ -95,12 +95,11 @@ public class SendFriendRequestTests {
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito
-                .verify(communication, Mockito.times(3))
+                .verify(communication, Mockito.times(1))
                 .sendObject(argument.capture());
 
         Assertions.assertEquals(argument
-                                        .getAllValues()
-                                        .get(2)
+                                        .getValue()
                                         .friendUsername(), username);
     }
 
@@ -124,12 +123,11 @@ public class SendFriendRequestTests {
 
         var argument = ArgumentCaptor.forClass(FriendRequest.class);
         Mockito
-                .verify(communication, Mockito.times(3))
+                .verify(communication, Mockito.times(1))
                 .sendObject(argument.capture());
 
         Assertions.assertEquals(argument
-                                        .getAllValues()
-                                        .get(2)
+                                        .getValue()
                                         .message()
                                         .data(), message);
     }
@@ -139,7 +137,7 @@ public class SendFriendRequestTests {
         var fagiApp = Mockito.mock(FagiApp.class);
         var draggable = new Draggable(stage);
 
-        communication = Mockito.mock(Communication.class);
+        communication = Mockito.spy(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
         Mockito
@@ -166,11 +164,9 @@ public class SendFriendRequestTests {
                 .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp)
                 .showLoginScreen();
-
-        var comspy = Mockito.spy(communication);
         Mockito
                 .doNothing()
-                .when(comspy)
+                .when(communication)
                 .sendObject(Mockito.any());
 
         var inputThread = new Thread(inputHandler);

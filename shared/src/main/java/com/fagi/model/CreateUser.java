@@ -8,5 +8,5 @@ package com.fagi.model;
 
 import java.io.Serializable;
 
-public record CreateUser(String username, String password, int inviteCode) implements Serializable {
+public record CreateUser(String username, String password, InviteCode inviteCode) implements Serializable {
 }

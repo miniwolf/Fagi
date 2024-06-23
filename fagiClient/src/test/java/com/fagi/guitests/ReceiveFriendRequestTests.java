@@ -212,7 +212,7 @@ public class ReceiveFriendRequestTests {
         var fagiApp = Mockito.mock(FagiApp.class);
         var draggable = new Draggable(stage);
 
-        communication = Mockito.mock(Communication.class);
+        communication = Mockito.spy(Communication.class);
         inputHandler = Mockito.mock(InputHandler.class);
 
         Mockito
@@ -239,11 +239,9 @@ public class ReceiveFriendRequestTests {
                 .doAnswer(invocationOnMock -> new MasterLogin(fagiApp, communication, stage, draggable))
                 .when(fagiApp)
                 .showLoginScreen();
-
-        var comspy = Mockito.spy(communication);
         Mockito
                 .doNothing()
-                .when(comspy)
+                .when(communication)
                 .sendObject(Mockito.any());
 
         var inputThread = new Thread(inputHandler);

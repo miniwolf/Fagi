@@ -12,6 +12,7 @@ import com.fagi.model.Friend;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.HistoryUpdates;
+import com.fagi.model.InviteCode;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.model.Login;
 import com.fagi.model.Logout;
@@ -105,8 +106,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
             out.addResponse(handleUserNameAvailableRequest(request));
         } else {
             System.out.println("Unknown handle: " + input
-                    .getClass()
-                    .toString());
+                    .getClass());
         }
     }
 
@@ -144,7 +144,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
                 .filter(username -> username.startsWith(request.searchString()))
                 .filter(username -> !username.equals(request.sender()))
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
 
         List<String> friends = usernames
                 .stream()
@@ -152,7 +152,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
                         .getFriends()
                         .contains(username))
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
 
         List<String> nonFriends = usernames
                 .stream()
@@ -249,10 +249,14 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
             return new Unauthorized();
         }
 
+        // TODO: Should we have permissions in conversations?
+
         User user = data.getUser(request.participant());
         if (user == null) {
             return new NoSuchUser();
         }
+
+        // TODO: We should verify that the participant is in the conversation
 
         user.removeConversationID(request.id());
         con.removeUser(request.participant());
@@ -409,7 +413,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         System.out.println("CreateUser");
 
         InviteCodeContainer inviteCodes = data.loadInviteCodes();
-        int inviteCode = arg.inviteCode();
+        InviteCode inviteCode = arg.inviteCode();
         if (!inviteCodes.contains(inviteCode)) {
             return new IllegalInviteCode();
         }
