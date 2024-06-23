@@ -51,6 +51,7 @@ public class InputWorker extends Worker implements InputAgent {
                 if (input instanceof byte[]) {
                     input = decryptAndConvertToObject((byte[]) input);
                 }
+                // TODO: We should either verify that the contained sender property matches the user in our session or we should not look at the sender property at all and trust the session
                 inputHandler.handleInput(input);
             } catch (EOFException | SocketException eof) {
                 running = false;

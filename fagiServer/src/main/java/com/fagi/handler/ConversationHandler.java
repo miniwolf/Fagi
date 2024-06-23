@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ConversationHandler implements Runnable {
     private final Data data;
-    private LinkedBlockingQueue<TextMessage> queue = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<TextMessage> queue = new LinkedBlockingQueue<>();
 
     public ConversationHandler(Data data) {
         this.data = data;
@@ -49,5 +49,9 @@ public class ConversationHandler implements Runnable {
 
     public void addMessage(TextMessage message) {
         queue.add(message);
+    }
+
+    public int queueSize() {
+        return queue.size();
     }
 }

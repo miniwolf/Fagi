@@ -9,6 +9,7 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchConversation;
 import com.fagi.responses.Unauthorized;
+import com.fagi.util.OutputAgentTestUtil;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
@@ -29,20 +30,34 @@ class TextMessageTests {
     private InputHandler inputHandler;
     private Conversation conversation;
     private TextMessage message;
+    private ConversationHandler conversationHandler;
 
     @BeforeEach
     void setup() {
-        message = new TextMessage("Hullo", "sender", 42);
+        message = new TextMessage(
+                "Hullo",
+                "sender",
+                42
+        );
 
         data = Mockito.mock(Data.class);
         InputAgent inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.spy(OutputAgent.class);
-        ConversationHandler conversationHandler = new ConversationHandler(data);
-        inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
+        conversationHandler = new ConversationHandler(data);
+        inputHandler = new InputHandler(
+                inputAgent,
+                outputAgent,
+                conversationHandler,
+                data
+        );
 
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
 
-        conversation = new Conversation(42, "Some conversation", ConversationType.Single);
+        conversation = new Conversation(
+                42,
+                "Some conversation",
+                ConversationType.Single
+        );
         conversation.addUser("sender");
         conversation.addUser("receiver");
     }
@@ -71,25 +86,25 @@ class TextMessageTests {
     void dataNotContainingConversationWithId_ShouldResultInNoSuchConversation() {
         inputHandler.handleInput(message);
 
-        var argumentCaptor = ArgumentCaptor.forClass(NoSuchConversation.class);
-        Mockito
-                .verify(outputAgent, times(1))
-                .addResponse(argumentCaptor.capture());
-
-        Assertions.assertNotNull(argumentCaptor.getValue());
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                NoSuchConversation.class
+        );
     }
 
     @Test
     void sendingAMessageToConversationThatYouAreNotAParticipantOf_ShouldResultInUnauthorized() {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
-        inputHandler.handleInput(new TextMessage("Hello", "Not a participant", 42));
+        inputHandler.handleInput(new TextMessage(
+                "Hello",
+                "Not a participant",
+                42
+        ));
 
-        var argumentCaptor = ArgumentCaptor.forClass(Unauthorized.class);
-        Mockito
-                .verify(outputAgent, times(1))
-                .addResponse(argumentCaptor.capture());
-
-        Assertions.assertNotNull(argumentCaptor.getValue());
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                Unauthorized.class
+        );
     }
 
     @Test
@@ -98,11 +113,21 @@ class TextMessageTests {
 
         inputHandler.handleInput(message);
 
-        var argumentCaptor = ArgumentCaptor.forClass(AllIsWell.class);
-        Mockito
-                .verify(outputAgent, times(1))
-                .addResponse(argumentCaptor.capture());
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
+    }
 
-        Assertions.assertNotNull(argumentCaptor.getValue());
+    @Test
+    void whenSendingAMessageToConversation_ShouldResultInConversationHandlerQueueSizeIncrease() {
+        when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
+
+        inputHandler.handleInput(message);
+
+        Assertions.assertEquals(
+                1,
+                conversationHandler.queueSize()
+        );
     }
 }
