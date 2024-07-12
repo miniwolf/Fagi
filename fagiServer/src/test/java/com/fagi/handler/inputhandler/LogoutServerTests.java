@@ -93,4 +93,16 @@ class LogoutServerTests {
 
         Assertions.assertNotNull(argumentCaptor.getValue());
     }
+
+    @Test
+    void handlingLogoutRequest_ShouldResultInOutputWorkerNotRunning() {
+        inputHandler.handleInput(new Logout());
+
+        var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
+        Mockito
+                .verify(outputAgent, times(1))
+                .setRunning(argumentCaptor.capture());
+
+        Assertions.assertNotNull(argumentCaptor.getValue());
+    }
 }
