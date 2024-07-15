@@ -5,6 +5,8 @@ import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.DeleteFriendRequest;
 import com.fagi.model.User;
+import com.fagi.responses.AllIsWell;
+import com.fagi.util.OutputAgentTestUtil;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +27,14 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class DeleteFriendRequestTests {
     private InputHandler inputHandler;
-    @Mock private OutputAgent outputAgent;
-    @Mock private InputAgent inputAgent;
-    @Mock private Data data;
-    @Mock private User user;
+    @Mock
+    private OutputAgent outputAgent;
+    @Mock
+    private InputAgent inputAgent;
+    @Mock
+    private Data data;
+    @Mock
+    private User user;
 
     @BeforeEach
     void setup() {
@@ -38,7 +44,7 @@ public class DeleteFriendRequestTests {
     }
 
     @Test
-    void whenRemovingFriend_ShouldRemoveFromCorrectUser() {
+    void whenRemovingFriendRequest_ShouldRemoveFromCorrectUser() {
         var otherUser = Mockito.mock(User.class);
 
         String username = "username";
@@ -59,5 +65,24 @@ public class DeleteFriendRequestTests {
 
         verify(otherUser, never()).removeFriendRequest(eq(data), anyString());
         verify(user, times(1)).removeFriendRequest(data, otherUsername);
+    }
+
+    @Test
+    void whenSuccessfulRemovingFriendRequest_ShouldGetAllIsWellResponse() {
+        String username = "username";
+        String otherUsername = "otherUsername";
+        doReturn(user)
+                .when(data)
+                .getUser(username);
+        doReturn(new AllIsWell())
+                .when(user)
+                .removeFriendRequest(data, otherUsername);
+        doReturn(username)
+                .when(inputAgent)
+                .getUsername();
+
+        inputHandler.handleInput(new DeleteFriendRequest(otherUsername));
+
+        OutputAgentTestUtil.verifyOutputAgentResponseClass(outputAgent, AllIsWell.class);
     }
 }

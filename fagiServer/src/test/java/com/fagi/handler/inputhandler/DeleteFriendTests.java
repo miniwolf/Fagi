@@ -5,6 +5,8 @@ import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.DeleteFriend;
 import com.fagi.model.User;
+import com.fagi.responses.AllIsWell;
+import com.fagi.util.OutputAgentTestUtil;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteFriendTests {
@@ -59,5 +57,24 @@ public class DeleteFriendTests {
 
         verify(otherUser, never()).removeFriend(eq(data), anyString());
         verify(user, times(1)).removeFriend(data, otherUsername);
+    }
+
+    @Test
+    void whenSuccessfulRemovingFriend_ShouldGetAllIsWellResponse() {
+        String username = "username";
+        String otherUsername = "otherUsername";
+        doReturn(user)
+                .when(data)
+                .getUser(username);
+        doReturn(new AllIsWell())
+                .when(user)
+                .removeFriend(data, otherUsername);
+        doReturn(username)
+                .when(inputAgent)
+                .getUsername();
+
+        inputHandler.handleInput(new DeleteFriend(otherUsername));
+
+        OutputAgentTestUtil.verifyOutputAgentResponseClass(outputAgent, AllIsWell.class);
     }
 }
