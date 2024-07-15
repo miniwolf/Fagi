@@ -86,7 +86,7 @@ public class RemoveParticipantTests {
                 ),
                 () -> Assertions.assertEquals(
                         41,
-                        storedUser.getConversationIDs().get(0)
+                        storedUser.getConversationIDs().getFirst()
                 ),
                 () -> Assertions.assertEquals(
                         1,
@@ -94,7 +94,7 @@ public class RemoveParticipantTests {
                 ),
                 () -> Assertions.assertEquals(
                         "Sender",
-                        storedConversation.getParticipants().get(0)
+                        storedConversation.getParticipants().getFirst()
                 )
         );
 

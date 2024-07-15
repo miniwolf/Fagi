@@ -25,6 +25,4 @@ public class OutputAgentTestUtil {
 
         Assertions.assertTrue(responseClass.isInstance(argumentCaptor.getValue()));
     }
-
-
 }
