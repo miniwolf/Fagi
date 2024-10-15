@@ -11,12 +11,14 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.apache.commons.text.RandomStringGenerator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import static org.mockito.Mockito.times;
@@ -52,8 +54,8 @@ public class GetConversationsRequestTests {
                 "fisk",
                 "1234"
         );
-        var con1 = createConversationForUser(user, 1);
-        var con2 = createConversationForUser(user, 1);
+        var con1 = createConversationForUser( 1, user);
+        var con2 = createConversationForUser(1, user);
 
         when(data.getUser("fisk")).thenReturn(user);
 
@@ -70,10 +72,24 @@ public class GetConversationsRequestTests {
                         times(2)
                 )
                 .addResponse(argumentCaptor.capture());
-        // TODO - Continue testing
+
+        List<Conversation> conversations = argumentCaptor.getAllValues();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(2, conversations.size()),
+                () -> Assertions.assertEquals(ConversationType.Placeholder, conversations.getFirst().getType()),
+                () -> Assertions.assertEquals(ConversationType.Placeholder, conversations.getLast().getType()),
+                () -> Assertions.assertEquals(1, conversations.getFirst().getParticipants().size()),
+                () -> Assertions.assertEquals(user.getUserName(), conversations.getFirst().getParticipants().getFirst()),
+                () -> Assertions.assertEquals(user.getUserName(), conversations.getLast().getParticipants().getFirst()),
+                () -> Assertions.assertEquals(con1.getLastMessage(), conversations.getFirst().getLastMessage()),
+                () -> Assertions.assertEquals(con2.getLastMessage(), conversations.getLast().getLastMessage()),
+                () -> Assertions.assertEquals(con1.getLastMessageDate(), conversations.getFirst().getLastMessageDate()),
+                () -> Assertions.assertEquals(con2.getLastMessageDate(), conversations.getLast().getLastMessageDate())
+        );
     }
 
-    private Conversation createConversationForUser(User user, int numberOfMessages) {
+    private Conversation createConversationForUser(int numberOfMessages, User... participants) {
         var con = new Conversation(
                 random.nextInt(100),
                 randomString.generate(10),
@@ -82,7 +98,10 @@ public class GetConversationsRequestTests {
         for(var i = 0; i < numberOfMessages; i++) {
             con.addMessage(new TextMessage(randomString.generate(10), randomString.generate(10), con.getId()));
         }
-        user.addConversationID(con.getId());
+        for (User participant : participants) {
+            con.addUser(participant.getUserName());
+            participant.addConversationID(con.getId());
+        }
         when(data.getConversation(con.getId())).thenReturn(con);
         return con;
     }
