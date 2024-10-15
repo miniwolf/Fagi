@@ -49,8 +49,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public record InputHandler(InputAgent inputAgent, OutputAgent out,
-                           ConversationHandler conversationHandler, Data data) {
+public record InputHandler(InputAgent inputAgent, OutputAgent out, ConversationHandler conversationHandler, Data data) {
     public void handleInput(Object input) {
         if (input instanceof TextMessage arg) {
             MessageInfo messageInfo = arg.getMessageInfo();
@@ -105,8 +104,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         } else if (input instanceof UserNameAvailableRequest request) {
             out.addResponse(handleUserNameAvailableRequest(request));
         } else {
-            System.out.println("Unknown handle: " + input
-                    .getClass());
+            System.out.println("Unknown handle: " + input.getClass());
         }
     }
 
@@ -120,7 +118,10 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         List<Friend> friends = new ArrayList<>();
 
         for (String friendUsername : friendUsernames) {
-            friends.add(new Friend(friendUsername, data.isUserOnline(friendUsername)));
+            friends.add(new Friend(
+                    friendUsername,
+                    data.isUserOnline(friendUsername)
+            ));
         }
 
         return new FriendList(new DefaultListAccess<>(friends));
@@ -172,7 +173,8 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         Conversation conversation = data.getConversation(request.id());
         Date lastMessageDate = conversation.getLastMessageDate();
         Timestamp lastMessageReceived = new Timestamp(lastMessageDate.getTime());
-        return new ConversationDataUpdate(request.id(),
+        return new ConversationDataUpdate(
+                request.id(),
                 conversation.getMessages(),
                 lastMessageReceived,
                 conversation.getLastMessage()
@@ -180,10 +182,12 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
     }
 
     private void handleGetConversations(GetConversationsRequest request) {
+        // Find all conversations user is participating in
         List<Long> conversationIDs = data
                 .getUser(request.userName())
                 .getConversationIDs();
 
+        // Find conversations not in request and return them as placeholders
         conversationIDs
                 .stream()
                 .filter(x -> request
@@ -191,9 +195,12 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
                         .stream()
                         .noneMatch(y -> y.id() == x))
                 .forEach(x -> out.addResponse(data
-                        .getConversation(x)
-                        .getPlaceholder()));
+                                                      .getConversation(x)
+                                                      .getPlaceholder()));
 
+        // Find conversations from the request
+        // For each conversation we get the messages since the last received message in request
+        // For each conversation we find the last message and when it was sent
         request
                 .filters()
                 .stream()
@@ -201,12 +208,13 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
                 .forEach(x -> {
                     Conversation conversation = data.getConversation(x.id());
                     Timestamp time = new Timestamp(x
-                            .lastMessageDate()
-                            .getTime());
+                                                           .lastMessageDate()
+                                                           .getTime());
                     Timestamp lastMessageReceived = new Timestamp(conversation
-                            .getLastMessageDate()
-                            .getTime());
-                    ConversationDataUpdate res = new ConversationDataUpdate(x.id(),
+                                                                          .getLastMessageDate()
+                                                                          .getTime());
+                    ConversationDataUpdate res = new ConversationDataUpdate(
+                            x.id(),
                             conversation.getMessagesFromDate(time),
                             lastMessageReceived,
                             conversation.getLastMessage()
@@ -235,10 +243,13 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         }
 
         List<TextMessage> res = con.getMessagesFromDate(new Timestamp(request
-                .dateLastMessageReceived()
-                .getTime()));
+                                                                              .dateLastMessageReceived()
+                                                                              .getTime()));
 
-        return new HistoryUpdates(res, request.conversationID());
+        return new HistoryUpdates(
+                res,
+                request.conversationID()
+        );
     }
 
     private Object handleRemoveParticipant(RemoveParticipantRequest request) {
@@ -286,7 +297,10 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         for (User user : users) {
             user.addConversationID(con.getId());
             data.storeUser(user);
-            boolean notCurrentUser = !Objects.equals(user.getUserName(), inputAgent.getUsername());
+            boolean notCurrentUser = !Objects.equals(
+                    user.getUserName(),
+                    inputAgent.getUsername()
+            );
             if (notCurrentUser && data.isUserOnline(user.getUserName())) {
                 OutputAgent outputAgent = data.getOutputAgent(user.getUserName());
                 outputAgent.addResponse(con);
@@ -344,14 +358,20 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         System.out.println("Delete Friend");
         return data
                 .getUser(inputAgent.getUsername())
-                .removeFriend(data, arg.friendUsername());
+                .removeFriend(
+                        data,
+                        arg.friendUsername()
+                );
     }
 
     private Object handleDeleteFriendRequest(DeleteFriendRequest arg) {
         System.out.println("DeleteFriendRequest");
         return data
                 .getUser(inputAgent.getUsername())
-                .removeFriendRequest(data, arg.friendUsername());
+                .removeFriendRequest(
+                        data,
+                        arg.friendUsername()
+                );
     }
 
     private Object handleTextMessage(TextMessage arg) {
@@ -374,7 +394,12 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
     private Object handleLogin(Login arg) {
         System.out.println("Login");
 
-        Response response = data.userLogin(arg.username(), arg.password(), out, inputAgent);
+        Response response = data.userLogin(
+                arg.username(),
+                arg.password(),
+                out,
+                inputAgent
+        );
 
         if (!(response instanceof AllIsWell)) {
             return response;
@@ -423,7 +448,10 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
         }
 
         try {
-            Response response = data.createUser(arg.username(), arg.password());
+            Response response = data.createUser(
+                    arg.username(),
+                    arg.password()
+            );
             if (response instanceof AllIsWell) {
                 inviteCodes.remove(inviteCode);
                 data.storeInviteCodes(inviteCodes);
@@ -437,7 +465,10 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out,
     private Object handleFriendRequest(FriendRequest arg) {
         System.out.println("FriendRequest");
         User user = data.getUser(inputAgent.getUsername());
-        Response response = user.requestFriend(data, arg);
+        Response response = user.requestFriend(
+                data,
+                arg
+        );
         if (!(response instanceof AllIsWell)) {
             return response;
         }

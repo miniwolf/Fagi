@@ -13,7 +13,9 @@ public class OutputAgentTestUtil {
         // Disallows newing class
     }
 
-    public static <T extends Response> void verifyOutputAgentResponseClass(OutputAgent outputAgent, Class<T> responseClass) {
+    public static <T extends Response> void verifyOutputAgentResponseClass(
+            OutputAgent outputAgent,
+            Class<T> responseClass) {
         var argumentCaptor = ArgumentCaptor.forClass(Response.class);
 
         Mockito
