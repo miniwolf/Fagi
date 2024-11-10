@@ -43,6 +43,7 @@ public class ConversationHandler implements Runnable {
             conversation.addMessage(message);
             data.storeConversation(conversation);
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             ie.printStackTrace();
         }
     }
