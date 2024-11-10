@@ -78,4 +78,28 @@ public class TextMessageIntegrationTests {
                 .verify(data, times(1))
                 .storeConversation(conversation);
     }
+
+    @Test
+    void callingRun_ShouldCallTickAndSendMesasage() throws InterruptedException {
+        when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
+
+        inputHandler.handleInput(message);
+
+        var conversationThread = new Thread(conversationHandler);
+        conversationThread.setDaemon(true);
+        conversationThread.start();
+
+        while (conversationHandler.queueSize() > 0 && conversationThread.isAlive()) {
+            Thread.sleep(10); // Minimal sleep to avoid busy-waiting
+        }
+
+        conversationThread.interrupt();
+
+        conversationThread.join(1000);
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(conversationThread.isInterrupted()),
+                () -> Assertions.assertTrue(conversation.getMessages().contains(message))
+        );
+    }
 }
