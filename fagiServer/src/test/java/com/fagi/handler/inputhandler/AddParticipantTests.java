@@ -1,10 +1,6 @@
 package com.fagi.handler.inputhandler;
 
 import com.fagi.conversation.Conversation;
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.mockhelpers.ConversationMocks;
-import com.fagi.mockhelpers.UserMocks;
 import com.fagi.model.Data;
 import com.fagi.model.User;
 import com.fagi.model.conversation.AddParticipantRequest;
@@ -13,13 +9,13 @@ import com.fagi.responses.NoSuchConversation;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.Unauthorized;
 import com.fagi.responses.UserExists;
-import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,31 +25,18 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class AddParticipantTests {
+public class AddParticipantTests extends BaseInputHandlerTest {
     private static final String SENDER_USERNAME = "sender username";
     private static User newParticipant;
     private static final long CONVERSATION_ID = 42;
-    private InputHandler inputHandler;
     private AddParticipantRequest addParticipantRequest;
-    @Mock private OutputAgent outputAgent;
-    @Mock private InputAgent inputAgent;
-    @Mock private Data data;
 
-    @BeforeEach
-    void setup() {
+    void beforeEach() {
         newParticipant = new User(
                 "new participant username",
                 "some password"
         );
 
-        var conversationHandler = new ConversationHandler(data);
-
-        inputHandler = new InputHandler(
-                inputAgent,
-                outputAgent,
-                conversationHandler,
-                data
-        );
         addParticipantRequest = new AddParticipantRequest(
                 SENDER_USERNAME,
                 newParticipant.getUserName(),
@@ -77,7 +60,7 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingParticipantToConversationUserIsNotIn_ShouldResultInUnauthorizedResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(data);
+        mockConversationAndRegisterInData();
 
         inputHandler.handleInput(addParticipantRequest);
 
@@ -89,8 +72,7 @@ public class AddParticipantTests {
 
     @Test
     void whenNewParticipantIsAlreadyInConversation_ShouldResultInUserExistsResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(
-                data,
+        mockConversationAndRegisterInData(
                 SENDER_USERNAME,
                 newParticipant.getUserName()
         );
@@ -105,9 +87,7 @@ public class AddParticipantTests {
 
     @Test
     void whenNewParticipantUsernameIsNotAnExistingUser_ShouldResultInNoSuchUserResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        mockConversationAndRegisterInData(SENDER_USERNAME
         );
 
         inputHandler.handleInput(addParticipantRequest);
@@ -120,11 +100,9 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInNewParticipantBeingInConversationParticipantList() {
-        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        UserMocks.mockOnlineStatusOfUser(
+        mockOnlineStatusOfUser(
                 data,
                 newParticipant,
                 false
@@ -139,11 +117,9 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInConversationAddedToTheUsersConversationList() {
-        ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        UserMocks.mockOnlineStatusOfUser(
+        mockOnlineStatusOfUser(
                 data,
                 newParticipant,
                 false
@@ -158,17 +134,13 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingOnlineUserToConversation_ShouldResultInSendingConversationToThatUser() {
-        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        OutputAgent outputAgent = UserMocks
-                .mockOnlineStatusOfUser(
-                        data,
-                        newParticipant,
-                        true
-                )
-                .orElseThrow(() -> new AssertionError("Mocking new participant should return the OutputAgent"));
+        OutputAgent outputAgent = mockOnlineStatusOfUser(
+                data,
+                newParticipant,
+                true
+        ).orElseThrow(() -> new AssertionError("Mocking new participant should return the OutputAgent"));
 
         inputHandler.handleInput(addParticipantRequest);
 
@@ -180,11 +152,9 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInConversationBeingStored() {
-        Conversation conversation = ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        UserMocks.mockOnlineStatusOfUser(
+        mockOnlineStatusOfUser(
                 data,
                 newParticipant,
                 false
@@ -200,11 +170,9 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInNewParticipantBeingStored() {
-        ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        UserMocks.mockOnlineStatusOfUser(
+        mockOnlineStatusOfUser(
                 data,
                 newParticipant,
                 false
@@ -220,11 +188,9 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingOfflineUserToConversation_ShouldResultInAllIsWellResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        UserMocks.mockOnlineStatusOfUser(
+        mockOnlineStatusOfUser(
                 data,
                 newParticipant,
                 false
@@ -240,11 +206,9 @@ public class AddParticipantTests {
 
     @Test
     void whenAddingOnlineUserToConversation_ShouldResultInAllIsWellResponse() {
-        ConversationMocks.mockConversationAndRegisterInData(
-                data,
-                SENDER_USERNAME
+        mockConversationAndRegisterInData(SENDER_USERNAME
         );
-        UserMocks.mockOnlineStatusOfUser(
+        mockOnlineStatusOfUser(
                 data,
                 newParticipant,
                 true
@@ -256,5 +220,28 @@ public class AddParticipantTests {
                 outputAgent,
                 times(1)
         ).addResponse(any(AllIsWell.class));
+    }
+
+    private Optional<OutputAgent> mockOnlineStatusOfUser(
+            Data data,
+            User user,
+            boolean isOnline) {
+        doReturn(user)
+                .when(data)
+                .getUser(user.getUserName());
+
+        doReturn(isOnline)
+                .when(data)
+                .isUserOnline(user.getUserName());
+
+        if (isOnline) {
+            OutputAgent newParticipantOutputAgent = Mockito.mock(OutputAgent.class);
+            doReturn(newParticipantOutputAgent)
+                    .when(data)
+                    .getOutputAgent(user.getUserName());
+            return Optional.of(newParticipantOutputAgent);
+        }
+
+        return Optional.empty();
     }
 }

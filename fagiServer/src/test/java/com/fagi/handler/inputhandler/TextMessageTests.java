@@ -2,53 +2,28 @@ package com.fagi.handler.inputhandler;
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchConversation;
 import com.fagi.responses.Unauthorized;
 import com.fagi.util.OutputAgentTestUtil;
-import com.fagi.worker.InputAgent;
-import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.sql.Timestamp;
 
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-class TextMessageTests {
-    private OutputAgent outputAgent;
-    private Data data;
-
-    private InputHandler inputHandler;
+class TextMessageTests extends BaseInputHandlerTest {
     private Conversation conversation;
     private TextMessage message;
-    private ConversationHandler conversationHandler;
 
-    @BeforeEach
-    void setup() {
+    void beforeEach() {
         message = new TextMessage(
                 "Hullo",
                 "sender",
                 42
-        );
-
-        data = Mockito.mock(Data.class);
-        InputAgent inputAgent = Mockito.mock(InputAgent.class);
-        outputAgent = Mockito.spy(OutputAgent.class);
-        conversationHandler = new ConversationHandler(data);
-        inputHandler = new InputHandler(
-                inputAgent,
-                outputAgent,
-                conversationHandler,
-                data
         );
 
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);

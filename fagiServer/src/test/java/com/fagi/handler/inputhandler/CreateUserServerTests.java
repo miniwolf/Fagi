@@ -1,19 +1,13 @@
 package com.fagi.handler.inputhandler;
 
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
 import com.fagi.model.CreateUser;
-import com.fagi.model.Data;
 import com.fagi.model.InviteCode;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.IllegalInviteCode;
 import com.fagi.responses.UserExists;
 import com.fagi.util.OutputAgentTestUtil;
-import com.fagi.worker.InputAgent;
-import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -26,25 +20,10 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-class CreateUserServerTests {
-    private OutputAgent outputAgent;
-    private InputHandler inputHandler;
+class CreateUserServerTests extends BaseInputHandlerTest {
     private InviteCodeContainer inviteCodeContainer;
-    private Data data;
 
-    @BeforeEach
-    void setup() {
-        data = Mockito.mock(Data.class);
-        var inputAgent = Mockito.mock(InputAgent.class);
-        outputAgent = Mockito.mock(OutputAgent.class);
-        ConversationHandler conversationHandler = new ConversationHandler(data);
-
-        inputHandler = new InputHandler(
-                inputAgent,
-                outputAgent,
-                conversationHandler,
-                data
-        );
+    void beforeEach() {
         inviteCodeContainer = new InviteCodeContainer(new ArrayList<>(Collections.singletonList(new InviteCode("42"))));
         doReturn(inviteCodeContainer)
                 .when(data)

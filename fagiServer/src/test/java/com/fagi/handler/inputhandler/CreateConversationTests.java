@@ -1,23 +1,16 @@
 package com.fagi.handler.inputhandler;
 
 import com.fagi.conversation.Conversation;
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.mockhelpers.ConversationMocks;
-import com.fagi.model.Data;
 import com.fagi.model.User;
 import com.fagi.model.conversation.CreateConversationRequest;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.Response;
-import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -32,22 +25,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateConversationTests {
-    private InputHandler inputHandler;
-    @Mock private OutputAgent outputAgent;
-    @Mock private InputAgent inputAgent;
-    @Mock private Data data;
+public class CreateConversationTests extends BaseInputHandlerTest {
 
-    @BeforeEach
-    void setup() {
-        var conversationHandler = new ConversationHandler(data);
-
-        inputHandler = new InputHandler(
-                inputAgent,
-                outputAgent,
-                conversationHandler,
-                data
-        );
+    void beforeEach() {
     }
 
     @Test
@@ -79,7 +59,7 @@ public class CreateConversationTests {
                 "Someone else",
                 "Their password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName()
         );
@@ -122,7 +102,7 @@ public class CreateConversationTests {
                 "Someone else",
                 "Their password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName()
         );
@@ -185,7 +165,7 @@ public class CreateConversationTests {
                 "Someone else",
                 "Their password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName()
         );
@@ -237,7 +217,7 @@ public class CreateConversationTests {
                 "Some offline person",
                 "Their offline password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName(),
                 different.getUserName(),
@@ -322,7 +302,7 @@ public class CreateConversationTests {
                 "Someone else",
                 "Their password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName()
         );
@@ -369,7 +349,7 @@ public class CreateConversationTests {
                 "Someone else",
                 "Their password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName()
         );
@@ -413,7 +393,7 @@ public class CreateConversationTests {
                 "Someone else",
                 "Their password"
         );
-        Conversation conversation = ConversationMocks.createConversation(
+        Conversation conversation = createConversation(
                 self.getUserName(),
                 other.getUserName()
         );

@@ -1,15 +1,9 @@
 package com.fagi.handler.inputhandler;
 
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.model.Data;
 import com.fagi.model.Friend;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.User;
 import com.fagi.model.messages.lists.FriendList;
-import com.fagi.worker.InputAgent;
-import com.fagi.worker.OutputAgent;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -33,21 +27,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class GetFriendListRequestTests {
-    private InputHandler inputHandler;
-    @Mock private OutputAgent outputAgent;
-    @Mock private InputAgent inputAgent;
-    @Mock private Data data;
+class GetFriendListRequestTests extends BaseInputHandlerTest {
     @Mock private User user;
     @Captor private ArgumentCaptor<FriendList> friendListArgumentCaptor;
     private final List<String> friendsUsernames = new ArrayList<>();
 
-    @BeforeEach
-    void setup() {
-        var conversationHandler = new ConversationHandler(data);
-
-        inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
-
+    void beforeEach() {
         doReturn(user)
                 .when(data)
                 .getUser(anyString());
@@ -109,7 +94,7 @@ class GetFriendListRequestTests {
         assumeFalse(isNull(friendList));
         assumeTrue(getFriendListData(friendList).size() == 1);
         assertTrue(getFriendListData(friendList)
-                           .get(0)
+                           .getFirst()
                            .online());
     }
 

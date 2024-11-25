@@ -1,17 +1,12 @@
 package com.fagi.handler.inputhandler;
 
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.model.Data;
 import com.fagi.model.Logout;
 import com.fagi.model.User;
 import com.fagi.model.UserLoggedOut;
 import com.fagi.responses.AllIsWell;
 import com.fagi.util.OutputAgentTestUtil;
-import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -20,20 +15,10 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-class LogoutServerTests {
-    private Data data;
-    private InputHandler inputHandler;
-    private OutputAgent outputAgent;
+class LogoutServerTests extends BaseInputHandlerTest {
     private User user;
-    private InputAgent inputAgent;
 
-    @BeforeEach
-    void setup() {
-        inputAgent = Mockito.mock(InputAgent.class);
-        outputAgent = Mockito.mock(OutputAgent.class);
-        data = Mockito.mock(Data.class);
-
-        inputHandler = new InputHandler(inputAgent, outputAgent, new ConversationHandler(data), data);
+    void beforeEach() {
         user = new User("username", "password");
 
         doReturn(user)
