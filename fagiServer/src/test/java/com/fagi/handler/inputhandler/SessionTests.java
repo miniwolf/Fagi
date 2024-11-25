@@ -2,18 +2,11 @@ package com.fagi.handler.inputhandler;
 
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.model.Data;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
-import com.fagi.worker.InputAgent;
-import com.fagi.worker.OutputAgent;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,18 +17,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class SessionTests {
-    private InputHandler inputHandler;
-    @Mock private OutputAgent outputAgent;
-    @Mock private InputAgent inputAgent;
-    @Mock private Data data;
+public class SessionTests extends BaseInputHandlerTest {
     private Session session;
 
-    @BeforeEach
-    void setup() {
-        var conversationHandler = new ConversationHandler(data);
-
-        inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
+    void beforeEach() {
         var aes = new AES();
         aes.generateKey(128);
         session = new Session((AESKey) aes.getKey());

@@ -9,7 +9,10 @@ import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.mockito.Mockito;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -80,6 +83,7 @@ public class TextMessageIntegrationTests {
     }
 
     @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
     void callingRun_ShouldCallTickAndSendMesasage() throws InterruptedException {
         when(data.getConversation(Mockito.anyLong())).thenReturn(conversation);
 

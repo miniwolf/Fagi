@@ -1,15 +1,9 @@
 package com.fagi.handler.inputhandler;
 
-import com.fagi.handler.ConversationHandler;
-import com.fagi.handler.InputHandler;
-import com.fagi.model.Data;
 import com.fagi.model.DeleteFriend;
 import com.fagi.model.User;
 import com.fagi.responses.AllIsWell;
 import com.fagi.util.OutputAgentTestUtil;
-import com.fagi.worker.InputAgent;
-import com.fagi.worker.OutputAgent;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,21 +12,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class DeleteFriendTests {
-    private InputHandler inputHandler;
-    @Mock private OutputAgent outputAgent;
-    @Mock private InputAgent inputAgent;
-    @Mock private Data data;
+public class DeleteFriendTests extends BaseInputHandlerTest {
     @Mock private User user;
 
-    @BeforeEach
-    void setup() {
-        var conversationHandler = new ConversationHandler(data);
-
-        inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
+    void beforeEach() {
     }
 
     @Test

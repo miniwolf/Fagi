@@ -1,11 +1,17 @@
-package com.fagi.mockhelpers;
+package com.fagi.handler.inputhandler;
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.handler.ConversationHandler;
+import com.fagi.handler.InputHandler;
 import com.fagi.model.Data;
 import com.fagi.model.User;
 import com.fagi.model.messages.message.TextMessage;
-import org.apache.commons.text.RandomStringGenerator;
+import com.fagi.util.TestHelper;
+import com.fagi.worker.InputAgent;
+import com.fagi.worker.OutputAgent;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -14,12 +20,40 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 /**
- * Helper functions to create {@link Conversation}s in test
+ * A base class to make it easy for all {@link InputHandler} tests to have the base set up ready for each test.
+ * Also contains helpful methods to simplify st ups and mocks that are used multiple times.
  */
-public class ConversationMocks {
-    private ConversationMocks() {
-        // Disallows newing the class
+public abstract class BaseInputHandlerTest {
+    protected OutputAgent outputAgent;
+    protected Data data;
+    protected InputAgent inputAgent;
+    protected InputHandler inputHandler;
+    protected ConversationHandler conversationHandler;
+
+    /**
+     * Creates an {@link InputHandler} and the classes and mocks needed for testing. Calls {@link BaseInputHandlerTest#beforeEach()} at the end.
+     */
+    @BeforeEach
+    protected void setup() {
+        data = Mockito.mock(Data.class);
+        inputAgent = Mockito.mock(InputAgent.class);
+        outputAgent = Mockito.mock(OutputAgent.class);
+        conversationHandler = new ConversationHandler(data);
+
+        inputHandler = new InputHandler(
+                inputAgent,
+                outputAgent,
+                conversationHandler,
+                data
+        );
+
+        beforeEach();
     }
+
+    /**
+     * A method that allows each test class to prepare its own setup before each test, but after the {@link InputHandler} is created.
+     */
+    abstract void beforeEach();
 
     /**
      * Creates an empty {@link Conversation} with the given participants
@@ -27,7 +61,7 @@ public class ConversationMocks {
      * @param participants the participants of the new {@link Conversation}
      * @return a {@link Conversation} with the id of 42
      */
-    public static Conversation createConversation(
+    protected Conversation createConversation(
             String... participants) {
         var conversation = new Conversation(
                 42,
@@ -45,12 +79,10 @@ public class ConversationMocks {
     /**
      * Creates a {@link Conversation} and registers it in a given {@link Data} object
      *
-     * @param data         the data object to register the {@link Conversation} in
      * @param participants the participants of the new {@link Conversation}
      * @return a {@link Conversation} with the id of 42
      */
-    public static Conversation mockConversationAndRegisterInData(
-            Data data,
+    protected Conversation mockConversationAndRegisterInData(
             String... participants) {
         var conversation = createConversation(participants);
 
@@ -66,20 +98,17 @@ public class ConversationMocks {
      * {@link TextMessage}s with random contents and sender. The {@link Conversation} is registered in the given
      * {@link Data} object.
      *
-     * @param data the data object to register the {@link Conversation} in
-     * @param user a {@link User}
+     * @param user             a {@link User}
      * @param numberOfMessages the number of {@link TextMessage}s to be in the {@link Conversation}
      * @return a {@link Conversation}
      */
-    public static Conversation createConversationWithRandomDataForUserAndRegisterInData(
-            Data data,
+    protected Conversation createConversationWithRandomDataForUserAndRegisterInData(
             User user,
             int numberOfMessages) {
         Random random = new Random();
-        RandomStringGenerator randomString = new RandomStringGenerator.Builder().get();
         var con = new Conversation(
                 random.nextInt(100),
-                randomString.generate(10),
+                TestHelper.getSaltString(10),
                 ConversationType.Single
         );
         for (var i = 0; i < numberOfMessages; i++) {
@@ -91,8 +120,8 @@ public class ConversationMocks {
                 }
             }
             con.addMessage(new TextMessage(
-                    randomString.generate(10),
-                    randomString.generate(10),
+                    TestHelper.getSaltString(10),
+                    TestHelper.getSaltString(10),
                     con.getId()
             ));
         }

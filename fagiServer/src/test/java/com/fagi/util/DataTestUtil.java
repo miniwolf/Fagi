@@ -23,6 +23,7 @@ public final class DataTestUtil {
                 .storeUser(argumentCaptor.capture());
         return argumentCaptor;
     }
+
     public static ArgumentCaptor<Conversation> verifyStoreConversationCalled(Data dataMock, int numberOfCalls) {
         var argumentCaptor = ArgumentCaptor.forClass(Conversation.class);
         Mockito

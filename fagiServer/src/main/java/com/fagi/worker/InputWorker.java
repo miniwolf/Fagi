@@ -52,6 +52,7 @@ public class InputWorker extends Worker implements InputAgent {
                     input = decryptAndConvertToObject((byte[]) input);
                 }
                 // TODO: We should either verify that the contained sender property matches the user in our session or we should not look at the sender property at all and trust the session
+                // TODO: This will be fixed with https://trello.com/c/KBmf0o1U/54
                 inputHandler.handleInput(input);
             } catch (EOFException | SocketException eof) {
                 running = false;
