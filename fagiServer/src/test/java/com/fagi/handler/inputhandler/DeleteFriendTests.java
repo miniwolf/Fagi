@@ -45,8 +45,20 @@ public class DeleteFriendTests extends BaseInputHandlerTest {
         String otherUsername = "otherUsername";
         inputHandler.handleInput(new DeleteFriend(otherUsername));
 
-        verify(otherUser, never()).removeFriend(eq(data), anyString());
-        verify(user, times(1)).removeFriend(data, otherUsername);
+        verify(
+                otherUser,
+                never()
+        ).removeFriend(
+                eq(data),
+                anyString()
+        );
+        verify(
+                user,
+                times(1)
+        ).removeFriend(
+                data,
+                otherUsername
+        );
     }
 
     @Test
@@ -58,13 +70,19 @@ public class DeleteFriendTests extends BaseInputHandlerTest {
                 .getUser(username);
         doReturn(new AllIsWell())
                 .when(user)
-                .removeFriend(data, otherUsername);
+                .removeFriend(
+                        data,
+                        otherUsername
+                );
         doReturn(username)
                 .when(inputAgent)
                 .getUsername();
 
         inputHandler.handleInput(new DeleteFriend(otherUsername));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
     }
 }

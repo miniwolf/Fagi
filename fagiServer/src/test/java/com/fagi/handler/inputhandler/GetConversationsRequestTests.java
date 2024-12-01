@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-public class GetConversationsRequestTests extends BaseInputHandlerTest{
+public class GetConversationsRequestTests extends BaseInputHandlerTest {
     void beforeEach() {
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
     }
@@ -246,8 +246,14 @@ public class GetConversationsRequestTests extends BaseInputHandlerTest{
         );
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(con1.getId(), dataUpdateConversation1.id()),
-                () -> Assertions.assertEquals(con2.getId(), placeholderConversation2.getId())
+                () -> Assertions.assertEquals(
+                        con1.getId(),
+                        dataUpdateConversation1.id()
+                ),
+                () -> Assertions.assertEquals(
+                        con2.getId(),
+                        placeholderConversation2.getId()
+                )
         );
     }
 }

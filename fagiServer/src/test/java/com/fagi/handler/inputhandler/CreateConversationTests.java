@@ -46,7 +46,10 @@ public class CreateConversationTests extends BaseInputHandlerTest {
                 )
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertTrue(argumentCaptor.getValue() instanceof NoSuchUser);
+        Assertions.assertInstanceOf(
+                NoSuchUser.class,
+                argumentCaptor.getValue()
+        );
     }
 
     @Test
@@ -93,7 +96,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void creatingConversation_ShouldResultIn_StoringParticipants() throws Exception {
+    void creatingConversation_ShouldResultIn_StoringParticipants() {
         User self = new User(
                 "Me",
                 "Some password"
@@ -143,7 +146,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
                 () -> Assertions.assertEquals(
                         self.getUserName(),
                         storedUsersList
-                                .get(0)
+                                .getFirst()
                                 .getUserName()
                 ),
                 () -> Assertions.assertEquals(
@@ -156,7 +159,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void creatingConversation_ShouldNotResultIn_DataRequestedForCurrentUserOuptAgent() throws Exception {
+    void creatingConversation_ShouldNotResultIn_DataRequestedForCurrentUserOuptAgent() {
         User self = new User(
                 "Me",
                 "Some password"
@@ -200,7 +203,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void creatingConversation_ShouldResultIn_NotifyingOnlineParticipants() throws Exception {
+    void creatingConversation_ShouldResultIn_NotifyingOnlineParticipants() {
         User self = new User(
                 "Me",
                 "Some password"
@@ -283,7 +286,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
                 ),
                 () -> Assertions.assertEquals(
                         conversation,
-                        conversations.get(0)
+                        conversations.getFirst()
                 ),
                 () -> Assertions.assertEquals(
                         conversation,
@@ -293,7 +296,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void creatingConversation_ShouldResultIn_ConversationBeingStored() throws Exception {
+    void creatingConversation_ShouldResultIn_ConversationBeingStored() {
         User self = new User(
                 "Me",
                 "Some password"
@@ -340,7 +343,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void creatingConversation_ShouldResultIn_AllIsWellResponse() throws Exception {
+    void creatingConversation_ShouldResultIn_AllIsWellResponse() {
         User self = new User(
                 "Me",
                 "Some password"
@@ -384,7 +387,7 @@ public class CreateConversationTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void creatingConversation_ShouldResultIn_ConversationResponse() throws Exception {
+    void creatingConversation_ShouldResultIn_ConversationResponse() {
         User self = new User(
                 "Me",
                 "Some password"
@@ -424,6 +427,9 @@ public class CreateConversationTests extends BaseInputHandlerTest {
                 )
                 .addResponse(argumentCaptor.capture());
 
-        Assertions.assertEquals(conversation, argumentCaptor.getValue());
+        Assertions.assertEquals(
+                conversation,
+                argumentCaptor.getValue()
+        );
     }
 }

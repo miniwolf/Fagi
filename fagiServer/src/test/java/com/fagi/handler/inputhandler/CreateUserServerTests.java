@@ -96,13 +96,18 @@ class CreateUserServerTests extends BaseInputHandlerTest {
 
         var argumentCaptor = ArgumentCaptor.forClass(InviteCodeContainer.class);
         Mockito
-                .verify(data,
-                        times(1))
+                .verify(
+                        data,
+                        times(1)
+                )
                 .storeInviteCodes(argumentCaptor.capture());
 
         Assertions.assertAll(
                 () -> Assertions.assertFalse(inviteCodeContainer.contains(inviteCode)),
-                () -> Assertions.assertEquals(inviteCodeContainer, argumentCaptor.getValue())
+                () -> Assertions.assertEquals(
+                        inviteCodeContainer,
+                        argumentCaptor.getValue()
+                )
         );
     }
 

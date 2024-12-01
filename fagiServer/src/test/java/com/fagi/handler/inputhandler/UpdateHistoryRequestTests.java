@@ -33,33 +33,60 @@ public class UpdateHistoryRequestTests extends BaseInputHandlerTest {
     void givenUserDoesNotExist_ThenOutputNoSuchUser() {
         when(data.getUser(anyString())).thenReturn(null);
 
-        inputHandler.handleInput(new UpdateHistoryRequest("username", 42, new Date()));
+        inputHandler.handleInput(new UpdateHistoryRequest(
+                "username",
+                42,
+                new Date()
+        ));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchUser.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                NoSuchUser.class
+        );
     }
 
     @Test
     void givenUserNotHaveAccessToConversation_ThenOutputUnauthorized() {
-        var user = new User("username", "password");
+        var user = new User(
+                "username",
+                "password"
+        );
 
         when(data.getUser(anyString())).thenReturn(user);
 
-        inputHandler.handleInput(new UpdateHistoryRequest("username", 42, new Date()));
+        inputHandler.handleInput(new UpdateHistoryRequest(
+                "username",
+                42,
+                new Date()
+        ));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, Unauthorized.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                Unauthorized.class
+        );
     }
 
     @Test
     void givenConversationIdNotMatchingAConversation_ThenOutputNoSuchConversation() {
         var conversationId = 42;
-        var user = new User("username", "password");
+        var user = new User(
+                "username",
+                "password"
+        );
         user.addConversationID(conversationId);
 
         when(data.getUser(anyString())).thenReturn(user);
 
-        inputHandler.handleInput(new UpdateHistoryRequest("username", conversationId, new Date()));
+        inputHandler.handleInput(new UpdateHistoryRequest(
+                "username",
+                conversationId,
+                new Date()
+        ));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchConversation.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                NoSuchConversation.class
+        );
     }
 
     @Test
@@ -67,21 +94,48 @@ public class UpdateHistoryRequestTests extends BaseInputHandlerTest {
         var lastMessageReceived = new Timestamp(System.currentTimeMillis() - 2000);
 
         var conversationId = 42;
-        var user = new User("username", "password");
-        var otherUser = new User("otherUsername", "password");
+        var user = new User(
+                "username",
+                "password"
+        );
+        var otherUser = new User(
+                "otherUsername",
+                "password"
+        );
         user.addConversationID(conversationId);
         otherUser.addConversationID(conversationId);
 
-        var conversation = new Conversation(conversationId, "some Name", ConversationType.Single);
-        conversation.addMessage(createTextMessage(otherUser, "Message 1", conversationId, 2000));
-        conversation.addMessage(createTextMessage(otherUser, "Message 2", conversationId, 3000));
+        var conversation = new Conversation(
+                conversationId,
+                "some Name",
+                ConversationType.Single
+        );
+        conversation.addMessage(createTextMessage(
+                otherUser,
+                "Message 1",
+                conversationId,
+                2000
+        ));
+        conversation.addMessage(createTextMessage(
+                otherUser,
+                "Message 2",
+                conversationId,
+                3000
+        ));
 
         when(data.getUser(user.getUserName())).thenReturn(user);
         when(data.getConversation(conversationId)).thenReturn(conversation);
 
-        inputHandler.handleInput(new UpdateHistoryRequest(user.getUserName(), conversationId, lastMessageReceived));
+        inputHandler.handleInput(new UpdateHistoryRequest(
+                user.getUserName(),
+                conversationId,
+                lastMessageReceived
+        ));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
 
         var argumentCaptor = ArgumentCaptor.forClass(HistoryUpdates.class);
         Mockito
@@ -92,10 +146,32 @@ public class UpdateHistoryRequestTests extends BaseInputHandlerTest {
                 .addResponse(argumentCaptor.capture());
 
         var historyUpdates = argumentCaptor.getValue();
-        assertAll(() -> assertEquals(conversationId, historyUpdates.id()),
-                () -> assertEquals(2, historyUpdates.updates().size()),
-                () -> assertEquals("Message 1", historyUpdates.updates().getFirst().data()),
-                () -> assertEquals("Message 2", historyUpdates.updates().getLast().data()));
+        assertAll(
+                () -> assertEquals(
+                        conversationId,
+                        historyUpdates.id()
+                ),
+                () -> assertEquals(
+                        2,
+                        historyUpdates
+                                .updates()
+                                .size()
+                ),
+                () -> assertEquals(
+                        "Message 1",
+                        historyUpdates
+                                .updates()
+                                .getFirst()
+                                .data()
+                ),
+                () -> assertEquals(
+                        "Message 2",
+                        historyUpdates
+                                .updates()
+                                .getLast()
+                                .data()
+                )
+        );
     }
 
     @Test
@@ -103,21 +179,48 @@ public class UpdateHistoryRequestTests extends BaseInputHandlerTest {
         var lastMessageReceived = new Timestamp(System.currentTimeMillis() - 2000);
 
         var conversationId = 42;
-        var user = new User("username", "password");
-        var otherUser = new User("otherUsername", "password");
+        var user = new User(
+                "username",
+                "password"
+        );
+        var otherUser = new User(
+                "otherUsername",
+                "password"
+        );
         user.addConversationID(conversationId);
         otherUser.addConversationID(conversationId);
 
-        var conversation = new Conversation(conversationId, "some Name", ConversationType.Single);
-        conversation.addMessage(createTextMessage(otherUser, "Message 1", conversationId, -5000));
-        conversation.addMessage(createTextMessage(otherUser, "Message 2", conversationId, 3000));
+        var conversation = new Conversation(
+                conversationId,
+                "some Name",
+                ConversationType.Single
+        );
+        conversation.addMessage(createTextMessage(
+                otherUser,
+                "Message 1",
+                conversationId,
+                -5000
+        ));
+        conversation.addMessage(createTextMessage(
+                otherUser,
+                "Message 2",
+                conversationId,
+                3000
+        ));
 
         when(data.getUser(user.getUserName())).thenReturn(user);
         when(data.getConversation(conversationId)).thenReturn(conversation);
 
-        inputHandler.handleInput(new UpdateHistoryRequest(user.getUserName(), conversationId, lastMessageReceived));
+        inputHandler.handleInput(new UpdateHistoryRequest(
+                user.getUserName(),
+                conversationId,
+                lastMessageReceived
+        ));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
 
         var argumentCaptor = ArgumentCaptor.forClass(HistoryUpdates.class);
         Mockito
@@ -128,14 +231,40 @@ public class UpdateHistoryRequestTests extends BaseInputHandlerTest {
                 .addResponse(argumentCaptor.capture());
 
         var historyUpdates = argumentCaptor.getValue();
-        assertAll(() -> assertEquals(conversationId, historyUpdates.id()),
-                () -> assertEquals(1, historyUpdates.updates().size()),
-                () -> assertEquals("Message 2", historyUpdates.updates().getFirst().data()));
+        assertAll(
+                () -> assertEquals(
+                        conversationId,
+                        historyUpdates.id()
+                ),
+                () -> assertEquals(
+                        1,
+                        historyUpdates
+                                .updates()
+                                .size()
+                ),
+                () -> assertEquals(
+                        "Message 2",
+                        historyUpdates
+                                .updates()
+                                .getFirst()
+                                .data()
+                )
+        );
     }
 
-    private static TextMessage createTextMessage(User user, String message, int conversationId, long offsetFromNow) {
-        var result = new TextMessage(message, user.getUserName(), conversationId);
-        result.getMessageInfo().setTimestamp(new Timestamp(System.currentTimeMillis() + offsetFromNow));
+    private static TextMessage createTextMessage(
+            User user,
+            String message,
+            int conversationId,
+            long offsetFromNow) {
+        var result = new TextMessage(
+                message,
+                user.getUserName(),
+                conversationId
+        );
+        result
+                .getMessageInfo()
+                .setTimestamp(new Timestamp(System.currentTimeMillis() + offsetFromNow));
         return result;
     }
 }

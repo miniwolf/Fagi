@@ -87,8 +87,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenNewParticipantUsernameIsNotAnExistingUser_ShouldResultInNoSuchUserResponse() {
-        mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        mockConversationAndRegisterInData(SENDER_USERNAME);
 
         inputHandler.handleInput(addParticipantRequest);
 
@@ -100,8 +99,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInNewParticipantBeingInConversationParticipantList() {
-        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME);
         mockOnlineStatusOfUser(
                 data,
                 newParticipant,
@@ -117,8 +115,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInConversationAddedToTheUsersConversationList() {
-        mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        mockConversationAndRegisterInData(SENDER_USERNAME);
         mockOnlineStatusOfUser(
                 data,
                 newParticipant,
@@ -134,8 +131,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingOnlineUserToConversation_ShouldResultInSendingConversationToThatUser() {
-        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME);
         OutputAgent outputAgent = mockOnlineStatusOfUser(
                 data,
                 newParticipant,
@@ -152,8 +148,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInConversationBeingStored() {
-        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        Conversation conversation = mockConversationAndRegisterInData(SENDER_USERNAME);
         mockOnlineStatusOfUser(
                 data,
                 newParticipant,
@@ -170,8 +165,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingUserToConversation_ShouldResultInNewParticipantBeingStored() {
-        mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        mockConversationAndRegisterInData(SENDER_USERNAME);
         mockOnlineStatusOfUser(
                 data,
                 newParticipant,
@@ -188,8 +182,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingOfflineUserToConversation_ShouldResultInAllIsWellResponse() {
-        mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        mockConversationAndRegisterInData(SENDER_USERNAME);
         mockOnlineStatusOfUser(
                 data,
                 newParticipant,
@@ -206,8 +199,7 @@ public class AddParticipantTests extends BaseInputHandlerTest {
 
     @Test
     void whenAddingOnlineUserToConversation_ShouldResultInAllIsWellResponse() {
-        mockConversationAndRegisterInData(SENDER_USERNAME
-        );
+        mockConversationAndRegisterInData(SENDER_USERNAME);
         mockOnlineStatusOfUser(
                 data,
                 newParticipant,

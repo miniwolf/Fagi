@@ -19,7 +19,10 @@ class LogoutServerTests extends BaseInputHandlerTest {
     private User user;
 
     void beforeEach() {
-        user = new User("username", "password");
+        user = new User(
+                "username",
+                "password"
+        );
 
         doReturn(user)
                 .when(data)
@@ -31,8 +34,14 @@ class LogoutServerTests extends BaseInputHandlerTest {
 
     @Test
     void whenUserLogout_UserOnlineFriendsGetsNotification() {
-        var friend = new User("friend", "123");
-        var otherFriend = new User("otherUser", "123");
+        var friend = new User(
+                "friend",
+                "123"
+        );
+        var otherFriend = new User(
+                "otherUser",
+                "123"
+        );
         user.addFriend(friend);
         user.addFriend(otherFriend);
         var otherFriendOutputAgent = Mockito.mock(OutputAgent.class);
@@ -51,12 +60,18 @@ class LogoutServerTests extends BaseInputHandlerTest {
 
         var otherFriendArgumentCaptor = ArgumentCaptor.forClass(UserLoggedOut.class);
         Mockito
-                .verify(otherFriendOutputAgent, times(0))
+                .verify(
+                        otherFriendOutputAgent,
+                        times(0)
+                )
                 .addMessage(otherFriendArgumentCaptor.capture());
 
         var argumentCaptor = ArgumentCaptor.forClass(UserLoggedOut.class);
         Mockito
-                .verify(outputAgent, times(1))
+                .verify(
+                        outputAgent,
+                        times(1)
+                )
                 .addMessage(argumentCaptor.capture());
 
         Assertions.assertAll(
@@ -74,7 +89,10 @@ class LogoutServerTests extends BaseInputHandlerTest {
     void handlingLogoutRequest_ShouldResultInAllIsWellResponse() {
         inputHandler.handleInput(new Logout());
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
     }
 
     @Test
@@ -83,7 +101,10 @@ class LogoutServerTests extends BaseInputHandlerTest {
 
         var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
         Mockito
-                .verify(outputAgent, times(1))
+                .verify(
+                        outputAgent,
+                        times(1)
+                )
                 .setRunning(argumentCaptor.capture());
 
         Boolean isRunning = argumentCaptor.getValue();
@@ -99,7 +120,10 @@ class LogoutServerTests extends BaseInputHandlerTest {
 
         var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
         Mockito
-                .verify(inputAgent, times(1))
+                .verify(
+                        inputAgent,
+                        times(1)
+                )
                 .setRunning(argumentCaptor.capture());
 
         Boolean isRunning = argumentCaptor.getValue();
@@ -119,9 +143,15 @@ class LogoutServerTests extends BaseInputHandlerTest {
 
         var argumentCaptor = ArgumentCaptor.forClass(String.class);
         Mockito
-                .verify(data, times(1))
+                .verify(
+                        data,
+                        times(1)
+                )
                 .userLogout(argumentCaptor.capture());
 
-        Assertions.assertEquals(username, argumentCaptor.getValue());
+        Assertions.assertEquals(
+                username,
+                argumentCaptor.getValue()
+        );
     }
 }

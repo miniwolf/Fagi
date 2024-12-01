@@ -17,9 +17,7 @@ public class UserNameAvailableRequestTest extends BaseInputHandlerTest {
 
     @Test
     void whenUserNameDoesNotMatchAUser_ShouldReturnAllIsWellResponse() {
-        inputHandler.handleInput(new UserNameAvailableRequest(
-                "fisk"
-        ));
+        inputHandler.handleInput(new UserNameAvailableRequest("fisk"));
 
         OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
                 outputAgent,
@@ -29,11 +27,12 @@ public class UserNameAvailableRequestTest extends BaseInputHandlerTest {
 
     @Test
     void whenUserNameMatchesAUser_ShouldReturnUserExistsResponse() {
-        when(data.getUser("fisk")).thenReturn(new User("fisk", "1234"));
-
-        inputHandler.handleInput(new UserNameAvailableRequest(
-                "fisk"
+        when(data.getUser("fisk")).thenReturn(new User(
+                "fisk",
+                "1234"
         ));
+
+        inputHandler.handleInput(new UserNameAvailableRequest("fisk"));
 
         OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
                 outputAgent,

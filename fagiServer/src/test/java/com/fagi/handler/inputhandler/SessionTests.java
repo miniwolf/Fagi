@@ -31,11 +31,17 @@ public class SessionTests extends BaseInputHandlerTest {
         inputHandler.handleInput(session);
 
         ArgumentCaptor<AES> argumentCaptor = ArgumentCaptor.forClass(AES.class);
-        verify(inputAgent, times(1)).setAes(argumentCaptor.capture());
+        verify(
+                inputAgent,
+                times(1)
+        ).setAes(argumentCaptor.capture());
 
         AES argument = argumentCaptor.getValue();
         assertNotNull(argument);
-        assertEquals(session.key(), argument.getKey());
+        assertEquals(
+                session.key(),
+                argument.getKey()
+        );
     }
 
     @Test
@@ -43,11 +49,17 @@ public class SessionTests extends BaseInputHandlerTest {
         inputHandler.handleInput(session);
 
         ArgumentCaptor<AES> argumentCaptor = ArgumentCaptor.forClass(AES.class);
-        verify(outputAgent, times(1)).setAes(argumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).setAes(argumentCaptor.capture());
 
         AES argument = argumentCaptor.getValue();
         assertNotNull(argument);
-        assertEquals(session.key(), argument.getKey());
+        assertEquals(
+                session.key(),
+                argument.getKey()
+        );
     }
 
     @Test
@@ -55,7 +67,10 @@ public class SessionTests extends BaseInputHandlerTest {
         inputHandler.handleInput(session);
 
         ArgumentCaptor<Boolean> booleanArgumentCaptor = ArgumentCaptor.forClass(Boolean.class);
-        verify(inputAgent, times(1)).setSessionCreated(booleanArgumentCaptor.capture());
+        verify(
+                inputAgent,
+                times(1)
+        ).setSessionCreated(booleanArgumentCaptor.capture());
 
         assertTrue(booleanArgumentCaptor.getValue());
     }
@@ -64,6 +79,9 @@ public class SessionTests extends BaseInputHandlerTest {
     void whenReceivingASession_ShouldReturnAllIsWellResponse() {
         inputHandler.handleInput(session);
 
-        verify(outputAgent, times(1)).addResponse(any(AllIsWell.class));
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(any(AllIsWell.class));
     }
 }

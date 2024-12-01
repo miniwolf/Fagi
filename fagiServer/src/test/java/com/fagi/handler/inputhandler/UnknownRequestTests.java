@@ -41,7 +41,9 @@ public class UnknownRequestTests extends BaseInputHandlerTest {
 
         Assertions.assertEquals(
                 "Unknown handle: " + UnknownRequest.class,
-                outputStreamCaptor.toString().trim()
+                outputStreamCaptor
+                        .toString()
+                        .trim()
         );
     }
 
