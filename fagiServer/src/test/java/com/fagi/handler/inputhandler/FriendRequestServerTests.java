@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -30,9 +29,11 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FriendRequestServerTests extends BaseInputHandlerTest {
-    @Mock private User user;
+    private User user;
 
     void beforeEach() {
+        user = Mockito.mock(User.class);
+
         var username = "bob";
 
         doReturn(username)

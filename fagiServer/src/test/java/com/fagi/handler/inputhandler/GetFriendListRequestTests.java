@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -28,11 +28,12 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class GetFriendListRequestTests extends BaseInputHandlerTest {
-    @Mock private User user;
     @Captor private ArgumentCaptor<FriendList> friendListArgumentCaptor;
     private final List<String> friendsUsernames = new ArrayList<>();
 
     void beforeEach() {
+        User user = Mockito.mock(User.class);
+
         doReturn(user)
                 .when(data)
                 .getUser(anyString());
