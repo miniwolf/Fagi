@@ -5,11 +5,9 @@ import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.User;
 import com.fagi.model.messages.lists.FriendList;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 class GetFriendListRequestTests extends BaseInputHandlerTest {
     @Captor private ArgumentCaptor<FriendList> friendListArgumentCaptor;
     private final List<String> friendsUsernames = new ArrayList<>();
