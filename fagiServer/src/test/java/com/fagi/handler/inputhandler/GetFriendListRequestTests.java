@@ -4,9 +4,8 @@ import com.fagi.model.Friend;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.User;
 import com.fagi.model.messages.lists.FriendList;
+import com.fagi.util.OutputAgentTestUtil;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -21,11 +20,8 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 class GetFriendListRequestTests extends BaseInputHandlerTest {
-    @Captor private ArgumentCaptor<FriendList> friendListArgumentCaptor;
     private final List<String> friendsUsernames = new ArrayList<>();
 
     void beforeEach() {
@@ -47,23 +43,26 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
     @Test
     void gettingFriendList_NeverReturnsNull() {
         inputHandler.handleInput(new GetFriendListRequest("sender"));
-        verify(
+
+        var capturedFriendList = OutputAgentTestUtil.captureResponse(
                 outputAgent,
-                times(1)
-        ).addResponse(friendListArgumentCaptor.capture());
-        assertNotNull(friendListArgumentCaptor.getValue());
+                FriendList.class
+        );
+
+        assertNotNull(capturedFriendList);
     }
 
     @Test
     void whenUserHasNoFriends_ThenFriendListIsEmpty() {
         inputHandler.handleInput(new GetFriendListRequest("sender"));
-        verify(
+
+        var capturedFriendList = OutputAgentTestUtil.captureResponse(
                 outputAgent,
-                times(1)
-        ).addResponse(friendListArgumentCaptor.capture());
-        FriendList friendList = friendListArgumentCaptor.getValue();
-        assumeFalse(isNull(friendList));
-        assertTrue(getFriendListData(friendList).isEmpty());
+                FriendList.class
+        );
+
+        assumeFalse(isNull(capturedFriendList));
+        assertTrue(getFriendListData(capturedFriendList).isEmpty());
     }
 
     @Test
@@ -83,16 +82,15 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
 
         inputHandler.handleInput(new GetFriendListRequest("sender"));
 
-        verify(
+        var capturedFriendList = OutputAgentTestUtil.captureResponse(
                 outputAgent,
-                times(1)
-        ).addResponse(friendListArgumentCaptor.capture());
+                FriendList.class
+        );
 
-        FriendList friendList = friendListArgumentCaptor.getValue();
-        assumeFalse(isNull(friendList));
+        assumeFalse(isNull(capturedFriendList));
         assertEquals(
                 2,
-                getFriendListData(friendList).size()
+                getFriendListData(capturedFriendList).size()
         );
     }
 
@@ -107,15 +105,14 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
 
         inputHandler.handleInput(new GetFriendListRequest("sender"));
 
-        verify(
+        var capturedFriendList = OutputAgentTestUtil.captureResponse(
                 outputAgent,
-                times(1)
-        ).addResponse(friendListArgumentCaptor.capture());
+                FriendList.class
+        );
 
-        FriendList friendList = friendListArgumentCaptor.getValue();
-        assumeFalse(isNull(friendList));
-        assumeTrue(getFriendListData(friendList).size() == 1);
-        assertTrue(getFriendListData(friendList)
+        assumeFalse(isNull(capturedFriendList));
+        assumeTrue(getFriendListData(capturedFriendList).size() == 1);
+        assertTrue(getFriendListData(capturedFriendList)
                            .getFirst()
                            .online());
     }
@@ -131,15 +128,14 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
 
         inputHandler.handleInput(new GetFriendListRequest("sender"));
 
-        verify(
+        var capturedFriendList = OutputAgentTestUtil.captureResponse(
                 outputAgent,
-                times(1)
-        ).addResponse(friendListArgumentCaptor.capture());
+                FriendList.class
+        );
 
-        FriendList friendList = friendListArgumentCaptor.getValue();
-        assumeFalse(isNull(friendList));
-        assumeTrue(getFriendListData(friendList).size() == 1);
-        assertFalse(getFriendListData(friendList)
+        assumeFalse(isNull(capturedFriendList));
+        assumeTrue(getFriendListData(capturedFriendList).size() == 1);
+        assertFalse(getFriendListData(capturedFriendList)
                             .getFirst()
                             .online());
     }
