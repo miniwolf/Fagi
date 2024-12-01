@@ -11,9 +11,7 @@ import com.fagi.responses.Unauthorized;
 import com.fagi.responses.UserExists;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -24,7 +22,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 public class AddParticipantTests extends BaseInputHandlerTest {
     private static final String SENDER_USERNAME = "sender username";
     private static User newParticipant;

@@ -9,10 +9,8 @@ import com.fagi.responses.Response;
 import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +22,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
-@ExtendWith(MockitoExtension.class)
 public class CreateConversationTests extends BaseInputHandlerTest {
 
     void beforeEach() {
