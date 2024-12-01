@@ -8,7 +8,6 @@ import com.fagi.responses.UserExists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -19,6 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -29,14 +29,21 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UserTests {
-    @Mock private Data data;
+    private Data data;
     private User user;
     private User secondUser;
 
     @BeforeEach
     void setup() {
-        user = new User("username", "password");
-        secondUser = new User("second user", "123");
+        data = Mockito.mock(Data.class);
+        user = new User(
+                "username",
+                "password"
+        );
+        secondUser = new User(
+                "second user",
+                "123"
+        );
         doReturn(user)
                 .when(data)
                 .getUser(user.getUserName());
@@ -51,73 +58,157 @@ public class UserTests {
     @Test
     void sendingFriendRequestToAFriend_ShouldResultInUserExistsResponse() {
         user.addFriend(secondUser);
-        var friendReq = new FriendRequest(secondUser.getUserName(), new TextMessage("Hello", user.getUserName(), -1));
+        var friendReq = new FriendRequest(
+                secondUser.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        user.getUserName(),
+                        -1
+                )
+        );
 
-        Response response = user.requestFriend(data, friendReq);
+        Response response = user.requestFriend(
+                data,
+                friendReq
+        );
 
-        assertTrue(response instanceof UserExists);
+        assertInstanceOf(
+                UserExists.class,
+                response
+        );
     }
 
     @Test
     void sendingFriendRequestToNonExistingUser_ShouldResultInNoSuchUserResponse() {
-        var friendReq = new FriendRequest("non existing user", new TextMessage("Hello", user.getUserName(), -1));
+        var friendReq = new FriendRequest(
+                "non existing user",
+                new TextMessage(
+                        "Hello",
+                        user.getUserName(),
+                        -1
+                )
+        );
 
-        Response response = user.requestFriend(data, friendReq);
+        Response response = user.requestFriend(
+                data,
+                friendReq
+        );
 
-        assertTrue(response instanceof NoSuchUser);
+        assertInstanceOf(
+                NoSuchUser.class,
+                response
+        );
     }
 
     @Test
     void sendingFriendRequestToUserNotInFriendRequestList_ShouldResultInUserGettingAFriendRequest() {
-        var friendReq = new FriendRequest(secondUser.getUserName(), new TextMessage("Hello", user.getUserName(), -1));
+        var friendReq = new FriendRequest(
+                secondUser.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        user.getUserName(),
+                        -1
+                )
+        );
 
-        user.requestFriend(data, friendReq);
+        user.requestFriend(
+                data,
+                friendReq
+        );
 
         List<FriendRequest> friendRequests = secondUser.getFriendReq();
-        assertEquals(friendReq, friendRequests.get(0));
+        assertEquals(
+                friendReq,
+                friendRequests.getFirst()
+        );
     }
 
     @Test
     void sendingFriendRequestToUserInFriendRequestList_ShouldResultInRemovalOfBothRequests() {
-        var firstFriendRequest = new FriendRequest(user.getUserName(),
-                                                   new TextMessage("Hello", secondUser.getUserName(), -1)
+        var firstFriendRequest = new FriendRequest(
+                user.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        secondUser.getUserName(),
+                        -1
+                )
         );
-        var secondFriendReq = new FriendRequest(secondUser.getUserName(),
-                                                new TextMessage("Hello", user.getUserName(), -1)
+        var secondFriendReq = new FriendRequest(
+                secondUser.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        user.getUserName(),
+                        -1
+                )
         );
 
-        secondUser.requestFriend(data, firstFriendRequest);
+        secondUser.requestFriend(
+                data,
+                firstFriendRequest
+        );
 
-        user.requestFriend(data, secondFriendReq);
+        user.requestFriend(
+                data,
+                secondFriendReq
+        );
         List<FriendRequest> userFriendRequests = user.getFriendReq();
         List<FriendRequest> newFriendFriendRequests = secondUser.getFriendReq();
 
-        assertAll(() -> assertFalse(userFriendRequests.contains(firstFriendRequest)),
-                  () -> assertFalse(newFriendFriendRequests.contains(secondFriendReq))
+        assertAll(
+                () -> assertFalse(userFriendRequests.contains(firstFriendRequest)),
+                () -> assertFalse(newFriendFriendRequests.contains(secondFriendReq))
         );
     }
 
     @Test
     void sendingFriendRequestToUserInFriendRequestList_ShouldResultInUsersBecomingFriends() {
-        var firstFriendRequest = new FriendRequest(user.getUserName(),
-                                                   new TextMessage("Hello", secondUser.getUserName(), -1)
+        var firstFriendRequest = new FriendRequest(
+                user.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        secondUser.getUserName(),
+                        -1
+                )
         );
-        var secondFriendReq = new FriendRequest(secondUser.getUserName(),
-                                                new TextMessage("Hello", user.getUserName(), -1)
+        var secondFriendReq = new FriendRequest(
+                secondUser.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        user.getUserName(),
+                        -1
+                )
         );
 
-        secondUser.requestFriend(data, firstFriendRequest);
+        secondUser.requestFriend(
+                data,
+                firstFriendRequest
+        );
 
-        user.requestFriend(data, secondFriendReq);
+        user.requestFriend(
+                data,
+                secondFriendReq
+        );
 
-        verify(data, times(1)).makeFriends(user, secondUser);
+        verify(
+                data,
+                times(1)
+        ).makeFriends(
+                user,
+                secondUser
+        );
     }
 
     @Test
     void tryingToRemoveNonExistingFriendRequest_ShouldResultInNoSuchUserResponse() {
-        Response response = user.removeFriendRequest(data, "non existing");
+        Response response = user.removeFriendRequest(
+                data,
+                "non existing"
+        );
 
-        assertTrue(response instanceof NoSuchUser);
+        assertInstanceOf(
+                NoSuchUser.class,
+                response
+        );
     }
 
     @Test
@@ -125,32 +216,68 @@ public class UserTests {
         when(data.storeUser(any())).thenReturn(new AllIsWell());
 
         var senderUsername = "potential friend";
-        var friendReq = new FriendRequest(user.getUserName(), new TextMessage("Hullo me friend", senderUsername, 42));
+        var friendReq = new FriendRequest(
+                user.getUserName(),
+                new TextMessage(
+                        "Hullo me friend",
+                        senderUsername,
+                        42
+                )
+        );
         List<FriendRequest> friendRequestList = user.getFriendReq();
         friendRequestList.add(friendReq);
 
-        Response response = user.removeFriendRequest(data, senderUsername);
+        Response response = user.removeFriendRequest(
+                data,
+                senderUsername
+        );
 
-        assertAll(() -> assertTrue(friendRequestList.isEmpty()), () -> assertTrue(response instanceof AllIsWell));
+        assertAll(
+                () -> assertTrue(friendRequestList.isEmpty()),
+                () -> assertInstanceOf(
+                        AllIsWell.class,
+                        response
+                )
+        );
     }
 
     @Test
     void whenRequestingFriendTwice_ShouldResultInUserExistsResponse() {
-        var friendRequest = new FriendRequest(secondUser.getUserName(),
-                                              new TextMessage("Hello", user.getUserName(), -1)
+        var friendRequest = new FriendRequest(
+                secondUser.getUserName(),
+                new TextMessage(
+                        "Hello",
+                        user.getUserName(),
+                        -1
+                )
         );
 
-        user.requestFriend(data, friendRequest);
+        user.requestFriend(
+                data,
+                friendRequest
+        );
 
-        Response response = user.requestFriend(data, friendRequest);
+        Response response = user.requestFriend(
+                data,
+                friendRequest
+        );
 
-        assertTrue(response instanceof UserExists);
+        assertInstanceOf(
+                UserExists.class,
+                response
+        );
     }
 
     @Test
     void whenTryingToRemoveUserThatIsNotAFriend_ShouldResultInUserExistsResponse() {
-        Response response = user.removeFriend(data, secondUser.getUserName());
-        assertTrue(response instanceof UserExists);
+        Response response = user.removeFriend(
+                data,
+                secondUser.getUserName()
+        );
+        assertInstanceOf(
+                UserExists.class,
+                response
+        );
     }
 
     @Test
@@ -158,7 +285,10 @@ public class UserTests {
         List<String> friends = user.getFriends();
         friends.add(secondUser.getUserName());
 
-        user.removeFriend(data, secondUser.getUserName());
+        user.removeFriend(
+                data,
+                secondUser.getUserName()
+        );
 
         assertFalse(friends.contains(secondUser.getUserName()));
     }
@@ -170,8 +300,14 @@ public class UserTests {
                 .getFriends()
                 .add(secondUser.getUserName());
 
-        Response response = user.removeFriend(data, secondUser.getUserName());
+        Response response = user.removeFriend(
+                data,
+                secondUser.getUserName()
+        );
 
-        assertTrue(response instanceof AllIsWell);
+        assertInstanceOf(
+                AllIsWell.class,
+                response
+        );
     }
 }
