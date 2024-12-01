@@ -125,8 +125,17 @@ public class SearchUsersRequestTests extends BaseInputHandlerTest {
                 .data();
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(1, result.usernames().size()),
-                () -> Assertions.assertEquals("Victor", result.usernames().getFirst())
+                () -> Assertions.assertEquals(1,
+                                              result
+                                                      .usernames()
+                                                      .size()
+                ),
+                () -> Assertions.assertEquals(
+                        "Victor",
+                        result
+                                .usernames()
+                                .getFirst()
+                )
         );
     }
 
@@ -149,9 +158,23 @@ public class SearchUsersRequestTests extends BaseInputHandlerTest {
                 .data();
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(2, result.usernames().size()),
-                () -> Assertions.assertEquals("Egon", result.usernames().getFirst()),
-                () -> Assertions.assertEquals("Ester", result.usernames().getLast())
+                () -> Assertions.assertEquals(2,
+                                              result
+                                                      .usernames()
+                                                      .size()
+                ),
+                () -> Assertions.assertEquals(
+                        "Egon",
+                        result
+                                .usernames()
+                                .getFirst()
+                ),
+                () -> Assertions.assertEquals(
+                        "Ester",
+                        result
+                                .usernames()
+                                .getLast()
+                )
         );
     }
 

@@ -49,14 +49,20 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
     @Test
     void gettingFriendList_NeverReturnsNull() {
         inputHandler.handleInput(new GetFriendListRequest("sender"));
-        verify(outputAgent, times(1)).addResponse(friendListArgumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(friendListArgumentCaptor.capture());
         assertNotNull(friendListArgumentCaptor.getValue());
     }
 
     @Test
     void whenUserHasNoFriends_ThenFriendListIsEmpty() {
         inputHandler.handleInput(new GetFriendListRequest("sender"));
-        verify(outputAgent, times(1)).addResponse(friendListArgumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(friendListArgumentCaptor.capture());
         FriendList friendList = friendListArgumentCaptor.getValue();
         assumeFalse(isNull(friendList));
         assertTrue(getFriendListData(friendList).isEmpty());
@@ -68,27 +74,45 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
         String friend2 = "Friend 2";
         friendsUsernames.add(friend1);
         friendsUsernames.add(friend2);
-        setUserOnline(friend1, false);
-        setUserOnline(friend2, false);
+        setUserOnline(
+                friend1,
+                false
+        );
+        setUserOnline(
+                friend2,
+                false
+        );
 
         inputHandler.handleInput(new GetFriendListRequest("sender"));
 
-        verify(outputAgent, times(1)).addResponse(friendListArgumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(friendListArgumentCaptor.capture());
 
         FriendList friendList = friendListArgumentCaptor.getValue();
         assumeFalse(isNull(friendList));
-        assertEquals(2, getFriendListData(friendList).size());
+        assertEquals(
+                2,
+                getFriendListData(friendList).size()
+        );
     }
 
     @Test
     void whenFriendIsOnline_ThenFriendInFriendListShouldShowIt() {
         String friend = "Friend";
         friendsUsernames.add(friend);
-        setUserOnline(friend, true);
+        setUserOnline(
+                friend,
+                true
+        );
 
         inputHandler.handleInput(new GetFriendListRequest("sender"));
 
-        verify(outputAgent, times(1)).addResponse(friendListArgumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(friendListArgumentCaptor.capture());
 
         FriendList friendList = friendListArgumentCaptor.getValue();
         assumeFalse(isNull(friendList));
@@ -102,22 +126,30 @@ class GetFriendListRequestTests extends BaseInputHandlerTest {
     void whenFriendIsNotOnline_ThenFriendInFriendListShouldShowIt() {
         String friend = "Friend";
         friendsUsernames.add(friend);
-        setUserOnline(friend, false);
+        setUserOnline(
+                friend,
+                false
+        );
 
         inputHandler.handleInput(new GetFriendListRequest("sender"));
 
-        verify(outputAgent, times(1)).addResponse(friendListArgumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(friendListArgumentCaptor.capture());
 
         FriendList friendList = friendListArgumentCaptor.getValue();
         assumeFalse(isNull(friendList));
         assumeTrue(getFriendListData(friendList).size() == 1);
         assertFalse(getFriendListData(friendList)
-                            .get(0)
+                            .getFirst()
                             .online());
     }
 
     private static List<Friend> getFriendListData(FriendList friendList) {
-        return friendList.access().data();
+        return friendList
+                .access()
+                .data();
     }
 
     private void setUserOnline(

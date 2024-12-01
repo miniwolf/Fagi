@@ -20,8 +20,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteFriendRequestTests extends BaseInputHandlerTest {
-    @Mock
-    private User user;
+    @Mock private User user;
 
     void beforeEach() {
     }
@@ -46,8 +45,20 @@ public class DeleteFriendRequestTests extends BaseInputHandlerTest {
         String otherUsername = "otherUsername";
         inputHandler.handleInput(new DeleteFriendRequest(otherUsername));
 
-        verify(otherUser, never()).removeFriendRequest(eq(data), anyString());
-        verify(user, times(1)).removeFriendRequest(data, otherUsername);
+        verify(
+                otherUser,
+                never()
+        ).removeFriendRequest(
+                eq(data),
+                anyString()
+        );
+        verify(
+                user,
+                times(1)
+        ).removeFriendRequest(
+                data,
+                otherUsername
+        );
     }
 
     @Test
@@ -59,13 +70,19 @@ public class DeleteFriendRequestTests extends BaseInputHandlerTest {
                 .getUser(username);
         doReturn(new AllIsWell())
                 .when(user)
-                .removeFriendRequest(data, otherUsername);
+                .removeFriendRequest(
+                        data,
+                        otherUsername
+                );
         doReturn(username)
                 .when(inputAgent)
                 .getUsername();
 
         inputHandler.handleInput(new DeleteFriendRequest(otherUsername));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
     }
 }

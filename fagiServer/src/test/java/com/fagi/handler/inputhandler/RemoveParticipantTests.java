@@ -24,63 +24,124 @@ public class RemoveParticipantTests extends BaseInputHandlerTest {
     @Test
     void removingParticipantFromNonExistentConversation_ShouldReturnNoSuchConversation() {
         var notExistingConversationId = 12;
-        inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", notExistingConversationId));
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchConversation.class);
+        inputHandler.handleInput(new RemoveParticipantRequest(
+                "Sender",
+                "Participant",
+                notExistingConversationId
+        ));
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                NoSuchConversation.class
+        );
     }
 
     @Test
     void nonParticipantRemovesParticipantFromConversation_ShouldReturnUnauthorized() {
-        Conversation testConversation = new Conversation(42, "Test Conversation", ConversationType.Multi);
+        Conversation testConversation = new Conversation(
+                42,
+                "Test Conversation",
+                ConversationType.Multi
+        );
         testConversation.addUser("Random person");
         when(data.getConversation(Mockito.anyLong())).thenReturn(testConversation);
-        inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", 42));
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, Unauthorized.class);
+        inputHandler.handleInput(new RemoveParticipantRequest(
+                "Sender",
+                "Participant",
+                42
+        ));
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                Unauthorized.class
+        );
     }
 
     @Test
     void removingNonExistentUser_ShouldReturnNoSuchUser() {
-        Conversation testConversation = new Conversation(42, "Test Conversation", ConversationType.Multi);
+        Conversation testConversation = new Conversation(
+                42,
+                "Test Conversation",
+                ConversationType.Multi
+        );
         testConversation.addUser("Sender");
         testConversation.addUser("Participant");
         when(data.getConversation(Mockito.anyLong())).thenReturn(testConversation);
-        inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", 42));
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchUser.class);
+        inputHandler.handleInput(new RemoveParticipantRequest(
+                "Sender",
+                "Participant",
+                42
+        ));
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                NoSuchUser.class
+        );
     }
 
     @Test
     void removingParticipant_ShouldRemoveThemFromConversation() {
-        var partic = new User("Participant", "password");
+        var partic = new User(
+                "Participant",
+                "password"
+        );
         partic.addConversationID(42);
         partic.addConversationID(41);
         when(data.getUser("Participant")).thenReturn(partic);
-        Conversation testConversation = new Conversation(42, "Test Conversation", ConversationType.Multi);
+        Conversation testConversation = new Conversation(
+                42,
+                "Test Conversation",
+                ConversationType.Multi
+        );
         testConversation.addUser("Sender");
         testConversation.addUser("Participant");
         when(data.getConversation(Mockito.anyLong())).thenReturn(testConversation);
-        inputHandler.handleInput(new RemoveParticipantRequest("Sender", "Participant", 42));
+        inputHandler.handleInput(new RemoveParticipantRequest(
+                "Sender",
+                "Participant",
+                42
+        ));
 
-        User storedUser = DataTestUtil.verifyStoreUserCalled(data, 1).getValue();
-        Conversation storedConversation = DataTestUtil.verifyStoreConversationCalled(data, 1).getValue();
+        User storedUser = DataTestUtil
+                .verifyStoreUserCalled(
+                        data,
+                        1
+                )
+                .getValue();
+        Conversation storedConversation = DataTestUtil
+                .verifyStoreConversationCalled(
+                        data,
+                        1
+                )
+                .getValue();
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(
                         1,
-                        storedUser.getConversationIDs().size()
+                        storedUser
+                                .getConversationIDs()
+                                .size()
                 ),
                 () -> Assertions.assertEquals(
                         41,
-                        storedUser.getConversationIDs().getFirst()
+                        storedUser
+                                .getConversationIDs()
+                                .getFirst()
                 ),
                 () -> Assertions.assertEquals(
                         1,
-                        storedConversation.getParticipants().size()
+                        storedConversation
+                                .getParticipants()
+                                .size()
                 ),
                 () -> Assertions.assertEquals(
                         "Sender",
-                        storedConversation.getParticipants().getFirst()
+                        storedConversation
+                                .getParticipants()
+                                .getFirst()
                 )
         );
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, AllIsWell.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                AllIsWell.class
+        );
     }
 }

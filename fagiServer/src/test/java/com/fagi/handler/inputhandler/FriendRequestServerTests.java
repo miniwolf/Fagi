@@ -48,26 +48,49 @@ class FriendRequestServerTests extends BaseInputHandlerTest {
 
     @Test
     void whenRequestFriendFails_ShouldResultInResponseNotBeingAFriendList() {
-        var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
+        var friendReq = new FriendRequest(
+                "new friend",
+                new TextMessage(
+                        "Hullo me friend",
+                        user.getUserName(),
+                        42
+                )
+        );
 
         doReturn(new NoSuchUser())
                 .when(user)
-                .requestFriend(any(), any());
+                .requestFriend(
+                        any(),
+                        any()
+                );
 
         inputHandler.handleInput(friendReq);
 
         var argumentCaptor = ArgumentCaptor.forClass(Response.class);
-        verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(argumentCaptor.capture());
 
         Assertions.assertAll(
                 () -> Assertions.assertNotNull(argumentCaptor.getValue()),
-                () -> Assertions.assertTrue(argumentCaptor.getValue() instanceof NoSuchUser)
+                () -> Assertions.assertInstanceOf(
+                        NoSuchUser.class,
+                        argumentCaptor.getValue()
+                )
         );
     }
 
     @Test
     void whenRequestFriendSucceedsAndTheyAreOnline_ShouldSendFriendListToRequestedFriend() {
-        var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
+        var friendReq = new FriendRequest(
+                "new friend",
+                new TextMessage(
+                        "Hullo me friend",
+                        user.getUserName(),
+                        42
+                )
+        );
         var friendInputAgent = Mockito.mock(InputAgent.class);
         var friendInputHandler = Mockito.mock(InputHandler.class);
 
@@ -79,7 +102,10 @@ class FriendRequestServerTests extends BaseInputHandlerTest {
                 .when(friendInputAgent)
                 .getInputHandler();
 
-        when(user.requestFriend(data, friendReq)).thenReturn(new AllIsWell());
+        when(user.requestFriend(
+                data,
+                friendReq
+        )).thenReturn(new AllIsWell());
 
         doReturn(true)
                 .when(data)
@@ -88,24 +114,43 @@ class FriendRequestServerTests extends BaseInputHandlerTest {
         inputHandler.handleInput(friendReq);
 
         var argumentCaptor = ArgumentCaptor.forClass(GetFriendListRequest.class);
-        verify(friendInputHandler, times(1)).handleInput(argumentCaptor.capture());
+        verify(
+                friendInputHandler,
+                times(1)
+        ).handleInput(argumentCaptor.capture());
 
         String senderUsername = argumentCaptor
                 .getValue()
                 .sender();
-        Assertions.assertEquals(friendReq.friendUsername(), senderUsername);
+        Assertions.assertEquals(
+                friendReq.friendUsername(),
+                senderUsername
+        );
     }
 
     @Test
     void whenRequestFriendSucceeds_ShouldResultInTheUsersFriendListAsResponse() {
-        var expectedFriend = new User("friend", "123");
-        var friendReq = new FriendRequest("new friend", new TextMessage("Hullo me friend", user.getUserName(), 42));
+        var expectedFriend = new User(
+                "friend",
+                "123"
+        );
+        var friendReq = new FriendRequest(
+                "new friend",
+                new TextMessage(
+                        "Hullo me friend",
+                        user.getUserName(),
+                        42
+                )
+        );
 
         doReturn(false)
                 .when(data)
                 .isUserOnline(friendReq.friendUsername());
 
-        when(user.requestFriend(data, friendReq)).thenReturn(new AllIsWell());
+        when(user.requestFriend(
+                data,
+                friendReq
+        )).thenReturn(new AllIsWell());
 
         doReturn(Collections.singletonList(expectedFriend.getUserName()))
                 .when(user)
@@ -114,16 +159,25 @@ class FriendRequestServerTests extends BaseInputHandlerTest {
         inputHandler.handleInput(friendReq);
 
         var argumentCaptor = ArgumentCaptor.forClass(FriendList.class);
-        verify(outputAgent, times(1)).addResponse(argumentCaptor.capture());
+        verify(
+                outputAgent,
+                times(1)
+        ).addResponse(argumentCaptor.capture());
 
         List<Friend> friendList = argumentCaptor
                 .getValue()
                 .access()
                 .data();
 
-        Assertions.assertEquals(1, friendList.size());
+        Assertions.assertEquals(
+                1,
+                friendList.size()
+        );
 
-        Friend firstFriend = friendList.get(0);
-        Assertions.assertEquals(expectedFriend.getUserName(), firstFriend.username());
+        Friend firstFriend = friendList.getFirst();
+        Assertions.assertEquals(
+                expectedFriend.getUserName(),
+                firstFriend.username()
+        );
     }
 }

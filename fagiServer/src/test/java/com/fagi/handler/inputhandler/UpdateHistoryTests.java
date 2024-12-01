@@ -20,8 +20,15 @@ public class UpdateHistoryTests extends BaseInputHandlerTest {
     void unknownUser_ShouldResultInNoSuchUserResponse() {
         when(data.getUser(anyString())).thenReturn(null);
 
-        inputHandler.handleInput(new UpdateHistoryRequest("not existing user", 42, new Date()));
+        inputHandler.handleInput(new UpdateHistoryRequest(
+                "not existing user",
+                42,
+                new Date()
+        ));
 
-        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(outputAgent, NoSuchUser.class);
+        OutputAgentTestUtil.assertOutputAgentReceivedResponseClass(
+                outputAgent,
+                NoSuchUser.class
+        );
     }
 }
