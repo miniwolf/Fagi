@@ -44,7 +44,15 @@ public class Data {
 
         String name = participants
             .stream()
-            .reduce("", (a, b) -> a + ", " + b);
+            .reduce(
+                    "",
+                    (a, b) -> {
+                        if (!a.isEmpty()) {
+                            return a + ", " + b;
+                        }
+                        return b;
+                    }
+            );
 
         Conversation con = new Conversation(nextConversationId, name, type);
         nextConversationId++;
