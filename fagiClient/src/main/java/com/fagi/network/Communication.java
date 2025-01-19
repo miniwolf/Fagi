@@ -62,11 +62,21 @@ public class Communication {
             ThreadPool threadPool) throws IOException {
         this.encryption = encryption;
         try {
-            socket = new Socket(host, port);
+            socket = new Socket(
+                    host,
+                    port
+            );
             out = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
-            setupInputHandler(encryption, inputStream, threadPool);
-            createSession(encryption, serverKey);
+            setupInputHandler(
+                    encryption,
+                    inputStream,
+                    threadPool
+            );
+            createSession(
+                    encryption,
+                    serverKey
+            );
         } catch (UnknownHostException Uhe) {
             System.err.println("c Uhe: " + Uhe);
             Logger.logStackTrace(Uhe);
@@ -80,16 +90,24 @@ public class Communication {
             EncryptionAlgorithm encryption,
             ObjectInputStream in,
             ThreadPool threadPool) {
-        inputHandler = new InputHandler(in, encryption);
+        inputHandler = new InputHandler(
+                in,
+                encryption
+        );
         inputHandler.setupDistributor(threadPool);
-        threadPool.startThread(inputHandler, "InputHandler");
+        threadPool.startThread(
+                inputHandler,
+                "InputHandler"
+        );
     }
 
     private void createSession(
             EncryptionAlgorithm encryption,
             PublicKey serverKey) throws IOException {
-        RSA rsa = new RSA();
-        rsa.setEncryptionKey(new RSAKey(new KeyPair(serverKey, null)));
+        RSA rsa = new RSA(new RSAKey(new KeyPair(
+                serverKey,
+                null
+        )));
         out.writeObject(rsa.encrypt(Conversion.convertToBytes(new Session((AESKey) encryption.getKey()))));
         out.flush();
 

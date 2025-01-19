@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 
 public final class DataTestUtil {
-    public DataTestUtil() {
+    private DataTestUtil() {
         // Disallowing newing class
     }
 

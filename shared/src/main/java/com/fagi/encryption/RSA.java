@@ -14,6 +14,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Objects;
 
 /**
  * Created by Marcus on 30-05-2016.
@@ -100,5 +101,39 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
         this.encryptionKey = key
                 .key()
                 .getPublic();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RSA rsa = (RSA) o;
+        return Objects.equals(
+                key
+                        .key()
+                        .getPrivate(),
+                rsa.key
+                        .key()
+                        .getPrivate()
+        ) && Objects.equals(
+                key
+                        .key()
+                        .getPublic(),
+                rsa.key
+                        .key()
+                        .getPublic()
+        ) && Objects.equals(
+                encryptionKey,
+                rsa.encryptionKey
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                key,
+                encryptionKey
+        );
     }
 }

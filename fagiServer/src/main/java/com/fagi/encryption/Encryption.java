@@ -14,8 +14,8 @@ public class Encryption {
 
     private RSA rsa;
 
-    private Encryption() {
-        File f = new File(KeyStorage.PUBLICKEYFILE);
+    Encryption(String publicKeyPath) {
+        File f = new File(publicKeyPath);
         if (!f.exists()) {
             this.rsa = new RSA();
             KeyPair key = (KeyPair) rsa
@@ -39,12 +39,19 @@ public class Encryption {
 
     public static Encryption getInstance() {
         if (instance == null) {
-            instance = new Encryption();
+            instance = new Encryption(KeyStorage.PUBLICKEYFILE);
         }
         return instance;
     }
 
     public RSA getRSA() {
         return rsa;
+    }
+
+    /**
+     * This method allow for resting the singleton instance. Should only be used in tests.
+     */
+    static void resetInstance() {
+        instance = null;
     }
 }
