@@ -13,6 +13,7 @@ import com.fagi.responses.UserExists;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -24,7 +25,7 @@ public class User implements Serializable {
     private final String userName;
     private final List<String> friends;
     private final List<Long> conversationIDs;
-    private volatile List<FriendRequest> incFriendReq;
+    private final List<FriendRequest> incFriendReq;
 
     public User(
             String name,
@@ -132,5 +133,40 @@ public class User implements Serializable {
 
     public List<Long> getConversationIDs() {
         return conversationIDs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(
+                pass,
+                user.pass
+        ) && Objects.equals(
+                userName,
+                user.userName
+        ) && Objects.equals(
+                friends,
+                user.friends
+        ) && Objects.equals(
+                conversationIDs,
+                user.conversationIDs
+        ) && Objects.equals(
+                incFriendReq,
+                user.incFriendReq
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                pass,
+                userName,
+                friends,
+                conversationIDs,
+                incFriendReq
+        );
     }
 }
