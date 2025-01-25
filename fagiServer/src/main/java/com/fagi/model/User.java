@@ -72,8 +72,8 @@ public class User implements Serializable {
         if (incFriendReq
                 .stream()
                 .anyMatch(x -> x
-                        .friendUsername()
-                        .equals(userName))) {
+                        .getSender()
+                        .equals(otherUser))) {
             data.makeFriends(this, other);
             other.removeFriendRequest(data, userName);
             return removeFriendRequest(data, otherUser);

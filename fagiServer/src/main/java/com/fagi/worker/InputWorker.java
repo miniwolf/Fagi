@@ -36,10 +36,16 @@ public class InputWorker extends Worker implements InputAgent {
             ConversationHandler handler,
             Data data) throws IOException {
         this.data = data;
+        // TODO: This sysout does not make sense. Should be in the run method or where the thread is started.
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
         this.out = out;
-        this.inputHandler = new InputHandler(this, out, handler, data);
+        this.inputHandler = new InputHandler(
+                this,
+                out,
+                handler,
+                data
+        );
     }
 
     @Override
