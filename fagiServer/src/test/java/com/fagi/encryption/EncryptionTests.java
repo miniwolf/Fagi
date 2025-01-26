@@ -12,6 +12,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -130,7 +131,7 @@ class EncryptionTests {
 
     @Test
     void encryptionInstanceIsASingleton() {
-        assertEquals(
+        assertSame(
                 Encryption.getInstance(),
                 Encryption.getInstance()
         );
