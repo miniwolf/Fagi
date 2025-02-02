@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -47,10 +49,14 @@ public class Data {
             .reduce(
                     "",
                     (a, b) -> {
-                        if (!a.isEmpty()) {
-                            return a + ", " + b;
+                        var joiner = new StringJoiner(", ");
+                        if (Objects.nonNull(a) && !a.isEmpty()) {
+                            joiner.add(a);
                         }
-                        return b;
+                        if (Objects.nonNull(b) && !b.isEmpty()) {
+                            joiner.add(b);
+                        }
+                        return joiner.toString();
                     }
             );
 
