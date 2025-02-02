@@ -37,6 +37,7 @@ public class InputWorker extends Worker implements InputAgent {
             Data data) throws IOException {
         this.data = data;
         // TODO: This sysout does not make sense. Should be in the run method or where the thread is started.
+        // https://trello.com/c/SVazRIgj/58-inputworker-should-not-print-starting-an-input-thread-in-its-constructor
         System.out.println("Starting an input thread");
         objIn = new ObjectInputStream(socket.getInputStream());
         this.out = out;

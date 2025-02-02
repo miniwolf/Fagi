@@ -30,7 +30,7 @@ class EncryptionTests {
     }
 
     @Test
-    public void constructorLoadKeyPairThrowsExceptionIOExceptionWhenLoadKeyThrowsThat() throws Exception {
+    public void whenLoadKeyPairThrowsIOException_ThenConstructorPrintsStacktrace() throws Exception {
         try (var mockedKeyStorage = Mockito.mockStatic(KeyStorage.class)) {
             mockedKeyStorage
                     .when(() -> KeyStorage.LoadKeyPair("RSA"))
@@ -49,7 +49,7 @@ class EncryptionTests {
     }
 
     @Test
-    public void constructorLoadKeyPairThrowsNoSuchAlgorithmExceptionWhenLoadKeyThrowsThat() throws Exception {
+    public void whenLoadKeyPairThrowsNoSuchAlgorithmException_ThenConstructorPrintsStacktrace() throws Exception {
         try (var mockedKeyStorage = Mockito.mockStatic(KeyStorage.class)) {
             mockedKeyStorage
                     .when(() -> KeyStorage.LoadKeyPair("RSA"))
@@ -68,7 +68,7 @@ class EncryptionTests {
     }
 
     @Test
-    public void constructorLoadKeyPairThrowsInvalidKeySpecExceptionWhenLoadKeyThrowsThat() throws Exception {
+    public void whenLoadKeyPairThrowsInvalidKeySpecException_ThenConstructorPrintsStacktrace() throws Exception {
         try (var mockedKeyStorage = Mockito.mockStatic(KeyStorage.class)) {
             mockedKeyStorage
                     .when(() -> KeyStorage.LoadKeyPair("RSA"))
@@ -87,7 +87,7 @@ class EncryptionTests {
     }
 
     @Test
-    void constructorSaveKeyPairThrowsIOExceptionWhenSaveKeyPairThrowsThat() {
+    void whenSaveKeyPairThrowsIOException_ThenConstructorPrintsStacktrace() {
         try (var mockedKeyStorage = Mockito.mockStatic(KeyStorage.class)) {
             mockedKeyStorage
                     .when(() -> KeyStorage.SaveKeyPair(any()))
@@ -104,7 +104,7 @@ class EncryptionTests {
     }
 
     @Test
-    void constructorCreatesRSAKeyAndTriesToStoreIt() {
+    void givenNoKeyPairFileExists_WhenConstructingEncryption_ThenConstructorAttemptsToStoreRSAKeyPair() {
         try (var mockedStatic = Mockito.mockStatic(KeyStorage.class)) {
             var encryption = new Encryption(PUBLIC_KEY_PATH);
             mockedStatic.verify(() -> KeyStorage.SaveKeyPair(eq((KeyPair) encryption
@@ -115,7 +115,7 @@ class EncryptionTests {
     }
 
     @Test
-    void constructorCanLoadRSAKeyFromDisk() throws IOException {
+    void givenKeyPairFileExists_WhenConstructingEncryption_ThenConstructorLoadsKeyPairFromDisk() throws IOException {
         var rsa = new RSA(1024);
         KeyStorage.SaveKeyPair((KeyPair) rsa
                 .getKey()
