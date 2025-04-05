@@ -51,7 +51,7 @@ public class InputWorker extends Worker implements InputAgent {
 
     @Override
     public void run() {
-        while (running) {
+        while (isWorkerRunningStrategy.isRunning()) {
             System.out.println("Running");
             try {
                 Object input = objIn.readObject();
