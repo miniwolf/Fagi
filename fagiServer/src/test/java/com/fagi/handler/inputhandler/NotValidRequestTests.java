@@ -11,7 +11,7 @@ import java.io.PrintStream;
 
 import static org.mockito.Mockito.when;
 
-public class UnknownRequestTests extends BaseInputHandlerTest {
+public class NotValidRequestTests extends BaseInputHandlerTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
@@ -41,6 +41,28 @@ public class UnknownRequestTests extends BaseInputHandlerTest {
 
         Assertions.assertEquals(
                 "Unknown handle: " + UnknownRequest.class,
+                outputStreamCaptor
+                        .toString()
+                        .trim()
+        );
+    }
+
+    @Test
+    void givenInputIsNull_ShouldGiveNoResponse() {
+        inputHandler.handleInput(null);
+
+        OutputAgentTestUtil.verifyNoResponseOfType(
+                outputAgent,
+                Object.class
+        );
+    }
+
+    @Test
+    void givenInputIsNull_ShouldPrintMessageInSysOut() {
+        inputHandler.handleInput(null);
+
+        Assertions.assertEquals(
+                "Input is null. Doing nothing.",
                 outputStreamCaptor
                         .toString()
                         .trim()
