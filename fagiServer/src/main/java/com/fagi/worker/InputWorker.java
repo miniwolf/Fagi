@@ -55,6 +55,8 @@ public class InputWorker extends Worker implements InputAgent {
             System.out.println("Running");
             try {
                 Object input = objIn.readObject();
+
+                // TODO: We should only accept encrypted objects. This will be fixed in https://trello.com/c/8ieB7CSV
                 if (input instanceof byte[]) {
                     input = decryptAndConvertToObject((byte[]) input);
                 }
