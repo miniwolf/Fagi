@@ -44,7 +44,7 @@ public class OutputWorker extends Worker implements OutputAgent {
 
     @Override
     public void run() {
-        while (running) {
+        while (isWorkerRunningStrategy.isRunning()) {
             System.out.println("Running");
             try {
                 sendIncMessages();

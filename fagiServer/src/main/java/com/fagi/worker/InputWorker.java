@@ -14,7 +14,6 @@ import com.fagi.model.Data;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 import java.net.SocketException;
 
 /**
@@ -23,8 +22,8 @@ import java.net.SocketException;
 public class InputWorker extends Worker implements InputAgent {
     private final InputHandler inputHandler;
     private final Data data;
-    private ObjectInputStream objIn;
-    private OutputWorker out;
+    private final ObjectInputStream objIn;
+    private final OutputWorker out;
     private String myUserName = null;
 
     private EncryptionAlgorithm<AESKey> aes;
@@ -34,7 +33,7 @@ public class InputWorker extends Worker implements InputAgent {
             ObjectInputStream objIn,
             OutputWorker out,
             ConversationHandler handler,
-            Data data) throws IOException {
+            Data data) {
         this.data = data;
         // TODO: This sysout does not make sense. Should be in the run method or where the thread is started.
         // https://trello.com/c/SVazRIgj/58-inputworker-should-not-print-starting-an-input-thread-in-its-constructor
@@ -66,11 +65,11 @@ public class InputWorker extends Worker implements InputAgent {
             } catch (EOFException | SocketException eof) {
                 running = false;
                 System.out.println("Logging out user " + myUserName);
-                out.running = false;
+                out.setRunning(false);
                 data.userLogout(myUserName);
             } catch (Exception e) {
                 running = false;
-                out.running = false;
+                out.setRunning(false);
                 System.out.println("Something went wrong in a input worker while loop " + e);
                 e.printStackTrace();
                 System.out.println("Logging out user " + myUserName);
