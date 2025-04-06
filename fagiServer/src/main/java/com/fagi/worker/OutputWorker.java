@@ -138,7 +138,12 @@ public class OutputWorker extends Worker implements OutputAgent {
         this.running = running;
     }
 
-    private <T extends Comparable> boolean equalLists(
+    public int getResponseObjectsQueueSize() {
+        return respondObjects.size();
+    }
+
+    // TODO: zargess - Move to a utility class.
+    <T extends Comparable<T>> boolean equalLists(
             List<T> one,
             List<T> two) {
         if (one == null && two == null) {
