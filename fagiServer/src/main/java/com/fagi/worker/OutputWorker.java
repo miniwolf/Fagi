@@ -16,7 +16,6 @@ import com.fagi.model.messages.lists.ListAccess;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,9 +36,9 @@ public class OutputWorker extends Worker implements OutputAgent {
     private final ListAccess<FriendRequest> currentRequests = new DefaultListAccess<>(new ArrayList<>());
 
     public OutputWorker(
-            Socket socket,
-            Data data) throws IOException {
-        objOut = new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream objOut,
+            Data data) {
+        this.objOut = objOut;
         this.data = data;
     }
 

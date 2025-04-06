@@ -31,7 +31,7 @@ public class InputWorker extends Worker implements InputAgent {
     private boolean sessionCreated = false;
 
     public InputWorker(
-            Socket socket,
+            ObjectInputStream objIn,
             OutputWorker out,
             ConversationHandler handler,
             Data data) throws IOException {
@@ -39,7 +39,7 @@ public class InputWorker extends Worker implements InputAgent {
         // TODO: This sysout does not make sense. Should be in the run method or where the thread is started.
         // https://trello.com/c/SVazRIgj/58-inputworker-should-not-print-starting-an-input-thread-in-its-constructor
         System.out.println("Starting an input thread");
-        objIn = new ObjectInputStream(socket.getInputStream());
+        this.objIn = objIn;
         this.out = out;
         this.inputHandler = new InputHandler(
                 this,
@@ -121,5 +121,13 @@ public class InputWorker extends Worker implements InputAgent {
     @Override
     public InputHandler getInputHandler() {
         return inputHandler;
+    }
+
+    public boolean isSessionCreated() {
+        return sessionCreated;
+    }
+
+    public EncryptionAlgorithm<AESKey> getAes() {
+        return aes;
     }
 }
