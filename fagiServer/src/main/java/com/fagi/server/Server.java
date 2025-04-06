@@ -20,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
@@ -48,7 +50,12 @@ public class Server {
                     .getKey())
                     .key()
                     .getPublic();
-            ServerConfig config = new ServerConfig(name, ip, port, pk);
+            ServerConfig config = new ServerConfig(
+                    name,
+                    ip,
+                    port,
+                    pk
+            );
             config.saveToPath(configFile);
             File inviteCodesFile = new File(JsonFileOperations.INVITE_CODES_FILE_PATH);
             if (!inviteCodesFile.exists()) {
@@ -98,9 +105,17 @@ public class Server {
 
     private void workerCreation(ServerSocket serverSocket) throws IOException {
         Socket socket = serverSocket.accept();
-        OutputWorker outWorker = new OutputWorker(socket, data);
+        OutputWorker outWorker = new OutputWorker(
+                new ObjectOutputStream(socket.getOutputStream()),
+                data
+        );
         Thread outputWorker = new Thread(outWorker);
-        Thread inputWorker = new Thread(new InputWorker(socket, outWorker, handler, data));
+        Thread inputWorker = new Thread(new InputWorker(
+                new ObjectInputStream(socket.getInputStream()),
+                outWorker,
+                handler,
+                data
+        ));
         outputWorker.start();
         inputWorker.start();
     }
