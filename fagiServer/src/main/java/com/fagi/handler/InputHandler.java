@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 
 public record InputHandler(InputAgent inputAgent, OutputAgent out, ConversationHandler conversationHandler, Data data) {
     public void handleInput(Object input) {
-        if (Objects.isNull(input)) {
+        if (input == null) {
             System.out.println("Input is null. Doing nothing.");
         } else if (input instanceof TextMessage arg) {
             MessageInfo messageInfo = arg.getMessageInfo();
