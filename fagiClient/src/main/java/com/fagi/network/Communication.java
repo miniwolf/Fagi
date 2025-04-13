@@ -35,7 +35,6 @@ public class Communication {
     private ObjectOutputStream out;
     private InputHandler inputHandler;
     private Socket socket;
-    private Thread inputThread;
     private String name;
     private String host;
     private int port;
@@ -134,7 +133,6 @@ public class Communication {
     // TODO: Need to close correctly?
     public void close() {
         inputHandler.close();
-        inputThread.interrupt();
         try {
             socket.close();
         } catch (IOException ioe) {
