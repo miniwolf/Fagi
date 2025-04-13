@@ -21,6 +21,7 @@ import java.util.Objects;
  */
 public class RSA implements EncryptionAlgorithm<RSAKey> {
     private RSAKey key;
+    // TODO: Remove this as it is redundant. Trello task: https://trello.com/c/JZynEGUQ
     private PublicKey encryptionKey;
 
     public RSA() {
@@ -43,10 +44,14 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
 
     public RSA(KeyPair key) {
         this.key = new RSAKey(key);
+        this.encryptionKey = key.getPublic();
     }
 
     public RSA(RSAKey key) {
         this.key = key;
+        this.encryptionKey = key
+                .key()
+                .getPublic();
     }
 
     @Override

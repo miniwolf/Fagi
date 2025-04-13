@@ -117,6 +117,7 @@ class EncryptionTests {
     @Test
     void givenKeyPairFileExists_WhenConstructingEncryption_ThenConstructorLoadsKeyPairFromDisk() throws IOException {
         var rsa = new RSA(1024);
+        rsa.setEncryptionKey((RSAKey) rsa.getKey());
         KeyStorage.SaveKeyPair((KeyPair) rsa
                 .getKey()
                 .key());
