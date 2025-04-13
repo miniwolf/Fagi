@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -44,7 +45,7 @@ class EncryptionTests {
             new Encryption(PUBLIC_KEY_PATH);
 
             String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("IOException"));
+            assertTrue(consoleOutput.contains("java.io.IOException"));
         }
     }
 
@@ -63,7 +64,7 @@ class EncryptionTests {
             new Encryption(PUBLIC_KEY_PATH);
 
             String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("NoSuchAlgorithmException"));
+            assertTrue(consoleOutput.contains("java.security.NoSuchAlgorithmException"));
         }
     }
 
@@ -72,7 +73,7 @@ class EncryptionTests {
         try (var mockedKeyStorage = Mockito.mockStatic(KeyStorage.class)) {
             mockedKeyStorage
                     .when(() -> KeyStorage.LoadKeyPair("RSA"))
-                    .thenThrow(new NoSuchAlgorithmException());
+                    .thenThrow(new InvalidKeySpecException());
 
             createPublicKeyFile();
 
@@ -82,7 +83,7 @@ class EncryptionTests {
             new Encryption(PUBLIC_KEY_PATH);
 
             String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("InvalidKeySpecException"));
+            assertTrue(consoleOutput.contains("java.security.spec.InvalidKeySpecException"));
         }
     }
 
@@ -99,7 +100,7 @@ class EncryptionTests {
             new Encryption(PUBLIC_KEY_PATH);
 
             String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("IOException"));
+            assertTrue(consoleOutput.contains("java.io.IOException"));
         }
     }
 
