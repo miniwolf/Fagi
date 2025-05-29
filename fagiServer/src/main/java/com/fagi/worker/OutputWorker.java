@@ -50,7 +50,7 @@ public class OutputWorker extends Worker implements OutputAgent {
                 sendIncMessages();
                 sendResponses();
                 objOut.reset();
-                while (messages.isEmpty() && respondObjects.isEmpty() && running) {
+                while (messages.isEmpty() && respondObjects.isEmpty() && isWorkerRunningStrategy.isRunning()) {
                     if (myUserName != null) {
                         checkForLists();
                     }
