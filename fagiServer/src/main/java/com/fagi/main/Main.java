@@ -7,6 +7,9 @@ package com.fagi.main;
 import com.fagi.model.Data;
 import com.fagi.server.Server;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 /**
  * Handling server start.
  */
@@ -18,6 +21,13 @@ class Main {
         int port = args.length > 0 ? Integer.parseInt(args[0]) : 4242;
 
         Server server = new Server(port, data);
-        server.start();
+
+        try {
+            var serverSocket = new ServerSocket(port);
+
+            server.start(serverSocket);
+        } catch (IOException e) {
+            System.out.println("Error while creating socket, are you sure you can use port " + port + " on you system?");
+        }
     }
 }
