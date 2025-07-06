@@ -13,7 +13,6 @@ import com.fagi.model.Session;
 import com.fagi.model.UserNameAvailableRequest;
 import com.fagi.responses.AllIsWell;
 import com.fagi.util.OutputAgentTestUtil;
-import com.fagi.worker.running.IsWorkerRunningStrategy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,8 +1,8 @@
 package com.fagi.worker;
 
-import com.fagi.worker.running.IsWorkerRunningStrategy;
+import com.fagi.running.IsRunningStrategy;
 
-public class WorkerRunCalledNTimesStrategy implements IsWorkerRunningStrategy {
+public class WorkerRunCalledNTimesStrategy implements IsRunningStrategy {
     private final int timesToRun;
     private int timesCalled = 0;
 

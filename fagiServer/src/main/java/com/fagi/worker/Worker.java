@@ -6,14 +6,14 @@ package com.fagi.worker;
  *
  * Worker thread for each client.
  */
-import com.fagi.worker.running.CheckFieldRunningStrategy;
-import com.fagi.worker.running.IsWorkerRunningStrategy;
+import com.fagi.worker.running.CheckFieldWorkerRunningStrategy;
+import com.fagi.running.IsRunningStrategy;
 
 public abstract class Worker implements Runnable {
     // TODO: Rework using running and the IsWorkerRunningStrategy
     // Trello issue: https://trello.com/c/8cEhrobt
     boolean running = true;
-    protected IsWorkerRunningStrategy isWorkerRunningStrategy = new CheckFieldRunningStrategy(this);
+    protected IsRunningStrategy isWorkerRunningStrategy = new CheckFieldWorkerRunningStrategy(this);
 
     public boolean isRunning() {
         return running;
@@ -23,7 +23,7 @@ public abstract class Worker implements Runnable {
      * Used by tests to change the strategy used to check if worker is running
      * @param strategy the strategy to set
      */
-    void setIsWorkerRunningStrategy(IsWorkerRunningStrategy strategy) {
+    void setIsWorkerRunningStrategy(IsRunningStrategy strategy) {
         isWorkerRunningStrategy = strategy;
     }
 }
