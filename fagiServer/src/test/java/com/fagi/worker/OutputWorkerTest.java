@@ -12,6 +12,7 @@ import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserOnline;
+import com.fagi.util.RunOnceStrategy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -475,7 +476,7 @@ class OutputWorkerTest {
             var user1LoggedInMessage = new UserLoggedIn("bob");
             var user2LoggedInMessage = new UserLoggedIn("eve");
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunOnceStrategy());
+            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
             outputWorker.setRunning(true);
 
             outputWorker.addMessage(user1LoggedInMessage);
@@ -530,7 +531,7 @@ class OutputWorkerTest {
                     .when(objOut)
                     .reset();
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunOnceStrategy());
+            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
             outputWorker.setRunning(true);
 
             outputWorker.run();
@@ -611,7 +612,7 @@ class OutputWorkerTest {
             var outContent = new ByteArrayOutputStream();
             System.setOut(new PrintStream(outContent));
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunOnceStrategy());
+            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
             outputWorker.setRunning(true);
 
             outputWorker.run();
@@ -628,7 +629,7 @@ class OutputWorkerTest {
 
             var userLoggedInMessage = new UserLoggedIn("bob");
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunOnceStrategy());
+            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
             outputWorker.setRunning(true);
 
             outputWorker.addMessage(userLoggedInMessage);
