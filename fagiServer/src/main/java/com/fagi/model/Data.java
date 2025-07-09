@@ -202,4 +202,8 @@ public class Data {
             .map(User::getUserName)
             .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public long getNextConversationId() {
+        return nextConversationId;
+    }
 }
