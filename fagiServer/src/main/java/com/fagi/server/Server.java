@@ -109,12 +109,14 @@ public class Server {
                 data
         );
         Thread outputWorker = new Thread(outWorker);
+        outputWorker.setDaemon(true);
         Thread inputWorker = new Thread(new InputWorker(
                 new ObjectInputStream(socket.getInputStream()),
                 outWorker,
                 handler,
                 data
         ));
+        inputWorker.setDaemon(true);
         outputWorkerThreads.add(outputWorker);
         inputWorkerThreads.add(inputWorker);
         outputWorker.start();
