@@ -19,7 +19,7 @@ tasks.test {
 }
 
 javafx {
-    version = "21"
+    version = "24"
     modules = mutableListOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
 }
 
@@ -27,7 +27,7 @@ dependencies {
     implementation(project(":shared"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
-    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("org.mockito:mockito-core:5.18.0")
     testImplementation("org.hamcrest:hamcrest:2.2")
     testImplementation("org.testfx:testfx-core:4.0.18")
     testImplementation("org.testfx:testfx-junit5:4.0.18")

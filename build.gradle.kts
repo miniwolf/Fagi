@@ -17,8 +17,8 @@ subprojects {
     apply(plugin = "info.solidsoft.pitest")
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = JavaVersion.VERSION_21.toString()
-        targetCompatibility = JavaVersion.VERSION_21.toString()
+        sourceCompatibility = JavaVersion.VERSION_24.toString()
+        targetCompatibility = JavaVersion.VERSION_24.toString()
     }
 
     configure<PitestPluginExtension> {
