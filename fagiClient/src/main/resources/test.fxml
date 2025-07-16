@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<fx:root prefHeight="391.0" prefWidth="585.0" type="Pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <TextArea fx:id="conversationTextarea" layoutX="14.0" layoutY="265.0" prefHeight="110.0" prefWidth="526.0" />
+   <TextField layoutX="14.0" layoutY="23.0" prefHeight="121.0" prefWidth="318.0" text="Hello there" />
+</fx:root>
