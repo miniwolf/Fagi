@@ -13,5 +13,5 @@ public interface OutputAgent {
 
     void setUserName(String userName);
 
-    void setRunning(boolean running);
+    void stop();
 }

@@ -44,20 +44,20 @@ public class OutputWorker extends Worker implements OutputAgent {
 
     @Override
     public void run() {
-        while (isWorkerRunningStrategy.isRunning()) {
+        while (isRunningStrategy.isRunning()) {
             System.out.println("Running");
             try {
                 sendIncMessages();
                 sendResponses();
                 objOut.reset();
-                while (messages.isEmpty() && respondObjects.isEmpty() && isWorkerRunningStrategy.isRunning()) {
+                while (messages.isEmpty() && respondObjects.isEmpty() && isRunningStrategy.isRunning()) {
                     if (myUserName != null) {
                         checkForLists();
                     }
                     Thread.sleep(100);
                 }
             } catch (IOException | InterruptedException ioe) {
-                running = false;
+                stop();
                 System.out.println(ioe.toString());
                 System.out.println("Logging out user " + myUserName);
                 data.userLogout(myUserName);
@@ -134,8 +134,8 @@ public class OutputWorker extends Worker implements OutputAgent {
     }
 
     @Override
-    public void setRunning(boolean running) {
-        this.running = running;
+    public void stop() {
+        this.isRunningStrategy.stop();
     }
 
     public int getResponseObjectsQueueSize() {

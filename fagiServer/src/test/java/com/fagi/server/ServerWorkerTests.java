@@ -10,6 +10,7 @@ import com.fagi.model.Session;
 import com.fagi.model.User;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
+import com.fagi.running.IsRunningStrategy;
 import com.fagi.util.DataTestUtil;
 import com.fagi.util.RunOnceStrategy;
 import org.junit.jupiter.api.Assertions;
@@ -46,16 +47,24 @@ class ServerWorkerTests extends ServerTests {
                 data
         );
         var runStrategy = new RunOnceStrategy();
-        server.setIsRunningStrategy(() -> {
-            var isRunning = runStrategy.isRunning();
-            if (!isRunning) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+        server.setIsRunningStrategy(new IsRunningStrategy() {
+            @Override
+            public boolean isRunning() {
+                var isRunning = runStrategy.isRunning();
+                if (!isRunning) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+                return isRunning;
             }
-            return isRunning;
+
+            @Override
+            public void stop() {
+
+            }
         });
 
         server.start(serverSocket);
@@ -105,19 +114,27 @@ class ServerWorkerTests extends ServerTests {
                 data
         );
         var runStrategy = new RunOnceStrategy();
-        server.setIsRunningStrategy(() -> {
-            var isRunning = runStrategy.isRunning();
-            if (!isRunning) {
-                // Wait for output stream to contain response
-                while (outputStream.size() < encryptedResponse.length) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+        server.setIsRunningStrategy(new IsRunningStrategy() {
+            @Override
+            public boolean isRunning() {
+                var isRunning = runStrategy.isRunning();
+                if (!isRunning) {
+                    // Wait for output stream to contain response
+                    while (outputStream.size() < encryptedResponse.length) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
+                return isRunning;
             }
-            return isRunning;
+
+            @Override
+            public void stop() {
+
+            }
         });
 
         server.start(serverSocket);
@@ -196,19 +213,27 @@ class ServerWorkerTests extends ServerTests {
         );
 
         var runStrategy = new RunOnceStrategy();
-        server.setIsRunningStrategy(() -> {
-            var isRunning = runStrategy.isRunning();
-            if (!isRunning) {
-                // Wait for output stream to contain response
-                while (outputStream.size() < encryptedResponse.length * 3) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+        server.setIsRunningStrategy(new IsRunningStrategy() {
+            @Override
+            public boolean isRunning() {
+                var isRunning = runStrategy.isRunning();
+                if (!isRunning) {
+                    // Wait for output stream to contain response
+                    while (outputStream.size() < encryptedResponse.length * 3) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
+                return isRunning;
             }
-            return isRunning;
+
+            @Override
+            public void stop() {
+
+            }
         });
 
         server.start(serverSocket);

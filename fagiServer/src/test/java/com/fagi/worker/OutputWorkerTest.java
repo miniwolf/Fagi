@@ -12,6 +12,7 @@ import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserOnline;
+import com.fagi.util.NeverRunStrategy;
 import com.fagi.util.RunOnceStrategy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -73,7 +74,7 @@ class OutputWorkerTest {
             doThrow(new IOException())
                     .when(objOut)
                     .writeObject(any());
-            outputWorker.setRunning(false);
+            outputWorker.setIsRunningStrategy(new NeverRunStrategy());
             outputWorker.addResponse("dummy");
 
             outputWorker.run();
@@ -93,7 +94,6 @@ class OutputWorkerTest {
             doThrow(new IOException())
                     .when(objOut)
                     .writeObject(any());
-            outputWorker.setRunning(true);
             outputWorker.addResponse("dummy");
 
             outputWorker.run();
@@ -111,7 +111,6 @@ class OutputWorkerTest {
             doThrow(new IOException())
                     .when(objOut)
                     .writeObject(any());
-            outputWorker.setRunning(true);
             outputWorker.addResponse("dummy");
 
             outputWorker.run();
@@ -134,7 +133,6 @@ class OutputWorkerTest {
             doThrow(new IOException())
                     .when(objOut)
                     .writeObject(any());
-            outputWorker.setRunning(true);
             outputWorker.addResponse("dummy");
             outputWorker.setUserName("bob");
 
@@ -252,8 +250,7 @@ class OutputWorkerTest {
     class OutputWorkerSendFriendRequestListTests {
         @Test
         void givenNoUsernameInOutputWorker_WhenCheckingFriendRequestList_ThenShouldNotSendFriendRequestList() throws IOException {
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
 
             outputWorker.run();
 
@@ -286,8 +283,7 @@ class OutputWorkerTest {
                     .when(objOut)
                     .reset();
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
             outputWorker.setUserName(user.getUserName());
 
             outputWorker.run();
@@ -334,8 +330,7 @@ class OutputWorkerTest {
                     .when(objOut)
                     .reset();
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
             outputWorker.setUserName(user.getUserName());
 
             outputWorker.run();
@@ -367,8 +362,7 @@ class OutputWorkerTest {
                     .when(data.getUser(user.getUserName()))
                     .thenReturn(user);
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
             outputWorker.setUserName(user.getUserName());
 
             outputWorker.run();
@@ -400,8 +394,7 @@ class OutputWorkerTest {
                     .when(data.getUser(user.getUserName()))
                     .thenReturn(user);
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
             outputWorker.setUserName(user.getUserName());
 
             outputWorker.run();
@@ -435,8 +428,7 @@ class OutputWorkerTest {
                     .when(data.getUser(user.getUserName()))
                     .thenReturn(user);
 
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(4));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(4));
             outputWorker.setUserName(user.getUserName());
 
             outputWorker.run();
@@ -453,8 +445,7 @@ class OutputWorkerTest {
 
         @Test
         void whenCheckingFriendRequestListTwentyTimes_ThenRunShouldTakeAtLeastTwoSeconds() {
-            outputWorker.setIsWorkerRunningStrategy(new WorkerRunCalledNTimesStrategy(21));
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(21));
 
             var startTime = System.currentTimeMillis();
             outputWorker.run();
@@ -476,8 +467,7 @@ class OutputWorkerTest {
             var user1LoggedInMessage = new UserLoggedIn("bob");
             var user2LoggedInMessage = new UserLoggedIn("eve");
 
-            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
             outputWorker.addMessage(user1LoggedInMessage);
             outputWorker.addMessage(user2LoggedInMessage);
@@ -531,8 +521,7 @@ class OutputWorkerTest {
                     .when(objOut)
                     .reset();
 
-            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
             outputWorker.run();
 
@@ -548,7 +537,7 @@ class OutputWorkerTest {
 
         @Test
         void whenRunningIsFalse_ThenShouldSendAllRespondObjects() throws IOException {
-            outputWorker.setRunning(false);
+            outputWorker.setIsRunningStrategy(new NeverRunStrategy());
             String firstResponse = "some response";
             AllIsWell secondResponse = new AllIsWell();
             outputWorker.addResponse(firstResponse);
@@ -598,7 +587,7 @@ class OutputWorkerTest {
             var outContent = new ByteArrayOutputStream();
             System.setOut(new PrintStream(outContent));
 
-            outputWorker.setRunning(false);
+            outputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
             outputWorker.run();
 
@@ -612,8 +601,7 @@ class OutputWorkerTest {
             var outContent = new ByteArrayOutputStream();
             System.setOut(new PrintStream(outContent));
 
-            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
             outputWorker.run();
 
@@ -629,8 +617,7 @@ class OutputWorkerTest {
 
             var userLoggedInMessage = new UserLoggedIn("bob");
 
-            outputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
-            outputWorker.setRunning(true);
+            outputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
             outputWorker.addMessage(userLoggedInMessage);
 

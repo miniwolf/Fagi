@@ -12,6 +12,7 @@ import com.fagi.model.Login;
 import com.fagi.model.Session;
 import com.fagi.model.UserNameAvailableRequest;
 import com.fagi.responses.AllIsWell;
+import com.fagi.util.NeverRunStrategy;
 import com.fagi.util.OutputAgentTestUtil;
 import com.fagi.util.RunOnceStrategy;
 import org.junit.jupiter.api.AfterEach;
@@ -112,7 +113,7 @@ public class InputWorkerTests {
         var outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        inputWorker.setRunning(false);
+        inputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
         inputWorker.run();
 
@@ -125,7 +126,7 @@ public class InputWorkerTests {
         var outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        inputWorker.setRunning(false);
+        inputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
         inputWorker.run();
 
@@ -146,7 +147,7 @@ public class InputWorkerTests {
             var outContent = new ByteArrayOutputStream();
             System.setOut(new PrintStream(outContent));
 
-            inputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
+            inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockAes);
 
@@ -177,7 +178,7 @@ public class InputWorkerTests {
                     .when(() -> Conversion.convertFromBytes(decryptedInput))
                     .thenReturn(sessionRequest);
 
-            inputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
+            inputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
             Assertions.assertFalse(inputWorker.isSessionCreated());
 
@@ -218,7 +219,7 @@ public class InputWorkerTests {
                     .when(() -> Conversion.convertFromBytes(decryptedInput))
                     .thenReturn(loginRequest);
 
-            inputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
+            inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockedAES);
 
@@ -248,7 +249,7 @@ public class InputWorkerTests {
             var outContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(outContent));
 
-            inputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
+            inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockedAES);
 
@@ -274,7 +275,7 @@ public class InputWorkerTests {
             var outContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(outContent));
 
-            inputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
+            inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockedAES);
 
@@ -312,7 +313,7 @@ public class InputWorkerTests {
                         outputWorker,
                         times(1)
                 )
-                .setRunning(false);
+                .stop();
 
         Assertions.assertAll(
                 () -> Assertions.assertFalse(inputWorker.isRunning()),
@@ -352,7 +353,7 @@ public class InputWorkerTests {
                         outputWorker,
                         times(1)
                 )
-                .setRunning(false);
+                .stop();
 
         Assertions.assertAll(
                 () -> Assertions.assertFalse(inputWorker.isRunning()),
@@ -392,7 +393,7 @@ public class InputWorkerTests {
                         outputWorker,
                         times(1)
                 )
-                .setRunning(false);
+                .stop();
 
         Assertions.assertAll(
                 () -> Assertions.assertFalse(inputWorker.isRunning()),
@@ -416,7 +417,7 @@ public class InputWorkerTests {
         when(data.getUser(any())).thenReturn(null);
         when(mockObjectInputStream.readObject()).thenReturn(new UserNameAvailableRequest("bob"));
 
-        inputWorker.setIsWorkerRunningStrategy(new RunOnceStrategy());
+        inputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
         inputWorker.run();
 
