@@ -14,4 +14,9 @@ public class WorkerRunCalledNTimesStrategy implements IsRunningStrategy {
     public boolean isRunning() {
         return timesToRun > timesCalled++;
     }
+
+    @Override
+    public void stop() {
+        timesCalled = timesToRun;
+    }
 }

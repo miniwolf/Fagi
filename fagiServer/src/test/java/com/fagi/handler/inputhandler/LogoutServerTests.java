@@ -99,38 +99,24 @@ class LogoutServerTests extends BaseInputHandlerTest {
     void handlingLogoutRequest_ShouldResultInOutputWorkerNotRunning() {
         inputHandler.handleInput(new Logout());
 
-        var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
         Mockito
                 .verify(
                         outputAgent,
                         times(1)
                 )
-                .setRunning(argumentCaptor.capture());
-
-        Boolean isRunning = argumentCaptor.getValue();
-        Assertions.assertAll(
-                () -> Assertions.assertNotNull(isRunning),
-                () -> Assertions.assertFalse(isRunning)
-        );
+                .stop();
     }
 
     @Test
     void handlingLogoutRequest_ShouldResultInInputAgentNotRunning() {
         inputHandler.handleInput(new Logout());
 
-        var argumentCaptor = ArgumentCaptor.forClass(Boolean.class);
         Mockito
                 .verify(
                         inputAgent,
                         times(1)
                 )
-                .setRunning(argumentCaptor.capture());
-
-        Boolean isRunning = argumentCaptor.getValue();
-        Assertions.assertAll(
-                () -> Assertions.assertNotNull(isRunning),
-                () -> Assertions.assertFalse(isRunning)
-        );
+                .stop();
     }
 
     @Test

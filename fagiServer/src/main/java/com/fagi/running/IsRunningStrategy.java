@@ -11,4 +11,9 @@ public interface IsRunningStrategy {
      * @return true if the worker is running, false if not
      */
     boolean isRunning();
+
+    /**
+     * Ensure future calls to {@link IsRunningStrategy#isRunning()} will return false
+     */
+    void stop();
 }

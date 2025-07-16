@@ -13,7 +13,7 @@ public interface InputAgent {
 
     String getUsername();
 
-    void setRunning(boolean running);
+    void stop();
 
     InputHandler getInputHandler();
 }

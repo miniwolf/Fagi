@@ -61,7 +61,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out, ConversationH
             out.addResponse(handleLogin(arg));
         } else if (input instanceof Logout) {
             out.addResponse(handleLogout());
-            out.setRunning(false);
+            out.stop();
         } else if (input instanceof CreateUser arg) {
             out.addResponse(handleCreateUser(arg));
         } else if (input instanceof FriendRequest arg) {
@@ -420,7 +420,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out, ConversationH
 
     private Object handleLogout() {
         data.userLogout(inputAgent.getUsername());
-        inputAgent.setRunning(false);
+        inputAgent.stop();
 
         List<String> friends = data
                 .getUser(inputAgent.getUsername())

@@ -1,5 +1,6 @@
 package com.fagi.server;
 
+import com.fagi.util.NeverRunStrategy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -94,7 +95,7 @@ class ServerLoggingTests extends ServerTests {
                 serverPort,
                 data
         );
-        server.setRunning(false);
+        server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(serverSocket);
 
         Assertions.assertAll(
@@ -117,7 +118,7 @@ class ServerLoggingTests extends ServerTests {
                 serverPort,
                 data
         );
-        server.setRunning(false);
+        server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(null);
 
         Assertions.assertTrue(outContent
@@ -134,7 +135,7 @@ class ServerLoggingTests extends ServerTests {
                 serverPort,
                 data
         );
-        server.setRunning(false);
+        server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(null);
 
         Assertions.assertTrue(outContent

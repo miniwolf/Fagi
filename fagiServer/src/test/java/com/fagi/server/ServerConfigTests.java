@@ -71,4 +71,14 @@ class ServerConfigTests extends ServerTests {
                 }
         );
     }
+
+    @Test
+    void givenServerNewlyCreated_ThenShouldBeRunning() {
+        var server = new Server(
+                serverPort,
+                data
+        );
+
+        Assertions.assertTrue(server.isRunning());
+    }
 }
