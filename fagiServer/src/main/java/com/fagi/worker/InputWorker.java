@@ -50,7 +50,7 @@ public class InputWorker extends Worker implements InputAgent {
 
     @Override
     public void run() {
-        while (isWorkerRunningStrategy.isRunning()) {
+        while (isRunningStrategy.isRunning()) {
             System.out.println("Running");
             try {
                 Object input = objIn.readObject();
@@ -63,13 +63,13 @@ public class InputWorker extends Worker implements InputAgent {
                 // TODO: This will be fixed with https://trello.com/c/KBmf0o1U/54
                 inputHandler.handleInput(input);
             } catch (EOFException | SocketException eof) {
-                running = false;
+                stop();
                 System.out.println("Logging out user " + myUserName);
-                out.setRunning(false);
+                out.stop();
                 data.userLogout(myUserName);
             } catch (Exception e) {
-                running = false;
-                out.setRunning(false);
+                stop();
+                out.stop();
                 System.out.println("Something went wrong in a input worker while loop " + e);
                 e.printStackTrace();
                 System.out.println("Logging out user " + myUserName);
@@ -115,8 +115,8 @@ public class InputWorker extends Worker implements InputAgent {
     }
 
     @Override
-    public void setRunning(boolean running) {
-        this.running = running;
+    public void stop() {
+        this.isRunningStrategy.stop();
     }
 
     @Override

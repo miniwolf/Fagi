@@ -4,7 +4,9 @@ import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
+import com.fagi.running.IsRunningStrategy;
 import com.fagi.util.DataTestUtil;
+import com.fagi.util.NeverRunStrategy;
 import com.fagi.utility.JsonFileOperations;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,10 @@ class ServerConversationHandlerTests extends ServerTests {
                 serverPort,
                 data
         );
-        server.setRunning(false);
+        server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(null);
+
+        // Allow the ConversationHandler thread to get going
         Thread.sleep(100);
 
         Assertions.assertAll(
@@ -33,13 +37,16 @@ class ServerConversationHandlerTests extends ServerTests {
     }
 
     @Test
-    void whenServerIsShuttingDown_ThenConversationHandlerThreadShouldBeInterrupted() {
+    void whenServerIsShuttingDown_ThenConversationHandlerThreadShouldBeInterrupted() throws InterruptedException {
         var server = new Server(
                 serverPort,
                 data
         );
-        server.setRunning(false);
+        server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(null);
+
+        // Allow the ConversationHandler thread to get going
+        Thread.sleep(100);
 
         Assertions.assertTrue(server
                                       .getConversationHandlerThread()
@@ -67,7 +74,6 @@ class ServerConversationHandlerTests extends ServerTests {
                 serverPort,
                 data
         );
-        server.setRunning(false);
         TextMessage evaMessage = new TextMessage(
                 "Hello, friend.",
                 "Eva",
@@ -76,17 +82,25 @@ class ServerConversationHandlerTests extends ServerTests {
         server
                 .getHandler()
                 .addMessage(evaMessage);
-        server.setIsRunningStrategy(() -> {
-            do {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } while (server
-                    .getHandler()
-                    .queueSize() > 0);
-            return false;
+        server.setIsRunningStrategy(new IsRunningStrategy() {
+            @Override
+            public boolean isRunning() {
+                do {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                } while (server
+                        .getHandler()
+                        .queueSize() > 0);
+                return false;
+            }
+
+            @Override
+            public void stop() {
+
+            }
         });
 
         server.start(null);
@@ -143,7 +157,7 @@ class ServerConversationHandlerTests extends ServerTests {
                 serverPort,
                 data
         );
-        server.setRunning(false);
+        server.setIsRunningStrategy(new NeverRunStrategy());
 
         server.start(null);
 

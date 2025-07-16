@@ -12,8 +12,8 @@ import com.fagi.encryption.RSAKey;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.model.Data;
 import com.fagi.model.InviteCodeContainer;
+import com.fagi.running.CheckFieldRunningStrategy;
 import com.fagi.running.IsRunningStrategy;
-import com.fagi.server.running.CheckFieldServerRunningStrategy;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.worker.InputWorker;
 import com.fagi.worker.OutputWorker;
@@ -32,8 +32,7 @@ import java.util.List;
 public class Server {
     static final String CONFIG_FILE = "config/serverinfo.config";
     private final Data data;
-    private IsRunningStrategy isRunningStrategy = new CheckFieldServerRunningStrategy(this);
-    private boolean running = true;
+    private IsRunningStrategy isRunningStrategy = new CheckFieldRunningStrategy();
     private final ConversationHandler handler;
     private Thread conversationHandlerThread;
     private final List<Thread> inputWorkerThreads = Collections.synchronizedList(new ArrayList<>());
@@ -82,7 +81,7 @@ public class Server {
                 workerCreation(serverSocket);
             } catch (IOException e) {
                 System.out.println("Error in server loop exception = " + e);
-                running = false;
+                isRunningStrategy.stop();
             }
         }
 
@@ -121,11 +120,7 @@ public class Server {
     }
 
     public boolean isRunning() {
-        return running;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
+        return isRunningStrategy.isRunning();
     }
 
     public void setIsRunningStrategy(IsRunningStrategy isRunningStrategy) {

@@ -17,4 +17,9 @@ public class RunOnceStrategy implements IsRunningStrategy {
         hasRun = true;
         return true;
     }
+
+    @Override
+    public void stop() {
+        hasRun = true;
+    }
 }
