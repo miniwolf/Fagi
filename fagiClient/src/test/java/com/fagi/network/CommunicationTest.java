@@ -1,5 +1,6 @@
 package com.fagi.network;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,7 @@ import java.io.ObjectOutputStream;
  *
  * @author miniwolf
  */
-public class CommunicationTest {
+public class CommunicationTest extends BaseFagiTest {
     private Communication communication;
 
     @BeforeEach

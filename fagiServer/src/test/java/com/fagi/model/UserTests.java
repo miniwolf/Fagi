@@ -1,5 +1,6 @@
 package com.fagi.model;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class UserTests {
+public class UserTests extends BaseFagiTest {
     private Data data;
     private User user;
     private User secondUser;

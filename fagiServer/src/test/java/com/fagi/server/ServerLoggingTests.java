@@ -1,30 +1,21 @@
 package com.fagi.server;
 
-import com.fagi.util.NeverRunStrategy;
-import org.junit.jupiter.api.AfterEach;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
+import com.fagi.util.running.NeverRunStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.nio.file.Files;
+import java.util.List;
 
 class ServerLoggingTests extends ServerTests {
-    @AfterEach
-    void tearDown() {
-        System.setOut(System.out);
-        System.setErr(System.err);
-    }
-
     @Test
-    void givenFileWriteGivesIOException_ThenShouldPrintErrorToErrorConsole() {
+    void givenFileWriteGivesIOException_ThenShouldLogError() {
         try (var mockedFiles = Mockito.mockStatic(Files.class)) {
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             mockedFiles
                     .when(() -> Files.write(
                             Mockito.any(),
@@ -38,18 +29,38 @@ class ServerLoggingTests extends ServerTests {
                     data
             );
 
-            String consoleOutput = outContent.toString();
-            Assertions.assertTrue(consoleOutput.contains("java.io.IOException"));
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                    Server.class,
+                    TestLogLevel.ERROR
+            );
+
+            Assertions.assertEquals(
+                    1,
+                    testLogRecords.size()
+            );
+
+            TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            "Could not create server.",
+                            logRecord.message()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecord.logLevel()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            IOException.class,
+                            logRecord.throwable()
+                    )
+            );
         }
     }
 
     @Test
-    void givenServerSocketAcceptThrowsIOException_ThenShouldPrintErrorToSysOutButNotSysError() throws IOException {
+    void givenServerSocketAcceptThrowsIOException_ThenShouldLogError() throws IOException {
         var serverSocket = Mockito.mock(ServerSocket.class);
-        var outContent = new ByteArrayOutputStream();
-        var outErrorContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(outErrorContent));
 
         Mockito
                 .when(serverSocket.accept())
@@ -61,30 +72,38 @@ class ServerLoggingTests extends ServerTests {
         );
         server.start(serverSocket);
 
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                Server.class,
+                TestLogLevel.ERROR
+        );
+
+        Assertions.assertEquals(
+                1,
+                testLogRecords.size()
+        );
+
+        TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
         Assertions.assertAll(
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("Error in server loop exception = ")),
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("java.io.IOException")),
-                () -> Assertions.assertFalse(outErrorContent
-                                                     .toString()
-                                                     .contains("Error in server loop exception = ")),
-                () -> Assertions.assertFalse(outErrorContent
-                                                     .toString()
-                                                     .contains("java.io.IOException")),
+                () -> Assertions.assertEquals(
+                        "Error in server loop exception",
+                        logRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.ERROR,
+                        logRecord.logLevel()
+                ),
+                () -> Assertions.assertInstanceOf(
+                        IOException.class,
+                        logRecord.throwable()
+                ),
                 () -> Assertions.assertFalse(server.isRunning())
         );
     }
 
     @Test
-    void givenServerSocketCloseThrowsIOException_ThenShouldPrintErrorToSysErrorButNotSysOut() throws IOException {
+    void givenServerSocketCloseThrowsIOException_ThenShouldBeLogged() throws IOException {
         var serverSocket = Mockito.mock(ServerSocket.class);
-        var outContent = new ByteArrayOutputStream();
-        var outErrorContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(outErrorContent));
 
         Mockito
                 .doThrow(new IOException())
@@ -98,22 +117,36 @@ class ServerLoggingTests extends ServerTests {
         server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(serverSocket);
 
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                Server.class,
+                TestLogLevel.ERROR
+        );
+
+        Assertions.assertEquals(
+                1,
+                testLogRecords.size()
+        );
+
+        TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
         Assertions.assertAll(
-                () -> Assertions.assertFalse(outContent
-                                                     .toString()
-                                                     .contains("java.io.IOException")),
-                () -> Assertions.assertTrue(outErrorContent
-                                                    .toString()
-                                                    .contains("java.io.IOException")),
-                () -> Assertions.assertFalse(server.isRunning())
+                () -> Assertions.assertEquals(
+                        "Failed to close server socket gracefully.",
+                        logRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.ERROR,
+                        logRecord.logLevel()
+                ),
+                () -> Assertions.assertInstanceOf(
+                        IOException.class,
+                        logRecord.throwable()
+                )
         );
     }
 
     @Test
-    void whenServerStarts_ThenStartingServerIsPrintedInSysOut() {
-        var outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
+    void whenServerStartsAndThenStops_ThenShouldLogThatServerStartsAndStops() {
         var server = new Server(
                 serverPort,
                 data
@@ -121,25 +154,42 @@ class ServerLoggingTests extends ServerTests {
         server.setIsRunningStrategy(new NeverRunStrategy());
         server.start(null);
 
-        Assertions.assertTrue(outContent
-                                      .toString()
-                                      .contains("Starting Server"));
-    }
-
-    @Test
-    void whenServerStops_ThenStoppingServerIsPrintedInSysOut() {
-        var outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        var server = new Server(
-                serverPort,
-                data
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                Server.class,
+                TestLogLevel.INFO
         );
-        server.setIsRunningStrategy(new NeverRunStrategy());
-        server.start(null);
 
-        Assertions.assertTrue(outContent
-                                      .toString()
-                                      .contains("Stopping Server"));
+        Assertions.assertEquals(
+                2,
+                testLogRecords.size()
+        );
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        "Starting Server",
+                        testLogRecords
+                                .getFirst()
+                                .message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.INFO,
+                        testLogRecords
+                                .getFirst()
+                                .logLevel()
+                ),
+
+                () -> Assertions.assertEquals(
+                        "Stopping Server",
+                        testLogRecords
+                                .getLast()
+                                .message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.INFO,
+                        testLogRecords
+                                .getLast()
+                                .logLevel()
+                )
+        );
     }
 }

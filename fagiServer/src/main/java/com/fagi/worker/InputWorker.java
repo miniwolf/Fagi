@@ -9,6 +9,8 @@ import com.fagi.encryption.Encryption;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.Data;
 
 import java.io.EOFException;
@@ -20,6 +22,7 @@ import java.net.SocketException;
  * @author miniwolf
  */
 public class InputWorker extends Worker implements InputAgent {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(InputWorker.class);
     private final InputHandler inputHandler;
     private final Data data;
     private final ObjectInputStream objIn;
@@ -35,9 +38,6 @@ public class InputWorker extends Worker implements InputAgent {
             ConversationHandler handler,
             Data data) {
         this.data = data;
-        // TODO: This sysout does not make sense. Should be in the run method or where the thread is started.
-        // https://trello.com/c/SVazRIgj/58-inputworker-should-not-print-starting-an-input-thread-in-its-constructor
-        System.out.println("Starting an input thread");
         this.objIn = objIn;
         this.out = out;
         this.inputHandler = new InputHandler(
@@ -50,8 +50,9 @@ public class InputWorker extends Worker implements InputAgent {
 
     @Override
     public void run() {
+        LOGGER.info(() -> "Starting an input thread");
         while (isRunningStrategy.isRunning()) {
-            System.out.println("Running");
+            LOGGER.info(() -> "Running");
             try {
                 Object input = objIn.readObject();
 
@@ -64,19 +65,21 @@ public class InputWorker extends Worker implements InputAgent {
                 inputHandler.handleInput(input);
             } catch (EOFException | SocketException eof) {
                 stop();
-                System.out.println("Logging out user " + myUserName);
+                LOGGER.info(() -> "Logging out user " + myUserName);
                 out.stop();
                 data.userLogout(myUserName);
             } catch (Exception e) {
                 stop();
                 out.stop();
-                System.out.println("Something went wrong in a input worker while loop " + e);
-                e.printStackTrace();
-                System.out.println("Logging out user " + myUserName);
+                LOGGER.error(
+                        e,
+                        () -> "Something went wrong in a input worker while loop."
+                );
+                LOGGER.info(() -> "Logging out user " + myUserName);
                 data.userLogout(myUserName);
             }
         }
-        System.out.println("Closing input");
+        LOGGER.info(() -> "Closing input.");
     }
 
     private Object decryptAndConvertToObject(byte[] input) {
@@ -89,7 +92,10 @@ public class InputWorker extends Worker implements InputAgent {
         try {
             return Conversion.convertFromBytes(input);
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error(
+                    e,
+                    () -> "Failed to decrypt or deserialize object."
+            );
         }
         return null;
     }

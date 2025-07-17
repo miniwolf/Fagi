@@ -6,6 +6,8 @@ package com.fagi.controller.login;
 
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.main.FagiApp;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
@@ -21,6 +23,7 @@ import javafx.stage.Stage;
  * class.
  */
 public class MasterLogin {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(MasterLogin.class);
     private final FagiApp fagiApp;
     private final Communication communication;
     private final Draggable draggable;
@@ -63,7 +66,10 @@ public class MasterLogin {
             ChatManager.closeCommunication();
             fagiApp.stop();
         } catch (Exception ex) {
-            System.err.println(ex.toString());
+            LOGGER.error(
+                    ex,
+                    () -> "Client encountered unexpected exception whilst attempting to shutdown."
+            );
         }
     }
 
@@ -90,7 +96,7 @@ public class MasterLogin {
             case PASSWORD -> state = LoginState.INVITE_CODE;
             case INVITE_CODE -> state = LoginState.LOGIN;
             default -> {
-                System.out.println(state + " is not known");
+                LOGGER.error(() -> state + " is not known");
                 throw new UnsupportedOperationException();
             }
         }
@@ -115,7 +121,7 @@ public class MasterLogin {
                 state = LoginState.PASSWORD;
                 break;
             default:
-                System.out.println(state + " is not known");
+                LOGGER.error(() -> state + " is not known");
                 throw new UnsupportedOperationException();
         }
         showScreen(state);
@@ -140,7 +146,10 @@ public class MasterLogin {
         LoginController controller;
         switch (screen) {
             case LOGIN:
-                controller = new LoginScreenController(this, communication);
+                controller = new LoginScreenController(
+                        this,
+                        communication
+                );
                 break;
             case USERNAME:
                 controller = new CreateUserNameController(this);

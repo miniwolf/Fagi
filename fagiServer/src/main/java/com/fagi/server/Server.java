@@ -10,6 +10,8 @@ import com.fagi.config.ServerConfig;
 import com.fagi.encryption.Encryption;
 import com.fagi.encryption.RSAKey;
 import com.fagi.handler.ConversationHandler;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.Data;
 import com.fagi.model.InviteCodeContainer;
 import com.fagi.running.CheckFieldRunningStrategy;
@@ -30,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Server {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(Server.class);
     static final String CONFIG_FILE = "config/serverinfo.config";
     private final Data data;
     private IsRunningStrategy isRunningStrategy = new CheckFieldRunningStrategy();
@@ -64,12 +67,15 @@ public class Server {
                 data.storeInviteCodes(new InviteCodeContainer(new ArrayList<>()));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(
+                    e,
+                    () -> "Could not create server."
+            );
         }
     }
 
     public void start(ServerSocket serverSocket) {
-        System.out.println("Starting Server");
+        LOGGER.info(() -> "Starting Server");
 
         conversationHandlerThread = new Thread(handler);
         conversationHandlerThread.setDaemon(true);
@@ -80,20 +86,26 @@ public class Server {
             try {
                 workerCreation(serverSocket);
             } catch (IOException e) {
-                System.out.println("Error in server loop exception = " + e);
+                LOGGER.error(
+                        e,
+                        () -> "Error in server loop exception"
+                );
                 isRunningStrategy.stop();
             }
         }
 
         conversationHandlerThread.interrupt();
 
-        System.out.println("Stopping Server");
+        LOGGER.info(() -> "Stopping Server");
 
         if (serverSocket != null) {
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(
+                        e,
+                        () -> "Failed to close server socket gracefully."
+                );
             }
         }
     }

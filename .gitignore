@@ -8,6 +8,8 @@ users
 *.key
 *.config
 *.fagi
+*.log
+*.log.lck
 .gradle/*
 **/build/*
 buildSrc/.gradle

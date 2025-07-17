@@ -1,5 +1,6 @@
 package com.fagi.server;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.model.Data;
 import com.fagi.utility.JsonFileOperations;
 import org.junit.jupiter.api.AfterEach;
@@ -8,7 +9,7 @@ import org.mockito.Mockito;
 
 import java.io.File;
 
-abstract class ServerTests {
+abstract class ServerTests extends BaseFagiTest {
     protected final int serverPort = 4242;
     protected Data data;
 

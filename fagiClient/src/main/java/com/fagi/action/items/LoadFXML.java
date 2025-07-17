@@ -5,7 +5,8 @@
 package com.fagi.action.items;
 
 import com.fagi.action.Action;
-import com.fagi.utility.Logger;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -18,6 +19,7 @@ import java.io.IOException;
  * @author miniwolf
  */
 public record LoadFXML(String resourcePath) implements Action<Parent> {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(LoadFXML.class);
 
     @Override
     public void execute(Parent parent) {
@@ -27,8 +29,10 @@ public record LoadFXML(String resourcePath) implements Action<Parent> {
         try {
             loader.load();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
-            Logger.logStackTrace(ioe);
+            LOGGER.error(
+                    ioe,
+                    () -> "Failed to load the FXML file: " + resourcePath
+            );
         }
     }
 }

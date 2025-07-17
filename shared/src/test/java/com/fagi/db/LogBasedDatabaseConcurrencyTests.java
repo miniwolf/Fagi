@@ -1,14 +1,23 @@
 package com.fagi.db;
 
-import org.junit.jupiter.api.*;
+import com.fagi.BaseFagiTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class LogBasedDatabaseConcurrencyTests {
+public class LogBasedDatabaseConcurrencyTests extends BaseFagiTest {
     private LogBasedDatabase db;
 
     @BeforeEach

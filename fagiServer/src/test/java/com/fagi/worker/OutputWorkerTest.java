@@ -1,7 +1,10 @@
 package com.fagi.worker;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.Conversion;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
 import com.fagi.model.Data;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.User;
@@ -12,9 +15,8 @@ import com.fagi.model.messages.lists.FriendRequestList;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.UserOnline;
-import com.fagi.util.NeverRunStrategy;
-import com.fagi.util.RunOnceStrategy;
-import org.junit.jupiter.api.AfterEach;
+import com.fagi.util.running.NeverRunStrategy;
+import com.fagi.util.running.RunOnceStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -36,8 +38,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-class OutputWorkerTest {
+class OutputWorkerTest extends BaseFagiTest {
     private final ArgumentCaptor<byte[]> captor = ArgumentCaptor.forClass(byte[].class);
+    private final String username = "Charles";
     private ObjectOutputStream objOut;
     private Data data;
     private OutputWorker outputWorker;
@@ -62,15 +65,10 @@ class OutputWorkerTest {
     }
 
     @Nested
-    class OutputWorkerErrorHandlingTests {
-        @AfterEach
-        void tearDown() {
-            System.setErr(System.err);
-            System.setOut(System.out);
-        }
+    class OutputWorkerErrorHandlingTests extends BaseFagiTest {
 
         @Test
-        void givenWritingObjectGivesIOException_WhenRunningIsFalse_ThenShouldNotWriteToConsole() throws IOException {
+        void givenWritingObjectGivesIOException_WhenRunningIsFalse_ThenShouldNotLogError() throws IOException {
             var outContent = new ByteArrayOutputStream();
             var errorContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(errorContent));
@@ -84,14 +82,12 @@ class OutputWorkerTest {
 
             outputWorker.run();
 
-            Assertions.assertAll(
-                    () -> Assertions.assertFalse(outContent
-                                                         .toString()
-                                                         .contains("java.io.IOException")),
-                    () -> Assertions.assertFalse(errorContent
-                                                         .toString()
-                                                         .contains("java.io.IOException"))
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                    OutputWorker.class,
+                    TestLogLevel.ERROR
             );
+
+            Assertions.assertTrue(testLogRecords.isEmpty());
         }
 
         @Test
@@ -107,50 +103,91 @@ class OutputWorkerTest {
         }
 
         @Test
-        void givenWritingObjectsGivesIOException_WhenRunningIsTrue_ThenShouldWriteToConsoleAsInfo() throws IOException {
-            var outContent = new ByteArrayOutputStream();
-            var errorContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(errorContent));
-            System.setOut(new PrintStream(outContent));
-
+        void givenWritingObjectsGivesIOException_WhenRunningIsTrue_ThenShouldLogError() throws IOException {
             doThrow(new IOException())
                     .when(objOut)
                     .writeObject(any());
             outputWorker.addResponse("dummy");
+            outputWorker.setUserName(username);
 
             outputWorker.run();
 
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                    OutputWorker.class,
+                    TestLogLevel.ERROR
+            );
+
+            Assertions.assertEquals(
+                    1,
+                    testLogRecords.size()
+            );
+
+            TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
             Assertions.assertAll(
-                    () -> Assertions.assertTrue(outContent
-                                                        .toString()
-                                                        .contains("java.io.IOException")),
-                    () -> Assertions.assertFalse(errorContent
-                                                         .toString()
-                                                         .contains("java.io.IOException"))
+                    () -> Assertions.assertEquals(
+                            "Logging out user " + username,
+                            logRecord.message()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecord.logLevel()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            IOException.class,
+                            logRecord.throwable()
+                    )
             );
         }
 
         @Test
         void givenWritingObjectsGivesException_WhenRunningIsTrue_ThenShouldLogoutUser() throws IOException {
-            var outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
-
             doThrow(new IOException())
                     .when(objOut)
                     .writeObject(any());
             outputWorker.addResponse("dummy");
-            outputWorker.setUserName("bob");
+            outputWorker.setUserName(username);
 
             outputWorker.run();
 
-            Mockito.verify(data, times(1)).userLogout("bob");
+            Mockito
+                    .verify(
+                            data,
+                            times(1)
+                    )
+                    .userLogout(username);
 
-            Assertions.assertTrue(outContent.toString().contains("Logging out user bob"));
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                    OutputWorker.class,
+                    TestLogLevel.ERROR
+            );
+
+            Assertions.assertEquals(
+                    1,
+                    testLogRecords.size()
+            );
+
+            TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            "Logging out user " + username,
+                            logRecord.message()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecord.logLevel()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            IOException.class,
+                            logRecord.throwable()
+                    )
+            );
         }
     }
 
     @Nested
-    class OutputWorkerEqualListsTests {
+    class OutputWorkerEqualListsTests extends BaseFagiTest {
         @Test
         void givenBothListsAreNull_WhenCallingEqualLists_ThenShouldReturnTrue() {
             Assertions.assertTrue(outputWorker.equalLists(
@@ -252,7 +289,7 @@ class OutputWorkerTest {
     }
 
     @Nested
-    class OutputWorkerSendFriendRequestListTests {
+    class OutputWorkerSendFriendRequestListTests extends BaseFagiTest {
         @Test
         void givenNoUsernameInOutputWorker_WhenCheckingFriendRequestList_ThenShouldNotSendFriendRequestList() throws IOException {
             outputWorker.setIsRunningStrategy(new WorkerRunCalledNTimesStrategy(2));
@@ -463,16 +500,14 @@ class OutputWorkerTest {
     }
 
     @Nested
-    class OutputWorkerSendMessagesAndResponsesTests {
+    class OutputWorkerSendMessagesAndResponsesTests extends BaseFagiTest {
         @Test
         void givenMessagesQueueHasTwoMessages_WhenRunningIsTrue_ThenHaveSentTwoObject() throws IOException {
-            var outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
-
             var user1LoggedInMessage = new UserLoggedIn("bob");
             var user2LoggedInMessage = new UserLoggedIn("eve");
 
             outputWorker.setIsRunningStrategy(new RunOnceStrategy());
+            outputWorker.setUserName(username);
 
             outputWorker.addMessage(user1LoggedInMessage);
             outputWorker.addMessage(user2LoggedInMessage);
@@ -490,6 +525,8 @@ class OutputWorkerTest {
 
             List<byte[]> messageObjects = captor.getAllValues();
 
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(OutputWorker.class);
+
             Assertions.assertAll(
                     () -> Assertions.assertEquals(
                             2,
@@ -499,16 +536,20 @@ class OutputWorkerTest {
                             Conversion.convertToBytes(user1LoggedInMessage),
                             messageObjects.getFirst()
                     ),
-                    () -> Assertions.assertTrue(outContent
-                                                        .toString()
-                                                        .contains(user1LoggedInMessage.toString())),
+                    () -> Assertions.assertTrue(testLogRecords
+                                                        .stream()
+                                                        .anyMatch(logRecord -> logRecord
+                                                                .message()
+                                                                .equals("Sending the following object to user " + username + ": " + user1LoggedInMessage))),
                     () -> Assertions.assertArrayEquals(
                             Conversion.convertToBytes(user2LoggedInMessage),
                             messageObjects.getLast()
                     ),
-                    () -> Assertions.assertTrue(outContent
-                                                        .toString()
-                                                        .contains(user2LoggedInMessage.toString()))
+                    () -> Assertions.assertTrue(testLogRecords
+                                                        .stream()
+                                                        .anyMatch(logRecord -> logRecord
+                                                                .message()
+                                                                .equals("Sending the following object to user " + username + ": " + user2LoggedInMessage)))
             );
         }
 
@@ -581,45 +622,39 @@ class OutputWorkerTest {
     }
 
     @Nested
-    class OutputWorkerLoggingTests {
-        @AfterEach
-        void tearDown() {
-            System.setOut(System.out);
-        }
-
+    class OutputWorkerLoggingTests extends BaseFagiTest {
         @Test
-        void whenRunningIsFalse_ThenClosingOutputShouldBePrintedToConsole() {
-            var outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
-
+        void whenRunningIsFalse_ThenClosingOutputShouldBeLogged() {
             outputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
             outputWorker.run();
 
-            Assertions.assertTrue(outContent
-                                          .toString()
-                                          .contains("Closing output"));
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(OutputWorker.class);
+
+            Assertions.assertTrue(testLogRecords
+                                          .stream()
+                                          .anyMatch(logRecord -> logRecord
+                                                  .message()
+                                                  .equals("Closing output")));
         }
 
         @Test
-        void whenRunningIsTrue_ThenRunningShouldBePrintedToConsole() {
-            var outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
-
+        void whenRunningIsTrue_ThenRunningShouldBeLogged() {
             outputWorker.setIsRunningStrategy(new RunOnceStrategy());
 
             outputWorker.run();
 
-            Assertions.assertTrue(outContent
-                                          .toString()
-                                          .contains("Running"));
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(OutputWorker.class);
+
+            Assertions.assertTrue(testLogRecords
+                                          .stream()
+                                          .anyMatch(logRecord -> logRecord
+                                                  .message()
+                                                  .equals("Running")));
         }
 
         @Test
         void givenMessagesQueueHasOneMessage_WhenRunningIsTrue_ThenHaveSentOneObject() throws IOException {
-            var outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
-
             var userLoggedInMessage = new UserLoggedIn("bob");
 
             outputWorker.setIsRunningStrategy(new RunOnceStrategy());
@@ -639,15 +674,18 @@ class OutputWorkerTest {
 
             byte[] messageObject = captor.getValue();
 
-            Assertions.assertAll(
-                    () -> Assertions.assertArrayEquals(
-                            Conversion.convertToBytes(userLoggedInMessage),
-                            messageObject
-                    ),
-                    () -> Assertions.assertTrue(outContent
-                                                        .toString()
-                                                        .contains(userLoggedInMessage.toString()))
+            Assertions.assertArrayEquals(
+                    Conversion.convertToBytes(userLoggedInMessage),
+                    messageObject
             );
+
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(OutputWorker.class);
+
+            Assertions.assertFalse(testLogRecords
+                                           .stream()
+                                           .anyMatch(logRecord -> logRecord
+                                                   .message()
+                                                   .equals(userLoggedInMessage.toString())));
         }
     }
 

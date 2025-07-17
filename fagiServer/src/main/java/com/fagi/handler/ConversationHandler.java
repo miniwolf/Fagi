@@ -1,6 +1,8 @@
 package com.fagi.handler;
 
 import com.fagi.conversation.Conversation;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 
@@ -10,6 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by Marcus on 04-07-2016.
  */
 public class ConversationHandler implements Runnable {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(ConversationHandler.class);
     private final Data data;
     private final LinkedBlockingQueue<TextMessage> queue = new LinkedBlockingQueue<>();
 
@@ -44,7 +47,10 @@ public class ConversationHandler implements Runnable {
             data.storeConversation(conversation);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
-            ie.printStackTrace();
+            LOGGER.debug(
+                    ie,
+                    () -> "Interrupted ConversationHandler thread."
+            );
         }
     }
 

@@ -1,28 +1,20 @@
 package com.fagi.handler.inputhandler;
 
+import com.fagi.handler.InputHandler;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
 import com.fagi.util.OutputAgentTestUtil;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
 public class NotValidRequestTests extends BaseInputHandlerTest {
-    private final PrintStream standardOut = System.out;
-    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-
     void beforeEach() {
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
-        System.setOut(new PrintStream(outputStreamCaptor));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        System.setOut(standardOut);
     }
 
     @Test
@@ -36,14 +28,27 @@ public class NotValidRequestTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void whenSendingUnknownRequestObject_ShouldPrintMessageInSysOut() {
+    void whenSendingUnknownRequestObject_ShouldLogMessage() {
         inputHandler.handleInput(new UnknownRequest());
 
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputHandler.class);
+
         Assertions.assertEquals(
-                "Unknown handle: " + UnknownRequest.class,
-                outputStreamCaptor
-                        .toString()
-                        .trim()
+                1,
+                testLogRecords.size()
+        );
+
+        TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        "Unknown handle: " + UnknownRequest.class,
+                        logRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.INFO,
+                        logRecord.logLevel()
+                )
         );
     }
 
@@ -58,14 +63,27 @@ public class NotValidRequestTests extends BaseInputHandlerTest {
     }
 
     @Test
-    void givenInputIsNull_ShouldPrintMessageInSysOut() {
+    void givenInputIsNull_ShouldLogMessage() {
         inputHandler.handleInput(null);
 
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputHandler.class);
+
         Assertions.assertEquals(
-                "Input is null. Doing nothing.",
-                outputStreamCaptor
-                        .toString()
-                        .trim()
+                1,
+                testLogRecords.size()
+        );
+
+        TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        "Input is null. Doing nothing.",
+                        logRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.INFO,
+                        logRecord.logLevel()
+                )
         );
     }
 

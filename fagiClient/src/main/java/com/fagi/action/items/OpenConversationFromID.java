@@ -6,6 +6,8 @@ import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.conversation.GetAllConversationDataRequest;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.network.Communication;
 
 import java.util.Optional;
@@ -14,6 +16,7 @@ import java.util.Optional;
  * @author miniwolf
  */
 public record OpenConversationFromID(MainScreen mainScreen) implements Action<Long> {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(OpenConversationFromID.class);
     @Override
     public void execute(Long id) {
         Optional<Conversation> optional = mainScreen
@@ -58,7 +61,7 @@ public record OpenConversationFromID(MainScreen mainScreen) implements Action<Lo
     }
 
     private void errorHandling(long id) {
-        System.err.println("OpenConversationFromID: Couldn't find conversation on ID <" + id + ">");
+        LOGGER.error(() -> "OpenConversationFromID: Couldn't find conversation on ID <" + id + ">");
         throw new RuntimeException();
     }
 }

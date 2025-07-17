@@ -1,16 +1,19 @@
 package com.fagi.encryption;
 
+import com.fagi.BaseFagiTest;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -18,12 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
-class EncryptionTests {
+class EncryptionTests extends BaseFagiTest {
     private static final String PUBLIC_KEY_PATH = "build/test/data/encryption_test/public.key";
 
     @AfterEach
     void tearDown() {
-        System.setErr(System.err);
         deleteFileAndFolder(PUBLIC_KEY_PATH);
         deleteFileAndFolder(KeyStorage.PUBLICKEYFILE);
         deleteFileAndFolder(KeyStorage.PRIVATEKEYFILE);
@@ -39,13 +41,33 @@ class EncryptionTests {
 
             createPublicKeyFile();
 
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             new Encryption(PUBLIC_KEY_PATH);
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("java.io.IOException"));
+            List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(Encryption.class);
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            1,
+                            logRecords.size()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecords
+                                    .getFirst()
+                                    .logLevel()
+                    ),
+                    () -> Assertions.assertEquals(
+                            "Could not load RSA key pair.",
+                            logRecords
+                                    .getFirst()
+                                    .message()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            IOException.class,
+                            logRecords
+                                    .getFirst()
+                                    .throwable()
+                    )
+            );
         }
     }
 
@@ -58,13 +80,33 @@ class EncryptionTests {
 
             createPublicKeyFile();
 
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             new Encryption(PUBLIC_KEY_PATH);
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("java.security.NoSuchAlgorithmException"));
+            List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(Encryption.class);
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            1,
+                            logRecords.size()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecords
+                                    .getFirst()
+                                    .logLevel()
+                    ),
+                    () -> Assertions.assertEquals(
+                            "Could not load RSA key pair.",
+                            logRecords
+                                    .getFirst()
+                                    .message()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            NoSuchAlgorithmException.class,
+                            logRecords
+                                    .getFirst()
+                                    .throwable()
+                    )
+            );
         }
     }
 
@@ -77,13 +119,33 @@ class EncryptionTests {
 
             createPublicKeyFile();
 
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             new Encryption(PUBLIC_KEY_PATH);
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("java.security.spec.InvalidKeySpecException"));
+            List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(Encryption.class);
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            1,
+                            logRecords.size()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecords
+                                    .getFirst()
+                                    .logLevel()
+                    ),
+                    () -> Assertions.assertEquals(
+                            "Could not load RSA key pair.",
+                            logRecords
+                                    .getFirst()
+                                    .message()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            InvalidKeySpecException.class,
+                            logRecords
+                                    .getFirst()
+                                    .throwable()
+                    )
+            );
         }
     }
 
@@ -94,13 +156,33 @@ class EncryptionTests {
                     .when(() -> KeyStorage.SaveKeyPair(any()))
                     .thenThrow(new IOException());
 
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             new Encryption(PUBLIC_KEY_PATH);
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("java.io.IOException"));
+            List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(Encryption.class);
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            1,
+                            logRecords.size()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecords
+                                    .getFirst()
+                                    .logLevel()
+                    ),
+                    () -> Assertions.assertEquals(
+                            "Could not save RSA key pair.",
+                            logRecords
+                                    .getFirst()
+                                    .message()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            IOException.class,
+                            logRecords
+                                    .getFirst()
+                                    .throwable()
+                    )
+            );
         }
     }
 

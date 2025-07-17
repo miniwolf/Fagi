@@ -1,3 +1,4 @@
+import com.fagi.BaseFagiTest;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.handler.ConversationHandler;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-public class TextMessageIntegrationTests {
+public class TextMessageIntegrationTests extends BaseFagiTest {
     private OutputAgent outputAgent;
     private ConversationHandler conversationHandler;
     private Data data;

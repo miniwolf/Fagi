@@ -18,6 +18,8 @@ javafx {
 
 dependencies {
     implementation(project(":shared"))
+    testImplementation(testFixtures(project(":shared")))
+
     testImplementation(libs.bundles.junit.base)
     testImplementation(libs.bundles.mockito)
     testImplementation(libs.hamcrest)
