@@ -1,12 +1,13 @@
 package com.fagi.db;
 
+import com.fagi.BaseFagiTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
 
-public class LogBasedDatabaseResourceTests {
+public class LogBasedDatabaseResourceTests extends BaseFagiTest {
     @Test
     void testMemoryUsage(@TempDir Path tempDir) throws DatabaseInitializeException, DatabaseUpdateException {
         String dbPath = tempDir

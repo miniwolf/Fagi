@@ -1,6 +1,8 @@
 package com.fagi.utility;
 
 import com.fagi.conversation.Conversation;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -17,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by costa on 09-11-2016.
  */
 public class JsonFileOperations {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(JsonFileOperations.class);
     public static final String FAGI_EXTENSION = ".fagi";
     public static final String CONFIG_FOLDER_PATH = "config/";
     public static final String CONVERSATION_FOLDER_PATH = "conversations/";
@@ -40,13 +43,18 @@ public class JsonFileOperations {
 
             Gson gson = new Gson();
 
-            PrintWriter out = new PrintWriter(new FileWriter(folderPath + fileName + FAGI_EXTENSION, false));
+            PrintWriter out = new PrintWriter(new FileWriter(
+                    folderPath + fileName + FAGI_EXTENSION,
+                    false
+            ));
             out.println(gson.toJson(object));
             out.flush();
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to write object to file."
+            );
         }
     }
 
@@ -68,10 +76,15 @@ public class JsonFileOperations {
 
             Gson gson = new Gson();
 
-            res = gson.fromJson(json.toString(), clazz);
+            res = gson.fromJson(
+                    json.toString(),
+                    clazz
+            );
         } catch (IOException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to load object from file."
+            );
         }
         return res;
     }
@@ -92,9 +105,12 @@ public class JsonFileOperations {
         }
 
         for (File file : files) {
-            var loadedObj = loadObjectFromFile(file.getAbsolutePath(), clazz);
+            var loadedObj = loadObjectFromFile(
+                    file.getAbsolutePath(),
+                    clazz
+            );
             if (loadedObj == null) {
-                System.err.println("Warning: We were about to add null due to this file path: " + file.getAbsolutePath());
+                LOGGER.warning(() -> "We were about to add null due to this file path: " + file.getAbsolutePath());
                 continue;
             }
             res.add(loadedObj);
@@ -104,7 +120,11 @@ public class JsonFileOperations {
     }
 
     public static void storeConversation(Conversation c) {
-        storeObjectToFile(c, CONVERSATION_FOLDER_PATH, c.getId() + "");
+        storeObjectToFile(
+                c,
+                CONVERSATION_FOLDER_PATH,
+                c.getId() + ""
+        );
     }
 
     public static void storeClientConversation(
@@ -114,14 +134,24 @@ public class JsonFileOperations {
         if (!clientFolder.exists()) {
             clientFolder.mkdir();
         }
-        storeObjectToFile(c, username + "/" + CONVERSATION_FOLDER_PATH, c.getId() + "");
+        storeObjectToFile(
+                c,
+                username + "/" + CONVERSATION_FOLDER_PATH,
+                c.getId() + ""
+        );
     }
 
     public static List<Conversation> loadAllConversations() {
-        return loadAllObjectsInFolder(CONVERSATION_FOLDER_PATH, Conversation.class);
+        return loadAllObjectsInFolder(
+                CONVERSATION_FOLDER_PATH,
+                Conversation.class
+        );
     }
 
     public static List<Conversation> loadAllClientConversations(String username) {
-        return loadAllObjectsInFolder(username + "/" + CONVERSATION_FOLDER_PATH, Conversation.class);
+        return loadAllObjectsInFolder(
+                username + "/" + CONVERSATION_FOLDER_PATH,
+                Conversation.class
+        );
     }
 }

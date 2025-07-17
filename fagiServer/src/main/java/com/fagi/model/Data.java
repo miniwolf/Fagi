@@ -6,6 +6,8 @@ package com.fagi.model;
 
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
  * Contains and update information on users.
  */
 public class Data {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(Data.class);
     private final Map<String, OutputAgent> OUTPUT_AGENT_MAP = new ConcurrentHashMap<>();
     private final Map<String, InputAgent> INPUT_AGENT_MAP = new ConcurrentHashMap<>();
     private final Map<String, User> registeredUsers = new ConcurrentHashMap<>();
@@ -164,7 +167,7 @@ public class Data {
             OUTPUT_AGENT_MAP.remove(userName);
             INPUT_AGENT_MAP.remove(userName);
         } else {
-            System.out.println("Couldn't log " + userName + " out");
+            LOGGER.info(() -> "Couldn't log " + userName + " out");
         }
     }
 

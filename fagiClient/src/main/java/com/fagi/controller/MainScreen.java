@@ -16,6 +16,8 @@ import com.fagi.controller.utility.Draggable;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationFilter;
 import com.fagi.handler.Search;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.GetFriendListRequest;
 import com.fagi.model.Logout;
 import com.fagi.model.conversation.GetConversationsRequest;
@@ -30,7 +32,6 @@ import com.fagi.network.handlers.TextMessageHandler;
 import com.fagi.threads.ThreadPool;
 import com.fagi.uimodel.FriendMapWrapper;
 import com.fagi.utility.JsonFileOperations;
-import com.fagi.utility.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -60,6 +61,7 @@ import java.util.stream.Collectors;
  * TODO: Write description.
  */
 public class MainScreen extends Pane {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(MainScreen.class);
     @FXML private Pane messages;
     @FXML private Pane contacts;
     @FXML private ScrollPane listContent;
@@ -139,11 +141,24 @@ public class MainScreen extends Pane {
         setupFriendList();
         setupContactList();
 
-        messageHandler = new TextMessageHandler(this, communication.getInputDistributor());
-        threadPool.startThread(messageHandler.getRunnable(), "MessageHandler");
+        messageHandler = new TextMessageHandler(
+                this,
+                communication.getInputDistributor()
+        );
+        threadPool.startThread(
+                messageHandler.getRunnable(),
+                "MessageHandler"
+        );
 
-        generalHandler = new GeneralHandlerFactory().construct(this, communication.getInputDistributor(), threadPool);
-        threadPool.startThread(generalHandler.getRunnable(), "GeneralHandler");
+        generalHandler = new GeneralHandlerFactory().construct(
+                this,
+                communication.getInputDistributor(),
+                threadPool
+        );
+        threadPool.startThread(
+                generalHandler.getRunnable(),
+                "GeneralHandler"
+        );
 
         updateConversationListFromServer(conversations);
     }
@@ -161,15 +176,31 @@ public class MainScreen extends Pane {
         emptyFocusElement = messages;
         username.setText(usernameString);
         char cUpper = Character.toUpperCase(usernameString.toCharArray()[0]);
-        Image tiny = new Image("/style/material-icons/" + cUpper + ".png", 40, 40, true, true);
+        Image tiny = new Image(
+                "/style/material-icons/" + cUpper + ".png",
+                40,
+                40,
+                true,
+                true
+        );
         this.tinyIcon.setImage(tiny);
-        Image large = new Image("/style/material-icons/" + cUpper + ".png", 96, 96, true, true);
+        Image large = new Image(
+                "/style/material-icons/" + cUpper + ".png",
+                96,
+                96,
+                true,
+                true
+        );
         this.largeIcon.setImage(large);
         this.requestFocus();
 
         Scene scene = primaryStage.getScene();
         final MainScreen mainScreen = this;
-        Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
+        Platform.runLater(() -> search = new Search(
+                searchBox,
+                searchHeader,
+                mainScreen
+        ));
         scene
                 .widthProperty()
                 .addListener(new ChangeListener<>() {
@@ -183,14 +214,20 @@ public class MainScreen extends Pane {
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                Logger.logStackTrace(e);
+                                LOGGER.info(() -> "Search thread was interrupted.");
                             } finally {
-                                Platform.runLater(() -> search = new Search(searchBox, searchHeader, mainScreen));
+                                Platform.runLater(() -> search = new Search(
+                                        searchBox,
+                                        searchHeader,
+                                        mainScreen
+                                ));
                             }
                         };
 
-                        threadPool.startThread(run, "Search thread");
+                        threadPool.startThread(
+                                run,
+                                "Search thread"
+                        );
 
                         scene
                                 .widthProperty()
@@ -281,7 +318,10 @@ public class MainScreen extends Pane {
             Platform.runLater(() -> listContent.setContent(parent));
         }
 
-        listContentMap.put(content, parent);
+        listContentMap.put(
+                content,
+                parent
+        );
     }
 
     public void setFriendList(FriendList friendList) {
@@ -318,7 +358,7 @@ public class MainScreen extends Pane {
                 currentPane = messages;
             }
             default -> {
-                System.err.println("Mainscreen, changeMenuStyle: " + menu);
+                LOGGER.error(() -> "Failed to change MainScreen menu into unsupported menu type: " + menu);
                 throw new UnsupportedOperationException();
             }
         }
@@ -364,10 +404,16 @@ public class MainScreen extends Pane {
     private void updateConversationListFromServer(List<Conversation> conversations) {
         List<ConversationFilter> filters = conversations
                 .stream()
-                .map(x -> new ConversationFilter(x.getId(), x.getLastMessageDate()))
+                .map(x -> new ConversationFilter(
+                        x.getId(),
+                        x.getLastMessageDate()
+                ))
                 .collect(Collectors.toList());
 
-        communication.sendObject(new GetConversationsRequest(usernameString, filters));
+        communication.sendObject(new GetConversationsRequest(
+                usernameString,
+                filters
+        ));
     }
 
     private void setupFriendList() {
@@ -376,12 +422,18 @@ public class MainScreen extends Pane {
 
     private void setupContactList() {
         ContentController contactContentController = new ContentController("/view/content/ContentList.fxml");
-        setScrollPaneContent(PaneContent.Contacts, contactContentController);
+        setScrollPaneContent(
+                PaneContent.Contacts,
+                contactContentController
+        );
     }
 
     private synchronized void setupConversationList() {
         conversationContentController = new ContentController("/view/content/ContentList.fxml");
-        setScrollPaneContent(PaneContent.Messages, conversationContentController);
+        setScrollPaneContent(
+                PaneContent.Messages,
+                conversationContentController
+        );
 
         messageItems.forEach(MessageItemController::stopTimer);
         messageItems.clear();
@@ -391,10 +443,11 @@ public class MainScreen extends Pane {
     }
 
     public Pane createMessageItem(Conversation conversation) {
-        MessageItemController messageItemController = new MessageItemController(usernameString,
-                                                                                conversation,
-                                                                                new OpenConversationFromID(this),
-                                                                                conversation.getLastMessageDate()
+        MessageItemController messageItemController = new MessageItemController(
+                usernameString,
+                conversation,
+                new OpenConversationFromID(this),
+                conversation.getLastMessageDate()
         );
         messageItems.add(messageItemController);
         return messageItemController;

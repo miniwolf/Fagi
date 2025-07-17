@@ -18,20 +18,28 @@ import com.fagi.utility.JsonFileOperations;
 import javafx.application.Platform;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * @author miniwolf
  */
 public class TextMessageHandler implements Handler<TextMessage> {
+    private static final Logger LOGGER = Logger.getLogger(TextMessageHandler.class.getName());
     private Container<TextMessage> container = new DefaultContainer<>();
-    private DefaultThreadHandler<TextMessage> runnable = new DefaultThreadHandler<>(container, this);
+    private DefaultThreadHandler<TextMessage> runnable = new DefaultThreadHandler<>(
+            container,
+            this
+    );
     private final MainScreen mainScreen;
 
     public TextMessageHandler(
             MainScreen mainScreen,
             InputDistributor inputDistributor) {
         container.setThread(runnable);
-        inputDistributor.register(TextMessage.class, container);
+        inputDistributor.register(
+                TextMessage.class,
+                container
+        );
         this.mainScreen = mainScreen;
     }
 
@@ -45,7 +53,7 @@ public class TextMessageHandler implements Handler<TextMessage> {
                         .getConversationID())
                 .findFirst();
         if (first.isEmpty()) {
-            System.err.println("Server sent a message before it sent the conversation of ID '" + message
+            LOGGER.severe(() -> "Server sent a message before it sent the conversation of ID '" + message
                     .getMessageInfo()
                     .getConversationID() + "'to the profile.");
             return;
@@ -60,7 +68,10 @@ public class TextMessageHandler implements Handler<TextMessage> {
             conversation.setType(type);
             mainScreen
                     .getCommunication()
-                    .sendObject(new GetAllConversationDataRequest(mainScreen.getUsername(), conversation.getId()));
+                    .sendObject(new GetAllConversationDataRequest(
+                            mainScreen.getUsername(),
+                            conversation.getId()
+                    ));
         }
 
         if (mainScreen.hasCurrentOpenConversation(conversation)) {
@@ -71,7 +82,10 @@ public class TextMessageHandler implements Handler<TextMessage> {
         conversation
                 .data()
                 .addMessage(message);
-        JsonFileOperations.storeClientConversation(conversation, mainScreen.getUsername());
+        JsonFileOperations.storeClientConversation(
+                conversation,
+                mainScreen.getUsername()
+        );
 
         MessageItemController messageItemController = mainScreen
                 .getMessageItems()

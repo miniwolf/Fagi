@@ -1,5 +1,6 @@
 package com.fagi.db;
 
+import com.fagi.BaseFagiTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-public class LogBasedDatabaseTests {
+public class LogBasedDatabaseTests extends BaseFagiTest {
     private String dbPath;
 
     @BeforeEach

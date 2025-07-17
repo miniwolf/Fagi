@@ -1,5 +1,6 @@
 package com.fagi.handler.inputhandler;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.handler.ConversationHandler;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
  * A base class to make it easy for all {@link InputHandler} tests to have the base set up ready for each test.
  * Also contains helpful methods to simplify st ups and mocks that are used multiple times.
  */
-public abstract class BaseInputHandlerTest {
+public abstract class BaseInputHandlerTest extends BaseFagiTest {
     protected OutputAgent outputAgent;
     protected Data data;
     protected InputAgent inputAgent;

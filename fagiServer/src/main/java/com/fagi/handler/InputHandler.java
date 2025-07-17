@@ -4,6 +4,8 @@ import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationDataUpdate;
 import com.fagi.conversation.GetAllConversationDataRequest;
 import com.fagi.encryption.AES;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.CreateUser;
 import com.fagi.model.Data;
 import com.fagi.model.DeleteFriend;
@@ -50,9 +52,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public record InputHandler(InputAgent inputAgent, OutputAgent out, ConversationHandler conversationHandler, Data data) {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(InputHandler.class);
     public void handleInput(Object input) {
         if (input == null) {
-            System.out.println("Input is null. Doing nothing.");
+            LOGGER.info(() -> "Input is null. Doing nothing.");
         } else if (input instanceof TextMessage arg) {
             MessageInfo messageInfo = arg.getMessageInfo();
             messageInfo.setTimestamp(new Timestamp(System.currentTimeMillis()));
@@ -102,7 +105,7 @@ public record InputHandler(InputAgent inputAgent, OutputAgent out, ConversationH
         } else if (input instanceof UserNameAvailableRequest request) {
             out.addResponse(handleUserNameAvailableRequest(request));
         } else {
-            System.out.println("Unknown handle: " + input.getClass());
+            LOGGER.info(() -> "Unknown handle: " + input.getClass());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
@@ -44,7 +45,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 @ExtendWith(ApplicationExtension.class)
-public class FriendsTests {
+public class FriendsTests extends BaseFagiTest {
     private InputHandler inputHandler;
     private final ThreadPool threadPool = new ThreadPool();
 

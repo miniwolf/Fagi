@@ -6,6 +6,8 @@ package com.fagi.worker;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.Data;
 import com.fagi.model.FriendRequest;
 import com.fagi.model.User;
@@ -26,6 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miniwolf
  */
 public class OutputWorker extends Worker implements OutputAgent {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(OutputWorker.class);
     private final Queue<InGoingMessages> messages = new ConcurrentLinkedQueue<>();
     private final Queue<Object> respondObjects = new ConcurrentLinkedQueue<>();
     private final Data data;
@@ -45,7 +48,7 @@ public class OutputWorker extends Worker implements OutputAgent {
     @Override
     public void run() {
         while (isRunningStrategy.isRunning()) {
-            System.out.println("Running");
+            LOGGER.info(() -> "Running");
             try {
                 sendIncMessages();
                 sendResponses();
@@ -58,8 +61,10 @@ public class OutputWorker extends Worker implements OutputAgent {
                 }
             } catch (IOException | InterruptedException ioe) {
                 stop();
-                System.out.println(ioe.toString());
-                System.out.println("Logging out user " + myUserName);
+                LOGGER.error(
+                        ioe,
+                        () -> "Logging out user " + myUserName
+                );
                 data.userLogout(myUserName);
             }
         }
@@ -69,7 +74,7 @@ public class OutputWorker extends Worker implements OutputAgent {
             } catch (IOException ignored) { // User logged off we didn't manage to send response
             }
         }
-        System.out.println("Closing output");
+        LOGGER.info(() -> "Closing output");
     }
 
     private void checkForLists() throws IOException {
@@ -103,7 +108,7 @@ public class OutputWorker extends Worker implements OutputAgent {
     }
 
     private void send(Object object) throws IOException {
-        System.out.println("so: " + object.toString());
+        LOGGER.debug(() -> "Sending the following object to user " + myUserName + ": " + object.toString());
         objOut.writeObject(aes.encrypt(Conversion.convertToBytes(object)));
         objOut.flush();
     }

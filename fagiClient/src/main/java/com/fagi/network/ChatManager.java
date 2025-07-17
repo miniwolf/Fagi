@@ -4,6 +4,8 @@ package com.fagi.network;
  * ChatManager.java
  */
 
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.main.FagiApp;
 import com.fagi.model.CreateUser;
 import com.fagi.model.InviteCode;
@@ -24,6 +26,7 @@ import java.util.regex.Pattern;
  * Handles login requests and responds to and from server.
  */
 public class ChatManager {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(ChatManager.class);
     private static Communication communication = null;
     private static FagiApp application;
     private ServiceLoader<Communication> communicationLoader;
@@ -45,7 +48,7 @@ public class ChatManager {
         communication.sendObject(logout);
         Response response = communication.getNextResponse();
         if (!(response instanceof AllIsWell)) {
-            System.err.println("Could not log out properly. " + "Shut down and let server handle the response");
+            LOGGER.error(() -> "Could not log out properly. Shut down and let server handle the response.");
         }
         communication.close();
         application.showLoginScreen();
@@ -79,12 +82,16 @@ public class ChatManager {
         }
 
         if (!isValidUserName(username)) {
-            System.out.println(username);
+            LOGGER.info(() -> "The username " + username + " is not valid.");
             labelMessage.setText("Username may not contain special symbols");
             return false;
         }
 
-        CreateUser createUser = new CreateUser(username, password, new InviteCode(inviteCode));
+        CreateUser createUser = new CreateUser(
+                username,
+                password,
+                new InviteCode(inviteCode)
+        );
         communication.sendObject(createUser);
 
         Response response = communication.getNextResponse();
@@ -128,7 +135,10 @@ public class ChatManager {
     }
 
     public static boolean isValidUserName(String string) {
-        return Pattern.matches("\\w*", string);
+        return Pattern.matches(
+                "\\w*",
+                string
+        );
     }
 
     public static FagiApp getApplication() {

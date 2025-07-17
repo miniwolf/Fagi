@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
@@ -46,7 +47,7 @@ import java.util.List;
 import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
 
 @ExtendWith(ApplicationExtension.class)
-public class SearchUserTests {
+public class SearchUserTests extends BaseFagiTest {
     private Communication communication;
     private InputHandler inputHandler;
     private final ThreadPool threadPool = new ThreadPool();

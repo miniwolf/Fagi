@@ -1,4 +1,4 @@
-package com.fagi.util;
+package com.fagi.util.running;
 
 import com.fagi.running.IsRunningStrategy;
 

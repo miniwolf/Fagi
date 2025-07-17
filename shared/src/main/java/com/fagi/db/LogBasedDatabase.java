@@ -1,7 +1,16 @@
 package com.fagi.db;
 
-import java.io.*;
-import java.util.*;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -70,8 +79,8 @@ import static com.fagi.utility.Checksum.calculateChecksum;
  * <h3>Error Handling:</h3>
  * <p>The database handles various error conditions gracefully:</p>
  * <ul>
- *     <li>Corrupted Log entries are skipped with warnings to stderr</li>
- *     <li>Malformed entries are ignored during startup</li>
+ *     <li>Corrupted Log entries are skipped with warnings logged to WARNING</li>
+ *     <li>Malformed entries are ignored during startup and logged to WARNING</li>
  *     <li>I/O errors during writes throw RuntimeException</li>
  * </ul>
  *
@@ -87,6 +96,7 @@ import static com.fagi.utility.Checksum.calculateChecksum;
  * @see com.fagi.utility.Checksum
  */
 public class LogBasedDatabase implements AutoCloseable {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(LogBasedDatabase.class);
 
     enum DBOperation {
         PUT,
@@ -125,11 +135,11 @@ public class LogBasedDatabase implements AutoCloseable {
      *
      * @param filePath the path to the database Log file, must not be null
      * @throws DatabaseInitializeException if the database cannot be initialized due to:
-     * <ul>
-     *     <li>I/O errors when creating/opening the Log file</li>
-     *     <li>Permission issue with the file or directory</li>
-     *     <li>Corruption in the existing Log file that prevents loading</li>
-     * </ul>
+     *                                     <ul>
+     *                                         <li>I/O errors when creating/opening the Log file</li>
+     *                                         <li>Permission issue with the file or directory</li>
+     *                                         <li>Corruption in the existing Log file that prevents loading</li>
+     *                                     </ul>
      */
     public LogBasedDatabase(String filePath) throws DatabaseInitializeException {
         this.logFilePath = filePath;
@@ -144,7 +154,10 @@ public class LogBasedDatabase implements AutoCloseable {
             loadFromLog();
         } catch (IOException e) {
             close();
-            throw new DatabaseInitializeException("Failed to initialize database", e);
+            throw new DatabaseInitializeException(
+                    "Failed to initialize database",
+                    e
+            );
         } catch (DatabaseInitializeException e) {
             close();
             throw e;
@@ -158,14 +171,14 @@ public class LogBasedDatabase implements AutoCloseable {
      * It bypasses normal file initialization and error handling. The provided
      * FileWriter must be properly configured for append mode.</p>
      *
-     * @param filePath the path to the database log file, used for identification
+     * @param filePath  the path to the database log file, used for identification
      * @param logWriter the FileWriter to use for logging operations, must not be null
      * @throws DatabaseInitializeException if the database cannot be initialized due to:
-     * <ul>
-     *     <li>I/O errors when creating/opening the Log file</li>
-     *     <li>Permission issue with the file or directory</li>
-     *     <li>Corruption in the existing Log file that prevents loading</li>
-     * </ul>
+     *                                     <ul>
+     *                                         <li>I/O errors when creating/opening the Log file</li>
+     *                                         <li>Permission issue with the file or directory</li>
+     *                                         <li>Corruption in the existing Log file that prevents loading</li>
+     *                                     </ul>
      */
     public LogBasedDatabase(
             String filePath,
@@ -190,14 +203,12 @@ public class LogBasedDatabase implements AutoCloseable {
      * <p><strong>Performance:</strong> O(1) time complexity. Constant time regardless
      * of database size.</p>
      *
-     * @param id the record identifier, must not be null
-     * @param key the field key, must not be null
+     * @param id    the record identifier, must not be null
+     * @param key   the field key, must not be null
      * @param value the field value, must not be null
      * @throws IllegalArgumentException if any parameter is null
-     * @throws DatabaseUpdateException if the write operation fails due to I/O errors
-     *
-     * @snippet
-     * <pre>{@code
+     * @throws DatabaseUpdateException  if the write operation fails due to I/O errors
+     * @snippet <pre>{@code
      * db.put("user123", "name", "Alice");
      * db.put("user123", "email", "alice@example.com");
      * db.put("user123", "status", "active");
@@ -245,13 +256,11 @@ public class LogBasedDatabase implements AutoCloseable {
      *
      * <p><strong>Performance:</strong> O(1) time complexity. Direct hash map lookup.</p>
      *
-     * @param id the record identifier to look up, must not be null
+     * @param id  the record identifier to look up, must not be null
      * @param key the field key to retrieve, must not be null
      * @return the field value, or {@code null} if the record or field doesn't exist
      * @throws IllegalArgumentException if the id or key is null
-     *
-     * @snippet
-     * <pre>{@code
+     * @snippet <pre>{@code
      * String email = db.get("user123", "email"); // Returns "alice@example.com" or null
      * String phone = db.get("user123", "phone"); // Returns null if field doesn't exist
      * String name = db.get("nonexistent", "name"); // Returns null if record doesn't exist
@@ -288,8 +297,7 @@ public class LogBasedDatabase implements AutoCloseable {
      * @param id the record identifier to retrieve, must not be null
      * @return a copy of all fields for the record, or {@code null} if the record doesn't exist
      * @throws IllegalArgumentException if id is null
-     * @snippet
-     * <pre>{@code
+     * @snippet <pre>{@code
      * Map<String, String> user = db.get("user123");
      * if (user != null) {
      *     String name = user.get("name");     // "Alice Johnson"
@@ -344,7 +352,8 @@ public class LogBasedDatabase implements AutoCloseable {
 
                     String[] parts = line.split("\\|");
                     if (parts.length < 5) {
-                        System.err.println("Malformed entry at line " + lineNumber);
+                        int malformedLine = lineNumber;
+                        LOGGER.warning(() -> "Malformed entry at line " + malformedLine);
                         continue;
                     }
 
@@ -358,7 +367,8 @@ public class LogBasedDatabase implements AutoCloseable {
                     );
 
                     if (!calculateChecksum(originalEntry).equals(storedChecksum)) {
-                        System.err.println("Corruption detected at line " + lineNumber);
+                        int corruptLine = lineNumber;
+                        LOGGER.warning(() -> "Corruption detected at line " + corruptLine);
                         continue;
                     }
 
@@ -405,9 +415,9 @@ public class LogBasedDatabase implements AutoCloseable {
      * Appends an operation to the Log file with checksum verification.
      *
      * @param operation the operator type (e.g. "PUT")
-     * @param id the record identifier
-     * @param key the field key
-     * @param value the field value
+     * @param id        the record identifier
+     * @param key       the field key
+     * @param value     the field value
      * @throws DatabaseUpdateException if the write operations fails
      */
     private void appendToLog(
@@ -450,14 +460,12 @@ public class LogBasedDatabase implements AutoCloseable {
      * <p><strong>Performance:</strong> O(n) where n is the total number of records.
      * Performance degrades linearly with database size.</p>
      *
-     * @param fieldName the name of the field to match against, must not be null
+     * @param fieldName  the name of the field to match against, must not be null
      * @param fieldValue the value to search for, must not be null
      * @return a List or records (as maps) that contain the specified field-value pair,
-     *         empty List if no matches found, never null
+     * empty List if no matches found, never null
      * @throws IllegalArgumentException if fieldName or fieldValue is null
-     *
-     * @snippet
-     * <pre>{@code
+     * @snippet <pre>{@code
      * // Find all active users
      * List<Map<String, String>> activeUsers = db.queryByField("status", "active");
      *
@@ -466,7 +474,7 @@ public class LogBasedDatabase implements AutoCloseable {
      *
      * // Process results
      * for (Map<String, String> user : activeUsers) {
-     *     System.out.println("Active user: " + user.get("name"));
+     *     LOGGER.info(() -> "Active user: " + user.get("name"));
      * }
      * }</pre>
      */
@@ -499,15 +507,13 @@ public class LogBasedDatabase implements AutoCloseable {
      * <p><strong>Performance:</strong> O(1) time complexity. Direct size lookup.</p>
      *
      * @return the number of records currently stored in the database, never negative
-     *
-     * @snippet
-     * <pre>{@code
+     * @snippet <pre>{@code
      * int totalUsers = db.count();
-     * System.out.println("Database contains " + totalUsers + " records");
+     * LOGGER.info(() -> "Database contains " + totalUsers + " records");
      *
      * // Check if database is empty
      * if (db.count() == 0) {
-     *     System.out.println("Database is empty");
+     *     LOGGER.info(() -> "Database is empty");
      * }
      * }</pre>
      */
@@ -535,12 +541,11 @@ public class LogBasedDatabase implements AutoCloseable {
      * only be called when no other operations are in progress.</p>
      *
      * <p><strong>Error Handling:</strong> I/O errors during close are logged
-     * to stderr but do not throw exceptions.</p>
+     * to ERROR but do not throw exceptions.</p>
      *
      * <p>This method is idempotent - calling it multiple times has no additional effect.</p>
      *
-     * @snippet
-     * <pre>{@code
+     * @snippet <pre>{@code
      * LogBasedDatabase db = new LogBasedDatabase("myapp.db");
      * try {
      *     // Use database...
@@ -563,7 +568,10 @@ public class LogBasedDatabase implements AutoCloseable {
                     logWriter.close();
                 }
             } catch (IOException e) {
-                System.err.println("Error closing database: " + e.getMessage());
+                LOGGER.error(
+                        e,
+                        () -> "Error closing database."
+                );
             }
         }
     }

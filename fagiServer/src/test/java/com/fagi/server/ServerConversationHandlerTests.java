@@ -6,7 +6,7 @@ import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.running.IsRunningStrategy;
 import com.fagi.util.DataTestUtil;
-import com.fagi.util.NeverRunStrategy;
+import com.fagi.util.running.NeverRunStrategy;
 import com.fagi.utility.JsonFileOperations;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

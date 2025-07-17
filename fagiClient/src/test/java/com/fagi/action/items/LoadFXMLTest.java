@@ -1,5 +1,6 @@
 package com.fagi.action.items;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.conversation.ConversationController;
 import com.fagi.conversation.Conversation;
@@ -14,7 +15,7 @@ import rules.JavaFXThreadingExtension;
  * Created by miniwolf on 01-04-2017.
  */
 @ExtendWith(JavaFXThreadingExtension.class)
-public class LoadFXMLTest {
+public class LoadFXMLTest extends BaseFagiTest {
     private LoadFXML loadFXML;
     private ConversationController mock;
 

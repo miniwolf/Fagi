@@ -1,7 +1,10 @@
 package com.fagi.model;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.NoSuchUser;
 import com.fagi.responses.PasswordError;
@@ -11,21 +14,18 @@ import com.fagi.responses.UserOnline;
 import com.fagi.utility.JsonFileOperations;
 import com.fagi.worker.InputAgent;
 import com.fagi.worker.OutputAgent;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.List;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-class DataTests {
+class DataTests extends BaseFagiTest {
     private Data data;
     private User user;
     private InputAgent inputAgent;
@@ -40,11 +40,6 @@ class DataTests {
                 "username",
                 "password"
         );
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.setOut(System.out);
     }
 
     @Test
@@ -529,10 +524,7 @@ class DataTests {
     }
 
     @Test
-    void logoutUserWithNotLoggedInUser_ShouldResultInPrintToSysOut() {
-        var outputStreamCaptor = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStreamCaptor));
-
+    void logoutUserWithNotLoggedInUser_ShouldLogMessage() {
         var user = new User(
                 "bob",
                 "password"
@@ -540,11 +532,24 @@ class DataTests {
 
         data.userLogout(user.getUserName());
 
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(Data.class);
+
         Assertions.assertEquals(
-                "Couldn't log " + user.getUserName() + " out",
-                outputStreamCaptor
-                        .toString()
-                        .trim()
+                1,
+                testLogRecords.size()
+        );
+
+        TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        "Couldn't log " + user.getUserName() + " out",
+                        logRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.INFO,
+                        logRecord.logLevel()
+                )
         );
     }
 

@@ -12,7 +12,7 @@ import com.fagi.model.messages.message.TextMessage;
 import com.fagi.responses.AllIsWell;
 import com.fagi.running.IsRunningStrategy;
 import com.fagi.util.DataTestUtil;
-import com.fagi.util.RunOnceStrategy;
+import com.fagi.util.running.RunOnceStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

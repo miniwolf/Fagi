@@ -42,8 +42,4 @@ public class ThreadPool {
         threads.forEach(Thread::interrupt);
         threads.clear();
     }
-
-    public void printThreads() {
-        threads.forEach(thread -> System.out.println("Thread: " + thread.getName() + " alive: " + thread.isAlive()));
-    }
 }
