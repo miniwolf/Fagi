@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
@@ -26,7 +27,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 @ExtendWith(ApplicationExtension.class)
-public class InviteCodeTests {
+public class InviteCodeTests extends BaseFagiTest {
     private Communication communication;
     private MasterLogin masterLogin;
 

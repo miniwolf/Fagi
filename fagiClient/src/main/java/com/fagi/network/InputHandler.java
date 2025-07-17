@@ -8,11 +8,12 @@ package com.fagi.network;
 import com.fagi.conversation.Conversation;
 import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.HistoryUpdates;
 import com.fagi.model.messages.InGoingMessages;
 import com.fagi.responses.Response;
 import com.fagi.threads.ThreadPool;
-import com.fagi.utility.Logger;
 import javafx.application.Platform;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * TODO: Write description
  */
 public class InputHandler implements Runnable {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(InputHandler.class);
     private final Queue<Response> inputs = new LinkedBlockingQueue<>();
     private final ObjectInputStream in;
     private final EncryptionAlgorithm encryption;
@@ -53,9 +55,10 @@ public class InputHandler implements Runnable {
                     handleInput(Conversion.convertFromBytes(encryption.decrypt(input)));
                 } catch (IOException ioe) {
                     if (running) {
-                        System.err.println("inputhandler ioe: " + ioe.toString());
-                        ioe.printStackTrace(); // DEBUG need to terminate before closing socket.
-                        Logger.logStackTrace(ioe);
+                        LOGGER.error(
+                                ioe,
+                                () -> "Failed to receive data from server. Logging user out."
+                        );
                     }
                     running = false;
                     ChatManager.closeCommunication();
@@ -63,9 +66,11 @@ public class InputHandler implements Runnable {
                             .getApplication()
                             .showLoginScreen());
                 } catch (ClassNotFoundException cnfe) {
+                    LOGGER.error(
+                            cnfe,
+                            () -> "Failed to parse response data from server."
+                    );
                     // Shared files are not the same on both side of the server
-                    System.err.println(cnfe.getMessage());
-                    Logger.logStackTrace(cnfe);
                     // TODO: This will be a bitch when having to update the server
                     // Fix: could be to implement JSON
                 }

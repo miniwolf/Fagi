@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import static com.fagi.helpers.WaitForFXEventsTestHelper.addIngoingMessageToInputHandler;
 
 @ExtendWith(ApplicationExtension.class)
-public class ReceiveFriendRequestTests {
+public class ReceiveFriendRequestTests extends BaseFagiTest {
     private static final String myUsername = "Test";
     private Communication communication;
     private InputHandler inputHandler;

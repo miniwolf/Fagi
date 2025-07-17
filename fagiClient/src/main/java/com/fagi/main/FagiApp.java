@@ -8,10 +8,11 @@ import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.encryption.AES;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.network.ChatManager;
 import com.fagi.network.Communication;
 import com.fagi.threads.ThreadPool;
-import com.fagi.utility.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -20,12 +21,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * JavaFX application class for handling GUI.
  */
 public class FagiApp extends Application {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(FagiApp.class);
     private Stage primaryStage;
     private Scene scene;
     private ThreadPool threadPool;
@@ -36,8 +39,12 @@ public class FagiApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        if (!FagiLoggerFactory.isCustomConfigurationAvailable()) {
+            FagiLoggerFactory.setupDefaultConfiguration(Path.of("client.log"));
+            LOGGER.info(() -> "No log config file specified. Using default log config instead.");
+        }
         if (args.length != 0) {
-            System.out.println("Usage: java LoginScreen");
+            LOGGER.info(() -> "Usage: java LoginScreen");
         }
         launch(args);
     }
@@ -80,8 +87,10 @@ public class FagiApp extends Application {
                         successfulConnection.set(true);
                     } catch (IOException e) {
                         Platform.runLater(() -> masterLogin.setMessageLabel("Connection refused"));
-                        e.printStackTrace();
-                        Logger.logStackTrace(e);
+                        LOGGER.error(
+                                e,
+                                () -> "Failed to connect to the server."
+                        );
                     }
                 });
 

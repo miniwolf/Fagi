@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.MainScreen;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
@@ -26,7 +27,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
 @ExtendWith(ApplicationExtension.class)
-public class SignOutTests {
+public class SignOutTests extends BaseFagiTest {
     private final ThreadPool threadPool = new ThreadPool();
 
     @BeforeAll

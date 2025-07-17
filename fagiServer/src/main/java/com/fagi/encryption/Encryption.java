@@ -1,5 +1,8 @@
 package com.fagi.encryption;
 
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyPair;
@@ -10,6 +13,7 @@ import java.security.spec.InvalidKeySpecException;
  * Created by Marcus on 04-06-2016.
  */
 public class Encryption {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(Encryption.class);
     private static Encryption instance;
 
     private RSA rsa;
@@ -24,14 +28,20 @@ public class Encryption {
             try {
                 KeyStorage.SaveKeyPair(key);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(
+                        e,
+                        () -> "Could not save RSA key pair."
+                );
             }
         } else {
             try {
                 KeyPair key = KeyStorage.LoadKeyPair("RSA");
                 this.rsa = new RSA(key);
             } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-                e.printStackTrace();
+                LOGGER.error(
+                        e,
+                        () -> "Could not load RSA key pair."
+                );
             }
         }
 

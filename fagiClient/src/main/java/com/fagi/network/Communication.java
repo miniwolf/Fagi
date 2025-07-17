@@ -13,12 +13,13 @@ import com.fagi.encryption.Conversion;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.encryption.RSA;
 import com.fagi.encryption.RSAKey;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.HistoryUpdates;
 import com.fagi.model.Session;
 import com.fagi.responses.AllIsWell;
 import com.fagi.responses.Response;
 import com.fagi.threads.ThreadPool;
-import com.fagi.utility.Logger;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,6 +33,7 @@ import java.security.PublicKey;
  * TODO: Add description
  */
 public class Communication {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(Communication.class);
     private ObjectOutputStream out;
     private InputHandler inputHandler;
     private Socket socket;
@@ -76,12 +78,11 @@ public class Communication {
                     encryption,
                     serverKey
             );
-        } catch (UnknownHostException Uhe) {
-            System.err.println("c Uhe: " + Uhe);
-            Logger.logStackTrace(Uhe);
-        } catch (IOException ioe) {
-            Logger.logStackTrace(ioe);
-            throw new IOException("c ioe: " + ioe.toString());
+        } catch (UnknownHostException uhe) {
+            LOGGER.error(
+                    uhe,
+                    () -> "Failed to connect to the following host: " + host
+            );
         }
     }
 
@@ -123,9 +124,10 @@ public class Communication {
             out.writeObject(encryption.encrypt(Conversion.convertToBytes(obj)));
             out.flush();
         } catch (IOException e) {
-            System.err.println("cso ioe: " + e.toString());
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Lost connection to server. Crashing now."
+            );
             System.exit(1);
         }
     }
@@ -136,7 +138,10 @@ public class Communication {
         try {
             socket.close();
         } catch (IOException ioe) {
-            System.err.println("cc ioe: " + ioe.toString());
+            LOGGER.error(
+                    ioe,
+                    () -> "Failed to close Communication gracefully."
+            );
         }
     }
 

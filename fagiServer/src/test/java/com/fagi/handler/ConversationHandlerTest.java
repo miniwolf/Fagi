@@ -1,7 +1,10 @@
 package com.fagi.handler;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
 import com.fagi.model.Data;
 import com.fagi.model.User;
 import com.fagi.model.messages.message.TextMessage;
@@ -10,13 +13,14 @@ import com.fagi.worker.OutputAgent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-class ConversationHandlerTest {
+class ConversationHandlerTest extends BaseFagiTest {
     private Data data;
     private ConversationHandler conversationHandler;
 
@@ -195,12 +199,8 @@ class ConversationHandlerTest {
     }
 
     @Test
-    void dummy() throws InterruptedException {
-        var outContent = new ByteArrayOutputStream();
-        var errorContent = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(errorContent));
-        System.setOut(new PrintStream(outContent));
-
+    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    void testConversationHandlerLogsMessageWhenInterrupted() throws InterruptedException {
         var thread = new Thread(conversationHandler);
         thread.setDaemon(true);
 
@@ -210,13 +210,34 @@ class ConversationHandlerTest {
 
         thread.interrupt();
 
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(errorContent.toString().contains("java.lang.InterruptedException")),
-                () -> Assertions.assertFalse(outContent.toString().contains("java.lang.InterruptedException")),
-                () -> Assertions.assertTrue(thread.isInterrupted())
+        List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(ConversationHandler.class);
+
+        while (logRecords.isEmpty()) {
+            Thread.sleep(100);
+            logRecords = lookupLogRecordsForClass(ConversationHandler.class);
+        }
+
+        Assertions.assertEquals(
+                1,
+                logRecords.size()
         );
 
-        System.setErr(System.err);
-        System.setOut(System.out);
+        TestLogRecord<?> logRecord = logRecords.getFirst();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(
+                        "Interrupted ConversationHandler thread.",
+                        logRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.DEBUG,
+                        logRecord.logLevel()
+                ),
+                () -> Assertions.assertInstanceOf(
+                        InterruptedException.class,
+                        logRecord.throwable()
+                ),
+                () -> Assertions.assertTrue(thread.isInterrupted())
+        );
     }
 }

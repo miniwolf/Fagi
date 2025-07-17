@@ -1,19 +1,25 @@
 package com.fagi.db;
 
-import org.junit.jupiter.api.*;
+import com.fagi.BaseFagiTest;
+import com.fagi.logging.TestLogRecord;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mockito;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
+import java.util.Map;
 
 import static com.fagi.utility.Checksum.calculateChecksum;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
-class LogBasedDatabaseIntegrationTests {
-
+class LogBasedDatabaseIntegrationTests extends BaseFagiTest {
     @Test
     void testCloseIOException(@TempDir Path tempDir) throws IOException, DatabaseInitializeException {
         FileWriter mockWriter = Mockito.mock(FileWriter.class);
@@ -21,26 +27,44 @@ class LogBasedDatabaseIntegrationTests {
                 .when(mockWriter)
                 .close();
         Path dbPath = tempDir.resolve("test.db");
-        var ignored = dbPath.toFile().createNewFile();
+        var ignored = dbPath
+                .toFile()
+                .createNewFile();
 
         LogBasedDatabase db = new LogBasedDatabase(
                 dbPath.toString(),
                 mockWriter
         );
 
-        // Capture System.err output to verify error message
-        ByteArrayOutputStream errOutput = new ByteArrayOutputStream();
-        PrintStream originalErr = System.err;
-        System.setErr(new PrintStream(errOutput));
-
         db.close();
 
-        String errorOutput = errOutput.toString();
-        Assertions.assertTrue(errorOutput.contains("Error closing database"));
-        Assertions.assertTrue(errorOutput.contains("Disk full"));
+        List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(LogBasedDatabase.class);
+
+        Assertions.assertEquals(
+                1,
+                logRecords.size()
+        );
+        Assertions.assertEquals(
+                "Error closing database.",
+                logRecords
+                        .getFirst()
+                        .message()
+        );
+        Assertions.assertInstanceOf(
+                IOException.class,
+                logRecords
+                        .getFirst()
+                        .throwable()
+        );
+        Assertions.assertEquals(
+                "Disk full",
+                logRecords
+                        .getFirst()
+                        .throwable()
+                        .getMessage()
+        );
 
         verify(mockWriter).close();
-        System.setErr(originalErr);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.fagi.encryption;
 
-import com.fagi.utility.Logger;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -17,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by Marcus on 04-06-2016.
  */
 public class AES implements EncryptionAlgorithm<AESKey> {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(AES.class);
     byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     IvParameterSpec ivspec = new IvParameterSpec(iv);
     private AESKey key;
@@ -44,8 +46,10 @@ public class AES implements EncryptionAlgorithm<AESKey> {
             cipher.init(Cipher.ENCRYPT_MODE, key.key(), ivspec);
             return cipher.doFinal(msg);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to encrypt byte array."
+            );
         }
         return null;
     }
@@ -57,8 +61,10 @@ public class AES implements EncryptionAlgorithm<AESKey> {
             cipher.init(Cipher.DECRYPT_MODE, key.key(), ivspec);
             return cipher.doFinal(cipherText);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to decrypt byte array."
+            );
         }
         return null;
     }
@@ -70,8 +76,10 @@ public class AES implements EncryptionAlgorithm<AESKey> {
             keygen.init(keyLength);
             this.key = new AESKey(keygen.generateKey());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to generate AES key."
+            );
         }
     }
 

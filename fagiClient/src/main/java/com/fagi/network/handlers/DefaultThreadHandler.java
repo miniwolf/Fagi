@@ -7,11 +7,13 @@ package com.fagi.network.handlers;
 import com.fagi.network.handlers.container.Container;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 /**
  * @author miniwolf
  */
 public class DefaultThreadHandler<T> implements Runnable {
+    private static final Logger LOGGER = Logger.getLogger(DefaultThreadHandler.class.getName());
     private Container<T> container;
     private Handler<T> handler;
     private AtomicBoolean running = new AtomicBoolean(true);
@@ -39,7 +41,7 @@ public class DefaultThreadHandler<T> implements Runnable {
                 }
             } catch (InterruptedException e) {
                 running.set(false);
-                System.out.println("Stopped the thread handler");
+                LOGGER.info(() -> "Stopped the thread handler");
             }
         }
     }

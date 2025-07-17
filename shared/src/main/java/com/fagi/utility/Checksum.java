@@ -40,7 +40,7 @@ import java.util.zip.CRC32;
  * // Calculate checksum for data integrity
  * String data = "PUT|user1|name|John Doe";
  * String checksum = Checksum.calculateChecksum(data);
- * System.out.println("Checksum: " + checksum); // e.g., "a1b2c3d4"
+ * LOGGER.info(() -> "Checksum: " + checksum); // e.g., "a1b2c3d4"
  *
  * // Verify data integrity
  * String receivedData = "PUT|user1|name|John Doe";
@@ -48,9 +48,9 @@ import java.util.zip.CRC32;
  * String calculatedChecksum = Checksum.calculateChecksum(receivedData);
  *
  * if (calculatedChecksum.equals(receivedChecksum)) {
- *     System.out.println("Data integrity verified");
+ *     LOGGER.info(() -> "Data integrity verified");
  * } else {
- *     System.out.println("Data corruption detected!");
+ *     LOGGER.warning(() -> "Data corruption detected!");
  * }
  * }</pre>
  *
@@ -112,7 +112,7 @@ public class Checksum {
      *
      * // Empty string handling
      * String emptyChecksum = Checksum.calculateChecksum("");
-     * System.out.println("Empty string checksum: " + emptyChecksum);
+     * LOGGER.info(() -> "Empty string checksum: " + emptyChecksum);
      *
      * // Database log entry checksumming
      * String logEntry = "PUT|user123|email|john@example.com";
@@ -203,9 +203,9 @@ public class Checksum {
      * // Later, verify the data hasn't been corrupted
      * String retrievedData = "Important data";
      * if (Checksum.verifyChecksum(retrievedData, storedChecksum)) {
-     *     System.out.println("Data integrity verified");
+     *     LOGGER.info(() -> "Data integrity verified");
      * } else {
-     *     System.out.println("Data corruption detected!");
+     *     LOGGER.warning(() -> "Data corruption detected!");
      * }
      * }</pre>
      */

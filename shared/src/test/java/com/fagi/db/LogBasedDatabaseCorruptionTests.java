@@ -1,15 +1,25 @@
 package com.fagi.db;
 
-import org.junit.jupiter.api.*;
+import com.fagi.BaseFagiTest;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.fagi.utility.Checksum.calculateChecksum;
 
-public class LogBasedDatabaseCorruptionTests {
+public class LogBasedDatabaseCorruptionTests extends BaseFagiTest {
     private LogBasedDatabase db;
     private String dbPath;
 
@@ -53,14 +63,27 @@ public class LogBasedDatabaseCorruptionTests {
                 corruptedContent
         );
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(out));
-
         db = new LogBasedDatabase(dbPath);
 
+        List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(LogBasedDatabase.class);
+
         Assertions.assertEquals(
-                "Corruption detected at line 2" + System.lineSeparator(),
-                out.toString()
+                1,
+                logRecords.size()
+        );
+
+        Assertions.assertEquals(
+                "Corruption detected at line 2",
+                logRecords
+                        .getFirst()
+                        .message()
+        );
+
+        Assertions.assertEquals(
+                TestLogLevel.WARNING,
+                logRecords
+                        .getFirst()
+                        .logLevel()
         );
 
         Assertions.assertEquals(
@@ -133,15 +156,28 @@ public class LogBasedDatabaseCorruptionTests {
                 StandardOpenOption.APPEND
         );
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(out));
-
         // Reload and continue operations
         db = new LogBasedDatabase(dbPath);
 
+        List<TestLogRecord<?>> logRecords = lookupLogRecordsForClass(LogBasedDatabase.class);
+
         Assertions.assertEquals(
-                "Malformed entry at line 3" + System.lineSeparator(),
-                out.toString()
+                1,
+                logRecords.size()
+        );
+
+        Assertions.assertEquals(
+                "Malformed entry at line 3",
+                logRecords
+                        .getFirst()
+                        .message()
+        );
+
+        Assertions.assertEquals(
+                TestLogLevel.WARNING,
+                logRecords
+                        .getFirst()
+                        .logLevel()
         );
 
         // Should be able to continue normal operations

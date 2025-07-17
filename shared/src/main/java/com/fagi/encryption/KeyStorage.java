@@ -1,6 +1,7 @@
 package com.fagi.encryption;
 
-import com.fagi.utility.Logger;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,7 @@ import java.security.spec.X509EncodedKeySpec;
  * Created by Marcus on 04-06-2016.
  */
 public class KeyStorage {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(KeyStorage.class);
     private static final String KEYSFOLDER = "config/keys";
     public static final String PUBLICKEYFILE = KEYSFOLDER + "/public.key";
     public static final String PRIVATEKEYFILE = KEYSFOLDER + "/private.key";
@@ -71,8 +73,10 @@ public class KeyStorage {
         try {
             fis.read(encodedPrivateKey);
         } catch (IOException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to read encoded private key."
+            );
         }
         fis.close();
 

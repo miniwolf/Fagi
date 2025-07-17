@@ -1,5 +1,6 @@
 package com.fagi.util;
 
+import com.fagi.BaseFagiTest;
 import javafx.scene.text.Font;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class DisableOnLinuxAndMacCondition implements ExecutionCondition {
  * @author miniwolf
  */
 @ExtendWith({JavaFXThreadingExtension.class, DisableOnLinuxAndMacCondition.class})
-public class FontUtilsTest {
+public class FontUtilsTest extends BaseFagiTest {
     private static final Font ROBOTO = new Font("Roboto-Regular", 13);
 
     @Test

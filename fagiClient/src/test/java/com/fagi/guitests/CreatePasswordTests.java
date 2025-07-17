@@ -1,5 +1,6 @@
 package com.fagi.guitests;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.controller.login.MasterLogin;
 import com.fagi.controller.utility.Draggable;
 import com.fagi.enums.LoginState;
@@ -25,7 +26,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
 @ExtendWith(ApplicationExtension.class)
-public class CreatePasswordTests {
+public class CreatePasswordTests extends BaseFagiTest {
     private MasterLogin masterLogin;
 
     @BeforeAll

@@ -1,6 +1,7 @@
 package com.fagi.encryption;
 
-import com.fagi.utility.Logger;
+import com.fagi.logging.FagiLogger;
+import com.fagi.logging.FagiLoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -20,6 +21,7 @@ import java.util.Objects;
  * Created by Marcus on 30-05-2016.
  */
 public class RSA implements EncryptionAlgorithm<RSAKey> {
+    private static final FagiLogger LOGGER = FagiLoggerFactory.createLogger(RSA.class);
     private RSAKey key;
     // TODO: Remove this as it is redundant. Trello task: https://trello.com/c/JZynEGUQ
     private PublicKey encryptionKey;
@@ -30,8 +32,10 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             try {
                 key = new RSAKey(KeyStorage.LoadKeyPair("RSA"));
             } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-                e.printStackTrace();
-                Logger.logStackTrace(e);
+                LOGGER.error(
+                        e,
+                        () -> "Failed to load existing RSA key pair."
+                );
             }
         } else {
             generateKey(4096);
@@ -61,8 +65,10 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
             return cipher.doFinal(msg);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to encrypt byte array."
+            );
         }
         return null;
     }
@@ -78,8 +84,10 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             );
             return cipher.doFinal(cipherText);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to decrypt byte array."
+            );
         }
         return null;
     }
@@ -91,8 +99,10 @@ public class RSA implements EncryptionAlgorithm<RSAKey> {
             keygen.initialize(keyLength);
             key = new RSAKey(keygen.generateKeyPair());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            Logger.logStackTrace(e);
+            LOGGER.error(
+                    e,
+                    () -> "Failed to generate RSA key."
+            );
         }
     }
 

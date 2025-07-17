@@ -1,5 +1,6 @@
 package com.fagi.worker;
 
+import com.fagi.BaseFagiTest;
 import com.fagi.encryption.AES;
 import com.fagi.encryption.AESKey;
 import com.fagi.encryption.Conversion;
@@ -7,36 +8,34 @@ import com.fagi.encryption.Encryption;
 import com.fagi.encryption.RSA;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
+import com.fagi.logging.TestLogLevel;
+import com.fagi.logging.TestLogRecord;
 import com.fagi.model.Data;
 import com.fagi.model.Login;
 import com.fagi.model.Session;
 import com.fagi.model.UserNameAvailableRequest;
 import com.fagi.responses.AllIsWell;
-import com.fagi.util.NeverRunStrategy;
 import com.fagi.util.OutputAgentTestUtil;
-import com.fagi.util.RunOnceStrategy;
-import org.junit.jupiter.api.AfterEach;
+import com.fagi.util.running.NeverRunStrategy;
+import com.fagi.util.running.RunOnceStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.PrintStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-public class InputWorkerTests {
+public class InputWorkerTests extends BaseFagiTest {
     private static final byte[] ENCRYPTED_DATA = "encryptedData".getBytes();
     private OutputWorker outputWorker;
     private ConversationHandler conversationHandler;
@@ -61,26 +60,19 @@ public class InputWorkerTests {
         );
     }
 
-    @AfterEach
-    void tearDown() {
-        System.setErr(System.err);
-        System.setOut(System.out);
-    }
-
     @Test
-    void whenInputWorkerIsCreated_ThenStartingThreadMessagesIsPrintedToConsole() {
-        var outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    void whenInputWorkerIsStarted_ThenStartingThreadMessageIsLogged() {
+        inputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
-        new InputWorker(
-                mockObjectInputStream,
-                outputWorker,
-                conversationHandler,
-                data
-        );
+        inputWorker.run();
 
-        String consoleOutput = outContent.toString();
-        assertTrue(consoleOutput.contains("Starting an input thread"));
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputWorker.class);
+
+        Assertions.assertTrue(testLogRecords
+                                      .stream()
+                                      .anyMatch(logRecord -> logRecord
+                                              .message()
+                                              .equals("Starting an input thread")));
     }
 
     @Test
@@ -109,33 +101,37 @@ public class InputWorkerTests {
     }
 
     @Test
-    void givenRunningIsSetToFalse_WhenWorkerIsRunning_ThenShouldNotPrintRunningToConsole() {
-        var outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
+    void givenRunningIsSetToFalse_WhenWorkerIsRunning_ThenShouldNotLogRunning() {
         inputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
         inputWorker.run();
 
-        String consoleOutput = outContent.toString();
-        assertFalse(consoleOutput.contains("Running"));
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputWorker.class);
+
+        Assertions.assertFalse(testLogRecords
+                                       .stream()
+                                       .anyMatch(logRecord -> logRecord
+                                               .message()
+                                               .equals("Running")));
     }
 
     @Test
-    void givenRunningIsSetToFalse_WhenWorkerIsRunning_ThenShouldPrintClosingInputToConsole() {
-        var outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
+    void givenRunningIsSetToFalse_WhenWorkerIsRunning_ThenShouldLogClosingInput() {
         inputWorker.setIsRunningStrategy(new NeverRunStrategy());
 
         inputWorker.run();
 
-        String consoleOutput = outContent.toString();
-        assertTrue(consoleOutput.contains("Closing input"));
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputWorker.class);
+
+        Assertions.assertTrue(testLogRecords
+                                      .stream()
+                                      .anyMatch(logRecord -> logRecord
+                                              .message()
+                                              .equals("Closing input.")));
     }
 
     @Test
-    void givenRunningIsSetToTrue_WhenWorkerIsRunning_ThenShouldPrintRunningToConsole() {
+    void givenRunningIsSetToTrue_WhenWorkerIsRunning_ThenShouldLogRunning() {
         try (var mockedConversion = Mockito.mockStatic(Conversion.class)) {
             mockedConversion
                     .when(() -> Conversion.convertFromBytes(any()))
@@ -144,17 +140,20 @@ public class InputWorkerTests {
             var mockAes = Mockito.mock(AES.class);
             when(mockAes.decrypt(any())).thenReturn("decrypted".getBytes());
 
-            var outContent = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outContent));
-
             inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockAes);
 
             inputWorker.run();
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("Running"));
+
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputWorker.class);
+
+            Assertions.assertTrue(testLogRecords
+                                          .stream()
+                                          .anyMatch(logRecord -> logRecord
+                                                  .message()
+                                                  .equals("Running")));
         }
     }
 
@@ -235,7 +234,7 @@ public class InputWorkerTests {
     }
 
     @Test
-    void givenConversionFailsToConvertByteArrayToObject_WhenWorkerReceivesEncryptedObject_ThenSystemErrorShouldContainClassNotFoundException() {
+    void givenConversionFailsToConvertByteArrayToObject_WhenWorkerReceivesEncryptedObject_ThenShouldLogError() {
         try (var mockedConversion = Mockito.mockStatic(Conversion.class)) {
             byte[] decryptedInput = "decryptedData".getBytes();
             var mockedAES = Mockito.mock(AES.class);
@@ -245,23 +244,43 @@ public class InputWorkerTests {
                     .when(() -> Conversion.convertFromBytes(any()))
                     .thenThrow(new ClassNotFoundException());
 
-
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockedAES);
 
             inputWorker.run();
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("java.lang.ClassNotFoundException"));
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                    InputWorker.class,
+                    TestLogLevel.ERROR
+            );
+
+            Assertions.assertEquals(
+                    1,
+                    testLogRecords.size()
+            );
+
+            TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            "Failed to decrypt or deserialize object.",
+                            logRecord.message()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecord.logLevel()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            ClassNotFoundException.class,
+                            logRecord.throwable()
+                    )
+            );
         }
     }
 
     @Test
-    void givenConversionFailsWithIo_WhenWorkerReceivesEncryptedObject_ThenSystemErrorShouldContainIOException() {
+    void givenConversionFailsWithIo_WhenWorkerReceivesEncryptedObject_ThenShouldLogError() {
         try (var mockedConversion = Mockito.mockStatic(Conversion.class)) {
             byte[] decryptedInput = "decryptedData".getBytes();
             var mockedAES = Mockito.mock(AES.class);
@@ -271,18 +290,38 @@ public class InputWorkerTests {
                     .when(() -> Conversion.convertFromBytes(any()))
                     .thenThrow(new IOException());
 
-
-            var outContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(outContent));
-
             inputWorker.setIsRunningStrategy(new RunOnceStrategy());
             inputWorker.setSessionCreated(true);
             inputWorker.setAes(mockedAES);
 
             inputWorker.run();
 
-            String consoleOutput = outContent.toString();
-            assertTrue(consoleOutput.contains("java.io.IOException"));
+            List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(
+                    InputWorker.class,
+                    TestLogLevel.ERROR
+            );
+
+            Assertions.assertEquals(
+                    1,
+                    testLogRecords.size()
+            );
+
+            TestLogRecord<?> logRecord = testLogRecords.getFirst();
+
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(
+                            "Failed to decrypt or deserialize object.",
+                            logRecord.message()
+                    ),
+                    () -> Assertions.assertEquals(
+                            TestLogLevel.ERROR,
+                            logRecord.logLevel()
+                    ),
+                    () -> Assertions.assertInstanceOf(
+                            IOException.class,
+                            logRecord.throwable()
+                    )
+            );
         }
     }
 
@@ -291,11 +330,6 @@ public class InputWorkerTests {
         var username = "my username";
         when(mockObjectInputStream.readObject()).thenThrow(new SocketException());
 
-        var outContent = new ByteArrayOutputStream();
-        var errorContent = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(errorContent));
-        System.setOut(new PrintStream(outContent));
-
         inputWorker.setSessionCreated(true);
         inputWorker.setUsername(username);
 
@@ -315,15 +349,13 @@ public class InputWorkerTests {
                 )
                 .stop();
 
-        Assertions.assertAll(
-                () -> Assertions.assertFalse(inputWorker.isRunning()),
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("Logging out user " + username)),
-                () -> Assertions.assertFalse(errorContent
-                                                     .toString()
-                                                     .contains("java.net.SocketException"))
-        );
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputWorker.class);
+
+        Assertions.assertTrue(testLogRecords
+                                      .stream()
+                                      .anyMatch(logRecord -> logRecord
+                                              .message()
+                                              .equals("Logging out user " + username)));
     }
 
     @Test
@@ -331,11 +363,6 @@ public class InputWorkerTests {
         var username = "my username";
         when(mockObjectInputStream.readObject()).thenThrow(new EOFException());
 
-        var outContent = new ByteArrayOutputStream();
-        var errorContent = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(errorContent));
-        System.setOut(new PrintStream(outContent));
-
         inputWorker.setSessionCreated(true);
         inputWorker.setUsername(username);
 
@@ -355,26 +382,19 @@ public class InputWorkerTests {
                 )
                 .stop();
 
-        Assertions.assertAll(
-                () -> Assertions.assertFalse(inputWorker.isRunning()),
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("Logging out user " + username)),
-                () -> Assertions.assertFalse(errorContent
-                                                     .toString()
-                                                     .contains("java.io.EOFException"))
-        );
+        List<TestLogRecord<?>> testLogRecords = lookupLogRecordsForClass(InputWorker.class);
+
+        Assertions.assertTrue(testLogRecords
+                                      .stream()
+                                      .anyMatch(logRecord -> logRecord
+                                              .message()
+                                              .equals("Logging out user " + username)));
     }
 
     @Test
-    void givenUnexpectedException_WhenRunning_ThenShouldHandleUserLogoutGracefullyButWithStacktrace() throws IOException, ClassNotFoundException {
+    void givenUnexpectedException_WhenRunning_ThenShouldHandleUserLogoutGracefullyButWithErrorLog() throws IOException, ClassNotFoundException {
         var username = "my username";
         when(mockObjectInputStream.readObject()).thenThrow(new SocketTimeoutException());
-
-        var outContent = new ByteArrayOutputStream();
-        var errorContent = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(errorContent));
-        System.setOut(new PrintStream(outContent));
 
         inputWorker.setSessionCreated(true);
         inputWorker.setUsername(username);
@@ -395,20 +415,38 @@ public class InputWorkerTests {
                 )
                 .stop();
 
+        Assertions.assertTrue(lookupLogRecordsForClass(InputWorker.class)
+                                      .stream()
+                                      .anyMatch(logRecord -> logRecord
+                                              .message()
+                                              .equals("Logging out user " + username)));
+
+
+        List<TestLogRecord<?>> testErrorLogRecords = lookupLogRecordsForClass(
+                InputWorker.class,
+                TestLogLevel.ERROR
+        );
+
+        Assertions.assertEquals(
+                1,
+                testErrorLogRecords.size()
+        );
+
+        TestLogRecord<?> errorLogRecord = testErrorLogRecords.getFirst();
+
         Assertions.assertAll(
-                () -> Assertions.assertFalse(inputWorker.isRunning()),
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("Logging out user " + username)),
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("Something went wrong in a input worker while loop ")),
-                () -> Assertions.assertTrue(outContent
-                                                    .toString()
-                                                    .contains("java.net.SocketTimeoutException")),
-                () -> Assertions.assertTrue(errorContent
-                                                    .toString()
-                                                    .contains("java.net.SocketTimeoutException"))
+                () -> Assertions.assertEquals(
+                        "Something went wrong in a input worker while loop.",
+                        errorLogRecord.message()
+                ),
+                () -> Assertions.assertEquals(
+                        TestLogLevel.ERROR,
+                        errorLogRecord.logLevel()
+                ),
+                () -> Assertions.assertInstanceOf(
+                        SocketTimeoutException.class,
+                        errorLogRecord.throwable()
+                )
         );
     }
 
