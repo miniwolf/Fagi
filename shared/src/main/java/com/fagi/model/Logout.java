@@ -10,5 +10,5 @@ import java.io.Serializable;
  * Serializable object to send logout request to server.
  * Will logout and destroy the worker thread on the server level.
  */
-public class Logout implements Serializable {
+public record Logout() implements Serializable {
 }

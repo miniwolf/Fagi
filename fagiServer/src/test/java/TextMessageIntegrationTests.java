@@ -3,6 +3,8 @@ import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
+import com.fagi.handler.request.RequestHandler;
+import com.fagi.handler.request.conversation.TextMessageRequestHandler;
 import com.fagi.model.Data;
 import com.fagi.model.messages.message.TextMessage;
 import com.fagi.worker.InputAgent;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.mockito.Mockito;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.times;
@@ -33,15 +36,33 @@ public class TextMessageIntegrationTests extends BaseFagiTest {
         InputAgent inputAgent = Mockito.mock(InputAgent.class);
         outputAgent = Mockito.spy(OutputAgent.class);
         conversationHandler = new ConversationHandler(data);
-        inputHandler = new InputHandler(inputAgent, outputAgent, conversationHandler, data);
+        var handlers = new HashMap<Class<?>, RequestHandler<?>>();
+        handlers.put(
+                TextMessage.class,
+                new TextMessageRequestHandler(
+                        outputAgent,
+                        conversationHandler,
+                        data
+                )
+        );
+        inputHandler = new InputHandler(handlers
+        );
 
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
 
-        conversation = new Conversation(42, "Some conversation", ConversationType.Single);
+        conversation = new Conversation(
+                42,
+                "Some conversation",
+                ConversationType.Single
+        );
         conversation.addUser("sender");
         conversation.addUser("receiver");
 
-        message = new TextMessage("Hullo", "sender", 42);
+        message = new TextMessage(
+                "Hullo",
+                "sender",
+                42
+        );
     }
 
     @Test
@@ -53,7 +74,10 @@ public class TextMessageIntegrationTests extends BaseFagiTest {
         conversationHandler.tick();
 
         Mockito
-                .verify(outputAgent, times(1))
+                .verify(
+                        outputAgent,
+                        times(1)
+                )
                 .addMessage(message);
     }
 
@@ -64,10 +88,11 @@ public class TextMessageIntegrationTests extends BaseFagiTest {
         inputHandler.handleInput(message);
         conversationHandler.tick();
 
-        Assertions.assertEquals(1,
-                                conversation
-                                        .getMessages()
-                                        .size()
+        Assertions.assertEquals(
+                1,
+                conversation
+                        .getMessages()
+                        .size()
         );
     }
 
@@ -79,7 +104,10 @@ public class TextMessageIntegrationTests extends BaseFagiTest {
         conversationHandler.tick();
 
         Mockito
-                .verify(data, times(1))
+                .verify(
+                        data,
+                        times(1)
+                )
                 .storeConversation(conversation);
     }
 
@@ -104,7 +132,9 @@ public class TextMessageIntegrationTests extends BaseFagiTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(conversationThread.isInterrupted()),
-                () -> Assertions.assertTrue(conversation.getMessages().contains(message))
+                () -> Assertions.assertTrue(conversation
+                                                    .getMessages()
+                                                    .contains(message))
         );
     }
 }

@@ -9,6 +9,7 @@ import com.fagi.encryption.Encryption;
 import com.fagi.encryption.EncryptionAlgorithm;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
+import com.fagi.handler.InputHandlerFactory;
 import com.fagi.logging.FagiLogger;
 import com.fagi.logging.FagiLoggerFactory;
 import com.fagi.model.Data;
@@ -40,7 +41,7 @@ public class InputWorker extends Worker implements InputAgent {
         this.data = data;
         this.objIn = objIn;
         this.out = out;
-        this.inputHandler = new InputHandler(
+        this.inputHandler = InputHandlerFactory.createInputHandler(
                 this,
                 out,
                 handler,

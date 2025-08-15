@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 public class RemoveParticipantTests extends BaseInputHandlerTest {
     void beforeEach() {
         when(data.getOutputAgent(Mockito.anyString())).thenReturn(outputAgent);
+        when(inputAgent.getUsername()).thenReturn("Sender");
     }
 
     @Test

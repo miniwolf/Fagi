@@ -8,6 +8,7 @@ import com.fagi.encryption.Encryption;
 import com.fagi.encryption.RSA;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
+import com.fagi.handler.InputHandlerFactory;
 import com.fagi.logging.TestLogLevel;
 import com.fagi.logging.TestLogRecord;
 import com.fagi.model.Data;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,17 +78,10 @@ public class InputWorkerTests extends BaseFagiTest {
     }
 
     @Test
-    void givenInputWorkerReceivedMockValues_WhenConstructorCalled_ThenItsInputHandlerShouldEqualInputHandlerWithMockValues() {
-        var inputHandler = new InputHandler(
-                inputWorker,
-                outputWorker,
-                conversationHandler,
-                data
-        );
-
+    void givenInputWorkerReceivedMockValues_WhenConstructorCalled_ThenItsShouldHaveAllHandlersRegistered() {
         assertEquals(
-                inputHandler,
-                inputWorker.getInputHandler()
+                17,
+                inputWorker.getInputHandler().handlers().size()
         );
     }
 

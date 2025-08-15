@@ -5,6 +5,7 @@ import com.fagi.conversation.Conversation;
 import com.fagi.conversation.ConversationType;
 import com.fagi.handler.ConversationHandler;
 import com.fagi.handler.InputHandler;
+import com.fagi.handler.InputHandlerFactory;
 import com.fagi.model.Data;
 import com.fagi.model.User;
 import com.fagi.model.messages.message.TextMessage;
@@ -41,7 +42,7 @@ public abstract class BaseInputHandlerTest extends BaseFagiTest {
         outputAgent = Mockito.mock(OutputAgent.class);
         conversationHandler = new ConversationHandler(data);
 
-        inputHandler = new InputHandler(
+        inputHandler = InputHandlerFactory.createInputHandler(
                 inputAgent,
                 outputAgent,
                 conversationHandler,
