@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("com.fagi.main.FagiApp")
+    mainClass.set("com.fagi.main.Main")
 }
 
 repositories {

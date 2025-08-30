@@ -1,12 +1,5 @@
 package com.fagi.bug;
 
-import com.fagi.controller.MainScreen;
-import com.fagi.controller.login.MasterLogin;
-import com.fagi.controller.utility.Draggable;
-import com.fagi.main.FagiApp;
-import com.fagi.network.ChatManager;
-import com.fagi.network.Communication;
-import com.fagi.network.InputHandler;
 import com.fagi.test.TestIssue;
 import com.fagi.utility.Logger;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
