@@ -6,6 +6,8 @@
     <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
       <value />
     </option>
+    <option name="RECORD_COMPONENTS_WRAP" value="2"/>
+    <option name="NEW_LINE_AFTER_LPAREN_IN_RECORD_HEADER" value="true"/>
   </JavaCodeStyleSettings>
   <codeStyleSettings language="JAVA">
     <option name="KEEP_LINE_BREAKS" value="false" />
