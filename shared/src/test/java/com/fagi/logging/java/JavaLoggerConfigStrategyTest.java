@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -16,6 +17,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * Doesn't utilise {@link com.fagi.BaseFagiTest} as we want to test the real logging framework to check if the
@@ -33,12 +35,27 @@ class JavaLoggerConfigStrategyTest {
         // Deleting the "build/test_logs" folder before executing the test.
         // This is done to mitigate Windows locking the log files in such a way that they cannot be
         // deleted after running the tests.
-        tempDir
-                .toFile()
-                .delete();
+        if (Files.exists(tempDir)) {
+            try (Stream<Path> walk = Files.walk(tempDir)) {
+                walk
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                throw new RuntimeException(
+                                        "Failed to delete: " + path,
+                                        e
+                                );
+                            }
+                        });
+            }
+        }
 
-        // Create the "build/test_logs" folder
-        Files.createDirectory(tempDir);
+        if (!Files.exists(tempDir)) {
+            // Create the "build/test_logs" folder
+            Files.createDirectory(tempDir);
+        }
     }
 
     @BeforeEach

@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
@@ -19,6 +20,7 @@ import java.util.logging.LogRecord;
  * </p>
  * <p>
  * 2025-07-19 09:42:37 [INFO] com.fagi.server.Server - Starting Server
+ * 2025-07-19 09:42:40 [DEBUG] com.fagi.server.Server - Starting Server took 3 ms
  * </p>
  * <p>
  * If there is an exception in the log, the stacktrace will start on the next line.
@@ -42,7 +44,7 @@ public class JavaLoggerFormatter extends Formatter {
 
         sb.append(String.format(
                 " [%s] %s - %s%n",
-                record.getLevel(),
+                transformLogLevel(record.getLevel()),
                 loggerName,
                 formatMessage(record)
         ));
@@ -56,5 +58,15 @@ public class JavaLoggerFormatter extends Formatter {
         }
 
         return sb.toString();
+    }
+
+    private String transformLogLevel(Level level) {
+        return switch (level.getName()) {
+            case "SEVERE" -> "ERROR";
+            case "WARNING" -> "WARNING";
+            case "INFO" -> "INFO";
+            case "FINE" -> "DEBUG";
+            default -> level.getName();
+        };
     }
 }
