@@ -14,7 +14,7 @@ class JavaLoggerFormatterTest {
     @Test
     void testFormatterShouldGiveCorrectFormattedStrings() {
         var logRecord = new LogRecord(
-                Level.WARNING,
+                Level.FINE,
                 "This is the log message"
         );
         logRecord.setLoggerName(JavaLoggerFormatterTest.class.getName());
@@ -22,7 +22,7 @@ class JavaLoggerFormatterTest {
 
         String dateTimeString = formatter.dateFormat.format(new Date(logRecord.getMillis()));
 
-        var expectedFormattedLogEntry = dateTimeString + " [" + logRecord.getLevel() + "] " + logRecord.getLoggerName() + " - " + logRecord.getMessage() + System.lineSeparator() + IOException.class.getName();
+        var expectedFormattedLogEntry = dateTimeString + " [DEBUG] " + logRecord.getLoggerName() + " - " + logRecord.getMessage() + System.lineSeparator() + IOException.class.getName();
 
         // Normalize line endings such that the test works on different operating systems
         String formattedLogRecord = formatter
