@@ -9,5 +9,5 @@ users
 *.config
 *.fagi
 .gradle/*
-*/build/*
+**/build/*
 buildSrc/.gradle
