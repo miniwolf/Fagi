@@ -4,7 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("info.solidsoft.pitest") version "1.15.0" apply false
+    alias(libs.plugins.pitest) apply false
 }
 
 allprojects {
