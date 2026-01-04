@@ -12,6 +12,7 @@ tasks.test {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(libs.gson)
 
     testImplementation(testFixtures(project(":shared")))
     testImplementation(libs.bundles.junit.base)

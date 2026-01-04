@@ -13,3 +13,8 @@ users
 .gradle/*
 **/build/*
 buildSrc/.gradle
+**/.settings
+**/.classpath
+**/.project
+**/bin/**
+kls_database.db
