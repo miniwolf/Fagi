@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -278,7 +279,7 @@ class JavaLoggerConfigStrategyTest {
     }
 
     private static Path createLogFile() {
-        return tempDir.resolve("test_" + System.currentTimeMillis() + ".log");
+        return tempDir.resolve("test_" + UUID.randomUUID() + ".log");
     }
 
     private void cleanHandlers() {
