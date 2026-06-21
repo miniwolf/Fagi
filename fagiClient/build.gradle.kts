@@ -12,7 +12,7 @@ tasks.test {
 }
 
 javafx {
-    version = "21"
+    version = "25.0.3"
     modules = mutableListOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
 }
 

@@ -1,5 +1,8 @@
 import com.fagi.test.TestResultsService
 import info.solidsoft.gradle.pitest.PitestPluginExtension
+import org.gradle.api.tasks.testing.TestDescriptor
+import org.gradle.api.tasks.testing.TestListener
+import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -17,8 +20,8 @@ subprojects {
     apply(plugin = "info.solidsoft.pitest")
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = JavaVersion.VERSION_21.toString()
-        targetCompatibility = JavaVersion.VERSION_21.toString()
+        sourceCompatibility = JavaVersion.VERSION_25.toString()
+        targetCompatibility = JavaVersion.VERSION_25.toString()
     }
 
     configure<PitestPluginExtension> {
@@ -59,11 +62,15 @@ allprojects {
         }
 
         // After a test suite is done running this is called to register the result
-        afterSuite(KotlinClosure2<TestDescriptor, TestResult, Unit>({ desc, result ->
-            if (desc.parent == null) {
-                val testResultsService = testResultsServiceProvider.get()
-                testResultsService.addTestResult(desc, result)
+        addTestListener(object : TestListener {
+            override fun beforeSuite(suite: TestDescriptor) {}
+            override fun beforeTest(testDescriptor: TestDescriptor) {}
+            override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {}
+            override fun afterSuite(suite: TestDescriptor, result: TestResult) {
+                if (suite.parent == null) {
+                    testResultsServiceProvider.get().addTestResult(suite, result)
+                }
             }
-        }))
+        })
     }
 }
