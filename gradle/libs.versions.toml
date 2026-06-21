@@ -18,7 +18,7 @@ junit-platform = { module = "org.junit.platform:junit-platform-suite", version.r
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 
-openjfx-javafx-swing = { module = "org.openjfx:javafx-swing", version = "21.0.9" }
+openjfx-javafx-swing = { module = "org.openjfx:javafx-swing", version = "25.0.3" }
 
 testfx-core = { module = "org.testfx:testfx-core", version.ref = "testfx" }
 testfx-junit5 = { module = "org.testfx:testfx-junit5", version.ref = "testfx" }
@@ -32,4 +32,4 @@ testfx = ["openjfx-javafx-swing", "testfx-core", "testfx-junit5", "testfx-openjf
 
 [plugins]
 javafx = { id = "org.openjfx.javafxplugin", version = "0.1.0" }
-pitest = { id = "info.solidsoft.pitest", version = "1.15.0" }
+pitest = { id = "info.solidsoft.pitest", version = "1.19.0" }
