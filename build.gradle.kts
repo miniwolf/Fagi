@@ -29,7 +29,7 @@ subprojects {
         outputFormats.set(listOf("XML", "HTML"))
         exportLineCoverage.set(true)
         timestampedReports.set(false)
-        junit5PluginVersion.set("1.2.2")
+        junit5PluginVersion.set("1.2.3")
         verbose.set(false)
 
         if (project.name in listOf("shared")) {
